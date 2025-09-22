@@ -1,0 +1,11 @@
+input{
+  border: solid 1px black;
+}
+
+.ticket-form-label{
+  width: 100%;
+  display: grid;
+  
+  grid-template-columns: 40% 60%;
+  gap: 10px;
+}
