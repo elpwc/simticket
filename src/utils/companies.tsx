@@ -4,6 +4,7 @@ import TR_logo from '../assets/companyLogos/ROC_Taiwan_Railways_Administration_L
 import VNR_logo from '../assets/companyLogos/Đsvn.png';
 import THSR_logo from '../assets/companyLogos/THSR.svg';
 import KORAIL_logo from '../assets/companyLogos/Korail_logo.svg';
+import JNR_logo from '../assets/companyLogos/Japanese_National_Railway_logo.svg';
 import { StaticImageData } from 'next/image';
 import { JSX } from 'react';
 
@@ -46,13 +47,27 @@ export const companyList: Company[] = [
 		logo: JR_logo,
 		abbr: 'JR',
 		name: '日本旅客鉄道',
-		tickets: [{
-			name: 'JR東日本マルス券'
-		},{
-			name: '近距離きっぷ'
-		},{
-			name: '硬券(D型券)'
-		}]
+		tickets: [
+			{
+				name: 'JR東日本マルス券',
+			},
+			{
+				name: '近距離きっぷ',
+			},
+			{
+				name: '硬券(D型券)',
+			},
+		],
+	},
+	{
+		logo: JNR_logo,
+		abbr: 'JNR',
+		name: '日本国有鉄道',
+		tickets: [
+			{
+				name: '硬券(C型券)',
+			},
+		],
 	},
 	{
 		logo: TR_logo,
