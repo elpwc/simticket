@@ -1,7 +1,6 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
-import { rules } from './.eslintrc';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,6 +22,9 @@ const eslintConfig = [
 			eqeqeq: 0, // 必须使用全等
 			'one-var': 0, // 连续声明
 			'no-undef': 0, // 可以 有未定义的变量
+			'@typescript-eslint/no-explicit-any': 'off',
+			'consistent-return': 'off',
+			'react/display-name': 'off',
 
 			// 警告
 			'no-extra-boolean-cast': 1, // 不必要的bool转换

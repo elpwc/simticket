@@ -14,7 +14,8 @@ interface Props {
 		ctx: CanvasRenderingContext2D | null,
 		scaleX: (x: number) => number,
 		scaleY: (y: number) => number,
-		fontSize: (size: number, isSerif?: boolean) => string
+		fontSize: (size: number, isSerif?: boolean) => string,
+		wordWidth: number
 	) => void;
 	canvasWidth: number;
 	canvasHeight: number;
@@ -43,11 +44,12 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWi
 
 		const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
 		const scaleY = (y: number) => (y / (scaleYWidth * currentSizeScale)) * h;
+		const wordWidth = h / (100 * currentSizeScale)
 		const fontSize = (size: number, isSerif: boolean = false) => `${(size / (100 * currentSizeScale)) * h}px ${isSerif ? 'serif' : 'sans-serif'}`;
 
 		ctx.clearRect(0, 0, w, h);
 
-		onCanvasLoad(canvas, ctx, scaleX, scaleY, fontSize);
+		onCanvasLoad(canvas, ctx, scaleX, scaleY, fontSize, wordWidth);
 	};
 
 	useEffect(() => {
@@ -60,7 +62,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWi
 
 	return (
 		<div className={clsx(isMobile ? 'flex-col' : 'flex-row', 'w-[100%] flex items-start justify-start')}>
-			<div className={clsx(isMobile ? 'w-[100%]' : 'w-[40%]', 'flex flex-col items-center h-[100%]')}>
+			<div className={clsx(isMobile ? 'w-[100%] border-b-[solid_1px_#ccc]' : 'w-[40%]', 'flex flex-col items-center h-[100%] sticky top-[56px] z-[50] bg-[#ffffff9e] backdrop-blur-[8px] ')}>
 				<div className="flex justify-center items-center">
 					<button
 						onClick={() => {

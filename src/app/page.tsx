@@ -1,6 +1,6 @@
 'use client';
 
-import Hongpiao from '@/components/Hongpiao';
+import CRWideTicket from '@/components/CRWideTicket';
 import './globals.css';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
@@ -19,7 +19,7 @@ export default function Home() {
 
 	useEffect(() => {
 		if (showMobileCompanySelectMenu) {
-      //dirty!!!
+			//dirty!!!
 			setmenuHeight((document.getElementsByClassName('ticket-select-menu-container')?.[0]?.clientHeight ?? 0) + 4);
 		} else {
 			setmenuHeight(0);
@@ -88,7 +88,7 @@ export default function Home() {
 			</AnimatePresence>
 
 			<motion.div animate={{ marginTop: `${menuHeight}px` }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
-				<Hongpiao />
+				<CRWideTicket />
 			</motion.div>
 		</div>
 	);

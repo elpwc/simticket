@@ -59,6 +59,7 @@ const TiltCanvas = forwardRef<HTMLCanvasElement, Props>(({ width, height, classN
 		};
 
 		window.addEventListener('deviceorientation', handleOrientation, true);
+		// eslint-disable-next-line consistent-return
 		return () => {
 			window.removeEventListener('deviceorientation', handleOrientation);
 		};

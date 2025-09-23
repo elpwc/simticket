@@ -1,0 +1,15 @@
+input {
+	border: solid 1px black;
+}
+
+textarea {
+	border: solid 1px black;
+}
+
+.ticket-form-label {
+	box-sizing: content-box;
+	width: 100%;
+	display: grid;
+
+	grid-template-columns: 35% 50%;
+}
