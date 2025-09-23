@@ -1,0 +1,48 @@
+.toggle-switch {
+	position: relative;
+	display: inline-block;
+	width: var(--width, 36px);
+	height: var(--height, 20px);
+	cursor: pointer;
+	margin-right: 4px;
+}
+
+.toggle-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.toggle-switch .slider {
+	position: absolute;
+	inset: 0;
+	background-color: #d1d5db;
+	border-radius: 9999px;
+	transition: background-color 0.1s;
+}
+
+.toggle-switch .slider::before {
+	content: '';
+	position: absolute;
+	left: var(--buttonLeft, 1px);
+	top: var(--buttonTop, 1px);
+	width: var(--buttonWidth, 18px);
+	height: var(--buttonHeight, 18px);
+	background-color: white;
+	border-radius: 50%;
+	transition: transform 0.1s;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-switch input:checked + .slider {
+	background-color: var(--bgColor, #4a9bde);
+}
+
+.toggle-switch input:checked + .slider::before {
+	transform: translateX(var(--translateX, 18px));
+}
+
+.toggle-switch.disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}

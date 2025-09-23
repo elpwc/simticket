@@ -3,10 +3,15 @@
 import { useEffect, useRef, useState } from 'react';
 import cr_red from '../../assets/cr_red.png';
 import './index.css';
-import QRCode from 'qrcode';
+import TicketEditorTemplate from '../TicketEditorTemplate';
+import { drawQRCode } from '@/utils/utils';
 
 export default function TrainTicket() {
-	const canvasRef = useRef<HTMLCanvasElement | null>(null);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+	const scaleXRef = useRef<(x: number) => number>(null);
+	const scaleYRef = useRef<(y: number) => number>(null);
+	const fontSizeRef = useRef<(size: number, isSerif?: boolean) => string>(null);
 
 	const [ticketNo, setTicketNo] = useState('A000001');
 	const [station1, setStation1] = useState('東京都区内');
@@ -29,22 +34,24 @@ export default function TrainTicket() {
 	const canvasHeight = (canvasWidth / 800) * 548;
 
 	const drawTicket = () => {
-		const canvas = canvasRef.current;
-		if (!canvas) return;
-		const ctx = canvas.getContext('2d');
-		if (!ctx) return;
+		handleDraw(canvasRef.current, ctxRef.current, scaleXRef.current, scaleYRef.current, fontSizeRef.current);
+	};
+
+	const handleDraw = (
+		canvas: HTMLCanvasElement | null,
+		ctx: CanvasRenderingContext2D | null,
+		scaleX: ((x: number) => number) | null,
+		scaleY: ((y: number) => number) | null,
+		fontSize: ((size: number, isSerif?: boolean) => string) | null
+	) => {
+		if (!ctx || !canvas || !scaleX || !scaleY || !fontSize) {
+			return;
+		}
 
 		const w = canvas.width;
 		const h = canvas.height;
-
 		const backgroundEdgeHori = 0.04;
 		const backgroundEdgeVert = 0.07;
-
-		const scaleX = (x: number) => (x / 1698) * w;
-		const scaleY = (y: number) => (y / 1162) * h;
-		const fontSize = (size: number, isSerif: boolean = false) => `${(size / 100) * h}px ${isSerif ? 'serif' : 'sans-serif'}`;
-
-		ctx.clearRect(0, 0, w, h);
 
 		const bg = new Image();
 		bg.src = cr_red.src;
@@ -178,135 +185,98 @@ export default function TrainTicket() {
 
 	useEffect(() => {
 		drawTicket();
-	}, []);
-
-	useEffect(() => {
-		drawTicket();
 	}, [ticketNo, station1, station2, station1en, station2en, routeIdentifier, date, time, carriage, seat1, seat2, seatClass, price, idNumber, passenger]);
 
-	const saveCanvasToLocal = (canvas: HTMLCanvasElement | null, filename: string) => {
-		if (!canvas) return;
-
-		canvas.toBlob((blob) => {
-			if (!blob) return;
-			const url = URL.createObjectURL(blob);
-
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = filename + '.png';
-			a.click();
-
-			URL.revokeObjectURL(url);
-		}, 'image/png');
-	};
-
-	const drawQRCode = async (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, text: string) => {
-		try {
-			const qrDataUrl = await QRCode.toDataURL(text, {
-				color: {
-					dark: '#000000',
-					light: '#00000000',
-				},
-			});
-
-			const img = new Image();
-			img.src = qrDataUrl;
-			img.onload = () => {
-				ctx.drawImage(img, x, y, size, size);
-			};
-		} catch (err) {
-			console.error(err);
-		}
-	};
-
 	return (
-		<div className="max-w-[500px] w-[100%]">
-			<canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} className="m-10 shadow-[0_0_16px_0px_#d1d1d1]" />
+		<TicketEditorTemplate
+			onCanvasLoad={function (
+				canvas: HTMLCanvasElement,
+				ctx: CanvasRenderingContext2D | null,
+				scaleX: (x: number) => number,
+				scaleY: (y: number) => number,
+				fontSize: (size: number, isSerif?: boolean) => string
+			): void {
+				canvasRef.current = canvas;
+				ctxRef.current = ctx;
+				scaleXRef.current = scaleX;
+				scaleYRef.current = scaleY;
+				fontSizeRef.current = fontSize;
+				drawTicket();
+			}}
+			canvasWidth={canvasWidth}
+			canvasHeight={canvasHeight}
+			scaleXWidth={1698}
+			scaleYWidth={1162}
+			saveFilename={`ticket_${station1}-${station2}`}
+			form={
+				<div className="flex flex-col gap-4 m-10">
+					<label className="ticket-form-label">
+						票号
+						<input className="text-red-500" value={ticketNo} onChange={(e) => setTicketNo(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						出发
+						<input value={station1} onChange={(e) => setStation1(e.target.value)} />
+					</label>
 
-			<div className="flex justify-center">
-				<button
-					onClick={() => {
-						drawTicket();
-					}}
-				>
-					画像更新
-				</button>
-				<button
-					onClick={() => {
-						saveCanvasToLocal(canvasRef.current, `ticket_${station1}-${station2}`);
-					}}
-				>
-					画像保存
-				</button>
-			</div>
-
-			<div className="flex flex-col gap-4 m-10">
-				<label className="ticket-form-label">
-					票号
-					<input className="text-red-500" value={ticketNo} onChange={(e) => setTicketNo(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					出发
-					<input value={station1} onChange={(e) => setStation1(e.target.value)} />
-				</label>
-
-				<label className="ticket-form-label">
-					到达
-					<input value={station2} onChange={(e) => setStation2(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					出发英文
-					<input value={station1en} onChange={(e) => setStation1en(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					到达英文
-					<input value={station2en} onChange={(e) => setStation2en(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					车次
-					<input value={routeIdentifier} onChange={(e) => setRouteIdentifier(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					购票处
-					<input className="" value={soldplace} onChange={(e) => setSoldPlace(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					發车日期
-					<input type="date" value={date.toISOString().slice(0, 10)} onChange={(e) => setDate(new Date(e.target.value))} />
-				</label>
-				<label className="ticket-form-label">
-					發车时间
-					<input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					车厢
-					<input value={carriage} onChange={(e) => setCarriage(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					座位1
-					<input value={seat1} onChange={(e) => setSeat1(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					座位2
-					<input value={seat2} onChange={(e) => setSeat2(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					座席
-					<input value={seatClass} onChange={(e) => setSeatClass(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					价格
-					<input value={price} onChange={(e) => setPrice(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					乘车人证件号
-					<input value={idNumber} onChange={(e) => setIdNumber(e.target.value)} />
-				</label>
-				<label className="ticket-form-label">
-					乘车人
-					<input value={passenger} onChange={(e) => setPassenger(e.target.value)} />
-				</label>
-			</div>
-		</div>
+					<label className="ticket-form-label">
+						到达
+						<input value={station2} onChange={(e) => setStation2(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						出发英文
+						<input value={station1en} onChange={(e) => setStation1en(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						到达英文
+						<input value={station2en} onChange={(e) => setStation2en(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						车次
+						<input value={routeIdentifier} onChange={(e) => setRouteIdentifier(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						购票处
+						<input className="" value={soldplace} onChange={(e) => setSoldPlace(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						發车日期
+						<input type="date" value={date.toISOString().slice(0, 10)} onChange={(e) => setDate(new Date(e.target.value))} />
+					</label>
+					<label className="ticket-form-label">
+						發车时间
+						<input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						车厢
+						<input value={carriage} onChange={(e) => setCarriage(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						座位1
+						<input value={seat1} onChange={(e) => setSeat1(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						座位2
+						<input value={seat2} onChange={(e) => setSeat2(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						座席
+						<input value={seatClass} onChange={(e) => setSeatClass(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						价格
+						<input value={price} onChange={(e) => setPrice(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						乘车人证件号
+						<input value={idNumber} onChange={(e) => setIdNumber(e.target.value)} />
+					</label>
+					<label className="ticket-form-label">
+						乘车人
+						<input value={passenger} onChange={(e) => setPassenger(e.target.value)} />
+					</label>
+				</div>
+			}
+		/>
 	);
 }
