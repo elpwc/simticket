@@ -11,6 +11,7 @@ export interface Company {
 	logo: string | StaticImageData;
 	abbr: string;
 	name: string | JSX.Element;
+	defaultSelectedTicketId?: number;
 	disabled?: boolean;
 	tickets?: { name: string | JSX.Element; disabled?: boolean }[];
 }
@@ -20,12 +21,24 @@ export const companyList: Company[] = [
 		logo: CR_logo,
 		abbr: 'CR',
 		name: '中国国家铁路集团',
+		defaultSelectedTicketId: 1,
 		tickets: [
 			{
-				name: '红票',
+				name: '旧硬票',
+				disabled: true,
 			},
 			{
-				name: '蓝票',
+				name: '软纸红票',
+			},
+			{
+				name: '软纸蓝票',
+			},
+			{
+				name: '磁介质红票',
+				disabled: true,
+			},
+			{
+				name: '磁介质蓝票',
 			},
 		],
 	},
@@ -33,6 +46,13 @@ export const companyList: Company[] = [
 		logo: JR_logo,
 		abbr: 'JR',
 		name: '日本旅客鉄道',
+		tickets: [{
+			name: 'JR東日本マルス券'
+		},{
+			name: '近距離きっぷ'
+		},{
+			name: '硬券(D型券)'
+		}]
 	},
 	{
 		logo: TR_logo,

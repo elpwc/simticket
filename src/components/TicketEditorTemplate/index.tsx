@@ -6,6 +6,7 @@ import { saveCanvasToLocal } from '@/utils/utils';
 import TiltCanvas from '../TiltCanvas';
 import Toggle from '../Toggle';
 import { useIsMobile } from '@/utils/hooks';
+import clsx from 'clsx';
 
 interface Props {
 	onCanvasLoad: (
@@ -58,8 +59,8 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWi
 	}, [currentSizeScale]);
 
 	return (
-		<div className={`w-[100%] flex items-start justify-start ${isMobile ? 'flex-col' : 'flex-row'}`}>
-			<div className="w-[40%]  flex flex-col items-center h-[100%]">
+		<div className={clsx(isMobile ? 'flex-col' : 'flex-row', 'w-[100%] flex items-start justify-start')}>
+			<div className={clsx(isMobile ? 'w-[100%]' : 'w-[40%]', 'flex flex-col items-center h-[100%]')}>
 				<div className="flex justify-center items-center">
 					<button
 						onClick={() => {
@@ -117,7 +118,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWi
 
 				<TiltCanvas doTilt={enableCanvasTilt} ref={canvasRef} width={canvasWidth * currentSizeScale} height={canvasHeight * currentSizeScale} className="m-10 shadow-[0_0_16px_0px_#d1d1d1]" />
 			</div>
-			<div>{form}</div>
+			<div className={clsx(isMobile ? 'w-[100%]' : 'w-[60%]')}>{form}</div>
 		</div>
 	);
 };

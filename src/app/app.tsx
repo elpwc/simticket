@@ -17,7 +17,7 @@ export default function App({
 	const isMobile = useIsMobile();
 
 	const [selectedCompanyId, setSelectedCompanyId] = useState(0);
-	const [selectedTicketId, setSelectedTicketId] = useState(0);
+	const [selectedTicketId, setSelectedTicketId] = useState(companyList[selectedCompanyId].defaultSelectedTicketId ?? 0);
 	const [showMobileCompanySelectMenu, setShowMobileCompanySelectMenu] = useState(true);
 
 	return (

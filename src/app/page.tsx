@@ -51,7 +51,7 @@ export default function Home() {
 										onClick={() => {
 											if (!company.disabled) {
 												setSelectedCompanyId(index);
-												setSelectedTicketId(0);
+												setSelectedTicketId(companyList[index].defaultSelectedTicketId ?? 0);
 											}
 										}}
 									>
