@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import cr_red from '../../assets/cr_red.png';
+import cr_red from '../../assets/tickets/cr_red.png';
 import './index.css';
 import TicketEditorTemplate from '../TicketEditorTemplate';
 import { drawQRCode } from '@/utils/utils';
