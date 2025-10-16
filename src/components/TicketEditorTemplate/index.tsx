@@ -25,6 +25,7 @@ interface Props {
 	form: JSX.Element | null;
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWidth, saveFilename, form }: Props) => {
 	const isMobile = useIsMobile();
 
@@ -44,7 +45,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWi
 
 		const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
 		const scaleY = (y: number) => (y / (scaleYWidth * currentSizeScale)) * h;
-		const wordWidth = h / (100 * currentSizeScale)
+		const wordWidth = h / (100 * currentSizeScale);
 		const fontSize = (size: number, isSerif: boolean = false) => `${(size / (100 * currentSizeScale)) * h}px ${isSerif ? 'serif' : 'sans-serif'}`;
 
 		ctx.clearRect(0, 0, w, h);
@@ -60,13 +61,21 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWi
 		drawTicket();
 	}, [currentSizeScale]);
 
+	const increaseScale = () => {
+		setCurrentSizeScale((prev) => Number((prev + 0.1).toFixed(1)));
+	};
+
+	const reduceScale = () => {
+		setCurrentSizeScale((prev) => Number((prev - 0.1).toFixed(1)));
+	};
+
 	return (
 		<div className={clsx(isMobile ? 'flex-col' : 'flex-row', 'w-[100%] flex items-start justify-start')}>
 			<div className={clsx(isMobile ? 'w-[100%] border-b-[solid_1px_#ccc]' : 'w-[40%]', 'flex flex-col items-center h-[100%] sticky top-[56px] z-[50] bg-[#ffffff9e] backdrop-blur-[8px] ')}>
 				<div className="flex justify-center items-center">
 					<button
 						onClick={() => {
-							setCurrentSizeScale(Number((currentSizeScale + 0.1).toFixed(1)));
+							increaseScale();
 						}}
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -76,7 +85,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWi
 					<span>{currentSizeScale.toFixed(1)}</span>
 					<button
 						onClick={() => {
-							setCurrentSizeScale(Number((currentSizeScale - 0.1).toFixed(1)));
+							reduceScale();
 						}}
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -118,7 +127,20 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWi
 					</label>
 				</div>
 
-				<TiltCanvas doTilt={enableCanvasTilt} ref={canvasRef} width={canvasWidth * currentSizeScale} height={canvasHeight * currentSizeScale} className="m-10 shadow-[0_0_16px_0px_#d1d1d1]" />
+				<TiltCanvas
+					doTilt={enableCanvasTilt}
+					ref={canvasRef}
+					width={canvasWidth * currentSizeScale}
+					height={canvasHeight * currentSizeScale}
+					className="m-10 shadow-[0_0_16px_0px_#d1d1d1]"
+					onWheel={(isZoomIn: boolean) => {
+						if (isZoomIn) {
+							increaseScale();
+						} else {
+							reduceScale();
+						}
+					}}
+				/>
 			</div>
 			<div className={clsx(isMobile ? 'w-[100%]' : 'w-[60%]')}>{form}</div>
 		</div>

@@ -8,9 +8,10 @@ interface Props {
 	height: number | string;
 	className: string;
 	doTilt?: boolean;
+	onWheel: (isZoomIn: boolean) => void;
 }
 
-const TiltCanvas = forwardRef<HTMLCanvasElement, Props>(({ width, height, className, doTilt = true }: Props, ref) => {
+const TiltCanvas = forwardRef<HTMLCanvasElement, Props>(({ width, height, className, doTilt = true, onWheel }: Props, ref) => {
 	const rotateX = useMotionValue(0);
 	const rotateY = useMotionValue(0);
 	const [enabled, setEnabled] = useState(true);
@@ -41,6 +42,23 @@ const TiltCanvas = forwardRef<HTMLCanvasElement, Props>(({ width, height, classN
 	useEffect(() => {
 		setEnabled(doTilt);
 	}, [doTilt]);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		const wheelHandler = (e: any) => {
+			e.preventDefault();
+			if (e.deltaY > 0) {
+				onWheel(false);
+			} else if (e.deltaY < 0) {
+				onWheel(true);
+			}
+		};
+		canvas?.addEventListener('wheel', wheelHandler, { passive: false });
+
+		return () => {
+			canvas?.removeEventListener('wheel', wheelHandler);
+		};
+	}, []);
 
 	// mobile gyroscope
 	useEffect(() => {
