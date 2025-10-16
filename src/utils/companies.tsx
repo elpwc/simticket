@@ -73,6 +73,17 @@ export const companyList: Company[] = [
 		logo: TR_logo,
 		abbr: 'TR',
 		name: '臺鐵公司',
+		tickets: [
+			{
+				name: '直票（第四代）',
+			},
+			{
+				name: '大張橫票（第三代）',
+			},
+			{
+				name: '小張直票（第三代）',
+			},
+		],
 	},
 	{
 		logo: THSR_logo,
