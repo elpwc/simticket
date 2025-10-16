@@ -66,7 +66,6 @@ button:hover {
 	background-color: #ffffff;
 }
 
-
 .company-menu-item img {
 	height: 30px;
 	width: fit-content;
@@ -97,4 +96,25 @@ button:hover {
 	padding: 4px 4px;
 	box-sizing: border-box !important;
 	font-size: 12px;
+}
+
+/* ticket editor */
+input {
+	border: solid 1px rgb(109, 109, 109);
+	margin: 1px;
+	border-radius: 2px;
+}
+
+textarea {
+	border: solid 1px rgb(109, 109, 109);
+	margin: 1px;
+	border-radius: 2px;
+}
+
+.ticket-form-label {
+	box-sizing: content-box;
+	width: 100%;
+	display: grid;
+
+	grid-template-columns: 35% 50%;
 }
