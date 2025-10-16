@@ -9,6 +9,7 @@ import { AppContext } from './app';
 import { useIsMobile } from '@/utils/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
+import UnderConstruction from '@/components/UnderConstruction';
 
 export default function Home() {
 	const isMobile = useIsMobile();
@@ -112,7 +113,49 @@ export default function Home() {
 			</AnimatePresence>
 
 			<motion.div animate={{ marginTop: `${menuHeight}px` }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
-				<CRWideTicket />
+				{(() => {
+					switch (selectedCompanyId) {
+						case 0: //CR
+							switch (selectedTicketId) {
+								case 0:
+									return <UnderConstruction />;
+								case 1:
+									return <CRWideTicket />;
+								case 2:
+								case 3:
+								case 4:
+								default:
+									return <UnderConstruction />;
+							}
+						case 1: // JR
+							switch (selectedTicketId) {
+								case 0:
+								case 1:
+								case 2:
+								default:
+									return <UnderConstruction />;
+							}
+						case 2: // JNR
+							switch (selectedTicketId) {
+								case 0:
+								default:
+									return <UnderConstruction />;
+							}
+						case 3: // TR
+							switch (selectedTicketId) {
+								case 0:
+								case 1:
+								case 2:
+								default:
+									return <UnderConstruction />;
+							}
+						case 4: // THSR
+						case 5: // VNR
+						case 6: // KR
+						default:
+							return <CRWideTicket />;
+					}
+				})()}
 			</motion.div>
 		</div>
 	);
