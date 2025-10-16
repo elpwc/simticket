@@ -8,6 +8,7 @@ import { companyList } from '@/utils/companies';
 import { AppContext } from './app';
 import { useIsMobile } from '@/utils/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function Home() {
 	const isMobile = useIsMobile();
@@ -17,6 +18,21 @@ export default function Home() {
 	const { showMobileCompanySelectMenu, setShowMobileCompanySelectMenu } = useContext(AppContext);
 	const [menuHeight, setmenuHeight] = useState(0);
 
+	const router = useRouter();
+	const searchParams = useSearchParams();
+
+	useEffect(() => {
+		const comParam = searchParams.get('com');
+		const ticketParam = searchParams.get('ticket');
+		if (comParam !== null && !isNaN(Number(comParam))) {
+			setSelectedCompanyId(Number(comParam));
+		}
+		if (ticketParam !== null && !isNaN(Number(ticketParam))) {
+			setSelectedTicketId(Number(ticketParam));
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	useEffect(() => {
 		if (showMobileCompanySelectMenu) {
 			//dirty!!!
@@ -25,6 +41,14 @@ export default function Home() {
 			setmenuHeight(0);
 		}
 	}, [showMobileCompanySelectMenu, isMobile]);
+
+	useEffect(() => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set('com', String(selectedCompanyId));
+		params.set('ticket', String(selectedTicketId));
+		router.replace(`?${params.toString()}`);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedCompanyId, selectedTicketId]);
 
 	return (
 		<div>
