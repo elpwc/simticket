@@ -6,12 +6,13 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 interface Props {
 	width: number | string;
 	height: number | string;
+	borderRadius: string;
 	className: string;
 	doTilt?: boolean;
 	onWheel: (isZoomIn: boolean) => void;
 }
 
-const TiltCanvas = forwardRef<HTMLCanvasElement, Props>(({ width, height, className, doTilt = true, onWheel }: Props, ref) => {
+const TiltCanvas = forwardRef<HTMLCanvasElement, Props>(({ width, height, borderRadius, className, doTilt = true, onWheel }: Props, ref) => {
 	const rotateX = useMotionValue(0);
 	const rotateY = useMotionValue(0);
 	const [enabled, setEnabled] = useState(true);
@@ -104,6 +105,7 @@ const TiltCanvas = forwardRef<HTMLCanvasElement, Props>(({ width, height, classN
 					rotateX: enabled ? rotateX : 0,
 					rotateY: enabled ? rotateY : 0,
 					scale: 1,
+					borderRadius: borderRadius,
 				}}
 				transition={{
 					type: 'spring',

@@ -19,6 +19,8 @@ interface Props {
 	) => void;
 	canvasWidth: number;
 	canvasHeight: number;
+	canvasBorderRadius?: number;
+	canvasShowShandow?: boolean;
 	scaleXWidth: number;
 	scaleYWidth: number;
 	saveFilename: string;
@@ -26,7 +28,7 @@ interface Props {
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWidth, saveFilename, form }: Props) => {
+export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 0, canvasShowShandow = true, scaleXWidth, scaleYWidth, saveFilename, form }: Props) => {
 	const isMobile = useIsMobile();
 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -132,7 +134,8 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, scaleXWidth, scaleYWi
 					ref={canvasRef}
 					width={canvasWidth * currentSizeScale}
 					height={canvasHeight * currentSizeScale}
-					className="m-10 shadow-[0_0_16px_0px_#d1d1d1]"
+					className={`m-10 ${canvasShowShandow ? 'shadow-[0_0_16px_0px_#d1d1d1]' : ''}`}
+					borderRadius={`${canvasBorderRadius}px`}
 					onWheel={(isZoomIn: boolean) => {
 						if (isZoomIn) {
 							increaseScale();

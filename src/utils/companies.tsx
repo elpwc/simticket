@@ -22,24 +22,18 @@ export const companyList: Company[] = [
 		logo: CR_logo,
 		abbr: 'CR',
 		name: '中国国家铁路集团',
-		defaultSelectedTicketId: 1,
+		defaultSelectedTicketId: 2,
 		tickets: [
 			{
 				name: '旧硬票',
 				disabled: true,
 			},
 			{
-				name: '软纸红票',
-			},
-			{
-				name: '软纸蓝票',
-			},
-			{
-				name: '磁介质红票',
+				name: 'II型客票',
 				disabled: true,
 			},
 			{
-				name: '磁介质蓝票',
+				name: '计算机客票',
 			},
 		],
 	},
@@ -73,15 +67,16 @@ export const companyList: Company[] = [
 		logo: TR_logo,
 		abbr: 'TR',
 		name: '臺鐵公司',
+		defaultSelectedTicketId: 2,
 		tickets: [
-			{
-				name: '直票（第四代）',
-			},
 			{
 				name: '大張橫票（第三代）',
 			},
 			{
 				name: '小張直票（第三代）',
+			},
+			{
+				name: '直票（第四代）',
 			},
 		],
 	},

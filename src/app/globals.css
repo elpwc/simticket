@@ -103,6 +103,7 @@ input {
 	border: solid 1px rgb(109, 109, 109);
 	margin: 1px;
 	border-radius: 2px;
+	padding: 0 2px;
 }
 
 textarea {

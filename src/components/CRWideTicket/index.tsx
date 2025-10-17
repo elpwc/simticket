@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import cr_red from '../../assets/tickets/cr_red.png';
+import cr_blue from '../../assets/tickets/cr_blue.png';
+import cr_mag_blue from '../../assets/tickets/cr_mag_blue.png';
 import './index.css';
 import TicketEditorTemplate from '../TicketEditorTemplate';
 import { drawQRCode } from '@/utils/utils';
@@ -9,6 +11,18 @@ import Toggle from '../Toggle';
 import TabBox from '../TabBox';
 import InputRadioGroup from '../InputRadioGroup';
 import { Divider } from '../Divider';
+import localFonts from 'next/font/local';
+import { CRWideTicketBgSelector, CRTicketBackGround } from './CRWideTicketBgSelector';
+
+export const HuawenXinwei = localFonts({
+	src: '../../assets/fonts/STXINWEI.woff2',
+});
+export const SongTi = localFonts({
+	src: '../../assets/fonts/simsun.woff2',
+});
+export const HeiTi = localFonts({
+	src: '../../assets/fonts/simhei.woff2',
+});
 
 export default function TrainTicket() {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -18,6 +32,7 @@ export default function TrainTicket() {
 	const fontSizeRef = useRef<(size: number, isSerif?: boolean) => string>(null);
 	const wordWidthRef = useRef<number>(null);
 
+	const [background, setBackground] = useState<CRTicketBackGround>(CRTicketBackGround.SoftRed);
 	const [ticketNo, setTicketNo] = useState('A000001');
 	const [showZhan, setShowZhan] = useState(true);
 	const [station1, setStation1] = useState('东京都区内');
@@ -59,6 +74,32 @@ export default function TrainTicket() {
 	const canvasWidth = 322;
 	const canvasHeight = (canvasWidth / 800) * 548;
 
+	useEffect(() => {
+		const loadFonts = async () => {
+			const fonts = [
+				new FontFace('HuawenXinwei', 'url(../../assets/fonts/STXINWEI.woff2)'),
+				new FontFace('SongTi', 'url(../../assets/fonts/simsun.woff2)'),
+				new FontFace('HeiTi', 'url(../../assets/fonts/simhei.woff2)'),
+			];
+			await Promise.all(fonts.map((f) => f.load()));
+			fonts.forEach((f) => document.fonts.add(f));
+
+			const ctx = canvasRef.current?.getContext('2d');
+			if (ctx) {
+				ctx.fillStyle = 'black';
+				ctx.font = '32px HuawenXinwei';
+				ctx.fillText('中文书法字体', 20, 50);
+
+				ctx.font = '28px SourceHanSerifSC';
+				ctx.fillText('明朝体字体', 20, 100);
+
+				ctx.font = '28px Roboto';
+				ctx.fillText('English Roboto', 20, 150);
+			}
+		};
+		loadFonts();
+	}, []);
+
 	const drawTicket = () => {
 		handleDraw(canvasRef.current, ctxRef.current, scaleXRef.current, scaleYRef.current, fontSizeRef.current, wordWidthRef.current ?? 0);
 	};
@@ -81,12 +122,29 @@ export default function TrainTicket() {
 		const backgroundEdgeVert = 0.07;
 
 		const bg = new Image();
-		bg.src = cr_red.src;
+		switch (background) {
+			case CRTicketBackGround.SoftRed:
+				bg.src = cr_red.src;
+				break;
+			case CRTicketBackGround.SoftBlue:
+				bg.src = cr_blue.src;
+				break;
+			case CRTicketBackGround.MagRed:
+				bg.src = cr_red.src;
+				break;
+			case CRTicketBackGround.MagBlue:
+				bg.src = cr_mag_blue.src;
+				break;
+		}
 		bg.onload = () => {
 			ctx.fillStyle = 'white';
 			ctx.fillRect(0, 0, w, h);
 			// 底图
-			ctx.drawImage(bg, w * backgroundEdgeHori, h * backgroundEdgeVert, w * (1 - 2 * backgroundEdgeHori), h * (1 - 2 * backgroundEdgeVert));
+			if (background === CRTicketBackGround.SoftRed || background === CRTicketBackGround.SoftBlue) {
+				ctx.drawImage(bg, w * backgroundEdgeHori, h * backgroundEdgeVert, w * (1 - 2 * backgroundEdgeHori), h * (1 - 2 * backgroundEdgeVert));
+			} else {
+				ctx.drawImage(bg, 0, 0, w, h);
+			}
 
 			// 票号
 			ctx.fillStyle = '#f89c9c';
@@ -94,12 +152,12 @@ export default function TrainTicket() {
 			ctx.fillText(ticketNo, scaleX(118), scaleY(224));
 
 			// 票样
-			ctx.beginPath();
-			ctx.strokeStyle = '#ffbbbb';
-			ctx.lineWidth = 1;
-			ctx.font = `bold ${fontSize(26)}`;
-			ctx.strokeText('票     样', scaleX(380), scaleY(670));
-			ctx.closePath();
+			// ctx.beginPath();
+			// ctx.strokeStyle = '#ffbbbb';
+			// ctx.lineWidth = 1;
+			// ctx.font = `bold ${fontSize(26)}`;
+			// ctx.strokeText('票     样', scaleX(380), scaleY(670));
+			// ctx.closePath();
 
 			// 售票点
 			ctx.fillStyle = 'black';
@@ -249,6 +307,7 @@ export default function TrainTicket() {
 	useEffect(() => {
 		drawTicket();
 	}, [
+		background,
 		ticketNo,
 		station1,
 		station2,
@@ -301,11 +360,18 @@ export default function TrainTicket() {
 			}}
 			canvasWidth={canvasWidth}
 			canvasHeight={canvasHeight}
+			canvasBorderRadius={background === CRTicketBackGround.MagBlue || background === CRTicketBackGround.MagRed ? 16 : 0}
 			scaleXWidth={1698}
 			scaleYWidth={1162}
 			saveFilename={`ticket_${station1}-${station2}`}
 			form={
 				<div className="flex flex-col gap-4 m-4">
+					<TabBox title="票面" className="flex flex-wrap gap-1">
+						<label className="ticket-form-label">
+							车票用纸
+							<CRWideTicketBgSelector value={background} onChange={setBackground} />
+						</label>
+					</TabBox>
 					<TabBox title="车站信息" className="flex flex-wrap gap-1">
 						<div className="flex flex-col gap-[2px]">
 							<label className="ticket-form-label">
@@ -353,7 +419,9 @@ export default function TrainTicket() {
 										setShowZhan(value);
 									}}
 								/>
-								<span>使用华文新魏</span>
+								<span>
+									使用<span className={HuawenXinwei.className}>华文新魏</span>
+								</span>
 							</label>
 						</div>
 					</TabBox>

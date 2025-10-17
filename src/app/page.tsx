@@ -118,12 +118,10 @@ export default function Home() {
 						case 0: //CR
 							switch (selectedTicketId) {
 								case 0:
-									return <UnderConstruction />;
 								case 1:
-									return <CRWideTicket />;
+									return <UnderConstruction />;
 								case 2:
-								case 3:
-								case 4:
+									return <CRWideTicket />;
 								default:
 									return <UnderConstruction />;
 							}
