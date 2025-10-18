@@ -361,6 +361,7 @@ export default function TrainTicket() {
 			canvasWidth={canvasWidth}
 			canvasHeight={canvasHeight}
 			canvasBorderRadius={background === CRTicketBackGround.MagBlue || background === CRTicketBackGround.MagRed ? 16 : 0}
+			canvasShowShandow={background === CRTicketBackGround.SoftRed || background === CRTicketBackGround.SoftBlue}
 			scaleXWidth={1698}
 			scaleYWidth={1162}
 			saveFilename={`ticket_${station1}-${station2}`}
