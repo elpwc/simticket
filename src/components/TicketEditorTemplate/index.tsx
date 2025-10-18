@@ -14,8 +14,7 @@ interface Props {
 		ctx: CanvasRenderingContext2D | null,
 		scaleX: (x: number) => number,
 		scaleY: (y: number) => number,
-		fontSize: (size: number, isSerif?: boolean) => string,
-		wordWidth: number
+		font: (size: number, fontName: string) => string
 	) => void;
 	canvasWidth: number;
 	canvasHeight: number;
@@ -42,17 +41,16 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 
-		const w = canvas.width * currentSizeScale;
-		const h = canvas.height * currentSizeScale;
+		const w = canvasWidth * currentSizeScale ** 2;
+		const h = canvasHeight * currentSizeScale ** 2;
 
 		const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
 		const scaleY = (y: number) => (y / (scaleYWidth * currentSizeScale)) * h;
-		const wordWidth = h / (100 * currentSizeScale);
-		const fontSize = (size: number, isSerif: boolean = false) => `${(size / (100 * currentSizeScale)) * h}px ${isSerif ? 'serif' : 'sans-serif'}`;
+		const font = (size: number, fontName: string, isBold: boolean = false) => `${isBold ? 'bold' : ''} ${(size / (100 * currentSizeScale)) * h}px ${fontName}`;
 
 		ctx.clearRect(0, 0, w, h);
 
-		onCanvasLoad(canvas, ctx, scaleX, scaleY, fontSize, wordWidth);
+		onCanvasLoad(canvas, ctx, scaleX, scaleY, font);
 	};
 
 	useEffect(() => {
@@ -61,7 +59,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 
 	useEffect(() => {
 		drawTicket();
-	}, [currentSizeScale]);
+	}, [currentSizeScale, canvasHeight, canvasWidth, scaleXWidth, scaleYWidth]);
 
 	const increaseScale = () => {
 		setCurrentSizeScale((prev) => Number((prev + 0.1).toFixed(1)));

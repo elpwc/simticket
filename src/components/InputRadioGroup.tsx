@@ -7,9 +7,10 @@ type Props = {
 	value: string;
 	onChange: (value: string) => void;
 	list: string[];
+	placeholder?: string;
 };
 
-const InputRadioGroup: React.FC<Props> = ({ name, value, onChange, list }) => {
+const InputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, placeholder = '空(自定义)' }) => {
 	const [diyValue, setDiyValue] = useState('');
 
 	return (
@@ -22,11 +23,12 @@ const InputRadioGroup: React.FC<Props> = ({ name, value, onChange, list }) => {
 			))}
 
 			<label className="flex items-center">
-				<input type="radio" name="seat3" checked={!list.includes(value)} onChange={() => onChange(diyValue)} />
+				<input type="radio" name={name} checked={!list.includes(value)} onChange={() => onChange(diyValue)} />
 				<input
 					type="text"
 					value={diyValue}
-					placeholder="自定义"
+					placeholder={placeholder}
+					onClick={() => onChange(diyValue)}
 					onChange={(e) => {
 						const val = e.target.value;
 						setDiyValue(val);

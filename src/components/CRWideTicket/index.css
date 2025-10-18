@@ -4,6 +4,8 @@
 	transition: all 0.1s;
 	border-radius: 4px;
 	border: solid 1px transparent;
+	width: 80px;
+	font-size: 12px;
 }
 
 .CRWideTicketBgSelector-item:hover {
@@ -17,5 +19,5 @@
 
 .CRWideTicketBgSelector-item.disabled {
 	cursor: default;
-	color: rgb(177, 177, 177)
+	color: rgb(177, 177, 177);
 }

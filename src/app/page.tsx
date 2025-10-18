@@ -119,8 +119,10 @@ export default function Home() {
 							switch (selectedTicketId) {
 								case 0:
 								case 1:
-									return <UnderConstruction />;
 								case 2:
+								case 3:
+									return <UnderConstruction />;
+								case 4:
 									return <CRWideTicket />;
 								default:
 									return <UnderConstruction />;

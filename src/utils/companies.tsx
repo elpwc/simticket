@@ -22,18 +22,24 @@ export const companyList: Company[] = [
 		logo: CR_logo,
 		abbr: 'CR',
 		name: '中国国家铁路集团',
-		defaultSelectedTicketId: 2,
+		defaultSelectedTicketId: 4,
 		tickets: [
 			{
-				name: '旧硬票',
+				name: '卡片式客票',
 				disabled: true,
 			},
 			{
-				name: 'II型客票',
+				name: 'II型客票(1984)',
 				disabled: true,
 			},
 			{
-				name: '计算机客票',
+				name: '计算机客票(1996)',
+			},
+			{
+				name: '计算机客票(2000)',
+			},
+			{
+				name: '计算机客票(2010)',
 			},
 		],
 	},
@@ -41,15 +47,16 @@ export const companyList: Company[] = [
 		logo: JR_logo,
 		abbr: 'JR',
 		name: '日本旅客鉄道',
+		defaultSelectedTicketId: 1,
 		tickets: [
+			{
+				name: '硬券(D型券)',
+			},
 			{
 				name: 'JR東日本マルス券',
 			},
 			{
 				name: '近距離きっぷ',
-			},
-			{
-				name: '硬券(D型券)',
 			},
 		],
 	},

@@ -1,6 +1,6 @@
-import cr_red from '../../assets/tickets/cr_red.png';
-import cr_blue from '../../assets/tickets/cr_blue.png';
-import cr_mag_blue from '../../assets/tickets/cr_mag_blue.png';
+import cr_red_preview from '../../assets/tickets_preview/cr_red.png';
+import cr_blue_preview from '../../assets/tickets_preview/cr_blue.png';
+import cr_mag_blue_preview from '../../assets/tickets_preview/cr_mag_blue.png';
 import './index.css';
 
 export enum CRTicketBackGround {
@@ -19,33 +19,33 @@ const bgInfos = [
 	{
 		id: 'cr_red',
 		title: '软纸红票',
-		img: cr_red.src,
+		img: cr_red_preview.src,
 		value: CRTicketBackGround.SoftRed,
 	},
 	{
 		id: 'cr_blue',
 		title: '软纸蓝票',
-		img: cr_blue.src,
+		img: cr_blue_preview.src,
 		value: CRTicketBackGround.SoftBlue,
 	},
 	{
 		id: 'cr_mag_red',
 		title: '磁纸红票',
-		img: cr_red.src,
+		img: cr_red_preview.src,
 		value: CRTicketBackGround.MagRed,
 		disabled: true,
 	},
 	{
 		id: 'cr_mag_blue',
 		title: '磁纸蓝票',
-		img: cr_mag_blue.src,
+		img: cr_mag_blue_preview.src,
 		value: CRTicketBackGround.MagBlue,
 	},
 ];
 
 export const CRWideTicketBgSelector = ({ value, onChange }: Props) => {
 	return (
-		<div className="flex flex-row gap-4">
+		<div className="flex flex-row gap-4 flex-wrap [&>*]:flex-shrink-0">
 			{bgInfos.map((bgInfo) => {
 				return (
 					<label
@@ -58,7 +58,7 @@ export const CRWideTicketBgSelector = ({ value, onChange }: Props) => {
 						}}
 					>
 						<div className="flex flex-col items-center">
-							<img src={bgInfo.img} alt={bgInfo.id} className="w-16 h-auto border" />
+							<img src={bgInfo.img} alt={bgInfo.id} className="w-16 h-auto border border-[lab(88_0_-0.01)]" />
 							{bgInfo.title}
 						</div>
 					</label>
