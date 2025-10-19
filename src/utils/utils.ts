@@ -47,7 +47,6 @@ export enum DrawTextMethod {
 	fillText,
 	strokeText,
 }
-
 export const drawText = (
 	ctx: CanvasRenderingContext2D,
 	text: string,
@@ -56,88 +55,103 @@ export const drawText = (
 	w: number = NaN,
 	align: TextAlign = TextAlign.Left,
 	method: DrawTextMethod = DrawTextMethod.fillText,
-	letterSpacing: number = 0
+	/* 字间距 */
+	letterSpacing: number = 0,
+	/* 行间距 相对于字体大小的倍数*/
+	lineHeight: number = 1.2
 ) => {
 	if (!text) return;
 
-	const chars = [...text];
-	const charWidths = chars.map((ch) => ctx.measureText(ch).width);
-
-	const textWidth = charWidths.reduce((a, b) => a + b, 0) + letterSpacing * (chars.length - 1);
-
-	let scaleX = 1;
-	if (!isNaN(w) && textWidth > w) scaleX = w / textWidth;
+	const lines = text.split('\n');
+	const fontSize = parseFloat(ctx.font.match(/\d+(\.\d+)?/g)?.[0] || '16');
+	const actualLineHeight = fontSize * lineHeight;
 
 	ctx.save();
 	ctx.translate(x, y);
-	ctx.scale(scaleX, 1);
 
-	const availableWidth = isNaN(w) ? textWidth : w / scaleX;
-	const isJustify = align === TextAlign.JustifyBetween || align === TextAlign.JustifyAround || align === TextAlign.JustifyEvenly;
+	for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+		const line = lines[lineIndex];
+		const chars = [...line];
+		const charWidths = chars.map((ch) => ctx.measureText(ch).width);
+		const textWidth = charWidths.reduce((a, b) => a + b, 0) + letterSpacing * (chars.length - 1);
 
-	if (isJustify && !isNaN(w)) {
-		if (chars.length === 1) {
-			const singleOffset = (availableWidth - charWidths[0]) / 2;
-			method === DrawTextMethod.fillText ? ctx.fillText(chars[0], singleOffset, 0) : ctx.strokeText(chars[0], singleOffset, 0);
-		} else {
-			const baseWidth = charWidths.reduce((a, b) => a + b, 0);
-			const totalGap = availableWidth - baseWidth;
+		let scaleX = 1;
+		if (!isNaN(w) && textWidth > w) scaleX = w / textWidth;
 
-			let leftPadding = 0;
-			let gap = 0;
+		ctx.save();
+		ctx.scale(scaleX, 1);
 
-			switch (align) {
-				case TextAlign.JustifyBetween:
-					leftPadding = 0;
-					gap = totalGap / (chars.length - 1);
-					break;
-				case TextAlign.JustifyAround:
-					gap = totalGap / chars.length;
-					leftPadding = gap / 2;
-					break;
-				case TextAlign.JustifyEvenly:
-					gap = totalGap / (chars.length + 1);
-					leftPadding = gap;
-					break;
+		const availableWidth = isNaN(w) ? textWidth : w / scaleX;
+		const isJustify = align === TextAlign.JustifyBetween || align === TextAlign.JustifyAround || align === TextAlign.JustifyEvenly;
+
+		let cursorX = 0;
+
+		// 对齐
+		if (isJustify && !isNaN(w)) {
+			if (chars.length === 1) {
+				cursorX = (availableWidth - charWidths[0]) / 2;
+			} else {
+				const baseWidth = charWidths.reduce((a, b) => a + b, 0);
+				const totalGap = availableWidth - baseWidth;
+				let leftPadding = 0;
+				let gap = 0;
+
+				switch (align) {
+					case TextAlign.JustifyBetween:
+						leftPadding = 0;
+						gap = totalGap / (chars.length - 1);
+						break;
+					case TextAlign.JustifyAround:
+						gap = totalGap / chars.length;
+						leftPadding = gap / 2;
+						break;
+					case TextAlign.JustifyEvenly:
+						gap = totalGap / (chars.length + 1);
+						leftPadding = gap;
+						break;
+				}
+
+				cursorX = leftPadding;
+
+				for (let i = 0; i < chars.length; i++) {
+					const ch = chars[i];
+					method === DrawTextMethod.fillText ? ctx.fillText(ch, cursorX, 0) : ctx.strokeText(ch, cursorX, 0);
+					cursorX += charWidths[i] + gap;
+				}
+
+				ctx.restore();
+				ctx.translate(0, actualLineHeight);
+				continue;
 			}
-
-			let cursor = leftPadding;
-			for (let i = 0; i < chars.length; i++) {
-				const ch = chars[i];
-				method === DrawTextMethod.fillText ? ctx.fillText(ch, cursor, 0) : ctx.strokeText(ch, cursor, 0);
-				cursor += charWidths[i] + gap;
+		} else {
+			// 非 Justify 对齐
+			switch (align) {
+				case TextAlign.Center:
+					cursorX = (availableWidth - textWidth) / 2;
+					break;
+				case TextAlign.Right:
+					cursorX = availableWidth - textWidth;
+					break;
+				case TextAlign.Left:
+				default:
+					cursorX = 0;
+					break;
 			}
 		}
 
+		// 绘
+		for (let i = 0; i < chars.length; i++) {
+			const ch = chars[i];
+			method === DrawTextMethod.fillText ? ctx.fillText(ch, cursorX, 0) : ctx.strokeText(ch, cursorX, 0);
+			cursorX += charWidths[i] + letterSpacing;
+		}
+
 		ctx.restore();
-		return;
-	}
-
-	//非 justify
-	let cursorX = 0;
-	switch (align) {
-		case TextAlign.Right:
-			cursorX = availableWidth - textWidth;
-			break;
-		case TextAlign.Center:
-			cursorX = (availableWidth - textWidth) / 2;
-			break;
-		case TextAlign.Left:
-		default:
-			cursorX = 0;
-			break;
-	}
-
-	let cursor = cursorX;
-	for (let i = 0; i < chars.length; i++) {
-		const ch = chars[i];
-		method === DrawTextMethod.fillText ? ctx.fillText(ch, cursor, 0) : ctx.strokeText(ch, cursor, 0);
-		cursor += charWidths[i] + letterSpacing;
+		ctx.translate(0, actualLineHeight);
 	}
 
 	ctx.restore();
 };
-
 export const CR_TRAIN_TYPES = [
 	{ value: 'G', desc: '高铁' },
 	{ value: 'D', desc: '动车' },

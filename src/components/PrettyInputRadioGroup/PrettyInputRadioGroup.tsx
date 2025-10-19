@@ -13,9 +13,10 @@ type Props = {
 	onChange: (value: string) => void;
 	list: Option[];
 	placeholder?: string;
+	showInputBox?: boolean;
 };
 
-const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeholder = '空(自定义)' }) => {
+const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeholder = '空(自定义)', showInputBox = true }) => {
 	const [diyValue, setDiyValue] = useState('');
 
 	const handleSelect = (val: string) => {
@@ -35,18 +36,20 @@ const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeho
 				);
 			})}
 
-			<input
-				type="text"
-				className={`radio-diy-input ${isCustomActive ? 'active' : ''}`}
-				placeholder={placeholder}
-				value={diyValue}
-				onClick={() => handleSelect(diyValue)}
-				onChange={(e) => {
-					const val = e.target.value;
-					setDiyValue(val);
-					if (isCustomActive) onChange(val);
-				}}
-			/>
+			{showInputBox && (
+				<input
+					type="text"
+					className={`radio-diy-input ${isCustomActive ? 'active' : ''}`}
+					placeholder={placeholder}
+					value={diyValue}
+					onClick={() => handleSelect(diyValue)}
+					onChange={(e) => {
+						const val = e.target.value;
+						setDiyValue(val);
+						if (isCustomActive) onChange(val);
+					}}
+				/>
+			)}
 		</div>
 	);
 };
