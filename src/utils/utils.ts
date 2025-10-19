@@ -1,6 +1,6 @@
 import QRCode from 'qrcode';
 
-export const saveCanvasToLocal = (canvas: HTMLCanvasElement | null, filename: string) => {
+export const saveCanvasToLocal = (canvas: HTMLCanvasElement | null, filename: string, onSave?: () => void) => {
 	if (!canvas) return;
 
 	canvas.toBlob((blob) => {
@@ -13,6 +13,8 @@ export const saveCanvasToLocal = (canvas: HTMLCanvasElement | null, filename: st
 		a.click();
 
 		URL.revokeObjectURL(url);
+
+		onSave?.();
 	}, 'image/png');
 };
 

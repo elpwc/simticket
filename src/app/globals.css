@@ -1,3 +1,4 @@
+@tailwind utilities;
 @import 'tailwindcss';
 
 :root {
@@ -40,6 +41,16 @@ button {
 
 button:hover {
 	background-color: #e6e6e6;
+}
+
+button.disabled {
+	cursor: default;
+	color: gray;
+	background-color: #ccc;
+}
+
+button.disabled:hover {
+	background-color: #ccc;
 }
 
 .company-menu-item {

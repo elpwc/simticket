@@ -7,6 +7,7 @@ import TiltCanvas from '../TiltCanvas';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import { useIsMobile } from '@/utils/hooks';
 import clsx from 'clsx';
+import { SaveImageModal } from '@/components/Modals/SaveImageModal';
 
 interface Props {
 	onCanvasLoad: (
@@ -34,6 +35,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 
 	const [enableCanvasTilt, setEnableCanvasTilt] = useState(true);
 	const [currentSizeScale, setCurrentSizeScale] = useState(1);
+	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
 
 	const drawTicket = () => {
 		const canvas = canvasRef.current;
@@ -109,7 +111,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 					<button
 						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
 						onClick={() => {
-							saveCanvasToLocal(canvasRef.current, saveFilename);
+							setShowSaveImageModal(true);
 						}}
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -146,6 +148,27 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 				/>
 			</div>
 			<div className={clsx(isMobile ? 'w-[100%]' : 'w-[60%]')}>{form}</div>
+			<SaveImageModal
+				show={showSaveImageModal}
+				onClose={() => {
+					setShowSaveImageModal(false);
+				}}
+				onSave={(scale: number, title: string) => {
+					const prevSizeScale = currentSizeScale;
+					setCurrentSizeScale(scale);
+
+					setTimeout(() => {
+						saveCanvasToLocal(
+							canvasRef.current,
+							saveFilename + '_' + title,
+							/* onSave */ () => {
+								setCurrentSizeScale(prevSizeScale);
+							}
+						);
+					}, 1000);
+				}}
+				defaultCanvasSize={[canvasWidth, canvasHeight]}
+			/>
 		</div>
 	);
 };
