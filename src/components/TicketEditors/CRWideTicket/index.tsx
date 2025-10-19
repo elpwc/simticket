@@ -146,9 +146,11 @@ export default function TrainTicket() {
 			switch (background) {
 				case CRTicketBackGround.MagRed:
 				case CRTicketBackGround.MagBlue:
+				case CRTicketBackGround.MagNoneBackground:
 					return scaleX((value / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]);
 				case CRTicketBackGround.SoftRed:
 				case CRTicketBackGround.SoftBlue:
+				case CRTicketBackGround.SoftNoneBackground:
 				default:
 					return scaleX(value);
 			}
@@ -157,9 +159,11 @@ export default function TrainTicket() {
 			switch (background) {
 				case CRTicketBackGround.MagRed:
 				case CRTicketBackGround.MagBlue:
+				case CRTicketBackGround.MagNoneBackground:
 					return scaleY((value / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]);
 				case CRTicketBackGround.SoftRed:
 				case CRTicketBackGround.SoftBlue:
+				case CRTicketBackGround.SoftNoneBackground:
 				default:
 					return scaleY(value);
 			}
@@ -168,9 +172,11 @@ export default function TrainTicket() {
 			switch (background) {
 				case CRTicketBackGround.MagRed:
 				case CRTicketBackGround.MagBlue:
+				case CRTicketBackGround.MagNoneBackground:
 					return scaleX(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeHori) / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]) + offsetX;
 				case CRTicketBackGround.SoftRed:
 				case CRTicketBackGround.SoftBlue:
+				case CRTicketBackGround.SoftNoneBackground:
 				default:
 					return scaleX(value) + offsetX;
 			}
@@ -179,9 +185,11 @@ export default function TrainTicket() {
 			switch (background) {
 				case CRTicketBackGround.MagRed:
 				case CRTicketBackGround.MagBlue:
+				case CRTicketBackGround.MagNoneBackground:
 					return scaleY(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeVert) / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]) + offsetY;
 				case CRTicketBackGround.SoftRed:
 				case CRTicketBackGround.SoftBlue:
+				case CRTicketBackGround.SoftNoneBackground:
 				default:
 					return scaleY(value) + offsetY;
 			}
@@ -190,9 +198,11 @@ export default function TrainTicket() {
 			switch (background) {
 				case CRTicketBackGround.MagRed:
 				case CRTicketBackGround.MagBlue:
+				case CRTicketBackGround.MagNoneBackground:
 					return font((size / MAG_TICKET_CANVAS_SIZE[1]) * PAPER_TICKET_CANVAS_SIZE[1], fontName, isBold);
 				case CRTicketBackGround.SoftRed:
 				case CRTicketBackGround.SoftBlue:
+				case CRTicketBackGround.SoftNoneBackground:
 				default:
 					return font(size, fontName, isBold);
 			}
@@ -212,15 +222,29 @@ export default function TrainTicket() {
 			case CRTicketBackGround.MagBlue:
 				bg.src = cr_mag_blue.src;
 				break;
+			case CRTicketBackGround.MagNoneBackground:
+			case CRTicketBackGround.SoftNoneBackground:
+				break;
 		}
-		bg.onload = () => {
-			ctx.fillStyle = 'white';
-			ctx.fillRect(0, 0, w, h);
+
+		const draw = () => {
+			// 清空
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			// 底图
-			if (background === CRTicketBackGround.SoftRed || background === CRTicketBackGround.SoftBlue) {
-				ctx.drawImage(bg, w * backgroundEdgeHori, h * backgroundEdgeVert, w * (1 - 2 * backgroundEdgeHori), h * (1 - 2 * backgroundEdgeVert));
-			} else {
-				ctx.drawImage(bg, 0, 0, w, h);
+			switch (background) {
+				case CRTicketBackGround.MagRed:
+				case CRTicketBackGround.MagBlue:
+					ctx.drawImage(bg, 0, 0, w, h);
+					break;
+				case CRTicketBackGround.SoftRed:
+				case CRTicketBackGround.SoftBlue:
+					ctx.fillStyle = 'white';
+					ctx.fillRect(0, 0, w, h);
+					ctx.drawImage(bg, w * backgroundEdgeHori, h * backgroundEdgeVert, w * (1 - 2 * backgroundEdgeHori), h * (1 - 2 * backgroundEdgeVert));
+					break;
+				case CRTicketBackGround.MagNoneBackground:
+				case CRTicketBackGround.SoftNoneBackground:
+					break;
 			}
 
 			// 票号
@@ -419,16 +443,34 @@ export default function TrainTicket() {
 			ctx.font = resizedFont(5.5, 'SongTi');
 			ctx.fillText(serialCode + (showSoldPlaceDown ? `  ${soldplace}售` : ''), offsetScaleX(133), offsetScaleY(1080), resizedScaleX(1090));
 		};
+
+		switch (background) {
+			case CRTicketBackGround.SoftRed:
+			case CRTicketBackGround.SoftBlue:
+			case CRTicketBackGround.MagRed:
+			case CRTicketBackGround.MagBlue:
+				// 有背景的
+				bg.onload = () => {
+					draw();
+				};
+				break;
+			case CRTicketBackGround.MagNoneBackground:
+			case CRTicketBackGround.SoftNoneBackground:
+				draw();
+				break;
+		}
 	};
 
 	useEffect(() => {
 		switch (background) {
 			case CRTicketBackGround.MagRed:
 			case CRTicketBackGround.MagBlue:
+			case CRTicketBackGround.MagNoneBackground:
 				setCanvasSize(MAG_TICKET_CANVAS_SIZE);
 				break;
 			case CRTicketBackGround.SoftRed:
 			case CRTicketBackGround.SoftBlue:
+			case CRTicketBackGround.SoftNoneBackground:
 				setCanvasSize(PAPER_TICKET_CANVAS_SIZE);
 				break;
 		}
@@ -498,7 +540,7 @@ export default function TrainTicket() {
 			canvasWidth={canvasSize[0]}
 			canvasHeight={canvasSize[1]}
 			canvasBorderRadius={background === CRTicketBackGround.MagBlue || background === CRTicketBackGround.MagRed ? 16 : 0}
-			canvasShowShandow={background === CRTicketBackGround.SoftRed || background === CRTicketBackGround.SoftBlue}
+			canvasShowShandow={background !== CRTicketBackGround.MagBlue && background !== CRTicketBackGround.MagRed}
 			scaleXWidth={size[0]}
 			scaleYWidth={size[1]}
 			saveFilename={`ticket_${station1}-${station2}`}

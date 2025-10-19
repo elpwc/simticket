@@ -1,6 +1,8 @@
 import cr_red_preview from '../../../assets/tickets_preview/cr_red.png';
 import cr_blue_preview from '../../../assets/tickets_preview/cr_blue.png';
 import cr_mag_blue_preview from '../../../assets/tickets_preview/cr_mag_blue.png';
+import cr_preview from '../../../assets/tickets_preview/cr.png';
+import cr_mag_preview from '../../../assets/tickets_preview/cr_mag.png';
 import './index.css';
 
 export enum CRTicketBackGround {
@@ -8,6 +10,8 @@ export enum CRTicketBackGround {
 	SoftBlue,
 	MagRed,
 	MagBlue,
+	SoftNoneBackground,
+	MagNoneBackground,
 }
 
 interface Props {
@@ -41,15 +45,27 @@ const bgInfos = [
 		img: cr_mag_blue_preview.src,
 		value: CRTicketBackGround.MagBlue,
 	},
+	{
+		id: 'cr_text',
+		title: '无背景软纸',
+		img: cr_preview.src,
+		value: CRTicketBackGround.SoftNoneBackground,
+	},
+	{
+		id: 'cr_mag_text',
+		title: '无背景磁纸',
+		img: cr_mag_preview.src,
+		value: CRTicketBackGround.MagNoneBackground,
+	},
 ];
 
 export const CRWideTicketBgSelector = ({ value, onChange }: Props) => {
 	return (
-		<div className="flex flex-row gap-4 flex-wrap [&>*]:flex-shrink-0">
+		<div className="flex flex-row gap-4 flex-wrap">
 			{bgInfos.map((bgInfo) => {
 				return (
 					<label
-						className={'CRWideTicketBgSelector-item flex items-center' + (value === bgInfo.value ? ' selected' : '') + (bgInfo.disabled === true ? ' disabled' : '')}
+						className={'CRWideTicketBgSelector-item flex-[50px] items-center' + (value === bgInfo.value ? ' selected' : '') + (bgInfo.disabled === true ? ' disabled' : '')}
 						key={bgInfo.id}
 						onClick={() => {
 							if (bgInfo.disabled !== true) {
