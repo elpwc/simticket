@@ -1,6 +1,6 @@
-import cr_red_preview from '../../assets/tickets_preview/cr_red.png';
-import cr_blue_preview from '../../assets/tickets_preview/cr_blue.png';
-import cr_mag_blue_preview from '../../assets/tickets_preview/cr_mag_blue.png';
+import cr_red_preview from '../../../assets/tickets_preview/cr_red.png';
+import cr_blue_preview from '../../../assets/tickets_preview/cr_blue.png';
+import cr_mag_blue_preview from '../../../assets/tickets_preview/cr_mag_blue.png';
 import './index.css';
 
 export enum CRTicketBackGround {

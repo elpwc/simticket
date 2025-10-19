@@ -4,7 +4,7 @@ import { JSX, useEffect, useRef, useState } from 'react';
 import './index.css';
 import { saveCanvasToLocal } from '@/utils/utils';
 import TiltCanvas from '../TiltCanvas';
-import Toggle from '../Toggle';
+import Toggle from '../../InfrastructureCompo/Toggle';
 import { useIsMobile } from '@/utils/hooks';
 import clsx from 'clsx';
 

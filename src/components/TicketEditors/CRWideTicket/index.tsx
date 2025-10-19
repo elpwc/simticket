@@ -1,30 +1,30 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import cr_red from '../../assets/tickets/cr_red.png';
-import cr_blue from '../../assets/tickets/cr_blue.png';
-import cr_mag_blue from '../../assets/tickets/cr_mag_blue.png';
+import cr_red from '../../../assets/tickets/cr_red.png';
+import cr_blue from '../../../assets/tickets/cr_blue.png';
+import cr_mag_blue from '../../../assets/tickets/cr_mag_blue.png';
 import './index.css';
-import TicketEditorTemplate from '../TicketEditorTemplate';
+import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
 import { CR_TRAIN_TYPE_ARRAY, CR_TRAIN_TYPES, drawQRCode, drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
-import Toggle from '../Toggle';
-import TabBox from '../TabBox';
-import InputRadioGroup from '../InputRadioGroup';
-import { Divider } from '../Divider';
+import Toggle from '../../InfrastructureCompo/Toggle';
+import TabBox from '../../InfrastructureCompo/TabBox';
+import InputRadioGroup from '../../InfrastructureCompo/InputRadioGroup';
+import { Divider } from '../../InfrastructureCompo/Divider';
 import localFonts from 'next/font/local';
 import { CRWideTicketBgSelector, CRTicketBackGround } from './CRWideTicketBgSelector';
-import PrettyInputRadioGroup from '../PrettyInputRadioGroup/PrettyInputRadioGroup';
+import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGroup/PrettyInputRadioGroup';
 import { pinyin } from 'pinyin-pro';
 
 export const HuawenXinwei = localFonts({
-	src: '../../assets/fonts/STXINWEI.woff2',
+	src: '../../../assets/fonts/STXINWEI.woff2',
 });
 export const SongTi = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
-	src: '../../assets/fonts/NotoSerifSC-VF.woff2',
+	src: '../../../assets/fonts/NotoSerifSC-VF.woff2',
 });
 export const HeiTi = localFonts({
-	src: '../../assets/fonts/simhei.woff2',
+	src: '../../../assets/fonts/simhei.woff2',
 });
 
 const PAPER_TICKET_SIZE = [1698, 1162];
@@ -113,9 +113,9 @@ export default function TrainTicket() {
 	useEffect(() => {
 		const loadFonts = async () => {
 			const fonts = [
-				new FontFace('HuawenXinwei', 'url(../../assets/fonts/STXINWEI.woff2)'),
-				new FontFace('SongTi', 'url(../../assets/fonts/simsun.woff2)'),
-				new FontFace('HeiTi', 'url(../../assets/fonts/simhei.woff2)'),
+				new FontFace('HuawenXinwei', 'url(../../../assets/fonts/STXINWEI.woff2)'),
+				new FontFace('SongTi', 'url(../../../assets/fonts/simsun.woff2)'),
+				new FontFace('HeiTi', 'url(../../../assets/fonts/simhei.woff2)'),
 			];
 			await Promise.all(fonts.map((f) => f.load()));
 			fonts.forEach((f) => document.fonts.add(f));
@@ -967,7 +967,6 @@ export default function TrainTicket() {
 						</label>
 						<label className="ticket-form-label">
 							<div>
-								虚线框内文字
 								<label>
 									<Toggle
 										value={doShowMessage}
@@ -975,7 +974,7 @@ export default function TrainTicket() {
 											setDoShowMessage(value);
 										}}
 									/>
-									<span>显示</span>
+									<span>虚线框内文字</span>
 								</label>
 							</div>
 							<div>
