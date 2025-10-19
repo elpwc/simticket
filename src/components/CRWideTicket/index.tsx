@@ -260,6 +260,7 @@ export default function TrainTicket() {
 					ctx.fillStyle = 'black';
 					ctx.font = `${resizedFont(6, 'SongTi')}`;
 					ctx.fillText('检票:' + turnstile, offsetScaleX(1315), offsetScaleY(210));
+					break;
 				case RightUpContentType.None:
 					// 不显示
 					break;
@@ -413,9 +414,7 @@ export default function TrainTicket() {
 			}
 
 			//QR
-			setQrCodeText(`${station1}-${station2} No.${ticketNo} ${date.toISOString().slice(0, 10)} ${time} ${seatClass}车 ${carriage}${seat1}${seat2}号${seat3} ￥${price}元`);
 			drawQRCode(ctx, offsetScaleX(1223), offsetScaleY(730), resizedScaleX(380), qrCodeText);
-
 			// code 下方购票处
 			ctx.font = resizedFont(5.5, 'SongTi');
 			ctx.fillText(serialCode + (showSoldPlaceDown ? `  ${soldplace}售` : ''), offsetScaleX(133), offsetScaleY(1080), resizedScaleX(1090));
@@ -487,7 +486,7 @@ export default function TrainTicket() {
 				ctx: CanvasRenderingContext2D | null,
 				scaleX: (x: number) => number,
 				scaleY: (y: number) => number,
-				font: (size: number, fontName: string) => string
+				font: (size: number, fontName: string, isBold?: boolean) => string
 			): void {
 				canvasRef.current = canvas;
 				ctxRef.current = ctx;
