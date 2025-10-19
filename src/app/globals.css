@@ -27,6 +27,14 @@ body {
 }
 
 .navitem {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	border-radius: 5px;
+	padding: 0 4px;
+}
+.navitem:hover {
+	background-color: #2396e2;
 }
 
 button {

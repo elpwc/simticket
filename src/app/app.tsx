@@ -6,6 +6,8 @@ import { createContext, useState } from 'react';
 import Image from 'next/image';
 import { companyList } from '@/utils/companies';
 import { useIsMobile } from '@/utils/hooks';
+import { useTranslations } from 'next-intl';
+import LangSwitcher from '@/components/InfrastructureCompo/LangSwitcher';
 
 export const AppContext = createContext<any>(null);
 
@@ -14,6 +16,7 @@ export default function App({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const t = useTranslations('app');
 	const isMobile = useIsMobile();
 
 	const [selectedCompanyId, setSelectedCompanyId] = useState(0);
@@ -23,14 +26,15 @@ export default function App({
 	return (
 		<AppContext.Provider value={{ selectedCompanyId, setSelectedCompanyId, selectedTicketId, setSelectedTicketId, showMobileCompanySelectMenu, setShowMobileCompanySelectMenu }}>
 			<header className="sticky top-0 h-[60px] z-[100]">
-				<nav className="bg-[#007fd4] text-white flex gap-4 items-center justify-between">
-					<section className="p-4 flex gap-4">
+				<nav className="bg-[#007fd4] text-white flex items-center justify-between">
+					<section className="px-2 py-4 flex gap-1 max-h-[56px]">
 						<Link href="/">
 							<div className="navitem">SimTicket</div>
 						</Link>
 						<Link href="/about">
-							<div className="navitem">About</div>
+							<div className="navitem">{t('menu.about')}</div>
 						</Link>
+						<LangSwitcher />
 					</section>
 					<button
 						className="mobile-company-select-button flex items-center gap-2"
