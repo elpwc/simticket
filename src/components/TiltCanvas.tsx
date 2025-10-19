@@ -67,8 +67,18 @@ const TiltCanvas = forwardRef<HTMLCanvasElement, Props>(({ width, height, border
 
 		const handleOrientation = (e: DeviceOrientationEvent) => {
 			// beta: 前後, gamma: 左右
-			const beta = e.beta ?? 0; // [-180, 180]
-			const gamma = e.gamma ?? 0; // [-90, 90]
+			let beta = ((e.beta ?? 0) / 12) * 180; // [-180, 180]
+			let gamma = ((e.gamma ?? 0) / 12) * 90; // [-90, 90]
+			if (beta > 180) {
+				beta = 180;
+			} else if (beta < -180) {
+				beta = -180;
+			}
+			if (gamma > 180) {
+				gamma = 180;
+			} else if (gamma < -180) {
+				gamma = -180;
+			}
 
 			const mappedX = Math.max(-maxRotate, Math.min(maxRotate, -beta / 10));
 			const mappedY = Math.max(-maxRotate, Math.min(maxRotate, gamma / 10));

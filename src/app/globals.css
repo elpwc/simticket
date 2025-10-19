@@ -53,6 +53,7 @@ button:hover {
 	cursor: pointer;
 	max-width: 120px;
 	transition: all 0.1s;
+	flex: 1 1 80px;
 }
 
 .company-menu-item.disabled {
@@ -79,6 +80,8 @@ button:hover {
 	padding: 4px 32px;
 	border-radius: 4px;
 	transition: all 0.1s;
+	flex: 1 1 150px;
+	max-width: max-content;
 }
 .ticket-menu-item.disabled {
 	color: rgb(185, 185, 185);

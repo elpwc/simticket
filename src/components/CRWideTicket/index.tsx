@@ -622,9 +622,9 @@ export default function TrainTicket() {
 					<TabBox title="运行信息" className="flex flex-wrap gap-2">
 						<label className="ticket-form-label">
 							车次
-							<div className="flex gap-4 items-center">
+							<div className="flex gap-4 items-center flex-wrap">
 								<input value={routeIdentifier} onChange={(e) => setRouteIdentifier(e.target.value)} />
-								<label>
+								<label className="">
 									<Toggle
 										value={routeIdentifier.substring(0, 1) === '0' ? true : false}
 										onChange={(value) => {
@@ -783,7 +783,7 @@ export default function TrainTicket() {
 						</label>
 						<label className="ticket-form-label">
 							右上角显示
-							<div className="flex items-center">
+							<div className="flex items-center flex-wrap">
 								<PrettyInputRadioGroup
 									list={[
 										{ value: RightUpContentType.None, title: '不显示' },

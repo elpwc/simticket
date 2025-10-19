@@ -72,28 +72,30 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 	return (
 		<div className={clsx(isMobile ? 'flex-col' : 'flex-row', 'w-[100%] flex items-start justify-start')}>
 			<div className={clsx(isMobile ? 'w-[100%] border-b-[solid_1px_#ccc]' : 'w-[40%]', 'flex flex-col items-center h-[100%] sticky top-[56px] z-[50] bg-[#ffffff9e] backdrop-blur-[8px] ')}>
-				<div className="flex justify-center items-center">
+				<div className="flex justify-center items-center flex-wrap">
+					<div className="ticketEditorTemplateToolBarItem flex">
+						<button
+							onClick={() => {
+								increaseScale();
+							}}
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+							</svg>
+						</button>
+						<span>{currentSizeScale.toFixed(1) + '×'}</span>
+						<button
+							onClick={() => {
+								reduceScale();
+							}}
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8" />
+							</svg>
+						</button>
+					</div>
 					<button
-						onClick={() => {
-							increaseScale();
-						}}
-					>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-							<path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
-						</svg>
-					</button>
-					<span>{currentSizeScale.toFixed(1) + '×'}</span>
-					<button
-						onClick={() => {
-							reduceScale();
-						}}
-					>
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-							<path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8" />
-						</svg>
-					</button>
-					<button
-						className="flex items-center gap-1"
+						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
 						onClick={() => {
 							drawTicket();
 						}}
@@ -105,7 +107,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 						画像更新
 					</button>
 					<button
-						className="flex items-center gap-1"
+						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
 						onClick={() => {
 							saveCanvasToLocal(canvasRef.current, saveFilename);
 						}}
@@ -116,7 +118,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 						</svg>
 						画像保存
 					</button>
-					<label>
+					<label className="ticketEditorTemplateToolBarItem">
 						<Toggle
 							value={enableCanvasTilt}
 							onChange={(value) => {

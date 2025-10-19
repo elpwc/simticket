@@ -23,8 +23,8 @@ export default function App({
 	return (
 		<AppContext.Provider value={{ selectedCompanyId, setSelectedCompanyId, selectedTicketId, setSelectedTicketId, showMobileCompanySelectMenu, setShowMobileCompanySelectMenu }}>
 			<header className="sticky top-0 h-[60px] z-[100]">
-				<nav className="bg-[#007fd4] text-white flex gap-10 items-center justify-between">
-					<section className="p-4 flex gap-10">
+				<nav className="bg-[#007fd4] text-white flex gap-4 items-center justify-between">
+					<section className="p-4 flex gap-4">
 						<Link href="/">
 							<div className="navitem">SimTicket</div>
 						</Link>

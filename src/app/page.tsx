@@ -153,7 +153,7 @@ export default function Home() {
 						case 5: // VNR
 						case 6: // KR
 						default:
-							return <CRWideTicket />;
+							return <UnderConstruction />;
 					}
 				})()}
 			</motion.div>

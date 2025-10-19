@@ -1,0 +1,4 @@
+.ticketEditorTemplateToolBarItem {
+	flex: 1 1 100px;
+	max-width: max-content;
+}
