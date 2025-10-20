@@ -951,9 +951,9 @@ export default function CRWideTicket() {
 							<div className="flex gap-3 flex-wrap">
 								<PrettyInputRadioGroup
 									list={[
-										{ value: 'up', title: '上铺' },
-										{ value: 'center', title: '中铺' },
-										{ value: 'down', title: '下铺' },
+										{ value: '上铺', title: '上铺' },
+										{ value: '中铺', title: '中铺' },
+										{ value: '下铺', title: '下铺' },
 									]}
 									value={seat3}
 									onChange={(value: string) => {
