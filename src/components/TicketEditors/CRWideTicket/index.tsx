@@ -45,7 +45,7 @@ const enum RightUpContentType {
 	Turnstile = 'turnstile',
 }
 
-export default function TrainTicket() {
+export default function CRWideTicket() {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
 	const scaleXRef = useRef<(x: number) => number>(null);
@@ -549,10 +549,12 @@ export default function TrainTicket() {
 			drawText(ctx, `${info3}`, offsetScaleX(140), offsetScaleY(734));
 
 			// 身份证+姓名
-			ctx.font = resizedFont(6.5, 'HeiTi');
-			ctx.fillText(idNumber, offsetScaleX(133), offsetScaleY(824));
-			ctx.font = resizedFont(6, 'SongTi');
-			ctx.fillText(passenger, offsetScaleX(839), offsetScaleY(824));
+			if (doShowPassenger) {
+				ctx.font = resizedFont(6.5, 'HeiTi');
+				ctx.fillText(idNumber, offsetScaleX(133), offsetScaleY(824));
+				ctx.font = resizedFont(6, 'SongTi');
+				ctx.fillText(passenger, offsetScaleX(839), offsetScaleY(824));
+			}
 
 			// 说明
 			if (doShowMessage) {
