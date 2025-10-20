@@ -15,6 +15,7 @@ import localFonts from 'next/font/local';
 import { CRWideTicketBgSelector, CRTicketBackGround } from './CRWideTicketBgSelector';
 import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGroup/PrettyInputRadioGroup';
 import { pinyin } from 'pinyin-pro';
+import { DescriptionButton } from '@/components/InfrastructureCompo/DescriptionButton';
 
 export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
@@ -26,6 +27,12 @@ export const SongTi = localFonts({
 export const HeiTi = localFonts({
 	src: '../../../assets/fonts/simhei.woff2',
 });
+
+interface PurchaseMethod {
+	type: string;
+	title: string;
+	desc: string;
+}
 
 const PAPER_TICKET_SIZE = [1698, 1162];
 const MAG_TICKET_SIZE = [1689, 1042];
@@ -49,8 +56,10 @@ export default function TrainTicket() {
 	const [canvasSize, setCanvasSize] = useState(PAPER_TICKET_CANVAS_SIZE);
 
 	const [background, setBackground] = useState<CRTicketBackGround>(CRTicketBackGround.SoftRed);
+	const [isHKWestKowloonStyle, setIsHKWestKowloonStyle] = useState(false);
 	const [offsetX, setOffsetX] = useState(0);
 	const [offsetY, setOffsetY] = useState(0);
+	const [showWatermark, setShowWatermark] = useState(true);
 	const [watermark, setWatermark] = useState('票样');
 	const [ticketNo, setTicketNo] = useState('A000001');
 	const [station1, setStation1] = useState('东京都区内');
@@ -79,12 +88,15 @@ export default function TrainTicket() {
 	const [rightUpContentType, setRightUpContentType] = useState(RightUpContentType.Turnstile);
 	const [serialCode, setSerialCode] = useState('1145141919810A000001 JM');
 	const [qrCodeText, setQrCodeText] = useState('1145141919810');
-	const [purchaseMethod, setPurchaseMethod] = useState(['学', '网']);
+	const [purchaseMethod, setPurchaseMethod] = useState<PurchaseMethod[]>([
+		{ type: '票种', title: '学', desc: '学生票' },
+		{ type: '售票方式', title: '网', desc: '互联网售票' },
+	]);
 	const [doPurchaseMethodHaveCircle, setDoPurchaseMethodHaveCircle] = useState(true);
 	const [noSeat, setNoSeat] = useState(false);
 	const [noCarriage, setNoCarriage] = useState(false);
-	const [info1, setInfo1] = useState('限乘当日当次车');
-	const [info2, setInfo2] = useState('中途下车失效');
+	const [info1, setInfo1] = useState('乘车纪念');
+	const [info2, setInfo2] = useState('');
 	const [info3, setInfo3] = useState('');
 	const [message, setMessage] = useState(`买票请到12306 发货请到95306
 中国铁路祝您旅途愉快`);
@@ -94,13 +106,67 @@ export default function TrainTicket() {
 	const [info1from, setinfo1From] = useState('');
 	const [info1to, setinfo1To] = useState('');
 
-	const purchaseMethodList = ['孩', '学', '工', '军', '残', '网', '折', '惠', '支', '微', '赠', '招', '中', '团', '纪念票', '挂失补'];
-	const info1List = ['限乘当日当次车'];
-	const info2List = ['中途下车失效', '在2日内有效', '在3日内有效', '随原票使用', '随原票使用有效'];
-	const info3List = ['仅供报销使用', '变更到站', '退票费', '中转签证', '乘车证签证', '始发改签'];
+	const purchaseMethodList: PurchaseMethod[] = [
+		{ type: '票种', title: '孩', desc: '儿童票' },
+		{ type: '票种', title: '学', desc: '学生票' },
+		{ type: '票种', title: '军', desc: '残疾军人票' },
+		{ type: '票种', title: '探', desc: '探亲乘车证签证票' },
+		{ type: '票种', title: '半', desc: '省部级领导车票' },
+		{ type: '票种', title: '兵', desc: '军人票' },
+		{ type: '票种', title: '红', desc: '红色旅游学生团体硬座20%优惠' },
+		{ type: '票种', title: '学返', desc: '学生返程票' },
+		{ type: '票种', title: '团', desc: '全价票团体票' },
+		{ type: '票种', title: '团优', desc: '0票价团优票' },
+		{ type: '票种', title: '返', desc: '农民工返程票' },
+		{ type: '售票方式', title: '网', desc: '互联网售票' },
+		{ type: '窗口POS支付打印字', title: '工', desc: '工行POS刷卡支付车票打印字' },
+		{ type: '窗口POS支付打印字', title: '农', desc: '农行POS刷卡支付车票打印字' },
+		{ type: '窗口POS支付打印字', title: '中', desc: '中行POS刷卡支付车票打印字' },
+		{ type: '窗口POS支付打印字', title: '招', desc: '招行POS刷卡支付车票打印字' },
+		{ type: '网上购买车票窗口改签打印字', title: '建', desc: '网上建行购票窗口改签打印' },
+		{ type: '网上购买车票窗口改签打印字', title: '支', desc: '网上支付宝购票窗口改签打印' },
+		{ type: '网上购买车票窗口改签打印字', title: '银', desc: '网上银通卡购票窗口改签打印' },
+		{ type: '网上购买车票窗口改签打印字', title: '微', desc: '网上微信购票窗口改签打印' },
+		{ type: '网上购买车票窗口改签打印字', title: '京', desc: '网上京东购票窗口改签打印' },
+		{ type: '网上购买车票窗口改签打印字', title: '现', desc: '' },
+		{ type: '其他', title: '赠', desc: '网上积分购票换票时打印' },
+		{ type: '其他', title: '折', desc: '' },
+		{ type: '其他', title: '补', desc: '进站补票打印' },
+		{ type: '其他', title: '专', desc: '残疾人专用票额车票打印' },
+		{ type: '其他', title: '行', desc: '' },
+		{ type: '其他', title: '车', desc: '' },
+		{ type: '其他', title: '残', desc: '' },
+		{ type: '其他', title: '软', desc: '' },
+		{ type: '其他', title: '硬', desc: '' },
+		{ type: '其他', title: '纪念票', desc: '残疾人专用票额车票打印' },
+		{ type: '其他', title: '挂失补', desc: '残疾人专用票额车票打印' },
+	];
+	const info1List = ['限乘当日当次车', '乘车纪念'];
+	const info2List = ['中途下车失效', '在2日内有效', '在3日内有效', '随原票使用', '随原票使用有效', '乘车纪念'];
+	const info3List = ['仅供报销使用', '变更到站', '退票费', '中转签证', '乘车证签证', '始发改签', '乘车纪念'];
 
-	const seatType = ['商务座', '一等座', '二等座', '动卧', '新空调高级软卧', '新空调软卧', '新空调硬卧', '新空调软座', '新空调硬座', '软座', '硬座', '软卧代软座'];
-	const sleepingCarSeatType = ['动卧', '新空调高级软卧', '新空调软卧', '新空调硬卧'];
+	const seatType = [
+		'商务座',
+		'一等座',
+		'二等座',
+		'动卧',
+		'高级动卧',
+		'新空调高级软卧',
+		'新空调软卧',
+		'新空调硬卧',
+		'新空调软座',
+		'新空调硬座',
+		'软座',
+		'硬座',
+		'硬卧代硬座',
+		'软卧代软座',
+		'特等座',
+		'观光座',
+		'棚车',
+		'一等/First Class',
+		'二等/Second Class',
+	];
+	const sleepingCarSeatType = ['动卧', '高级动卧', '新空调高级软卧', '新空调软卧', '新空调硬卧'];
 
 	const messageList = [
 		`买票请到12306 发货请到95306
@@ -252,13 +318,15 @@ export default function TrainTicket() {
 			ctx.font = `${resizedFont(8, 'HeiTi')}`;
 			drawText(ctx, ticketNo, offsetScaleX(118), offsetScaleY(224), resizedScaleX(443), TextAlign.Left, DrawTextMethod.fillText, 1);
 
-			// 票样
-			ctx.beginPath();
-			ctx.strokeStyle = '#ffbbbb';
-			ctx.lineWidth = 1;
-			ctx.font = `bold ${resizedFont(26, 'HeiTi')}`;
-			drawText(ctx, watermark, offsetScaleX(350), offsetScaleY(670), resizedScaleX(1000), TextAlign.JustifyAround, DrawTextMethod.strokeText);
-			ctx.closePath();
+			// 水印
+			if (showWatermark) {
+				ctx.beginPath();
+				ctx.strokeStyle = '#ffbbbb';
+				ctx.lineWidth = 1;
+				ctx.font = `bold ${resizedFont(26, 'HeiTi')}`;
+				drawText(ctx, watermark, offsetScaleX(350), offsetScaleY(670), resizedScaleX(1000), TextAlign.JustifyAround, DrawTextMethod.strokeText);
+				ctx.closePath();
+			}
 
 			// 右上角
 			switch (rightUpContentType) {
@@ -283,7 +351,7 @@ export default function TrainTicket() {
 					// 检票口
 					ctx.fillStyle = 'black';
 					ctx.font = `${resizedFont(6, 'SongTi')}`;
-					ctx.fillText('检票:' + turnstile, offsetScaleX(1315), offsetScaleY(210));
+					ctx.fillText((isHKWestKowloonStyle ? '檢票口/Gate  ' : '检票:') + turnstile, offsetScaleX(isHKWestKowloonStyle ? 1050 : 1315), offsetScaleY(210));
 					break;
 				case RightUpContentType.None:
 					// 不显示
@@ -296,7 +364,7 @@ export default function TrainTicket() {
 					break;
 			}
 
-			// 中文站名
+			// 站
 			if (doShowZhan) {
 				ctx.fillStyle = 'black';
 				ctx.font = `${resizedFont(5.5, 'SongTi', true)}`;
@@ -304,11 +372,12 @@ export default function TrainTicket() {
 				ctx.fillText('站', offsetScaleX(1407), offsetScaleY(doShowEnglish ? 321 : 351));
 			}
 
+			// 中文站名
 			ctx.fillStyle = 'black';
 			ctx.font = `${doUseHuaWenXinWei1 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
-			drawText(ctx, station1, offsetScaleX(197), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? 322 : 438), TextAlign.JustifyEvenly);
+			drawText(ctx, station1, offsetScaleX(187), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? 342 : 448), TextAlign.JustifyEvenly);
 			ctx.font = `${doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
-			drawText(ctx, station2, offsetScaleX(1054), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? 322 : 438), TextAlign.JustifyEvenly);
+			drawText(ctx, station2, offsetScaleX(1074), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? 342 : 448), TextAlign.JustifyEvenly);
 
 			// 英文站名
 			if (doShowEnglish) {
@@ -349,41 +418,92 @@ export default function TrainTicket() {
 			}
 
 			// 日期时间
-			ctx.font = resizedFont(4, 'SongTi', true);
-			ctx.fillText(`年          月         日                  开`, offsetScaleX(310), offsetScaleY(474));
-			ctx.font = resizedFont(6.5, 'HeiTi');
-			ctx.fillText(`${date.getFullYear()}  ${(date.getMonth() + 1).toString().padStart(2, '0')}  ${date.getDate().toString().padStart(2, '0')}  ${time}`, offsetScaleX(148), offsetScaleY(482));
-			if (!noCarriage) {
+			if (isHKWestKowloonStyle) {
 				ctx.font = resizedFont(4, 'SongTi', true);
-				ctx.fillText(`车`, offsetScaleX(1171), offsetScaleY(484));
-				ctx.font = resizedFont(6.5, 'HeiTi');
-				ctx.fillText(`${carriage}`, offsetScaleX(1096), offsetScaleY(489));
-			}
-			if (noSeat) {
-				ctx.font = resizedFont(6, 'SongTi');
-				ctx.fillText(`无座`, offsetScaleX(1250), offsetScaleY(484));
+				ctx.fillText(`年          月         日                  開`, offsetScaleX(310), offsetScaleY(454));
+				ctx.font = resizedFont(3.5, 'SongTi', true);
+				ctx.fillText(`Ｙ            Ｍ           Ｄ                   DEP`, offsetScaleX(310), offsetScaleY(494));
 			} else {
 				ctx.font = resizedFont(4, 'SongTi', true);
+				ctx.fillText(`年          月         日                  开`, offsetScaleX(310), offsetScaleY(474));
+			}
+			ctx.font = resizedFont(6.5, 'HeiTi');
+			ctx.fillText(`${date.getFullYear()}  ${(date.getMonth() + 1).toString().padStart(2, '0')}  ${date.getDate().toString().padStart(2, '0')}  ${time}`, offsetScaleX(148), offsetScaleY(482));
 
-				ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(484));
-				ctx.font = resizedFont(6.5, 'HeiTi');
-				ctx.fillText(`${seat1}`, offsetScaleX(1231), offsetScaleY(489));
-				ctx.font = resizedFont(5.5, 'SongTi');
-				ctx.fillText(`${seat3}`, offsetScaleX(1397), offsetScaleY(489));
-				ctx.font = resizedFont(5, 'SongTi');
-				ctx.fillText(`${seat2}`, offsetScaleX(1308), offsetScaleY(481));
+			// 车厢座位
+			if (isHKWestKowloonStyle) {
+				// 香港樣式
+				if (!noCarriage) {
+					ctx.font = resizedFont(4, 'SongTi', true);
+					ctx.fillText(`車廂`, offsetScaleX(1180), offsetScaleY(454));
+					ctx.font = resizedFont(3.5, 'SongTi', true);
+					ctx.fillText(`Car`, offsetScaleX(1190), offsetScaleY(494));
+
+					ctx.font = resizedFont(6.5, 'HeiTi');
+					ctx.fillText(`${carriage}`, offsetScaleX(1096), offsetScaleY(489));
+				}
+
+				if (noSeat) {
+					ctx.font = resizedFont(4, 'SongTi', true);
+					ctx.fillText(`無座`, offsetScaleX(1330), offsetScaleY(454));
+					ctx.font = resizedFont(3.5, 'SongTi', true);
+					ctx.fillText(`No Seat`, offsetScaleX(1300), offsetScaleY(494));
+				} else {
+					ctx.font = resizedFont(4, 'SongTi', true);
+					ctx.fillText(`座`, offsetScaleX(1410), offsetScaleY(454));
+					ctx.font = resizedFont(3.5, 'SongTi', true);
+					ctx.fillText(`Seat`, offsetScaleX(1395), offsetScaleY(494));
+					ctx.font = resizedFont(6.5, 'HeiTi');
+					ctx.fillText(`${seat1}`, offsetScaleX(1281), offsetScaleY(489));
+					ctx.font = resizedFont(5, 'SongTi');
+					ctx.fillText(`${seat2}`, offsetScaleX(1358), offsetScaleY(481));
+				}
+			} else {
+				// 非香港样式
+				if (!noCarriage) {
+					ctx.font = resizedFont(4, 'SongTi', true);
+					ctx.fillText(`车`, offsetScaleX(1171), offsetScaleY(474));
+
+					ctx.font = resizedFont(6.5, 'HeiTi');
+					ctx.fillText(`${carriage}`, offsetScaleX(1096), offsetScaleY(489));
+				}
+
+				if (noSeat) {
+					ctx.font = resizedFont(6, 'SongTi');
+					ctx.fillText(`无座`, offsetScaleX(1250), offsetScaleY(484));
+				} else {
+					ctx.font = resizedFont(4, 'SongTi', true);
+
+					ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(484));
+					ctx.font = resizedFont(6.5, 'HeiTi');
+					ctx.fillText(`${seat1}`, offsetScaleX(1231), offsetScaleY(489));
+					ctx.font = resizedFont(5.5, 'SongTi');
+					ctx.fillText(`${seat3}`, offsetScaleX(1397), offsetScaleY(489));
+					ctx.font = resizedFont(5, 'SongTi');
+					ctx.fillText(`${seat2}`, offsetScaleX(1308), offsetScaleY(481));
+				}
 			}
 
 			// 价格
-			ctx.font = resizedFont(4, 'SongTi');
-			ctx.fillText(`元`, offsetScaleX(220 + `￥${price}`.length * 35), offsetScaleY(561));
-			ctx.font = resizedFont(6.5, 'HeiTi');
-			ctx.fillText(`￥${price}`, offsetScaleX(163), offsetScaleY(568), resizedScaleX(300));
+			if (!isHKWestKowloonStyle) {
+				ctx.font = resizedFont(4, 'SongTi');
+				ctx.fillText(`元`, offsetScaleX(220 + `￥${price}`.length * 35), offsetScaleY(561));
+
+				ctx.font = resizedFont(5, 'SongTi');
+				ctx.fillText(`￥`, offsetScaleX(153), offsetScaleY(568));
+				ctx.font = resizedFont(6.5, 'HeiTi');
+				ctx.fillText(`${price}`, offsetScaleX(203), offsetScaleY(568), resizedScaleX(300));
+			} else {
+				ctx.font = resizedFont(5.5, 'SongTi', true);
+				ctx.fillText(`HK$`, offsetScaleX(148), offsetScaleY(568), resizedScaleX(100));
+				ctx.font = resizedFont(6.5, 'HeiTi');
+				ctx.fillText(`${price}`, offsetScaleX(253), offsetScaleY(568), resizedScaleX(300));
+			}
 
 			// 购票方式
 			const wordWidth = 3; // ctx.measureText('永').width;
 			purchaseMethod.forEach((purchaseMethodItem, index) => {
-				if (purchaseMethodItem.length === 1) {
+				if (purchaseMethodItem.title.length === 1) {
 					if (doPurchaseMethodHaveCircle) {
 						ctx.beginPath();
 						ctx.arc(offsetScaleX(700 + index * wordWidth * 35), offsetScaleY(550), resizedScaleY(36), 0, 2 * Math.PI);
@@ -394,22 +514,32 @@ export default function TrainTicket() {
 
 						ctx.font = `${resizedFont(5.6, 'SongTi')}`;
 						ctx.fillStyle = 'black';
-						ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(574));
+						ctx.fillText(purchaseMethodItem.title, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(574));
 					} else {
 						ctx.font = `${resizedFont(6, 'SongTi')}`;
 						ctx.fillStyle = 'black';
-						ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 25), offsetScaleY(581));
+						ctx.fillText(purchaseMethodItem.title, offsetScaleX(667 + index * wordWidth * 25), offsetScaleY(581));
 					}
 				} else {
 					ctx.font = `${resizedFont(6, 'SongTi')}`;
 					ctx.fillStyle = 'black';
-					ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(581));
+					ctx.fillText(purchaseMethodItem.title, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(581));
 				}
 			});
 
 			// 车厢
-			ctx.font = resizedFont(5.5, 'SongTi');
-			ctx.fillText(`${seatClass}`, offsetScaleX(1223), offsetScaleY(579), resizedScaleX(398));
+			if (seatClass.includes('/')) {
+				const chinese = seatClass.split('/')[0];
+				const english = seatClass.split('/')[1];
+
+				ctx.font = resizedFont(5.8, 'Heiti');
+				ctx.fillText(`${chinese}`, offsetScaleX(1070), offsetScaleY(579), resizedScaleX(398));
+				ctx.font = resizedFont(5.5, 'SongTi');
+				ctx.fillText(`${english}`, offsetScaleX(1200), offsetScaleY(579), resizedScaleX(398));
+			} else {
+				ctx.font = resizedFont(5.5, 'SongTi');
+				ctx.fillText(`${seatClass}`, offsetScaleX(1223), offsetScaleY(579), resizedScaleX(398));
+			}
 
 			// 信息1 2
 			ctx.font = resizedFont(5.5, 'SongTi');
@@ -575,8 +705,36 @@ export default function TrainTicket() {
 							</div>
 						</label>
 						<label className="ticket-form-label">
-							水印
+							<div>
+								水印
+								<Toggle
+									value={showWatermark}
+									onChange={(value) => {
+										setShowWatermark(value);
+									}}
+								/>
+							</div>
 							<input className="text-red-400" value={watermark} onChange={(e) => setWatermark(e.target.value)} />
+						</label>
+						<label className="ticket-form-label">
+							&nbsp;
+							<div>
+								<Toggle
+									value={isHKWestKowloonStyle}
+									onChange={(value) => {
+										if (value) {
+											setSeatClass('一等/First Class');
+											setDoShowMessage(false);
+											setShowSoldPlaceDown(true);
+										} else {
+											setSeatClass('一等座');
+											setDoShowMessage(false);
+										}
+										setIsHKWestKowloonStyle(value);
+									}}
+								/>
+								使用香港西九龍站發售樣式
+							</div>
 						</label>
 					</TabBox>
 					<TabBox title="车站信息" className="flex flex-wrap gap-1">
@@ -587,7 +745,11 @@ export default function TrainTicket() {
 									value={station1}
 									onChange={(e) => {
 										let stationEnglish = pinyin(e.target.value, { toneType: 'none', type: 'array' }).join('');
-										stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
+										if (['香港西九龍', '香港西九龙'].includes(e.target.value)) {
+											stationEnglish = 'HKWestKowloon';
+										} else {
+											stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
+										}
 										setStation1en(stationEnglish);
 
 										setStation1(e.target.value);
@@ -595,7 +757,7 @@ export default function TrainTicket() {
 								/>
 							</label>
 							<label className="ticket-form-label">
-								出发英文
+								出发外文
 								<input value={station1en} onChange={(e) => setStation1en(e.target.value)} />
 							</label>
 							<label>
@@ -607,6 +769,10 @@ export default function TrainTicket() {
 								/>
 								<span>
 									使用<span className={HuawenXinwei.className}>魏碑体</span>
+									<DescriptionButton modalTitle="魏碑体">
+										<p>　曾经CR上海局发行的车票中，当里程在400km以内时，两方车站名使用魏碑体</p>
+										<p>　但仍存在不少一方是黑体一方是魏碑体的车票，故在此对两车站分别设置字体而不是统一设置</p>
+									</DescriptionButton>
 								</span>
 							</label>
 						</div>
@@ -617,14 +783,18 @@ export default function TrainTicket() {
 									value={station2}
 									onChange={(e) => {
 										let stationEnglish = pinyin(e.target.value, { toneType: 'none', type: 'array' }).join('');
-										stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
+										if (['香港西九龍', '香港西九龙'].includes(e.target.value)) {
+											stationEnglish = 'HKWestKowloon';
+										} else {
+											stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
+										}
 										setStation2en(stationEnglish);
 										setStation2(e.target.value);
 									}}
 								/>
 							</label>
 							<label className="ticket-form-label">
-								到达英文
+								到达外文
 								<input value={station2en} onChange={(e) => setStation2en(e.target.value)} />
 							</label>
 							<label>
@@ -656,7 +826,7 @@ export default function TrainTicket() {
 										setDoShowEnglish(value);
 									}}
 								/>
-								<span>显示英文</span>
+								<span>显示外文</span>
 							</label>
 						</div>
 					</TabBox>
@@ -724,20 +894,11 @@ export default function TrainTicket() {
 							發车时间
 							<input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
 						</label>
+						<Divider />
 						<label className="ticket-form-label">
-							&nbsp;
-							<div className="flex flex-wrap gap-2">
-								<label>
-									<input
-										type="checkbox"
-										checked={noSeat}
-										onChange={(e) => {
-											setNoSeat(e.target.checked);
-										}}
-									/>
-									<span>无座</span>
-								</label>
-								<label>
+							<div className="flex gap-2">
+								车厢
+								<label className="flex items-center text-[12px]">
 									<input
 										type="checkbox"
 										checked={noCarriage}
@@ -748,17 +909,26 @@ export default function TrainTicket() {
 									<span>无指定车厢</span>
 								</label>
 							</div>
-						</label>
-						<label className="ticket-form-label">
-							车厢
 							<input value={carriage} onChange={(e) => setCarriage(e.target.value)} />
 						</label>
 						<label className="ticket-form-label">
-							座位1
+							<div className="flex gap-2">
+								座位号
+								<label className="flex items-center text-[12px]">
+									<input
+										type="checkbox"
+										checked={noSeat}
+										onChange={(e) => {
+											setNoSeat(e.target.checked);
+										}}
+									/>
+									<span>无座</span>
+								</label>
+							</div>
 							<input value={seat1} onChange={(e) => setSeat1(e.target.value)} />
 						</label>
 						<label className="ticket-form-label">
-							座位2
+							座位
 							<PrettyInputRadioGroup
 								list={[
 									{ value: 'A', title: 'A' },
@@ -799,8 +969,10 @@ export default function TrainTicket() {
 								value={seatClass}
 								onChange={(value: string) => {
 									if (sleepingCarSeatType.includes(value)) {
+										setSeat2('');
 										setSeat3('下铺');
 									} else {
+										setSeat2('F');
 										setSeat3('');
 									}
 
@@ -808,13 +980,13 @@ export default function TrainTicket() {
 								}}
 							/>
 						</label>
-						<label className="ticket-form-label">
-							价格
-							<input value={price} onChange={(e) => setPrice(e.target.value)} />
-						</label>
 					</TabBox>
 
 					<TabBox title="购票信息" className="flex flex-wrap">
+						<label className="ticket-form-label">
+							价格 {isHKWestKowloonStyle ? 'HK＄' : '￥'}
+							<input value={price} onChange={(e) => setPrice(e.target.value)} />
+						</label>
 						<label className="ticket-form-label">
 							购票处
 							<input className="" value={soldplace} onChange={(e) => setSoldPlace(e.target.value)} />
@@ -871,32 +1043,83 @@ export default function TrainTicket() {
 							</div>
 						</label>
 						<label className="ticket-form-label">
-							购票方式
-							<div className="flex flex-row gap-1 flex-wrap">
-								{purchaseMethodList.map((purchaseMethodItem) => {
-									return (
-										<label key={purchaseMethodItem}>
-											<input
-												type="checkbox"
-												checked={purchaseMethod.includes(purchaseMethodItem)}
-												onChange={(e) => {
-													if (purchaseMethod.includes(purchaseMethodItem)) {
-														setPurchaseMethod(
-															purchaseMethod.filter((j) => {
-																return j !== purchaseMethodItem;
-															})
+							<div>
+								购票方式
+								<DescriptionButton>
+									<div className="flex flex-row gap-1 flex-wrap">
+										{Object.entries(
+											purchaseMethodList.reduce<Record<string, PurchaseMethod[]>>((acc, item) => {
+												(acc[item.type] ||= []).push(item);
+												return acc;
+											}, {})
+										).map(([type, items]) => (
+											<div key={type} className="w-full">
+												<div className="text-sm font-semibold mt-2 mb-1">{type}</div>
+												<div className="flex flex-wrap gap-2">
+													{items.map((purchaseMethodItem) => {
+														return (
+															<label key={purchaseMethodItem.type + '_' + purchaseMethodItem.title} className="flex items-center gap-2">
+																<span
+																	className={
+																		purchaseMethodItem.title.length === 1
+																			? 'border-black flex justify-center items-center border rounded-[20px] text-[13px] w-[18px] h-[18px]'
+																			: ''
+																	}
+																>
+																	{purchaseMethodItem.title}
+																</span>
+																<span className="text-[12px] text-[#242424]">{purchaseMethodItem.desc}</span>
+															</label>
 														);
-													} else {
-														setPurchaseMethod([...purchaseMethod, purchaseMethodItem]);
-													}
-												}}
-											/>
-											<span className={doPurchaseMethodHaveCircle ? (purchaseMethodItem.length === 1 ? 'border-black border rounded-[20px] text-[14px]' : '') : ''}>
-												{purchaseMethodItem}
-											</span>
-										</label>
-									);
-								})}
+													})}
+												</div>
+											</div>
+										))}
+									</div>
+								</DescriptionButton>
+							</div>
+							<div className="flex flex-row gap-1 flex-wrap">
+								{Object.entries(
+									purchaseMethodList.reduce<Record<string, PurchaseMethod[]>>((acc, item) => {
+										(acc[item.type] ||= []).push(item);
+										return acc;
+									}, {})
+								).map(([type, items]) => (
+									<div key={type} className="w-full">
+										<div className="text-sm font-semibold mt-1">{type}</div>
+										<div className="flex flex-wrap gap-1">
+											{items.map((purchaseMethodItem) => {
+												const isChecked = purchaseMethod.some((pm) => pm.type === purchaseMethodItem.type && pm.title === purchaseMethodItem.title);
+												return (
+													<label title={purchaseMethodItem.desc} key={purchaseMethodItem.type + '_' + purchaseMethodItem.title} className="flex items-center">
+														<input
+															type="checkbox"
+															checked={isChecked}
+															onChange={() => {
+																if (isChecked) {
+																	setPurchaseMethod((prev) => prev.filter((j) => !(j.type === purchaseMethodItem.type && j.title === purchaseMethodItem.title)));
+																} else {
+																	setPurchaseMethod((prev) => [...prev, purchaseMethodItem]);
+																}
+															}}
+														/>
+														<span
+															className={
+																doPurchaseMethodHaveCircle
+																	? purchaseMethodItem.title.length === 1
+																		? 'border-black flex justify-center items-center border rounded-[20px] text-[13px] w-[18px] h-[18px]'
+																		: ''
+																	: ''
+															}
+														>
+															{purchaseMethodItem.title}
+														</span>
+													</label>
+												);
+											})}
+										</div>
+									</div>
+								))}
 								<label>
 									<Toggle
 										value={doPurchaseMethodHaveCircle}
@@ -967,6 +1190,7 @@ export default function TrainTicket() {
 								/>
 							</div>
 						</label>
+						<Divider />
 						<label className="ticket-form-label border-t-[#ccc_!important]">
 							信息2
 							<div className="flex gap-3 flex-wrap">
@@ -980,6 +1204,7 @@ export default function TrainTicket() {
 								/>
 							</div>
 						</label>
+						<Divider />
 						<label className="ticket-form-label border-t-[solid_1px_#ccc]">
 							信息3
 							<div className="flex gap-3 flex-wrap">
@@ -1005,22 +1230,22 @@ export default function TrainTicket() {
 						</label>
 						<label className="ticket-form-label">
 							二维码数据
-							<textarea value={qrCodeText} onChange={(e) => setQrCodeText(e.target.value)} />
+							<textarea className="w-full h-[100px]" value={qrCodeText} onChange={(e) => setQrCodeText(e.target.value)} />
 						</label>
 						<label className="ticket-form-label">
 							<div>
 								<label>
+									<span>虚线框内文字</span>
 									<Toggle
 										value={doShowMessage}
 										onChange={(value) => {
 											setDoShowMessage(value);
 										}}
 									/>
-									<span>虚线框内文字</span>
 								</label>
 							</div>
 							<div>
-								<textarea className="w-full" value={message} onChange={(e) => setMessage(e.target.value)} />
+								<textarea className="w-full h-[100px]" value={message} onChange={(e) => setMessage(e.target.value)} />
 								<PrettyInputRadioGroup
 									list={[
 										{ value: TextAlign.Left.toString(), title: '左对齐' },

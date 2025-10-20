@@ -34,10 +34,22 @@ export const Modal: React.FC<Props> = ({
 
 	return (
 		isOpen && (
-			<div className="modal-overlay" onClick={onClose}>
+			<div
+				className="modal-overlay"
+				onClick={(e) => {
+					e.preventDefault();
+					onClose();
+				}}
+			>
 				<div className={`modal-content mobile-${mobileMode}`} onClick={(e) => e.stopPropagation()}>
 					{showCloseButton && (
-						<button className="modal-close-btn" onClick={onClose}>
+						<button
+							className="modal-close-btn"
+							onClick={(e) => {
+								e.preventDefault();
+								onClose();
+							}}
+						>
 							×
 						</button>
 					)}
