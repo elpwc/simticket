@@ -57,10 +57,12 @@ export const drawText = (
 	w: number = NaN,
 	align: TextAlign = TextAlign.Left,
 	method: DrawTextMethod = DrawTextMethod.fillText,
-	/* 字间距 */
+	/** 字间距 */
 	letterSpacing: number = 0,
-	/* 行间距 相对于字体大小的倍数*/
-	lineHeight: number = 1.2
+	/** 行间距 相对于字体大小的倍数 */
+	lineHeight: number = 1.2,
+	/** 文字水平压缩（每个字符独立缩放） */
+	charHorizonalScale: number = 1
 ) => {
 	if (!text) return;
 
@@ -74,7 +76,7 @@ export const drawText = (
 	for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 		const line = lines[lineIndex];
 		const chars = [...line];
-		const charWidths = chars.map((ch) => ctx.measureText(ch).width);
+		const charWidths = chars.map((ch) => ctx.measureText(ch).width * charHorizonalScale);
 		const textWidth = charWidths.reduce((a, b) => a + b, 0) + letterSpacing * (chars.length - 1);
 
 		let scaleX = 1;
@@ -82,6 +84,230 @@ export const drawText = (
 
 		ctx.save();
 		ctx.scale(scaleX, 1);
+
+		const availableWidth = isNaN(w) ? textWidth : w / scaleX;
+		const isJustify = align === TextAlign.JustifyBetween || align === TextAlign.JustifyAround || align === TextAlign.JustifyEvenly;
+
+		let cursorX = 0;
+
+		// 对齐
+		if (isJustify && !isNaN(w) && w > 0) {
+			if (chars.length === 1) {
+				cursorX = (availableWidth - charWidths[0]) / 2;
+			} else {
+				const baseWidth = charWidths.reduce((a, b) => a + b, 0);
+				const totalGap = availableWidth - baseWidth;
+				let leftPadding = 0;
+				let gap = 0;
+
+				switch (align) {
+					case TextAlign.JustifyBetween:
+						leftPadding = 0;
+						gap = totalGap / (chars.length - 1);
+						break;
+					case TextAlign.JustifyAround:
+						gap = totalGap / chars.length;
+						leftPadding = gap / 2;
+						break;
+					case TextAlign.JustifyEvenly:
+						gap = totalGap / (chars.length + 1);
+						leftPadding = gap;
+						break;
+				}
+
+				cursorX = leftPadding;
+
+				for (let i = 0; i < chars.length; i++) {
+					const ch = chars[i];
+					ctx.save();
+					ctx.translate(cursorX, 0);
+					ctx.scale(charHorizonalScale, 1);
+					method === DrawTextMethod.fillText ? ctx.fillText(ch, 0, 0) : ctx.strokeText(ch, 0, 0);
+					ctx.restore();
+					cursorX += charWidths[i] + gap;
+				}
+
+				ctx.restore();
+				ctx.translate(0, actualLineHeight);
+				continue;
+			}
+		} else {
+			// 非 Justify 对齐
+			switch (align) {
+				case TextAlign.Center:
+					cursorX = (availableWidth - textWidth) / 2;
+					break;
+				case TextAlign.Right:
+					cursorX = availableWidth - textWidth;
+					break;
+				case TextAlign.Left:
+				default:
+					cursorX = 0;
+					break;
+			}
+		}
+
+		// 绘
+		for (let i = 0; i < chars.length; i++) {
+			const ch = chars[i];
+			ctx.save();
+			ctx.translate(cursorX, 0);
+			ctx.scale(charHorizonalScale, 1);
+			method === DrawTextMethod.fillText ? ctx.fillText(ch, 0, 0) : ctx.strokeText(ch, 0, 0);
+			ctx.restore();
+
+			cursorX += charWidths[i] + letterSpacing;
+		}
+
+		ctx.restore();
+		ctx.translate(0, actualLineHeight);
+	}
+
+	ctx.restore();
+};
+
+export const CR_TRAIN_TYPES = [
+	{ value: 'G', desc: '高铁' },
+	{ value: 'D', desc: '动车' },
+	{ value: 'C', desc: '城际' },
+	{ value: 'S', desc: '市郊' },
+	{ value: 'Z', desc: '直达' },
+	{ value: 'T', desc: '特快' },
+	{ value: 'K', desc: '快速' },
+	{ value: 'N', desc: '管内快速' },
+	{ value: 'Y', desc: '旅游' },
+	{ value: 'L', desc: '临时' },
+	{ value: 'A', desc: '临时特快' },
+	{ value: 'I', desc: 'D代用' },
+	{ value: 'P', desc: 'Z代用' },
+	{ value: 'Q', desc: 'T代用' },
+	{ value: 'W', desc: 'K代用' },
+	{ value: 'V', desc: '普代用' },
+	{ value: '青', desc: '' },
+	{ value: '藏', desc: '' },
+];
+
+export const CR_TRAIN_TYPE_ARRAY = CR_TRAIN_TYPES.map((type) => type.value);
+
+export function drawCarbonText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, font: string = 'sans-serif', fillStyle: string = 'black', scale: number = 1, widthPX: number = 2) {
+	const { width, height } = ctx.canvas;
+	const boxWidth = Math.round(scale * widthPX);
+
+	const tmpCanvas = document.createElement('canvas');
+	tmpCanvas.width = width * scale;
+	tmpCanvas.height = height * scale;
+	const tmpCtx = tmpCanvas.getContext('2d')!;
+	tmpCtx.clearRect(0, 0, width, height);
+
+	tmpCtx.font = font;
+	tmpCtx.fillStyle = fillStyle;
+	tmpCtx.textBaseline = 'alphabetic';
+	tmpCtx.fillText(text, x, y);
+
+	const imgData = tmpCtx.getImageData(0, 0, width, height);
+	const data = imgData.data;
+	if (boxWidth > 0) {
+		const newImage = tmpCtx.createImageData(width, height);
+		const newData = newImage.data;
+
+		for (let by = 0; by < height; by += boxWidth) {
+			for (let bx = 0; bx < width; bx += boxWidth) {
+				let sum = 0;
+				const count = boxWidth ** 2;
+				for (let yy = 0; yy < boxWidth; yy++) {
+					for (let xx = 0; xx < boxWidth; xx++) {
+						const px = (bx + xx + (by + yy) * width) * 4;
+						if (px >= data.length) continue;
+						const a = data[px + 3];
+						if (a > 0) {
+							// const r = data[px];
+							// const g = data[px + 1];
+							// const b = data[px + 2];
+							sum += 1;
+						}
+					}
+				}
+
+				if (count === 0) continue;
+				const avg: number = sum / count;
+				const isBlack = avg > 0.7; // 黑度阈值
+
+				for (let yy = 0; yy < boxWidth; yy++) {
+					for (let xx = 0; xx < boxWidth; xx++) {
+						const px = (bx + xx + (by + yy) * width) * 4;
+						if (px >= newData.length) continue;
+						if (isBlack) {
+							newData[px] = 0;
+							newData[px + 1] = 0;
+							newData[px + 2] = 0;
+							newData[px + 3] = 255;
+						} else {
+							newData[px + 3] = 0; // 透明
+						}
+					}
+				}
+			}
+		}
+		tmpCtx.putImageData(newImage, 0, 0);
+	} else {
+		tmpCtx.putImageData(imgData, 0, 0);
+	}
+	ctx.drawImage(tmpCanvas, 0, 0);
+}
+
+/** unused */
+export const drawTextNew = (
+	ctx: CanvasRenderingContext2D,
+	text: string,
+	font: string = 'sans-serif',
+	fillStyle: string = 'black',
+	x: number,
+	y: number,
+	w: number = NaN,
+	align: TextAlign = TextAlign.Left,
+	method: DrawTextMethod = DrawTextMethod.fillText,
+	/** 字间距 */
+	letterSpacing: number = 0,
+	/** 行间距 相对于字体大小的倍数*/
+	lineHeight: number = 1.2,
+	scale: number = 1,
+	widthPX: number = 2
+) => {
+	if (!text) return;
+
+	ctx.save();
+	ctx.translate(x, y);
+
+	const { width, height } = ctx.canvas;
+	const boxWidth = Math.round(scale * widthPX);
+
+	const tmpCanvas = document.createElement('canvas');
+	tmpCanvas.width = width * scale;
+	tmpCanvas.height = height * scale;
+	const tmpCtx = tmpCanvas.getContext('2d')!;
+	tmpCtx.clearRect(0, 0, width, height);
+
+	tmpCtx.font = font;
+	tmpCtx.fillStyle = fillStyle;
+	//const fillStyleColorRBG = converter.('#B8860B').to('RGB', false);
+
+	if (isNaN(lineHeight) && lineHeight < 0) lineHeight = 1.2;
+
+	const lines = text.split('\n');
+	const fontSize = parseFloat(tmpCtx.font.match(/\d+(\.\d+)?/g)?.[0] || '16');
+	const actualLineHeight = fontSize * lineHeight;
+
+	for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+		const line = lines[lineIndex];
+		const chars = [...line];
+		const charWidths = chars.map((ch) => tmpCtx.measureText(ch).width);
+		const textWidth = charWidths.reduce((a, b) => a + b, 0) + letterSpacing * (chars.length - 1);
+
+		let scaleX = 1;
+		if (!isNaN(w) && w > 0 && textWidth > w) scaleX = w / textWidth;
+
+		tmpCtx.save();
+		tmpCtx.scale(scaleX, 1);
 
 		const availableWidth = isNaN(w) ? textWidth : w / scaleX;
 		const isJustify = align === TextAlign.JustifyBetween || align === TextAlign.JustifyAround || align === TextAlign.JustifyEvenly;
@@ -117,12 +343,10 @@ export const drawText = (
 
 				for (let i = 0; i < chars.length; i++) {
 					const ch = chars[i];
-					method === DrawTextMethod.fillText ? ctx.fillText(ch, cursorX, 0) : ctx.strokeText(ch, cursorX, 0);
+					method === DrawTextMethod.fillText ? tmpCtx.fillText(ch, cursorX, 0) : tmpCtx.strokeText(ch, cursorX, 0);
 					cursorX += charWidths[i] + gap;
 				}
 
-				ctx.restore();
-				ctx.translate(0, actualLineHeight);
 				continue;
 			}
 		} else {
@@ -144,35 +368,64 @@ export const drawText = (
 		// 绘
 		for (let i = 0; i < chars.length; i++) {
 			const ch = chars[i];
-			method === DrawTextMethod.fillText ? ctx.fillText(ch, cursorX, 0) : ctx.strokeText(ch, cursorX, 0);
+			method === DrawTextMethod.fillText ? tmpCtx.fillText(ch, cursorX, 0) : tmpCtx.strokeText(ch, cursorX, 0);
 			cursorX += charWidths[i] + letterSpacing;
 		}
 
-		ctx.restore();
-		ctx.translate(0, actualLineHeight);
+		tmpCtx.restore();
+		tmpCtx.translate(0, actualLineHeight);
 	}
+
+	const imgData = tmpCtx.getImageData(0, 0, width, height);
+	const data = imgData.data;
+	if (boxWidth > 0) {
+		const newImage = tmpCtx.createImageData(width, height);
+		const newData = newImage.data;
+
+		for (let by = 0; by < height; by += boxWidth) {
+			for (let bx = 0; bx < width; bx += boxWidth) {
+				let sum = 0;
+				const count = boxWidth ** 2;
+				for (let yy = 0; yy < boxWidth; yy++) {
+					for (let xx = 0; xx < boxWidth; xx++) {
+						const px = (bx + xx + (by + yy) * width) * 4;
+						if (px >= data.length) continue;
+						const a = data[px + 3];
+						if (a > 0) {
+							// const r = data[px];
+							// const g = data[px + 1];
+							// const b = data[px + 2];
+							sum += 1;
+							console.log(sum);
+						}
+					}
+				}
+
+				if (count === 0) continue;
+				const avg: number = sum / count;
+				const isColored = avg > 0.7; // 黑度阈值
+
+				for (let yy = 0; yy < boxWidth; yy++) {
+					for (let xx = 0; xx < boxWidth; xx++) {
+						const px = (bx + xx + (by + yy) * width) * 4;
+						if (px >= newData.length) continue;
+						if (isColored) {
+							newData[px] = 0;
+							newData[px + 1] = 0;
+							newData[px + 2] = 0;
+							newData[px + 3] = 255;
+						} else {
+							newData[px + 3] = 0; // 透明
+						}
+					}
+				}
+			}
+		}
+		tmpCtx.putImageData(newImage, 0, 0);
+	} else {
+		tmpCtx.putImageData(imgData, 0, 0);
+	}
+	ctx.drawImage(tmpCanvas, 0, 0);
 
 	ctx.restore();
 };
-export const CR_TRAIN_TYPES = [
-	{ value: 'G', desc: '高铁' },
-	{ value: 'D', desc: '动车' },
-	{ value: 'C', desc: '城际' },
-	{ value: 'S', desc: '市郊' },
-	{ value: 'Z', desc: '直达' },
-	{ value: 'T', desc: '特快' },
-	{ value: 'K', desc: '快速' },
-	{ value: 'N', desc: '管内快速' },
-	{ value: 'Y', desc: '旅游' },
-	{ value: 'L', desc: '临时' },
-	{ value: 'A', desc: '临时特快' },
-	{ value: 'I', desc: 'D代用' },
-	{ value: 'P', desc: 'Z代用' },
-	{ value: 'Q', desc: 'T代用' },
-	{ value: 'W', desc: 'K代用' },
-	{ value: 'V', desc: '普代用' },
-	{ value: '青', desc: '' },
-	{ value: '藏', desc: '' },
-];
-
-export const CR_TRAIN_TYPE_ARRAY = CR_TRAIN_TYPES.map((type) => type.value);

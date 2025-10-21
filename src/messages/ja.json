@@ -1,4 +1,7 @@
 {
+  "InputRadioGroup": {
+    "placeholder": "空（カスタム）"
+  },
   "app": {
     "menu": {
       "about": "説明"

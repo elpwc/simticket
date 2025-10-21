@@ -25,10 +25,11 @@ interface Props {
 	scaleYWidth: number;
 	saveFilename: string;
 	form: JSX.Element | null;
+	onScaleChange?: (scale: number) => void;
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 0, canvasShowShandow = true, scaleXWidth, scaleYWidth, saveFilename, form }: Props) => {
+export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 0, canvasShowShandow = true, scaleXWidth, scaleYWidth, saveFilename, form, onScaleChange }: Props) => {
 	const isMobile = useIsMobile();
 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -64,11 +65,17 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 	}, [currentSizeScale, canvasHeight, canvasWidth, scaleXWidth, scaleYWidth]);
 
 	const increaseScale = () => {
-		setCurrentSizeScale((prev) => Number((prev + 0.1).toFixed(1)));
+		setCurrentSizeScale((prev) => {
+			onScaleChange?.(Number((prev + 0.1).toFixed(1)));
+			return Number((prev + 0.1).toFixed(1));
+		});
 	};
 
 	const reduceScale = () => {
-		setCurrentSizeScale((prev) => Number((prev - 0.1).toFixed(1)));
+		setCurrentSizeScale((prev) => {
+			onScaleChange?.(Number((prev - 0.1).toFixed(1)));
+			return Number((prev - 0.1).toFixed(1));
+		});
 	};
 
 	return (

@@ -9,7 +9,8 @@ import { AppContext } from './app';
 import { useIsMobile } from '@/utils/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
-import UnderConstruction from '@/components/TicketEditorCompo/UnderConstruction';
+import JRWideTicket from '@/components/TicketEditors/JRWideTicket';
+import { UnderConstruction } from '@/components/TicketEditorCompo/UnderConstruction';
 
 export default function HomePage() {
 	const isMobile = useIsMobile();
@@ -130,7 +131,9 @@ export default function HomePage() {
 						case 1: // JR
 							switch (selectedTicketId) {
 								case 0:
+									return <UnderConstruction />;
 								case 1:
+									return <JRWideTicket />;
 								case 2:
 								default:
 									return <UnderConstruction />;

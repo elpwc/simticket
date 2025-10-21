@@ -1,4 +1,7 @@
 {
+  "InputRadioGroup": {
+    "placeholder": "空 (自定义)"
+  },
   "app": {
     "menu": {
       "about": "关于"
