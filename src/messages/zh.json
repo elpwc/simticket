@@ -1,10 +1,14 @@
 {
-  "InputRadioGroup": {
-    "placeholder": "空 (自定义)"
-  },
-  "app": {
-    "menu": {
-      "about": "关于"
-    }
+	"InputRadioGroup": {
+		"placeholder": "空 (自定义)"
+	},
+	"app": {
+		"menu": {
+			"about": "关于",
+			"post": "投稿"
+		}
+	},
+  "text": {
+    "construction": "正在开發中"
   }
 }

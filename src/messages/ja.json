@@ -1,10 +1,14 @@
 {
-  "InputRadioGroup": {
-    "placeholder": "空（カスタム）"
-  },
-  "app": {
-    "menu": {
-      "about": "説明"
-    }
+	"InputRadioGroup": {
+		"placeholder": "空（カスタム）"
+	},
+	"app": {
+		"menu": {
+			"about": "説明",
+			"post": "投稿"
+		}
+	},
+  "text": {
+    "construction": "開発中です"
   }
 }
