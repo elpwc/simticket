@@ -1,6 +1,7 @@
 import cr_red_preview from '../../../assets/tickets_preview/cr_red.png';
 import cr_blue_preview from '../../../assets/tickets_preview/cr_blue.png';
 import cr_mag_blue_preview from '../../../assets/tickets_preview/cr_mag_blue.png';
+import cr_mag_red_preview from '../../../assets/tickets_preview/cr_mag_red.png';
 import cr_preview from '../../../assets/tickets_preview/cr.png';
 import cr_mag_preview from '../../../assets/tickets_preview/cr_mag.png';
 import './index.css';
@@ -25,6 +26,7 @@ const bgInfos = [
 		title: '软纸红票',
 		img: cr_red_preview.src,
 		value: CRTicketBackGround.SoftRed,
+		disabled: false,
 	},
 	{
 		id: 'cr_blue',
@@ -35,9 +37,8 @@ const bgInfos = [
 	{
 		id: 'cr_mag_red',
 		title: '磁纸红票',
-		img: cr_red_preview.src,
+		img: cr_mag_red_preview.src,
 		value: CRTicketBackGround.MagRed,
-		disabled: true,
 	},
 	{
 		id: 'cr_mag_blue',

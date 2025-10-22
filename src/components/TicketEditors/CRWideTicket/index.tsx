@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import cr_red from '../../../assets/tickets/cr_red.png';
 import cr_blue from '../../../assets/tickets/cr_blue.png';
 import cr_mag_blue from '../../../assets/tickets/cr_mag_blue.png';
+import cr_mag_red from '../../../assets/tickets/cr_mag_red.png';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
 import { CR_TRAIN_TYPE_ARRAY, CR_TRAIN_TYPES, drawQRCode, drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
@@ -81,7 +82,7 @@ export default function CRWideTicket() {
 	const [seatClass, setSeatClass] = useState('新空调硬卧');
 	const [price, setPrice] = useState('1540.0');
 	const [idNumber, setIdNumber] = useState('1145141980****1919');
-	const [passenger, setPassenger] = useState('田所浩二');
+	const [passenger, setPassenger] = useState('田浩');
 	const [doShowPassenger, setDoShowPassenger] = useState(true);
 	const [soldplace, setSoldPlace] = useState('稚内');
 	const [turnstile, setTurnstile] = useState('A13');
@@ -284,7 +285,7 @@ export default function CRWideTicket() {
 				bg.src = cr_blue.src;
 				break;
 			case CRTicketBackGround.MagRed:
-				bg.src = cr_red.src;
+				bg.src = cr_mag_red.src;
 				break;
 			case CRTicketBackGround.MagBlue:
 				bg.src = cr_mag_blue.src;
