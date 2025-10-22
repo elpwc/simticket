@@ -6,8 +6,8 @@ import { createContext, useState } from 'react';
 import Image from 'next/image';
 import { companyList } from '@/utils/companies';
 import { useIsMobile } from '@/utils/hooks';
-import { useTranslations } from 'next-intl';
 import LangSwitcher from '@/components/InfrastructureCompo/LangSwitcher';
+import { useLocale } from '@/utils/hooks/useLocale';
 
 export const AppContext = createContext<any>(null);
 
@@ -16,7 +16,8 @@ export default function App({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const t = useTranslations('app');
+	//const t = useTranslations('app');
+	const { t } = useLocale();
 	const isMobile = useIsMobile();
 
 	const [selectedCompanyId, setSelectedCompanyId] = useState(0);
@@ -32,7 +33,7 @@ export default function App({
 							<div className="navitem">SimTicket</div>
 						</Link>
 						<Link href="/about">
-							<div className="navitem">{t('menu.about')}</div>
+							<div className="navitem">{t('app.menu.about')}</div>
 						</Link>
 						<LangSwitcher />
 					</section>

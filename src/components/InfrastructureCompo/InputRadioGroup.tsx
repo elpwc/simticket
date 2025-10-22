@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale } from '@/utils/hooks/useLocale';
 import React, { useState } from 'react';
 
 type Props = {
@@ -12,11 +12,11 @@ type Props = {
 };
 
 const InputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, placeholder = '空(自定义)' }) => {
-	const t = useTranslations('InputRadioGroup');
+	const { t } = useLocale();
 	const [diyValue, setDiyValue] = useState('');
 
 	// Placeholder translation
-	const placeholderTranslation = t('placeholder');
+	const placeholderTranslation = t('InputRadioGroup.placeholder');
 
 	return (
 		<div className="flex gap-1 flex-wrap">

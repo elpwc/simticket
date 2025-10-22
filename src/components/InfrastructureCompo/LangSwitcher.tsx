@@ -1,14 +1,13 @@
 'use client';
 
-import { LanguageList } from '@/i18n/routing';
-import { useCurrentLanguage } from '@/utils/hooks/useCurrentLanguage';
+import { LanguageList, Locale, useLocale } from '@/utils/hooks/useLocale';
 import { useState } from 'react';
 
 export default function LangSwitcher() {
-	const { currentLang, switchLanguage } = useCurrentLanguage();
 	const [open, setOpen] = useState(false);
+	const { t, locale, setLocale } = useLocale();
 
-	const currentLangName = LanguageList.find((l) => l.id === currentLang)?.name || '中文';
+	const currentLangName = LanguageList.find((l) => l.id === locale)?.name || '中文';
 
 	return (
 		<div className="relative inline-block text-left">
@@ -26,11 +25,12 @@ export default function LangSwitcher() {
 
 			{open && (
 				<div className="absolute mt-1 right-0 w-24 bg-[#007fd4] dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow">
-					{LanguageList.map((lang) => (
+					{LanguageList.map((lang: { id: string; name: string }) => (
 						<button
 							key={lang.id}
 							onClick={() => {
-								switchLanguage(lang.id);
+								//switchLanguage(lang.id);
+								setLocale(lang.id as Locale);
 								setOpen(false);
 							}}
 							className="border-0 !m-0 bg-[transparent] w-full text-left px-2 py-1 text-sm hover:bg-[#2396e2] dark:hover:bg-gray-700"

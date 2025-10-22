@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import App from './app';
-import { redirect } from 'next/navigation';
-import { NextIntlClientProvider } from 'next-intl';
+import { LocaleProvider } from '@/utils/hooks/useLocale';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -28,9 +27,9 @@ export default async function RootLayout({
 	return (
 		<html lang="zh">
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-				<NextIntlClientProvider>
+				<LocaleProvider>
 					<App>{children}</App>
-				</NextIntlClientProvider>
+				</LocaleProvider>
 			</body>
 		</html>
 	);
