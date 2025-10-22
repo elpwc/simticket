@@ -35,7 +35,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
 	const [enableCanvasTilt, setEnableCanvasTilt] = useState(true);
-	const [currentSizeScale, setCurrentSizeScale] = useState(1);
+	const [currentSizeScale, setCurrentSizeScale] = useState(isMobile ? 1 : 1.4);
 	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
 
 	const drawTicket = () => {
@@ -80,7 +80,12 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 
 	return (
 		<div className={clsx(isMobile ? 'flex-col' : 'flex-row', 'w-[100%] flex items-start justify-start')}>
-			<div className={clsx(isMobile ? 'w-[100%] border-b-[solid_1px_#ccc]' : 'w-[40%]', 'flex flex-col items-center h-[100%] sticky top-[56px] z-[50] bg-[#ffffff9e] backdrop-blur-[8px] ')}>
+			<div
+				className={clsx(
+					isMobile ? 'w-[100%] border-b border-solid border-gray-300' : 'w-[40%]',
+					'flex flex-col items-center h-[100%] sticky top-[56px] z-[50] bg-[#ffffff9e] backdrop-blur-[8px] '
+				)}
+			>
 				<div className="flex justify-center items-center flex-wrap">
 					<div className="ticketEditorTemplateToolBarItem flex">
 						<button
