@@ -56,6 +56,7 @@ export default function CRWideTicket() {
 	const [canvasSize, setCanvasSize] = useState(PAPER_TICKET_CANVAS_SIZE);
 
 	const [background, setBackground] = useState<CRTicketBackGround>(CRTicketBackGround.SoftRed);
+	const [showBorder, setShowBorder] = useState(true);
 	const [isHKWestKowloonStyle, setIsHKWestKowloonStyle] = useState(false);
 	const [offsetX, setOffsetX] = useState(0);
 	const [offsetY, setOffsetY] = useState(0);
@@ -313,6 +314,13 @@ export default function CRWideTicket() {
 					break;
 			}
 
+			// border
+			if (showBorder && [CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground, CRTicketBackGround.MagNoneBackground].includes(background)) {
+				ctx.strokeStyle = 'gray';
+				ctx.lineWidth = resizedScaleX(2);
+				ctx.strokeRect(0, 0, canvasRef.current?.width || 0, canvasRef.current?.height || 0);
+			}
+
 			// 票号
 			ctx.fillStyle = '#f89c9c';
 			ctx.font = `${resizedFont(8, 'HeiTi')}`;
@@ -377,7 +385,7 @@ export default function CRWideTicket() {
 			ctx.font = `${doUseHuaWenXinWei1 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
 			drawText(ctx, station1, offsetScaleX(187), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? 342 : 448), TextAlign.JustifyEvenly);
 			ctx.font = `${doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
-			drawText(ctx, station2, offsetScaleX(1074), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? 342 : 448), TextAlign.JustifyEvenly);
+			drawText(ctx, station2, offsetScaleX(1064), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? 342 : 448), TextAlign.JustifyEvenly);
 
 			// 英文站名
 			if (doShowEnglish) {
@@ -718,26 +726,41 @@ export default function CRWideTicket() {
 							</div>
 							<input className="text-red-400" value={watermark} onChange={(e) => setWatermark(e.target.value)} />
 						</label>
-						<label className="ticket-form-label">
+						<div className="ticket-form-label">
 							&nbsp;
-							<div>
-								<Toggle
-									value={isHKWestKowloonStyle}
-									onChange={(value) => {
-										if (value) {
-											setSeatClass('一等/First Class');
-											setDoShowMessage(false);
-											setShowSoldPlaceDown(true);
-										} else {
-											setSeatClass('一等座');
-											setDoShowMessage(false);
-										}
-										setIsHKWestKowloonStyle(value);
-									}}
-								/>
-								使用香港西九龍站發售樣式
+							<div className="flex flex-col">
+								<label className="flex">
+									<div>
+										<Toggle
+											value={isHKWestKowloonStyle}
+											onChange={(value) => {
+												if (value) {
+													setSeatClass('一等/First Class');
+													setDoShowMessage(false);
+													setShowSoldPlaceDown(true);
+												} else {
+													setSeatClass('一等座');
+													setDoShowMessage(false);
+												}
+												setIsHKWestKowloonStyle(value);
+											}}
+										/>
+										使用香港西九龍站發售樣式
+									</div>
+								</label>
+								<label className="flex">
+									<div>
+										<Toggle
+											value={showBorder}
+											onChange={(value) => {
+												setShowBorder(value);
+											}}
+										/>
+										为软纸票和无背景显示边框
+									</div>
+								</label>
 							</div>
-						</label>
+						</div>
 					</TabBox>
 					<TabBox title="车站信息" className="flex flex-wrap gap-1">
 						<div className="flex flex-col gap-[2px]">
