@@ -34,9 +34,11 @@ export const companyList: Company[] = [
 			},
 			{
 				name: '计算机客票(1996)',
+				disabled: true,
 			},
 			{
 				name: '计算机客票(2000)',
+				disabled: true,
 			},
 			{
 				name: '计算机客票(2010)',
@@ -51,12 +53,14 @@ export const companyList: Company[] = [
 		tickets: [
 			{
 				name: '硬券(D型券)',
+				disabled: true,
 			},
 			{
 				name: 'JR東日本マルス券',
 			},
 			{
 				name: '近距離きっぷ',
+				disabled: true,
 			},
 		],
 	},
@@ -67,8 +71,10 @@ export const companyList: Company[] = [
 		tickets: [
 			{
 				name: '硬券(C型券)',
+				disabled: true,
 			},
 		],
+		disabled: true,
 	},
 	{
 		logo: TR_logo,
@@ -78,19 +84,24 @@ export const companyList: Company[] = [
 		tickets: [
 			{
 				name: '大張橫票（第三代）',
+				disabled: true,
 			},
 			{
 				name: '小張直票（第三代）',
+				disabled: true,
 			},
 			{
 				name: '直票（第四代）',
+				disabled: true,
 			},
 		],
+		disabled: true,
 	},
 	{
 		logo: THSR_logo,
 		abbr: 'THSR',
 		name: '台灣高鐵',
+		disabled: true,
 	},
 	{
 		logo: VNR_logo,
@@ -100,6 +111,7 @@ export const companyList: Company[] = [
 				總<rt>Tổng</rt>公<rt>công</rt>司<rt>ty</rt>塘<rt>Đường</rt>鐡<rt>sắt</rt>越<rt>Việt</rt>南<rt>Nam</rt>
 			</ruby>
 		),
+		disabled: true,
 	},
 	{
 		logo: KORAIL_logo,
