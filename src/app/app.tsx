@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import './globals.css';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { companyList } from '@/utils/companies';
 import { useIsMobile } from '@/utils/hooks';
 import LangSwitcher from '@/components/InfrastructureCompo/LangSwitcher';
 import { useLocale } from '@/utils/hooks/useLocale';
+import { DevProgressModal } from '@/components/Modals/DevProgressModal';
 
 export const AppContext = createContext<any>(null);
 
@@ -22,6 +23,11 @@ export default function App({
 	const [selectedCompanyId, setSelectedCompanyId] = useState(0);
 	const [selectedTicketId, setSelectedTicketId] = useState(companyList[selectedCompanyId].defaultSelectedTicketId ?? 0);
 	const [showMobileCompanySelectMenu, setShowMobileCompanySelectMenu] = useState(true);
+	const [showDevProgressModal, setShowDevProgressModal] = useState(false);
+
+	useEffect(() => {
+		setShowDevProgressModal(true)
+	}, [])
 
 	return (
 		<AppContext.Provider value={{ selectedCompanyId, setSelectedCompanyId, selectedTicketId, setSelectedTicketId, showMobileCompanySelectMenu, setShowMobileCompanySelectMenu }}>
@@ -73,6 +79,7 @@ export default function App({
 				</nav>
 			</header>
 			<main>{children}</main>
+			<DevProgressModal show={showDevProgressModal} onClose={() => {setShowDevProgressModal(false)}}/>
 		</AppContext.Provider>
 	);
 }

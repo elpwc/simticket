@@ -1,13 +1,18 @@
-'use client';
-
-import OuterLink from '@/components/InfrastructureCompo/OuterLink';
+import { useState } from 'react';
+import { Modal } from '../InfrastructureCompo/Modal';
+import OuterLink from '../InfrastructureCompo/OuterLink';
 import { useLocale } from '@/utils/hooks/useLocale';
 
-export default function About() {
+interface Props {
+	show: boolean;
+	onClose: () => void;
+}
+
+export const DevProgressModal = ({ show, onClose }: Props) => {
 	const { t, locale } = useLocale();
 
 	return (
-		<>
+		<Modal title={'声明'} isOpen={show} onClose={onClose} showOkButton onOk={onClose}>
 			{locale === 'ja' ? (
 				<div className="flex flex-col">
 					<p>
@@ -26,7 +31,7 @@ export default function About() {
 					</p>
 					<br />
 					<p className="w-full text-center">免責事項</p>
-					<p>　imTicket は個人の娯楽および学習目的のみにご利用ください。生成された乗車券を商業目的または不正な用途で使用することは禁止されています。</p>
+					<p>　simTicket は個人の娯楽および学習目的のみにご利用ください。生成された乗車券を商業目的または不正な用途で使用することは禁止されています。</p>
 					<br />
 
 					<p className="font-bold">TODO list:</p>
@@ -78,6 +83,6 @@ export default function About() {
 					<p className="text-right w-full">2025年 10月 23日 うに</p>
 				</div>
 			)}
-		</>
+		</Modal>
 	);
-}
+};

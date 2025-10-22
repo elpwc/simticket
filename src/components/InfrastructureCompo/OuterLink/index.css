@@ -1,0 +1,13 @@
+.outerlink {
+  text-decoration: none;
+  transition: all 0.3s;
+  display: inline-flex;
+}
+.outerlink:hover {
+  text-decoration: none;
+  color: rgb(10, 35, 83) !important;
+}
+
+.outerlink-svgicon {
+  font-size: 10px;
+}
