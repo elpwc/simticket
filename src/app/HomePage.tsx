@@ -42,7 +42,7 @@ export default function HomePage() {
 		} else {
 			setmenuHeight(0);
 		}
-	}, [showMobileCompanySelectMenu, isMobile]);
+	}, [showMobileCompanySelectMenu, isMobile, selectedCompanyId]);
 
 	useEffect(() => {
 		const params = new URLSearchParams(searchParams.toString());

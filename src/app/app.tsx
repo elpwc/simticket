@@ -16,7 +16,6 @@ export default function App({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	//const t = useTranslations('app');
 	const { t } = useLocale();
 	const isMobile = useIsMobile();
 
@@ -35,6 +34,14 @@ export default function App({
 						<Link href="/about">
 							<div className="navitem">{t('app.menu.about')}</div>
 						</Link>
+						<Link
+							href=""
+							onClick={() => {
+								alert(t('text.construction'));
+							}}
+						>
+							<div className="navitem text-[#cccccc]">{t('app.menu.post')}</div>
+						</Link>
 						<LangSwitcher />
 					</section>
 					<button
@@ -44,10 +51,13 @@ export default function App({
 						}}
 					>
 						<Image className="h-8 w-8" src={companyList[selectedCompanyId].logo} alt={companyList[selectedCompanyId].abbr} />
-						<div className="flex flex-col items-center">
-							<span className="w-max">{companyList[selectedCompanyId].name}</span>
-							<span className="w-max">{companyList[selectedCompanyId].tickets?.[selectedTicketId].name}</span>
-						</div>
+						{!isMobile && (
+							<div className="flex flex-col items-center">
+								<span className="w-max">{companyList[selectedCompanyId].name}</span>
+								<span className="w-max">{companyList[selectedCompanyId].tickets?.[selectedTicketId].name}</span>
+							</div>
+						)}
+
 						<span className="flex">
 							{showMobileCompanySelectMenu ? (
 								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
