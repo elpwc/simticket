@@ -44,6 +44,7 @@ const enum RightUpContentType {
 	None = 'none',
 	SoldPlace = 'soldplace',
 	Turnstile = 'turnstile',
+	International = 'international',
 }
 
 export default function CRWideTicket() {
@@ -76,8 +77,8 @@ export default function CRWideTicket() {
 	const [date, setDate] = useState(new Date());
 	const [time, setTime] = useState('11:55');
 	const [carriage, setCarriage] = useState('04');
-	const [seat1, setSeat1] = useState('12');
-	const [seat2, setSeat2] = useState('F');
+	const [seat1, setSeat1] = useState('012');
+	const [seat2, setSeat2] = useState('');
 	const [seat3, setSeat3] = useState('上铺');
 	const [seatClass, setSeatClass] = useState('新空调硬卧');
 	const [price, setPrice] = useState('1540.0');
@@ -360,7 +361,13 @@ export default function CRWideTicket() {
 					// 检票口
 					ctx.fillStyle = 'black';
 					ctx.font = `${resizedFont(6, 'SongTi')}`;
-					ctx.fillText((isHKWestKowloonStyle ? '檢票口/Gate  ' : '检票:') + turnstile, offsetScaleX(isHKWestKowloonStyle ? 1050 : 1315), offsetScaleY(210));
+					drawText(ctx, (isHKWestKowloonStyle ? '檢票口/Gate  ' : '检票:') + turnstile, offsetScaleX(701), offsetScaleY(210), resizedScaleX(900), TextAlign.Right);
+					break;
+				case RightUpContentType.International:
+					// 国际联运
+					ctx.fillStyle = 'black';
+					ctx.font = `${resizedFont(6, 'SongTi')}`;
+					ctx.fillText('国际联运', offsetScaleX(1240), offsetScaleY(210));
 					break;
 				case RightUpContentType.None:
 					// 不显示
@@ -377,16 +384,16 @@ export default function CRWideTicket() {
 			if (doShowZhan) {
 				ctx.fillStyle = 'black';
 				ctx.font = `${resizedFont(5.5, 'SongTi', true)}`;
-				ctx.fillText('站', offsetScaleX(538), offsetScaleY(doShowEnglish ? 321 : 351));
-				ctx.fillText('站', offsetScaleX(1407), offsetScaleY(doShowEnglish ? 321 : 351));
+				ctx.fillText('站', offsetScaleX(station1.length > 4 ? 628 : 538), offsetScaleY(doShowEnglish ? 321 : 351));
+				ctx.fillText('站', offsetScaleX(station2.length > 4 ? 1497 : 1407), offsetScaleY(doShowEnglish ? 321 : 351));
 			}
 
 			// 中文站名
 			ctx.fillStyle = 'black';
 			ctx.font = `${doUseHuaWenXinWei1 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
-			drawText(ctx, station1, offsetScaleX(187), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? 342 : 448), TextAlign.JustifyEvenly);
-			ctx.font = `${doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
-			drawText(ctx, station2, offsetScaleX(1064), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? 342 : 448), TextAlign.JustifyEvenly);
+			drawText(ctx, station1, offsetScaleX(167), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? (station1.length > 4 ? 452 : 365) : 500), TextAlign.JustifyEvenly);
+			ctx.font = `${doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi', true)}`;
+			drawText(ctx, station2, offsetScaleX(1044), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? (station2.length > 4 ? 452 : 365) : 500), TextAlign.JustifyEvenly);
 
 			// 英文站名
 			if (doShowEnglish) {
@@ -485,7 +492,7 @@ export default function CRWideTicket() {
 
 					ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(484));
 					ctx.font = resizedFont(6.5, 'HeiTi');
-					ctx.fillText(`${seat1}`, offsetScaleX(1231), offsetScaleY(489));
+					drawText(ctx, seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(seat2.length === 0 ? 100 : 79), TextAlign.Right);
 					ctx.font = resizedFont(5.5, 'SongTi');
 					ctx.fillText(`${seat3}`, offsetScaleX(1397), offsetScaleY(489));
 					ctx.font = resizedFont(5, 'SongTi');
@@ -741,7 +748,7 @@ export default function CRWideTicket() {
 													setShowSoldPlaceDown(true);
 												} else {
 													setSeatClass('一等座');
-													setDoShowMessage(false);
+													setDoShowMessage(true);
 												}
 												setIsHKWestKowloonStyle(value);
 											}}
@@ -1029,6 +1036,7 @@ export default function CRWideTicket() {
 										{ value: RightUpContentType.None, title: '不显示' },
 										{ value: RightUpContentType.SoldPlace, title: '售票站' },
 										{ value: RightUpContentType.Turnstile, title: '检票口' },
+										{ value: RightUpContentType.International, title: '国际联运' },
 									]}
 									value={rightUpContentType}
 									onChange={(value: string) => {
@@ -1167,10 +1175,11 @@ export default function CRWideTicket() {
 											value: `${info1TrainType}经由${info1from}至${info1to}`,
 											title: (
 												<div>
+													<span className="bg-black text-white p-[2px] mr-1">通票</span>
 													<input
 														type="text"
 														value={info1TrainType}
-														placeholder="自定义"
+														placeholder="列车类型"
 														onChange={(e) => {
 															const val = e.target.value;
 															setinfo1TrainType(val);
@@ -1181,18 +1190,18 @@ export default function CRWideTicket() {
 													<input
 														type="text"
 														value={info1from}
-														placeholder="自定义"
+														placeholder="经由"
 														onChange={(e) => {
 															const val = e.target.value;
 															setinfo1From(val);
 														}}
-														className="border w-16"
+														className="border w-24"
 													/>
 													至
 													<input
 														type="text"
 														value={info1to}
-														placeholder="自定义"
+														placeholder="终到站"
 														onChange={(e) => {
 															const val = e.target.value;
 															setinfo1To(val);

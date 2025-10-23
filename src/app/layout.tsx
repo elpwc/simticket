@@ -31,7 +31,7 @@ export default async function RootLayout({
 				<LocaleProvider>
 					<App>{children}</App>
 				</LocaleProvider>
-				<GoogleAnalytics gaId="G-M3D0Z0VV1D" />
+				<GoogleAnalytics gaId="G-2QPFFFRRK3" />
 			</body>
 		</html>
 	);
