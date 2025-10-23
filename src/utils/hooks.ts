@@ -1,10 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-const testMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
 export const useIsMobile = () => {
-	const [isMobile, setIsMobile] = useState<boolean>(testMobile());
+	const testMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+	const getInitial = () => {
+		if (typeof navigator !== 'undefined') return testMobile();
+		// SSR
+		return null;
+	};
+	const [isMobile, setIsMobile] = useState<boolean | null>(getInitial());
 
 	useEffect(() => {
 		const getIsMobile = () => testMobile();
