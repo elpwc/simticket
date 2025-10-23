@@ -1,11 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+const testMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 export const useIsMobile = () => {
-	const [isMobile, setIsMobile] = useState<boolean>(false);
+	const [isMobile, setIsMobile] = useState<boolean>(testMobile());
 
 	useEffect(() => {
-		const getIsMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+		const getIsMobile = () => testMobile();
 
 		const handleResize = () => {
 			setIsMobile(getIsMobile());
