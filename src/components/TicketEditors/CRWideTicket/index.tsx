@@ -392,7 +392,7 @@ export default function CRWideTicket() {
 			ctx.fillStyle = 'black';
 			ctx.font = `${doUseHuaWenXinWei1 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
 			drawText(ctx, station1, offsetScaleX(167), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? (station1.length > 4 ? 452 : 365) : 500), TextAlign.JustifyEvenly);
-			ctx.font = `${doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi', true)}`;
+			ctx.font = `${doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
 			drawText(ctx, station2, offsetScaleX(1044), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? (station2.length > 4 ? 452 : 365) : 500), TextAlign.JustifyEvenly);
 
 			// 英文站名
