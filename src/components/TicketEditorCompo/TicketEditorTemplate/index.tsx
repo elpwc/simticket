@@ -9,6 +9,14 @@ import { useIsMobile } from '@/utils/hooks';
 import clsx from 'clsx';
 import { SaveImageModal } from '@/components/Modals/SaveImageModal';
 
+export const getInitialMethods = (w: number, h: number, scaleXWidth: number, scaleYWidth: number, currentSizeScale: number = 1) => {
+	console.log(w ,h)
+	const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
+	const scaleY = (y: number) => (y / (scaleYWidth * currentSizeScale)) * h;
+	const font = (size: number, fontName: string, isBold: boolean = false) => `${isBold ? 'bold' : ''} ${(size / (100 * currentSizeScale)) * h}px ${fontName}`;
+	return { scaleX, scaleY, font };
+};
+
 interface Props {
 	onCanvasLoad: (
 		canvas: HTMLCanvasElement,
@@ -48,9 +56,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 		const w = canvasWidth * currentSizeScale ** 2;
 		const h = canvasHeight * currentSizeScale ** 2;
 
-		const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
-		const scaleY = (y: number) => (y / (scaleYWidth * currentSizeScale)) * h;
-		const font = (size: number, fontName: string, isBold: boolean = false) => `${isBold ? 'bold' : ''} ${(size / (100 * currentSizeScale)) * h}px ${fontName}`;
+		const { scaleX, scaleY, font } = getInitialMethods(w, h, scaleXWidth, scaleYWidth, currentSizeScale);
 
 		ctx.clearRect(0, 0, w, h);
 

@@ -5,15 +5,8 @@ import cr_mag_red_preview from '../../../assets/tickets_preview/cr_mag_red.png';
 import cr_preview from '../../../assets/tickets_preview/cr.png';
 import cr_mag_preview from '../../../assets/tickets_preview/cr_mag.png';
 import './index.css';
+import { CRTicketBackGround } from './type';
 
-export enum CRTicketBackGround {
-	SoftRed,
-	SoftBlue,
-	MagRed,
-	MagBlue,
-	SoftNoneBackground,
-	MagNoneBackground,
-}
 
 interface Props {
 	value: CRTicketBackGround;

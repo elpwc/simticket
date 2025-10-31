@@ -9,7 +9,7 @@ import jr_s from '../../../assets/tickets/jr_s.jpg';
 import jr_k from '../../../assets/tickets/jr_k.jpg';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
-import { CR_TRAIN_TYPE_ARRAY, CR_TRAIN_TYPES, drawCarbonText, drawQRCode, drawText, DrawTextMethod, drawTextNew, TextAlign } from '@/utils/utils';
+import { drawCarbonText, drawQRCode, drawText, DrawTextMethod, drawTextNew, TextAlign } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import TabBox from '../../InfrastructureCompo/TabBox';
 import InputRadioGroup from '../../InfrastructureCompo/InputRadioGroup';
@@ -18,7 +18,6 @@ import localFonts from 'next/font/local';
 import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGroup/PrettyInputRadioGroup';
 import { pinyin } from 'pinyin-pro';
 import { DescriptionButton } from '@/components/InfrastructureCompo/DescriptionButton';
-import { CRTicketBackGround } from '../CRWideTicket/CRWideTicketBgSelector';
 import { JRTicketBackGround, JRWideTicketBgSelector } from './JRWideTicketBgSelector';
 import { UnderConstruction } from '@/components/TicketEditorCompo/UnderConstruction';
 

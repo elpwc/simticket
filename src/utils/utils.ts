@@ -166,29 +166,6 @@ export const drawText = (
 	ctx.restore();
 };
 
-export const CR_TRAIN_TYPES = [
-	{ value: 'G', desc: '高铁' },
-	{ value: 'D', desc: '动车' },
-	{ value: 'C', desc: '城际' },
-	{ value: 'S', desc: '市郊' },
-	{ value: 'Z', desc: '直达' },
-	{ value: 'T', desc: '特快' },
-	{ value: 'K', desc: '快速' },
-	{ value: 'N', desc: '管内快速' },
-	{ value: 'Y', desc: '旅游' },
-	{ value: 'L', desc: '临时' },
-	{ value: 'A', desc: '临时特快' },
-	{ value: 'I', desc: 'D代用' },
-	{ value: 'P', desc: 'Z代用' },
-	{ value: 'Q', desc: 'T代用' },
-	{ value: 'W', desc: 'K代用' },
-	{ value: 'V', desc: '普代用' },
-	{ value: '青', desc: '' },
-	{ value: '藏', desc: '' },
-];
-
-export const CR_TRAIN_TYPE_ARRAY = CR_TRAIN_TYPES.map((type) => type.value);
-
 export function drawCarbonText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, font: string = 'sans-serif', fillStyle: string = 'black', scale: number = 1, widthPX: number = 2) {
 	const { width, height } = ctx.canvas;
 	const boxWidth = Math.round(scale * widthPX);
@@ -428,4 +405,26 @@ export const drawTextNew = (
 	ctx.drawImage(tmpCanvas, 0, 0);
 
 	ctx.restore();
+};
+
+/**
+ * 簡単にフォントリストをロード
+ * @param fontList
+ * @param onLoadStart
+ * @param onLoadEnd
+ * @param onNotNeeded
+ */
+export const fontsLoader = (fontList: { name: string; file: string }[], onLoadStart: () => void, onLoadEnd: () => void, onNotNeeded: () => void) => {
+	const loadFonts = async () => {
+		const fonts = fontList.map((font) => new FontFace(font.name, `url(${font.file})`));
+
+		await Promise.all(fonts.map((f) => f.load()));
+		fonts.forEach((f) => document.fonts.add(f));
+	};
+	if (fontList.every((font) => document.fonts.check(`1em ${font.name}`))) {
+		onNotNeeded();
+	} else {
+		onLoadStart();
+		loadFonts().finally(() => onLoadEnd());
+	}
 };

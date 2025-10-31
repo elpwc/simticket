@@ -1,22 +1,35 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import cr_red from '../../../assets/tickets/cr_red.png';
-import cr_blue from '../../../assets/tickets/cr_blue.png';
-import cr_mag_blue from '../../../assets/tickets/cr_mag_blue.png';
-import cr_mag_red from '../../../assets/tickets/cr_mag_red.png';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
-import { CR_TRAIN_TYPE_ARRAY, CR_TRAIN_TYPES, drawQRCode, drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
+import { fontsLoader, TextAlign } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import TabBox from '../../InfrastructureCompo/TabBox';
 import InputRadioGroup from '../../InfrastructureCompo/InputRadioGroup';
 import { Divider } from '../../InfrastructureCompo/Divider';
 import localFonts from 'next/font/local';
-import { CRWideTicketBgSelector, CRTicketBackGround } from './CRWideTicketBgSelector';
+import { CRWideTicketBgSelector } from './CRWideTicketBgSelector';
 import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGroup/PrettyInputRadioGroup';
 import { pinyin } from 'pinyin-pro';
 import { DescriptionButton } from '@/components/InfrastructureCompo/DescriptionButton';
+import {
+	CR_TRAIN_TYPE_ARRAY,
+	CR_TRAIN_TYPES,
+	CRWideTicketDrawParametersInitialValues,
+	info1List,
+	info2List,
+	info3List,
+	MAG_TICKET_CANVAS_SIZE,
+	messageList,
+	PAPER_TICKET_CANVAS_SIZE,
+	PAPER_TICKET_SIZE,
+	purchaseMethodList,
+	seatType,
+	sleepingCarSeatType,
+} from './value';
+import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType } from './type';
+import { drawCRWideTicket } from './draw';
 
 export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
@@ -28,24 +41,6 @@ export const SongTi = localFonts({
 export const HeiTi = localFonts({
 	src: '../../../assets/fonts/simhei.woff2',
 });
-
-interface PurchaseMethod {
-	type: string;
-	title: string;
-	desc: string;
-}
-
-const PAPER_TICKET_SIZE = [1698, 1162];
-const MAG_TICKET_SIZE = [1689, 1042];
-const PAPER_TICKET_CANVAS_SIZE = [322, 220];
-const MAG_TICKET_CANVAS_SIZE = [320, 197];
-
-const enum RightUpContentType {
-	None = 'none',
-	SoldPlace = 'soldplace',
-	Turnstile = 'turnstile',
-	International = 'international',
-}
 
 export default function CRWideTicket() {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,561 +54,33 @@ export default function CRWideTicket() {
 
 	const [isFontLoading, setIsFontLoading] = useState(false);
 
-	const [background, setBackground] = useState<CRTicketBackGround>(CRTicketBackGround.SoftRed);
-	const [showBorder, setShowBorder] = useState(true);
-	const [isHKWestKowloonStyle, setIsHKWestKowloonStyle] = useState(false);
-	const [offsetX, setOffsetX] = useState(0);
-	const [offsetY, setOffsetY] = useState(0);
-	const [showWatermark, setShowWatermark] = useState(true);
-	const [watermark, setWatermark] = useState('票样');
-	const [ticketNo, setTicketNo] = useState('A000001');
-	const [station1, setStation1] = useState('东京都区内');
-	const [station2, setStation2] = useState('北京朝阳');
-	const [station1en, setStation1en] = useState('Tokyo Ward Area');
-	const [station2en, setStation2en] = useState('Beijingchaoyang');
-	const [doShowZhan, setDoShowZhan] = useState(true);
-	const [doShowEnglish, setDoShowEnglish] = useState(true);
-	const [doUseHuaWenXinWei1, setDoUseHuaWenXinWei1] = useState(false);
-	const [doUseHuaWenXinWei2, setDoUseHuaWenXinWei2] = useState(false);
-	const [routeIdentifier, setRouteIdentifier] = useState('Z1140');
-	const [date, setDate] = useState(new Date());
-	const [time, setTime] = useState('11:55');
-	const [carriage, setCarriage] = useState('04');
-	const [seat1, setSeat1] = useState('012');
-	const [seat2, setSeat2] = useState('');
-	const [seat3, setSeat3] = useState('上铺');
-	const [seatClass, setSeatClass] = useState('新空调硬卧');
-	const [price, setPrice] = useState('1540.0');
-	const [idNumber, setIdNumber] = useState('1145141980****1919');
-	const [passenger, setPassenger] = useState('田浩');
-	const [doShowPassenger, setDoShowPassenger] = useState(true);
-	const [soldplace, setSoldPlace] = useState('稚内');
-	const [turnstile, setTurnstile] = useState('A13');
-	const [showSoldPlaceDown, setShowSoldPlaceDown] = useState(true);
-	const [rightUpContentType, setRightUpContentType] = useState(RightUpContentType.Turnstile);
-	const [serialCode, setSerialCode] = useState('1145141919810A000001 JM');
-	const [qrCodeText, setQrCodeText] = useState('1145141919810');
-	const [purchaseMethod, setPurchaseMethod] = useState<PurchaseMethod[]>([
-		{ type: '票种', title: '学', desc: '学生票' },
-		{ type: '售票方式', title: '网', desc: '互联网售票' },
-	]);
-	const [doPurchaseMethodHaveCircle, setDoPurchaseMethodHaveCircle] = useState(true);
-	const [noSeat, setNoSeat] = useState(false);
-	const [noCarriage, setNoCarriage] = useState(false);
-	const [info1, setInfo1] = useState('乘车纪念');
-	const [info2, setInfo2] = useState('');
-	const [info3, setInfo3] = useState('');
-	const [message, setMessage] = useState(`买票请到12306 发货请到95306
-中国铁路祝您旅途愉快`);
-	const [messageAlign, setMessageAlign] = useState(TextAlign.Center);
-	const [doShowMessage, setDoShowMessage] = useState(true);
-	const [info1TrainType, setinfo1TrainType] = useState('');
-	const [info1from, setinfo1From] = useState('');
-	const [info1to, setinfo1To] = useState('');
+	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(CRWideTicketDrawParametersInitialValues);
 
-	const purchaseMethodList: PurchaseMethod[] = [
-		{ type: '票种', title: '孩', desc: '儿童票' },
-		{ type: '票种', title: '学', desc: '学生票' },
-		{ type: '票种', title: '军', desc: '残疾军人票' },
-		{ type: '票种', title: '探', desc: '探亲乘车证签证票' },
-		{ type: '票种', title: '半', desc: '省部级领导车票' },
-		{ type: '票种', title: '兵', desc: '军人票' },
-		{ type: '票种', title: '红', desc: '红色旅游学生团体硬座20%优惠' },
-		{ type: '票种', title: '学返', desc: '学生返程票' },
-		{ type: '票种', title: '团', desc: '全价票团体票' },
-		{ type: '票种', title: '团优', desc: '0票价团优票' },
-		{ type: '票种', title: '返', desc: '农民工返程票' },
-		{ type: '售票方式', title: '网', desc: '互联网售票' },
-		{ type: '窗口POS支付打印字', title: '工', desc: '工行POS刷卡支付车票打印字' },
-		{ type: '窗口POS支付打印字', title: '农', desc: '农行POS刷卡支付车票打印字' },
-		{ type: '窗口POS支付打印字', title: '中', desc: '中行POS刷卡支付车票打印字' },
-		{ type: '窗口POS支付打印字', title: '招', desc: '招行POS刷卡支付车票打印字' },
-		{ type: '网上购买车票窗口改签打印字', title: '建', desc: '网上建行购票窗口改签打印' },
-		{ type: '网上购买车票窗口改签打印字', title: '支', desc: '网上支付宝购票窗口改签打印' },
-		{ type: '网上购买车票窗口改签打印字', title: '银', desc: '网上银通卡购票窗口改签打印' },
-		{ type: '网上购买车票窗口改签打印字', title: '微', desc: '网上微信购票窗口改签打印' },
-		{ type: '网上购买车票窗口改签打印字', title: '京', desc: '网上京东购票窗口改签打印' },
-		{ type: '网上购买车票窗口改签打印字', title: '现', desc: '' },
-		{ type: '其他', title: '赠', desc: '网上积分购票换票时打印' },
-		{ type: '其他', title: '折', desc: '' },
-		{ type: '其他', title: '补', desc: '进站补票打印' },
-		{ type: '其他', title: '专', desc: '残疾人专用票额车票打印' },
-		{ type: '其他', title: '行', desc: '' },
-		{ type: '其他', title: '车', desc: '' },
-		{ type: '其他', title: '残', desc: '' },
-		{ type: '其他', title: '软', desc: '' },
-		{ type: '其他', title: '硬', desc: '' },
-		{ type: '其他', title: '纪念票', desc: '残疾人专用票额车票打印' },
-		{ type: '其他', title: '挂失补', desc: '残疾人专用票额车票打印' },
-	];
-	const info1List = ['限乘当日当次车', '乘车纪念'];
-	const info2List = ['中途下车失效', '在2日内有效', '在3日内有效', '随原票使用', '随原票使用有效', '乘车纪念'];
-	const info3List = ['仅供报销使用', '变更到站', '退票费', '中转签证', '乘车证签证', '始发改签', '乘车纪念'];
-
-	const seatType = [
-		'商务座',
-		'一等座',
-		'二等座',
-		'动卧',
-		'高级动卧',
-		'新空调高级软卧',
-		'新空调软卧',
-		'新空调硬卧',
-		'新空调软座',
-		'新空调硬座',
-		'软座',
-		'硬座',
-		'硬卧代硬座',
-		'软卧代软座',
-		'特等座',
-		'观光座',
-		'棚车',
-		'一等/First Class',
-		'二等/Second Class',
-	];
-	const sleepingCarSeatType = ['动卧', '高级动卧', '新空调高级软卧', '新空调软卧', '新空调硬卧'];
-
-	const messageList = [
-		`买票请到12306 发货请到95306
-中国铁路祝您旅途愉快`,
-		`报销凭证 遗失不补
-退票改签时须交回车站`,
-		`欢度国庆，祝福祖国
-中国铁路祝您旅途愉快`,
-	];
 	useEffect(() => {
-		const loadFonts = async () => {
-			const fonts = [
-				new FontFace('HuawenXinwei', 'url(../../../assets/fonts/STXINWEI.woff2)'),
-				new FontFace('SongTi', 'url(../../../assets/fonts/simsun.woff2)'),
-				new FontFace('HeiTi', 'url(../../../assets/fonts/simhei.woff2)'),
-			];
-			await Promise.all(fonts.map((f) => f.load()));
-			fonts.forEach((f) => document.fonts.add(f));
-		};
-		setIsFontLoading(true);
-		loadFonts().finally(() => setIsFontLoading(false));
+		fontsLoader(
+			[
+				{ name: 'HuawenXinwei', file: '../../../assets/fonts/STXINWEI.woff2' },
+				{ name: 'SongTi', file: '../../../assets/fonts/simsun.woff2' },
+				{ name: 'HeiTi', file: '../../../assets/fonts/simhei.woff2' },
+			],
+			() => {
+				setIsFontLoading(true);
+			},
+			() => {
+				setIsFontLoading(false);
+			},
+			() => {
+				setIsFontLoading(false);
+			}
+		);
 	}, []);
 
 	const drawTicket = () => {
-		handleDraw(canvasRef.current, ctxRef.current, scaleXRef.current, scaleYRef.current, fontRef.current);
-	};
-
-	const handleDraw = (
-		canvas: HTMLCanvasElement | null,
-		ctx: CanvasRenderingContext2D | null,
-		scaleX: ((x: number) => number) | null,
-		scaleY: ((y: number) => number) | null,
-		font: ((size: number, fontName: string, isBold?: boolean) => string) | null
-	) => {
-		if (!ctx || !canvas || !scaleX || !scaleY || !font) {
-			return;
-		}
-		const w = canvas.width;
-		const h = canvas.height;
-		const backgroundEdgeHori = 0.04;
-		const backgroundEdgeVert = 0.07;
-
-		const resizedScaleX = (value: number) => {
-			switch (background) {
-				case CRTicketBackGround.MagRed:
-				case CRTicketBackGround.MagBlue:
-				case CRTicketBackGround.MagNoneBackground:
-					return scaleX((value / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]);
-				case CRTicketBackGround.SoftRed:
-				case CRTicketBackGround.SoftBlue:
-				case CRTicketBackGround.SoftNoneBackground:
-				default:
-					return scaleX(value);
-			}
-		};
-		const resizedScaleY = (value: number) => {
-			switch (background) {
-				case CRTicketBackGround.MagRed:
-				case CRTicketBackGround.MagBlue:
-				case CRTicketBackGround.MagNoneBackground:
-					return scaleY((value / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]);
-				case CRTicketBackGround.SoftRed:
-				case CRTicketBackGround.SoftBlue:
-				case CRTicketBackGround.SoftNoneBackground:
-				default:
-					return scaleY(value);
-			}
-		};
-		const offsetScaleX = (value: number) => {
-			switch (background) {
-				case CRTicketBackGround.MagRed:
-				case CRTicketBackGround.MagBlue:
-				case CRTicketBackGround.MagNoneBackground:
-					return scaleX(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeHori) / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]) + offsetX;
-				case CRTicketBackGround.SoftRed:
-				case CRTicketBackGround.SoftBlue:
-				case CRTicketBackGround.SoftNoneBackground:
-				default:
-					return scaleX(value) + offsetX;
-			}
-		};
-		const offsetScaleY = (value: number) => {
-			switch (background) {
-				case CRTicketBackGround.MagRed:
-				case CRTicketBackGround.MagBlue:
-				case CRTicketBackGround.MagNoneBackground:
-					return scaleY(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeVert) / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]) + offsetY;
-				case CRTicketBackGround.SoftRed:
-				case CRTicketBackGround.SoftBlue:
-				case CRTicketBackGround.SoftNoneBackground:
-				default:
-					return scaleY(value) + offsetY;
-			}
-		};
-		const resizedFont = (size: number, fontName: string, isBold?: boolean) => {
-			switch (background) {
-				case CRTicketBackGround.MagRed:
-				case CRTicketBackGround.MagBlue:
-				case CRTicketBackGround.MagNoneBackground:
-					return font((size / MAG_TICKET_CANVAS_SIZE[1]) * PAPER_TICKET_CANVAS_SIZE[1], fontName, isBold);
-				case CRTicketBackGround.SoftRed:
-				case CRTicketBackGround.SoftBlue:
-				case CRTicketBackGround.SoftNoneBackground:
-				default:
-					return font(size, fontName, isBold);
-			}
-		};
-
-		const bg = new Image();
-		switch (background) {
-			case CRTicketBackGround.SoftRed:
-				bg.src = cr_red.src;
-				break;
-			case CRTicketBackGround.SoftBlue:
-				bg.src = cr_blue.src;
-				break;
-			case CRTicketBackGround.MagRed:
-				bg.src = cr_mag_red.src;
-				break;
-			case CRTicketBackGround.MagBlue:
-				bg.src = cr_mag_blue.src;
-				break;
-			case CRTicketBackGround.MagNoneBackground:
-			case CRTicketBackGround.SoftNoneBackground:
-				break;
-		}
-
-		const draw = () => {
-			// 清空
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			// 底图
-			switch (background) {
-				case CRTicketBackGround.MagRed:
-				case CRTicketBackGround.MagBlue:
-					ctx.drawImage(bg, 0, 0, w, h);
-					break;
-				case CRTicketBackGround.SoftRed:
-				case CRTicketBackGround.SoftBlue:
-					ctx.fillStyle = 'white';
-					ctx.fillRect(0, 0, w, h);
-					ctx.drawImage(bg, w * backgroundEdgeHori, h * backgroundEdgeVert, w * (1 - 2 * backgroundEdgeHori), h * (1 - 2 * backgroundEdgeVert));
-					break;
-				case CRTicketBackGround.MagNoneBackground:
-				case CRTicketBackGround.SoftNoneBackground:
-					break;
-			}
-
-			// border
-			if (showBorder && [CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground, CRTicketBackGround.MagNoneBackground].includes(background)) {
-				ctx.strokeStyle = 'gray';
-				ctx.lineWidth = resizedScaleX(2);
-				ctx.strokeRect(0, 0, canvasRef.current?.width || 0, canvasRef.current?.height || 0);
-			}
-
-			// 票号
-			ctx.fillStyle = '#f89c9c';
-			ctx.font = `${resizedFont(8, 'HeiTi')}`;
-			drawText(ctx, ticketNo, offsetScaleX(118), offsetScaleY(224), resizedScaleX(443), TextAlign.Left, DrawTextMethod.fillText, 1);
-
-			// 水印
-			if (showWatermark) {
-				ctx.beginPath();
-				ctx.strokeStyle = '#ffbbbb';
-				ctx.lineWidth = 1;
-				ctx.font = `bold ${resizedFont(26, 'HeiTi')}`;
-				drawText(ctx, watermark, offsetScaleX(350), offsetScaleY(670), resizedScaleX(1000), TextAlign.JustifyAround, DrawTextMethod.strokeText);
-				ctx.closePath();
-			}
-
-			// 右上角
-			switch (rightUpContentType) {
-				case RightUpContentType.SoldPlace:
-					// 售票点
-					ctx.fillStyle = 'black';
-					ctx.strokeStyle = 'black';
-					ctx.font = `${resizedFont(6, 'SongTi')}`;
-					ctx.fillText(soldplace, offsetScaleX(1315), offsetScaleY(210));
-
-					ctx.beginPath();
-					ctx.arc(offsetScaleX(1500), offsetScaleY(185), resizedScaleY(40), 0, 2 * Math.PI);
-					ctx.lineWidth = resizedScaleX(5);
-					ctx.stroke();
-					ctx.closePath();
-
-					ctx.font = `${resizedFont(6, 'SongTi')}`;
-					ctx.fillText('售', offsetScaleX(1468), offsetScaleY(210));
-
-					break;
-				case RightUpContentType.Turnstile:
-					// 检票口
-					ctx.fillStyle = 'black';
-					ctx.font = `${resizedFont(6, 'SongTi')}`;
-					drawText(ctx, (isHKWestKowloonStyle ? '檢票口/Gate  ' : '检票:') + turnstile, offsetScaleX(701), offsetScaleY(210), resizedScaleX(900), TextAlign.Right);
-					break;
-				case RightUpContentType.International:
-					// 国际联运
-					ctx.fillStyle = 'black';
-					ctx.font = `${resizedFont(6, 'SongTi')}`;
-					ctx.fillText('国际联运', offsetScaleX(1240), offsetScaleY(210));
-					break;
-				case RightUpContentType.None:
-					// 不显示
-					break;
-				default:
-					// 自定义
-					ctx.fillStyle = 'black';
-					ctx.font = `${resizedFont(6, 'SongTi')}`;
-					ctx.fillText(rightUpContentType, offsetScaleX(1315), offsetScaleY(210));
-					break;
-			}
-
-			// 站
-			if (doShowZhan) {
-				ctx.fillStyle = 'black';
-				ctx.font = `${resizedFont(5.5, 'SongTi', true)}`;
-				ctx.fillText('站', offsetScaleX(station1.length > 4 ? 628 : 538), offsetScaleY(doShowEnglish ? 321 : 351));
-				ctx.fillText('站', offsetScaleX(station2.length > 4 ? 1497 : 1407), offsetScaleY(doShowEnglish ? 321 : 351));
-			}
-
-			// 中文站名
-			ctx.fillStyle = 'black';
-			ctx.font = `${doUseHuaWenXinWei1 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
-			drawText(ctx, station1, offsetScaleX(167), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? (station1.length > 4 ? 452 : 365) : 500), TextAlign.JustifyEvenly);
-			ctx.font = `${doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
-			drawText(ctx, station2, offsetScaleX(1044), offsetScaleY(doShowEnglish ? 335 : 365), resizedScaleX(doShowZhan ? (station2.length > 4 ? 452 : 365) : 500), TextAlign.JustifyEvenly);
-
-			// 英文站名
-			if (doShowEnglish) {
-				ctx.font = resizedFont(4.5, 'SongTi');
-				drawText(ctx, station1en, offsetScaleX(183), offsetScaleY(397), resizedScaleX(452), TextAlign.Center);
-				drawText(ctx, station2en, offsetScaleX(1072), offsetScaleY(397), resizedScaleX(452), TextAlign.Center);
-			}
-
-			// 车次
-			ctx.beginPath();
-			ctx.strokeStyle = 'black';
-			ctx.lineWidth = resizedScaleY(6);
-			ctx.moveTo(offsetScaleX(716), offsetScaleY(350));
-			ctx.lineTo(offsetScaleX(1006), offsetScaleY(350));
-			ctx.stroke();
-			ctx.closePath();
-
-			ctx.beginPath();
-			ctx.lineWidth = resizedScaleY(1);
-			ctx.moveTo(offsetScaleX(1006), offsetScaleY(350));
-			ctx.lineTo(offsetScaleX(983), offsetScaleY(350));
-			ctx.lineTo(offsetScaleX(964), offsetScaleY(337));
-			ctx.lineTo(offsetScaleX(961), offsetScaleY(333));
-			ctx.lineTo(offsetScaleX(979), offsetScaleY(337));
-			ctx.fill();
-			ctx.closePath();
-
-			const routeIdentifierFirstChar = routeIdentifier.substring(0, 1);
-			const routeIdentifierNumbersChar = routeIdentifier.substring(1, routeIdentifier.length);
-			if (/^[A-Z]$/.test(routeIdentifierFirstChar)) {
-				ctx.font = `${resizedFont(7, 'SongTi')}`;
-				ctx.fillText(routeIdentifierFirstChar, offsetScaleX(720), offsetScaleY(326), resizedScaleX(64));
-				ctx.font = `${resizedFont(8, 'SongTi')}`;
-				ctx.fillText(routeIdentifierNumbersChar, offsetScaleX(787), offsetScaleY(332), resizedScaleX(271));
-			} else {
-				ctx.font = `${resizedFont(8, 'SongTi')}`;
-				drawText(ctx, routeIdentifier, offsetScaleX(720), offsetScaleY(332), resizedScaleX(284), TextAlign.Center);
-			}
-
-			// 日期时间
-			if (isHKWestKowloonStyle) {
-				ctx.font = resizedFont(4, 'SongTi', true);
-				ctx.fillText(`年          月         日                  開`, offsetScaleX(310), offsetScaleY(454));
-				ctx.font = resizedFont(3.5, 'SongTi', true);
-				ctx.fillText(`Ｙ            Ｍ           Ｄ                   DEP`, offsetScaleX(310), offsetScaleY(494));
-			} else {
-				ctx.font = resizedFont(4, 'SongTi', true);
-				ctx.fillText(`年          月         日                  开`, offsetScaleX(310), offsetScaleY(474));
-			}
-			ctx.font = resizedFont(6.5, 'HeiTi');
-			ctx.fillText(`${date.getFullYear()}  ${(date.getMonth() + 1).toString().padStart(2, '0')}  ${date.getDate().toString().padStart(2, '0')}  ${time}`, offsetScaleX(148), offsetScaleY(482));
-
-			// 车厢座位
-			if (isHKWestKowloonStyle) {
-				// 香港樣式
-				if (!noCarriage) {
-					ctx.font = resizedFont(4, 'SongTi', true);
-					ctx.fillText(`車廂`, offsetScaleX(1180), offsetScaleY(454));
-					ctx.font = resizedFont(3.5, 'SongTi', true);
-					ctx.fillText(`Car`, offsetScaleX(1190), offsetScaleY(494));
-
-					ctx.font = resizedFont(6.5, 'HeiTi');
-					ctx.fillText(`${carriage}`, offsetScaleX(1096), offsetScaleY(489));
-				}
-
-				if (noSeat) {
-					ctx.font = resizedFont(4, 'SongTi', true);
-					ctx.fillText(`無座`, offsetScaleX(1330), offsetScaleY(454));
-					ctx.font = resizedFont(3.5, 'SongTi', true);
-					ctx.fillText(`No Seat`, offsetScaleX(1300), offsetScaleY(494));
-				} else {
-					ctx.font = resizedFont(4, 'SongTi', true);
-					ctx.fillText(`座`, offsetScaleX(1410), offsetScaleY(454));
-					ctx.font = resizedFont(3.5, 'SongTi', true);
-					ctx.fillText(`Seat`, offsetScaleX(1395), offsetScaleY(494));
-					ctx.font = resizedFont(6.5, 'HeiTi');
-					ctx.fillText(`${seat1}`, offsetScaleX(1281), offsetScaleY(489));
-					ctx.font = resizedFont(5, 'SongTi');
-					ctx.fillText(`${seat2}`, offsetScaleX(1358), offsetScaleY(481));
-				}
-			} else {
-				// 非香港样式
-				if (!noCarriage) {
-					ctx.font = resizedFont(4, 'SongTi', true);
-					ctx.fillText(`车`, offsetScaleX(1171), offsetScaleY(474));
-
-					ctx.font = resizedFont(6.5, 'HeiTi');
-					ctx.fillText(`${carriage}`, offsetScaleX(1096), offsetScaleY(489));
-				}
-
-				if (noSeat) {
-					ctx.font = resizedFont(6, 'SongTi');
-					ctx.fillText(`无座`, offsetScaleX(1250), offsetScaleY(484));
-				} else {
-					ctx.font = resizedFont(4, 'SongTi', true);
-
-					ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(484));
-					ctx.font = resizedFont(6.5, 'HeiTi');
-					drawText(ctx, seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(seat2.length === 0 ? 100 : 79), TextAlign.Right);
-					ctx.font = resizedFont(5.5, 'SongTi');
-					ctx.fillText(`${seat3}`, offsetScaleX(1397), offsetScaleY(489));
-					ctx.font = resizedFont(5, 'SongTi');
-					ctx.fillText(`${seat2}`, offsetScaleX(1308), offsetScaleY(481));
-				}
-			}
-
-			// 价格
-			if (!isHKWestKowloonStyle) {
-				ctx.font = resizedFont(4, 'SongTi');
-				ctx.fillText(`元`, offsetScaleX(220 + `￥${price}`.length * 35), offsetScaleY(561));
-
-				ctx.font = resizedFont(5, 'SongTi');
-				ctx.fillText(`￥`, offsetScaleX(153), offsetScaleY(568));
-				ctx.font = resizedFont(6.5, 'HeiTi');
-				ctx.fillText(`${price}`, offsetScaleX(203), offsetScaleY(568), resizedScaleX(300));
-			} else {
-				ctx.font = resizedFont(5.5, 'SongTi', true);
-				ctx.fillText(`HK$`, offsetScaleX(148), offsetScaleY(568), resizedScaleX(100));
-				ctx.font = resizedFont(6.5, 'HeiTi');
-				ctx.fillText(`${price}`, offsetScaleX(253), offsetScaleY(568), resizedScaleX(300));
-			}
-
-			// 购票方式
-			const wordWidth = 3; // ctx.measureText('永').width;
-			purchaseMethod.forEach((purchaseMethodItem, index) => {
-				if (purchaseMethodItem.title.length === 1) {
-					if (doPurchaseMethodHaveCircle) {
-						ctx.beginPath();
-						ctx.arc(offsetScaleX(700 + index * wordWidth * 35), offsetScaleY(550), resizedScaleY(36), 0, 2 * Math.PI);
-						ctx.strokeStyle = 'black';
-						ctx.lineWidth = resizedScaleX(3);
-						ctx.stroke();
-						ctx.closePath();
-
-						ctx.font = `${resizedFont(5.6, 'SongTi')}`;
-						ctx.fillStyle = 'black';
-						ctx.fillText(purchaseMethodItem.title, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(574));
-					} else {
-						ctx.font = `${resizedFont(6, 'SongTi')}`;
-						ctx.fillStyle = 'black';
-						ctx.fillText(purchaseMethodItem.title, offsetScaleX(667 + index * wordWidth * 25), offsetScaleY(581));
-					}
-				} else {
-					ctx.font = `${resizedFont(6, 'SongTi')}`;
-					ctx.fillStyle = 'black';
-					ctx.fillText(purchaseMethodItem.title, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(581));
-				}
-			});
-
-			// 车厢
-			if (seatClass.includes('/')) {
-				const chinese = seatClass.split('/')[0];
-				const english = seatClass.split('/')[1];
-
-				ctx.font = resizedFont(5.8, 'Heiti');
-				ctx.fillText(`${chinese}`, offsetScaleX(1070), offsetScaleY(579), resizedScaleX(398));
-				ctx.font = resizedFont(5.5, 'SongTi');
-				ctx.fillText(`${english}`, offsetScaleX(1200), offsetScaleY(579), resizedScaleX(398));
-			} else {
-				ctx.font = resizedFont(5.5, 'SongTi');
-				ctx.fillText(`${seatClass}`, offsetScaleX(1223), offsetScaleY(579), resizedScaleX(398));
-			}
-
-			// 信息1 2
-			ctx.font = resizedFont(5.5, 'SongTi');
-			drawText(ctx, `${info1}${info1.length > 0 ? '  ' : ''}${info2}`, offsetScaleX(140), offsetScaleY(650));
-			// 信息3
-			ctx.font = resizedFont(5.5, 'SongTi');
-			drawText(ctx, `${info3}`, offsetScaleX(140), offsetScaleY(734));
-
-			// 身份证+姓名
-			if (doShowPassenger) {
-				ctx.font = resizedFont(6.5, 'HeiTi');
-				ctx.fillText(idNumber, offsetScaleX(133), offsetScaleY(824));
-				ctx.font = resizedFont(6, 'SongTi');
-				ctx.fillText(passenger, offsetScaleX(839), offsetScaleY(824));
-			}
-
-			// 说明
-			if (doShowMessage) {
-				ctx.strokeStyle = 'black';
-				ctx.lineWidth = resizedScaleX(4);
-				ctx.setLineDash([resizedScaleX(23), resizedScaleX(10)]);
-				ctx.strokeRect(offsetScaleX(208), offsetScaleY(850), resizedScaleX(959), resizedScaleY(150));
-				ctx.setLineDash([]);
-
-				ctx.font = resizedFont(4.5, 'SongTi');
-
-				drawText(ctx, message, offsetScaleX(216), offsetScaleY(908), resizedScaleX(942), messageAlign, DrawTextMethod.fillText, 0);
-			}
-
-			//QR
-			drawQRCode(ctx, offsetScaleX(1223), offsetScaleY(730), resizedScaleX(380), qrCodeText);
-			// code 下方购票处
-			ctx.font = resizedFont(5.5, 'SongTi');
-			ctx.fillText(serialCode + (showSoldPlaceDown ? `  ${soldplace}售` : ''), offsetScaleX(133), offsetScaleY(1080), resizedScaleX(1090));
-		};
-
-		switch (background) {
-			case CRTicketBackGround.SoftRed:
-			case CRTicketBackGround.SoftBlue:
-			case CRTicketBackGround.MagRed:
-			case CRTicketBackGround.MagBlue:
-				// 有背景的
-				bg.onload = () => {
-					draw();
-				};
-				break;
-			case CRTicketBackGround.MagNoneBackground:
-			case CRTicketBackGround.SoftNoneBackground:
-				draw();
-				break;
-		}
+		drawCRWideTicket(canvasRef.current, ctxRef.current, drawParameters);
 	};
 
 	useEffect(() => {
-		switch (background) {
+		switch (drawParameters.background) {
 			case CRTicketBackGround.MagRed:
 			case CRTicketBackGround.MagBlue:
 			case CRTicketBackGround.MagNoneBackground:
@@ -625,52 +92,32 @@ export default function CRWideTicket() {
 				setCanvasSize(PAPER_TICKET_CANVAS_SIZE);
 				break;
 		}
-	}, [background]);
+	}, [drawParameters.background]);
 
 	useEffect(() => {
 		drawTicket();
-	}, [
-		drawTicket,
-		size,
-		canvasSize,
-		background,
-		offsetX,
-		offsetY,
-		ticketNo,
-		station1,
-		station2,
-		station1en,
-		station2en,
-		doShowZhan,
-		doShowEnglish,
-		doUseHuaWenXinWei1,
-		doUseHuaWenXinWei2,
-		routeIdentifier,
-		date,
-		time,
-		carriage,
-		seat1,
-		seat2,
-		seat3,
-		seatClass,
-		price,
-		idNumber,
-		passenger,
-		qrCodeText,
-		soldplace,
-		serialCode,
-		noSeat,
-		noCarriage,
-		purchaseMethod,
-		doPurchaseMethodHaveCircle,
-		info1,
-		info2,
-		info3,
-		message,
-	]);
+	}, [drawTicket, size, canvasSize, drawParameters]);
+
 	useEffect(() => {
-		setQrCodeText(`${station1}-${station2} No.${ticketNo} ${date.toISOString().slice(0, 10)} ${time} ${seatClass}车 ${carriage}${seat1}${seat2}号${seat3} ￥${price}元`);
-	}, [ticketNo, station1, station2, date, time, carriage, seat1, seat2, seat3, seatClass, price]);
+		setDrawParameters((prev) => ({
+			...prev,
+			qrCodeText: `${drawParameters.station1}-${drawParameters.station2} No.${drawParameters.ticketNo} ${drawParameters.date.toISOString().slice(0, 10)} ${drawParameters.time} ${
+				drawParameters.seatClass
+			}车 ${drawParameters.carriage}${drawParameters.seat1}${drawParameters.seat2}号${drawParameters.seat3} ￥${drawParameters.price}元`,
+		}));
+	}, [
+		drawParameters.ticketNo,
+		drawParameters.station1,
+		drawParameters.station2,
+		drawParameters.date,
+		drawParameters.time,
+		drawParameters.carriage,
+		drawParameters.seat1,
+		drawParameters.seat2,
+		drawParameters.seat3,
+		drawParameters.seatClass,
+		drawParameters.price,
+	]);
 
 	return (
 		<TicketEditorTemplate
@@ -690,33 +137,44 @@ export default function CRWideTicket() {
 			}}
 			canvasWidth={canvasSize[0]}
 			canvasHeight={canvasSize[1]}
-			canvasBorderRadius={background === CRTicketBackGround.MagBlue || background === CRTicketBackGround.MagRed ? 16 : 0}
-			canvasShowShandow={background !== CRTicketBackGround.MagBlue && background !== CRTicketBackGround.MagRed}
+			canvasBorderRadius={drawParameters.background === CRTicketBackGround.MagBlue || drawParameters.background === CRTicketBackGround.MagRed ? 16 : 0}
+			canvasShowShandow={drawParameters.background !== CRTicketBackGround.MagBlue && drawParameters.background !== CRTicketBackGround.MagRed}
 			scaleXWidth={size[0]}
 			scaleYWidth={size[1]}
-			saveFilename={`ticket_${station1}-${station2}`}
+			saveFilename={`ticket_${drawParameters.station1}-${drawParameters.station2}`}
 			isFontLoading={isFontLoading}
 			form={
 				<div className="flex flex-col gap-4 m-4">
 					<TabBox title="票面" className="flex flex-wrap gap-1">
 						<label className="ticket-form-label">
 							车票用纸
-							<CRWideTicketBgSelector value={background} onChange={setBackground} />
+							<CRWideTicketBgSelector value={drawParameters.background} onChange={(value: CRTicketBackGround) => setDrawParameters((prev) => ({ ...prev, background: value }))} />
 						</label>
 						<label className="ticket-form-label">
 							印刷偏移
 							<div className="flex grid-cols-3 gap-2">
 								<label className="flex gap-1 items-center">
-									X<input className="max-w-[50px]" type="number" value={offsetX} onChange={(e) => setOffsetX(Number(e.target.value))} />
+									X
+									<input
+										className="max-w-[50px]"
+										type="number"
+										value={drawParameters.offsetX}
+										onChange={(e) => setDrawParameters((prev) => ({ ...prev, offsetX: Number(e.target.value) }))}
+									/>
 								</label>
 								<label className="flex gap-1 items-center">
-									Y<input className="max-w-[50px]" type="number" value={0 - offsetY} onChange={(e) => setOffsetY(0 - Number(e.target.value))} />
+									Y
+									<input
+										className="max-w-[50px]"
+										type="number"
+										value={0 - drawParameters.offsetY}
+										onChange={(e) => setDrawParameters((prev) => ({ ...prev, offsetY: 0 - Number(e.target.value) }))}
+									/>
 								</label>
 								<button
 									className="w-[max-content] text-[12px]"
 									onClick={() => {
-										setOffsetX(0);
-										setOffsetY(0);
+										setDrawParameters((prev) => ({ ...prev, offsetX: 0, offsetY: 0 }));
 									}}
 								>
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -730,13 +188,13 @@ export default function CRWideTicket() {
 							<div>
 								水印
 								<Toggle
-									value={showWatermark}
+									value={drawParameters.showWatermark}
 									onChange={(value) => {
-										setShowWatermark(value);
+										setDrawParameters((prev) => ({ ...prev, showWatermark: value }));
 									}}
 								/>
 							</div>
-							<input className="text-red-400" value={watermark} onChange={(e) => setWatermark(e.target.value)} />
+							<input className="text-red-400" value={drawParameters.watermark} onChange={(e) => setDrawParameters((prev) => ({ ...prev, watermark: e.target.value }))} />
 						</label>
 						<div className="ticket-form-label">
 							&nbsp;
@@ -744,17 +202,17 @@ export default function CRWideTicket() {
 								<label className="flex">
 									<div>
 										<Toggle
-											value={isHKWestKowloonStyle}
+											value={drawParameters.isHKWestKowloonStyle}
 											onChange={(value) => {
 												if (value) {
-													setSeatClass('一等/First Class');
-													setDoShowMessage(false);
-													setShowSoldPlaceDown(true);
+													setDrawParameters((prev) => ({ ...prev, seatClass: '一等/First Class' }));
+													setDrawParameters((prev) => ({ ...prev, doShowMessage: false }));
+													setDrawParameters((prev) => ({ ...prev, showSoldPlaceDown: true }));
 												} else {
-													setSeatClass('一等座');
-													setDoShowMessage(true);
+													setDrawParameters((prev) => ({ ...prev, seatClass: '一等座' }));
+													setDrawParameters((prev) => ({ ...prev, doShowMessage: true }));
 												}
-												setIsHKWestKowloonStyle(value);
+												setDrawParameters((prev) => ({ ...prev, isHKWestKowloonStyle: value }));
 											}}
 										/>
 										使用香港西九龍站發售樣式
@@ -763,9 +221,9 @@ export default function CRWideTicket() {
 								<label className="flex">
 									<div>
 										<Toggle
-											value={showBorder}
+											value={drawParameters.showBorder}
 											onChange={(value) => {
-												setShowBorder(value);
+												setDrawParameters((prev) => ({ ...prev, showBorder: value }));
 											}}
 										/>
 										为软纸票和无背景显示边框
@@ -779,7 +237,7 @@ export default function CRWideTicket() {
 							<label className="ticket-form-label">
 								出发
 								<input
-									value={station1}
+									value={drawParameters.station1}
 									onChange={(e) => {
 										let stationEnglish = pinyin(e.target.value, { toneType: 'none', type: 'array' }).join('');
 										if (['香港西九龍', '香港西九龙'].includes(e.target.value)) {
@@ -787,21 +245,21 @@ export default function CRWideTicket() {
 										} else {
 											stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
 										}
-										setStation1en(stationEnglish);
+										setDrawParameters((prev) => ({ ...prev, station1en: stationEnglish }));
 
-										setStation1(e.target.value);
+										setDrawParameters((prev) => ({ ...prev, station1: e.target.value }));
 									}}
 								/>
 							</label>
 							<label className="ticket-form-label">
 								出发外文
-								<input value={station1en} onChange={(e) => setStation1en(e.target.value)} />
+								<input value={drawParameters.station1en} onChange={(e) => setDrawParameters((prev) => ({ ...prev, station1en: e.target.value }))} />
 							</label>
 							<label>
 								<Toggle
-									value={doUseHuaWenXinWei1}
+									value={drawParameters.doUseHuaWenXinWei1}
 									onChange={(value) => {
-										setDoUseHuaWenXinWei1(value);
+										setDrawParameters((prev) => ({ ...prev, doUseHuaWenXinWei1: value }));
 									}}
 								/>
 								<span>
@@ -817,7 +275,7 @@ export default function CRWideTicket() {
 							<label className="ticket-form-label">
 								到达
 								<input
-									value={station2}
+									value={drawParameters.station2}
 									onChange={(e) => {
 										let stationEnglish = pinyin(e.target.value, { toneType: 'none', type: 'array' }).join('');
 										if (['香港西九龍', '香港西九龙'].includes(e.target.value)) {
@@ -825,20 +283,20 @@ export default function CRWideTicket() {
 										} else {
 											stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
 										}
-										setStation2en(stationEnglish);
-										setStation2(e.target.value);
+										setDrawParameters((prev) => ({ ...prev, station2en: stationEnglish }));
+										setDrawParameters((prev) => ({ ...prev, station2: e.target.value }));
 									}}
 								/>
 							</label>
 							<label className="ticket-form-label">
 								到达外文
-								<input value={station2en} onChange={(e) => setStation2en(e.target.value)} />
+								<input value={drawParameters.station2en} onChange={(e) => setDrawParameters((prev) => ({ ...prev, station2en: e.target.value }))} />
 							</label>
 							<label>
 								<Toggle
-									value={doUseHuaWenXinWei2}
+									value={drawParameters.doUseHuaWenXinWei2}
 									onChange={(value) => {
-										setDoUseHuaWenXinWei2(value);
+										setDrawParameters((prev) => ({ ...prev, doUseHuaWenXinWei2: value }));
 									}}
 								/>
 								<span>
@@ -849,18 +307,18 @@ export default function CRWideTicket() {
 						<div className="flex flex-wrap gap-2">
 							<label>
 								<Toggle
-									value={doShowZhan}
+									value={drawParameters.doShowZhan}
 									onChange={(value) => {
-										setDoShowZhan(value);
+										setDrawParameters((prev) => ({ ...prev, doShowZhan: value }));
 									}}
 								/>
 								<span>显示「站」</span>
 							</label>
 							<label>
 								<Toggle
-									value={doShowEnglish}
+									value={drawParameters.doShowEnglish}
 									onChange={(value) => {
-										setDoShowEnglish(value);
+										setDrawParameters((prev) => ({ ...prev, doShowEnglish: value }));
 									}}
 								/>
 								<span>显示外文</span>
@@ -872,18 +330,18 @@ export default function CRWideTicket() {
 						<label className="ticket-form-label">
 							车次
 							<div className="flex gap-4 items-center flex-wrap">
-								<input value={routeIdentifier} onChange={(e) => setRouteIdentifier(e.target.value)} />
+								<input value={drawParameters.routeIdentifier} onChange={(e) => setDrawParameters((prev) => ({ ...prev, routeIdentifier: e.target.value }))} />
 								<label className="">
 									<Toggle
-										value={routeIdentifier.substring(0, 1) === '0' ? true : false}
+										value={drawParameters.routeIdentifier.substring(0, 1) === '0' ? true : false}
 										onChange={(value) => {
 											if (value) {
-												if (routeIdentifier.substring(0, 1) !== '0') {
-													setRouteIdentifier((prev) => '0' + prev);
+												if (drawParameters.routeIdentifier.substring(0, 1) !== '0') {
+													setDrawParameters((prev) => ({ ...prev, routeIdentifier: '0' + prev.routeIdentifier }));
 												}
 											} else {
-												if (routeIdentifier.substring(0, 1) === '0') {
-													setRouteIdentifier((prev) => prev.substring(1, prev.length));
+												if (drawParameters.routeIdentifier.substring(0, 1) === '0') {
+													setDrawParameters((prev) => ({ ...prev, routeIdentifier: prev.routeIdentifier.substring(1, prev.routeIdentifier.length) }));
 												}
 											}
 										}}
@@ -905,31 +363,45 @@ export default function CRWideTicket() {
 								};
 							})}
 							value={
-								CR_TRAIN_TYPE_ARRAY.includes(routeIdentifier.substring(routeIdentifier.substring(0, 1) === '0' ? 1 : 0, routeIdentifier.substring(0, 1) === '0' ? 2 : 1))
-									? routeIdentifier.substring(routeIdentifier.substring(0, 1) === '0' ? 1 : 0, routeIdentifier.substring(0, 1) === '0' ? 2 : 1)
+								CR_TRAIN_TYPE_ARRAY.includes(
+									drawParameters.routeIdentifier.substring(
+										drawParameters.routeIdentifier.substring(0, 1) === '0' ? 1 : 0,
+										drawParameters.routeIdentifier.substring(0, 1) === '0' ? 2 : 1
+									)
+								)
+									? drawParameters.routeIdentifier.substring(
+											drawParameters.routeIdentifier.substring(0, 1) === '0' ? 1 : 0,
+											drawParameters.routeIdentifier.substring(0, 1) === '0' ? 2 : 1
+									  )
 									: ''
 							}
 							onChange={(value: string) => {
-								const routeIdentifierFirstChar = routeIdentifier.substring(routeIdentifier.substring(0, 1) === '0' ? 1 : 0, routeIdentifier.substring(0, 1) === '0' ? 2 : 1);
+								const routeIdentifierFirstChar = drawParameters.routeIdentifier.substring(
+									drawParameters.routeIdentifier.substring(0, 1) === '0' ? 1 : 0,
+									drawParameters.routeIdentifier.substring(0, 1) === '0' ? 2 : 1
+								);
 								if (CR_TRAIN_TYPE_ARRAY.includes(routeIdentifierFirstChar)) {
-									const routeIdentifierNumbersChar = routeIdentifier.substring(routeIdentifier.substring(0, 1) === '0' ? 2 : 1, routeIdentifier.length);
-									setRouteIdentifier((prev) => (prev.substring(0, 1) === '0' ? '0' : '') + value + routeIdentifierNumbersChar);
+									const routeIdentifierNumbersChar = drawParameters.routeIdentifier.substring(
+										drawParameters.routeIdentifier.substring(0, 1) === '0' ? 2 : 1,
+										drawParameters.routeIdentifier.length
+									);
+									setDrawParameters((prev) => ({ ...prev, routeIdentifier: (prev.routeIdentifier.substring(0, 1) === '0' ? '0' : '') + value + routeIdentifierNumbersChar }));
 								} else {
-									setRouteIdentifier(value + routeIdentifier);
+									setDrawParameters((prev) => ({ ...prev, routeIdentifier: value + prev.routeIdentifier }));
 								}
 
-								setSeat3(value);
+								setDrawParameters((prev) => ({ ...prev, seat3: value }));
 							}}
 							placeholder="普客普快(自定义)"
 						/>
 
 						<label className="ticket-form-label">
 							發车日期
-							<input type="date" value={date.toISOString().slice(0, 10)} onChange={(e) => setDate(new Date(e.target.value))} />
+							<input type="date" value={drawParameters.date.toISOString().slice(0, 10)} onChange={(e) => setDrawParameters((prev) => ({ ...prev, date: new Date(e.target.value) }))} />
 						</label>
 						<label className="ticket-form-label">
 							發车时间
-							<input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+							<input type="time" value={drawParameters.time} onChange={(e) => setDrawParameters((prev) => ({ ...prev, time: e.target.value }))} />
 						</label>
 						<Divider />
 						<label className="ticket-form-label">
@@ -938,15 +410,15 @@ export default function CRWideTicket() {
 								<label className="flex items-center text-[12px]">
 									<input
 										type="checkbox"
-										checked={noCarriage}
+										checked={drawParameters.noCarriage}
 										onChange={(e) => {
-											setNoCarriage(e.target.checked);
+											setDrawParameters((prev) => ({ ...prev, noCarriage: e.target.checked }));
 										}}
 									/>
 									<span>无指定车厢</span>
 								</label>
 							</div>
-							<input value={carriage} onChange={(e) => setCarriage(e.target.value)} />
+							<input value={drawParameters.carriage} onChange={(e) => setDrawParameters((prev) => ({ ...prev, carriage: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							<div className="flex gap-2">
@@ -954,15 +426,15 @@ export default function CRWideTicket() {
 								<label className="flex items-center text-[12px]">
 									<input
 										type="checkbox"
-										checked={noSeat}
+										checked={drawParameters.noSeat}
 										onChange={(e) => {
-											setNoSeat(e.target.checked);
+											setDrawParameters((prev) => ({ ...prev, noSeat: e.target.checked }));
 										}}
 									/>
 									<span>无座</span>
 								</label>
 							</div>
-							<input value={seat1} onChange={(e) => setSeat1(e.target.value)} />
+							<input value={drawParameters.seat1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, seat1: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							座位
@@ -975,9 +447,9 @@ export default function CRWideTicket() {
 									{ value: 'E', title: 'E' },
 									{ value: 'F', title: 'F' },
 								]}
-								value={seat2}
+								value={drawParameters.seat2}
 								onChange={(value: string) => {
-									setSeat2(value);
+									setDrawParameters((prev) => ({ ...prev, seat2: value }));
 								}}
 							/>
 						</label>
@@ -990,9 +462,9 @@ export default function CRWideTicket() {
 										{ value: '中铺', title: '中铺' },
 										{ value: '下铺', title: '下铺' },
 									]}
-									value={seat3}
+									value={drawParameters.seat3}
 									onChange={(value: string) => {
-										setSeat3(value);
+										setDrawParameters((prev) => ({ ...prev, seat3: value }));
 									}}
 								/>
 							</div>
@@ -1003,17 +475,15 @@ export default function CRWideTicket() {
 								list={seatType.map((seatTypeItem) => {
 									return { value: seatTypeItem, title: seatTypeItem };
 								})}
-								value={seatClass}
+								value={drawParameters.seatClass}
 								onChange={(value: string) => {
 									if (sleepingCarSeatType.includes(value)) {
-										setSeat2('');
-										setSeat3('下铺');
+										setDrawParameters((prev) => ({ ...prev, seat2: '', seat3: '下铺' }));
 									} else {
-										setSeat2('F');
-										setSeat3('');
+										setDrawParameters((prev) => ({ ...prev, seat2: 'F', seat3: '' }));
 									}
 
-									setSeatClass(value);
+									setDrawParameters((prev) => ({ ...prev, seatClass: value }));
 								}}
 							/>
 						</label>
@@ -1021,16 +491,16 @@ export default function CRWideTicket() {
 
 					<TabBox title="购票信息" className="flex flex-wrap">
 						<label className="ticket-form-label">
-							价格 {isHKWestKowloonStyle ? 'HK＄' : '￥'}
-							<input value={price} onChange={(e) => setPrice(e.target.value)} />
+							价格 {drawParameters.isHKWestKowloonStyle ? 'HK＄' : '￥'}
+							<input value={drawParameters.price} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							购票处
-							<input className="" value={soldplace} onChange={(e) => setSoldPlace(e.target.value)} />
+							<input className="" value={drawParameters.soldplace} onChange={(e) => setDrawParameters((prev) => ({ ...prev, soldplace: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							检票
-							<input className="" value={turnstile} onChange={(e) => setTurnstile(e.target.value)} />
+							<input className="" value={drawParameters.turnstile} onChange={(e) => setDrawParameters((prev) => ({ ...prev, turnstile: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							右上角显示
@@ -1042,18 +512,18 @@ export default function CRWideTicket() {
 										{ value: RightUpContentType.Turnstile, title: '检票口' },
 										{ value: RightUpContentType.International, title: '国际联运' },
 									]}
-									value={rightUpContentType}
+									value={drawParameters.rightUpContentType}
 									onChange={(value: string) => {
-										setRightUpContentType(value as RightUpContentType);
+										setDrawParameters((prev) => ({ ...prev, rightUpContentType: value as RightUpContentType }));
 									}}
 									placeholder="自定义"
 								/>
 
 								<label>
 									<Toggle
-										value={showSoldPlaceDown}
+										value={drawParameters.showSoldPlaceDown}
 										onChange={(value) => {
-											setShowSoldPlaceDown(value);
+											setDrawParameters((prev) => ({ ...prev, showSoldPlaceDown: value }));
 										}}
 									/>
 									<span>下方显示购票处</span>
@@ -1063,17 +533,17 @@ export default function CRWideTicket() {
 
 						<label className="ticket-form-label">
 							乘车人证件号
-							<input value={idNumber} onChange={(e) => setIdNumber(e.target.value)} />
+							<input value={drawParameters.idNumber} onChange={(e) => setDrawParameters((prev) => ({ ...prev, idNumber: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							乘车人
 							<div>
-								<input value={passenger} onChange={(e) => setPassenger(e.target.value)} />
+								<input value={drawParameters.passenger} onChange={(e) => setDrawParameters((prev) => ({ ...prev, passenger: e.target.value }))} />
 								<label>
 									<Toggle
-										value={doShowPassenger}
+										value={drawParameters.doShowPassenger}
 										onChange={(value) => {
-											setDoShowPassenger(value);
+											setDrawParameters((prev) => ({ ...prev, doShowPassenger: value }));
 										}}
 									/>
 									<span>显示乘车人信息</span>
@@ -1127,7 +597,7 @@ export default function CRWideTicket() {
 										<div className="text-sm font-semibold mt-1">{type}</div>
 										<div className="flex flex-wrap gap-1">
 											{items.map((purchaseMethodItem) => {
-												const isChecked = purchaseMethod.some((pm) => pm.type === purchaseMethodItem.type && pm.title === purchaseMethodItem.title);
+												const isChecked = drawParameters.purchaseMethod.some((pm) => pm.type === purchaseMethodItem.type && pm.title === purchaseMethodItem.title);
 												return (
 													<label title={purchaseMethodItem.desc} key={purchaseMethodItem.type + '_' + purchaseMethodItem.title} className="flex items-center">
 														<input
@@ -1135,15 +605,20 @@ export default function CRWideTicket() {
 															checked={isChecked}
 															onChange={() => {
 																if (isChecked) {
-																	setPurchaseMethod((prev) => prev.filter((j) => !(j.type === purchaseMethodItem.type && j.title === purchaseMethodItem.title)));
+																	setDrawParameters((prev) => ({
+																		...prev,
+																		purchaseMethod: prev.purchaseMethod.filter(
+																			(j) => !(j.type === purchaseMethodItem.type && j.title === purchaseMethodItem.title)
+																		),
+																	}));
 																} else {
-																	setPurchaseMethod((prev) => [...prev, purchaseMethodItem]);
+																	setDrawParameters((prev) => ({ ...prev, purchaseMethod: [...prev.purchaseMethod, purchaseMethodItem] }));
 																}
 															}}
 														/>
 														<span
 															className={
-																doPurchaseMethodHaveCircle
+																drawParameters.doPurchaseMethodHaveCircle
 																	? purchaseMethodItem.title.length === 1
 																		? 'border-black flex justify-center items-center border rounded-[20px] text-[13px] w-[18px] h-[18px]'
 																		: ''
@@ -1160,9 +635,9 @@ export default function CRWideTicket() {
 								))}
 								<label>
 									<Toggle
-										value={doPurchaseMethodHaveCircle}
+										value={drawParameters.doPurchaseMethodHaveCircle}
 										onChange={(value) => {
-											setDoPurchaseMethodHaveCircle(value);
+											setDrawParameters((prev) => ({ ...prev, doPurchaseMethodHaveCircle: value }));
 										}}
 									/>
 									<span>购票方式添加圆环</span>
@@ -1176,39 +651,39 @@ export default function CRWideTicket() {
 								<PrettyInputRadioGroup
 									list={[
 										{
-											value: `${info1TrainType}经由${info1from}至${info1to}`,
+											value: `${drawParameters.info1TrainType}经由${drawParameters.info1from}至${drawParameters.info1to}`,
 											title: (
 												<div>
 													<span className="bg-black text-white p-[2px] mr-1">通票</span>
 													<input
 														type="text"
-														value={info1TrainType}
+														value={drawParameters.info1TrainType}
 														placeholder="列车类型"
 														onChange={(e) => {
 															const val = e.target.value;
-															setinfo1TrainType(val);
+															setDrawParameters((prev) => ({ ...prev, info1TrainType: val }));
 														}}
 														className="border w-16"
 													/>
 													经由
 													<input
 														type="text"
-														value={info1from}
+														value={drawParameters.info1from}
 														placeholder="经由"
 														onChange={(e) => {
 															const val = e.target.value;
-															setinfo1From(val);
+															setDrawParameters((prev) => ({ ...prev, info1from: val }));
 														}}
 														className="border w-24"
 													/>
 													至
 													<input
 														type="text"
-														value={info1to}
+														value={drawParameters.info1to}
 														placeholder="终到站"
 														onChange={(e) => {
 															const val = e.target.value;
-															setinfo1To(val);
+															setDrawParameters((prev) => ({ ...prev, info1to: val }));
 														}}
 														className="border w-16"
 													/>
@@ -1222,9 +697,9 @@ export default function CRWideTicket() {
 											};
 										}),
 									]}
-									value={info1}
+									value={drawParameters.info1}
 									onChange={(value: string) => {
-										setInfo1(value);
+										setDrawParameters((prev) => ({ ...prev, info1: value }));
 									}}
 								/>
 							</div>
@@ -1236,9 +711,9 @@ export default function CRWideTicket() {
 								<InputRadioGroup
 									name="info2"
 									list={info2List}
-									value={info2}
+									value={drawParameters.info2}
 									onChange={(value: string) => {
-										setInfo2(value);
+										setDrawParameters((prev) => ({ ...prev, info2: value }));
 									}}
 								/>
 							</div>
@@ -1250,9 +725,9 @@ export default function CRWideTicket() {
 								<InputRadioGroup
 									name="info3"
 									list={info3List}
-									value={info3}
+									value={drawParameters.info3}
 									onChange={(value: string) => {
-										setInfo3(value);
+										setDrawParameters((prev) => ({ ...prev, info3: value }));
 									}}
 								/>
 							</div>
@@ -1261,30 +736,30 @@ export default function CRWideTicket() {
 					<TabBox title="票号数据" className="flex flex-wrap">
 						<label className="ticket-form-label">
 							票号
-							<input className="text-red-500" value={ticketNo} onChange={(e) => setTicketNo(e.target.value)} />
+							<input className="text-red-500" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							车票标识码
-							<input value={serialCode} onChange={(e) => setSerialCode(e.target.value)} />
+							<input value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							二维码数据
-							<textarea className="w-full h-[100px]" value={qrCodeText} onChange={(e) => setQrCodeText(e.target.value)} />
+							<textarea className="w-full h-[100px]" value={drawParameters.qrCodeText} onChange={(e) => setDrawParameters((prev) => ({ ...prev, qrCodeText: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							<div>
 								<label>
 									<span>虚线框内文字</span>
 									<Toggle
-										value={doShowMessage}
+										value={drawParameters.doShowMessage}
 										onChange={(value) => {
-											setDoShowMessage(value);
+											setDrawParameters((prev) => ({ ...prev, doShowMessage: value }));
 										}}
 									/>
 								</label>
 							</div>
 							<div>
-								<textarea className="w-full h-[100px]" value={message} onChange={(e) => setMessage(e.target.value)} />
+								<textarea className="w-full h-[100px]" value={drawParameters.message} onChange={(e) => setDrawParameters((prev) => ({ ...prev, message: e.target.value }))} />
 								<PrettyInputRadioGroup
 									list={[
 										{ value: TextAlign.Left.toString(), title: '左对齐' },
@@ -1294,9 +769,9 @@ export default function CRWideTicket() {
 										{ value: TextAlign.JustifyEvenly.toString(), title: '等距铺开' },
 										{ value: TextAlign.JustifyAround.toString(), title: '最优铺开' },
 									]}
-									value={messageAlign.toString()}
+									value={drawParameters.messageAlign.toString()}
 									onChange={(value: string) => {
-										setMessageAlign(Number(value) as TextAlign);
+										setDrawParameters((prev) => ({ ...prev, messageAlign: Number(value) as TextAlign }));
 									}}
 									placeholder="自定义"
 									showInputBox={false}
@@ -1306,9 +781,9 @@ export default function CRWideTicket() {
 									list={messageList.map((messageListItem) => {
 										return { value: messageListItem, title: messageListItem };
 									})}
-									value={message}
+									value={drawParameters.message}
 									onChange={(value: string) => {
-										setMessage(value);
+										setDrawParameters((prev) => ({ ...prev, message: value }));
 									}}
 									placeholder="自定义"
 									showInputBox={false}
