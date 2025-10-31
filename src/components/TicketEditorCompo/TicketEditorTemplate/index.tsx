@@ -25,11 +25,12 @@ interface Props {
 	scaleYWidth: number;
 	saveFilename: string;
 	form: JSX.Element | null;
+	isFontLoading?: boolean;
 	onScaleChange?: (scale: number) => void;
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 0, canvasShowShandow = true, scaleXWidth, scaleYWidth, saveFilename, form, onScaleChange }: Props) => {
+export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 0, canvasShowShandow = true, scaleXWidth, scaleYWidth, saveFilename, form, isFontLoading, onScaleChange }: Props) => {
 	const isMobile = useIsMobile();
 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -142,6 +143,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 						<span>翻转效果</span>
 					</label>
 				</div>
+				<div>{isFontLoading && <span className="text-sm text-gray-500">フォント読み込み中...</span>}</div>
 
 				<TiltCanvas
 					doTilt={enableCanvasTilt}

@@ -57,6 +57,8 @@ export default function CRWideTicket() {
 	const [size, setSize] = useState(PAPER_TICKET_SIZE);
 	const [canvasSize, setCanvasSize] = useState(PAPER_TICKET_CANVAS_SIZE);
 
+	const [isFontLoading, setIsFontLoading] = useState(false);
+
 	const [background, setBackground] = useState<CRTicketBackGround>(CRTicketBackGround.SoftRed);
 	const [showBorder, setShowBorder] = useState(true);
 	const [isHKWestKowloonStyle, setIsHKWestKowloonStyle] = useState(false);
@@ -189,7 +191,8 @@ export default function CRWideTicket() {
 			await Promise.all(fonts.map((f) => f.load()));
 			fonts.forEach((f) => document.fonts.add(f));
 		};
-		loadFonts();
+		setIsFontLoading(true);
+		loadFonts().finally(() => setIsFontLoading(false));
 	}, []);
 
 	const drawTicket = () => {
@@ -692,6 +695,7 @@ export default function CRWideTicket() {
 			scaleXWidth={size[0]}
 			scaleYWidth={size[1]}
 			saveFilename={`ticket_${station1}-${station2}`}
+			isFontLoading={isFontLoading}
 			form={
 				<div className="flex flex-col gap-4 m-4">
 					<TabBox title="票面" className="flex flex-wrap gap-1">

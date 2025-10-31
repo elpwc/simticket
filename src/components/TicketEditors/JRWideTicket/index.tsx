@@ -84,6 +84,8 @@ export default function JRWideTicket() {
 	const [canvasSize, setCanvasSize] = useState(PAPER_TICKET_CANVAS_SIZE);
 	const [currentScale, setCurrentScale] = useState(1);
 
+	const [isFontLoading, setIsFontLoading] = useState(false);
+
 	const [background, setBackground] = useState<JRTicketBackGround>(JRTicketBackGround.JR_E);
 	const [offsetX, setOffsetX] = useState(0);
 	const [offsetY, setOffsetY] = useState(0);
@@ -118,6 +120,8 @@ export default function JRWideTicket() {
 			const fonts = [new FontFace('DotFont', 'url(../../../assets/fonts/JF-Dot-Izumi16.woff2.woff2)')];
 			await Promise.all(fonts.map((f) => f.load()));
 			fonts.forEach((f) => document.fonts.add(f));
+			setIsFontLoading(true);
+			loadFonts().finally(() => setIsFontLoading(false));
 		};
 		loadFonts();
 	}, []);
@@ -369,6 +373,7 @@ export default function JRWideTicket() {
 			scaleYWidth={size[1]}
 			saveFilename={`ticket_${station1}-${station2}`}
 			onScaleChange={setCurrentScale}
+			isFontLoading={isFontLoading}
 			form={
 				<div className="flex flex-col gap-4 m-4">
 					<UnderConstruction size="small" />
