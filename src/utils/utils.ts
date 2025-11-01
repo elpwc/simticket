@@ -428,3 +428,9 @@ export const fontsLoader = (fontList: { name: string; file: string }[], onLoadSt
 		loadFonts().finally(() => onLoadEnd());
 	}
 };
+
+export interface TicketListItemProperty {
+	companyId: number;
+	ticketTypeId: number;
+	ticketData?: any;
+}

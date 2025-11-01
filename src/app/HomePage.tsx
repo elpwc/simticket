@@ -12,6 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import JRWideTicket from '@/components/TicketEditors/JRWideTicket';
 import { UnderConstruction } from '@/components/TicketEditorCompo/UnderConstruction';
 import { TicketViewer } from '@/components/InfrastructureCompo/ticketViewer';
+import { TicketListViewItem } from '@/components/InfrastructureCompo/ticketListViewItem';
 
 export default function HomePage() {
 	const isMobile = useIsMobile();
@@ -114,7 +115,7 @@ export default function HomePage() {
 				)}
 			</AnimatePresence>
 
-			<motion.div className='mb-[200px]' animate={{ marginTop: `${menuHeight}px` }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
+			<motion.div className="mb-[200px]" animate={{ marginTop: `${menuHeight}px` }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
 				{(() => {
 					switch (selectedCompanyId) {
 						case 0: //CR
@@ -161,9 +162,15 @@ export default function HomePage() {
 					}
 				})()}
 			</motion.div>
-			<footer className='fixed bottom-0 left-0 right-0 bg-white text-center text-sm text-gray-500 py-2 border-t border-gray-300'>
-				<TicketViewer companyId={0} ticketTypeId={4} width={isMobile ? 200 : 200} height={-1} />
-				<TicketViewer companyId={0} ticketTypeId={4} width={isMobile ? 200 : 200} height={-1} />
+			<footer className="fixed bottom-0 left-0 right-0 bg-white text-center text-sm text-gray-500 py-2 border-t border-gray-300">
+				<div>
+					<TicketListViewItem companyId={0} ticketTypeId={4} width={-1} height={isMobile ? 100 : 100} />
+				</div>
+				<div>
+					<button>添加当前编辑结果到列表中</button>
+					<button>全部导出</button>
+					<button>清空列表</button>
+				</div>
 			</footer>
 		</div>
 	);

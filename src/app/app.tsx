@@ -9,6 +9,7 @@ import { useIsMobile } from '@/utils/hooks';
 import LangSwitcher from '@/components/InfrastructureCompo/LangSwitcher';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { DevProgressModal } from '@/components/Modals/DevProgressModal';
+import { TicketListItemProperty } from '@/utils/utils';
 
 export const AppContext = createContext<any>(null);
 
@@ -24,13 +25,16 @@ export default function App({
 	const [selectedTicketId, setSelectedTicketId] = useState(companyList[selectedCompanyId].defaultSelectedTicketId ?? 0);
 	const [showMobileCompanySelectMenu, setShowMobileCompanySelectMenu] = useState(true);
 	const [showDevProgressModal, setShowDevProgressModal] = useState(false);
+	const [ticketListItems, setTicketListItems] = useState<TicketListItemProperty[]>([]);
 
 	useEffect(() => {
-		setShowDevProgressModal(true)
-	}, [])
+		setShowDevProgressModal(true);
+	}, []);
 
 	return (
-		<AppContext.Provider value={{ selectedCompanyId, setSelectedCompanyId, selectedTicketId, setSelectedTicketId, showMobileCompanySelectMenu, setShowMobileCompanySelectMenu }}>
+		<AppContext.Provider
+			value={{ selectedCompanyId, setSelectedCompanyId, selectedTicketId, setSelectedTicketId, showMobileCompanySelectMenu, setShowMobileCompanySelectMenu, ticketListItems, setTicketListItems }}
+		>
 			<header className="sticky top-0 h-[60px] z-[100]">
 				<nav className="bg-[#007fd4] text-white flex items-center justify-between">
 					<section className="px-2 py-4 flex gap-1 max-h-[56px]">
@@ -79,7 +83,12 @@ export default function App({
 				</nav>
 			</header>
 			<main>{children}</main>
-			<DevProgressModal show={showDevProgressModal} onClose={() => {setShowDevProgressModal(false)}}/>
+			<DevProgressModal
+				show={showDevProgressModal}
+				onClose={() => {
+					setShowDevProgressModal(false);
+				}}
+			/>
 		</AppContext.Provider>
 	);
 }
