@@ -26,10 +26,11 @@ export const drawCRWideTicket = (
 		...partialDrawParameters,
 	};
 	if (initialMethods === undefined) {
+		console.log('draw.ts', canvas.width, canvas.height);
 		if ([CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground].includes(drawParameters.background || CRTicketBackGround.SoftRed)) {
-			initialMethods = getInitialMethods(canvas?.width || 320, canvas?.height || 197, PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
+			initialMethods = getInitialMethods(canvas?.width || PAPER_TICKET_CANVAS_SIZE[0], canvas?.height || PAPER_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
 		} else {
-			initialMethods = getInitialMethods(canvas?.width || 320, canvas?.height || 197, MAG_TICKET_SIZE[0], MAG_TICKET_SIZE[1], 1);
+			initialMethods = getInitialMethods(canvas?.width || MAG_TICKET_CANVAS_SIZE[0], canvas?.height || MAG_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
 		}
 	}
 
