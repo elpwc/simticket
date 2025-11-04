@@ -64,4 +64,17 @@ export const LocaleProvider = ({ children }: { children: ReactNode }) => {
 	return <LocaleContext.Provider value={{ locale, t, setLocale }}>{children}</LocaleContext.Provider>;
 };
 
-export const useLocale = () => useContext(LocaleContext);
+export const useLocale = (...baseKeys: string[]) => {
+	const { locale, t: rawT, setLocale } = useContext(LocaleContext);
+
+	const t = (key: string) => {
+		for (const baseKey of baseKeys) {
+			const fullKey = `${baseKey}.${key}`;
+			const translated = rawT(fullKey);
+			if (translated !== fullKey) return translated;
+		}
+		return rawT(key);
+	};
+
+	return { locale, t, setLocale };
+};
