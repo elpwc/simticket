@@ -99,7 +99,14 @@ export default function CRWideTicket() {
 
 	useEffect(() => {
 		drawTicket();
-	}, [drawTicket, size, canvasSize, drawParameters]);
+	}, [drawTicket, size, canvasSize, drawParameters, isFontLoading]);
+
+	// 背景切換時にdrawエラー対策
+	useEffect(() => {
+		setTimeout(() => {
+			drawTicket();
+		}, 1000);
+	}, [drawParameters.background]);
 
 	// 下のリスト更新用
 	useEffect(() => {
