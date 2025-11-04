@@ -148,11 +148,11 @@ export default function JRWideTicket() {
 		const resizedScaleY = (value: number) => {
 			return scaleY(value);
 		};
-		const offsetScaleX = (value: number) => {
-			return scaleX(value) + offsetX;
+		const offsetScaleX = (value: number, addOffsetValue: boolean = true) => {
+			return scaleX(value) + (addOffsetValue ? offsetX : 0);
 		};
-		const offsetScaleY = (value: number) => {
-			return scaleY(value) + offsetY;
+		const offsetScaleY = (value: number, addOffsetValue: boolean = true) => {
+			return scaleY(value) + (addOffsetValue ? offsetY : 0);
 		};
 		const resizedFont = (size: number, fontName: string, isBold?: boolean) => {
 			return font(size, fontName, isBold);
@@ -203,11 +203,11 @@ export default function JRWideTicket() {
 			if (showWatermark) {
 				ctx.fillStyle = '#AF0508';
 				ctx.font = `${resizedFont(10, 'DotFont')}`;
-				drawText(ctx, watermark, offsetScaleX(116), offsetScaleY(921), resizedScaleX(300), TextAlign.JustifyAround);
+				drawText(ctx, watermark, offsetScaleX(116, false), offsetScaleY(921, false), resizedScaleX(300), TextAlign.JustifyAround);
 
 				ctx.strokeStyle = '#AF0508';
 				ctx.lineWidth = resizedScaleX(8);
-				ctx.strokeRect(offsetScaleX(107), offsetScaleY(813), resizedScaleX(323), resizedScaleY(125));
+				ctx.strokeRect(offsetScaleX(107, false), offsetScaleY(813, false), resizedScaleX(323), resizedScaleY(125));
 				ctx.setLineDash([]);
 			}
 

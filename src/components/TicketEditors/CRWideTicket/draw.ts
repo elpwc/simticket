@@ -26,7 +26,6 @@ export const drawCRWideTicket = (
 		...partialDrawParameters,
 	};
 	if (initialMethods === undefined) {
-		console.log('draw.ts', canvas.width, canvas.height);
 		if ([CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground].includes(drawParameters.background || CRTicketBackGround.SoftRed)) {
 			initialMethods = getInitialMethods(canvas?.width || PAPER_TICKET_CANVAS_SIZE[0], canvas?.height || PAPER_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
 		} else {
@@ -84,12 +83,12 @@ export const drawCRWideTicket = (
 				return initialMethods.scaleY(value);
 		}
 	};
-	const offsetScaleX = (value: number) => {
+	const offsetScaleX = (value: number, addOffsetValue: boolean = true) => {
 		switch (drawParameters.background) {
 			case CRTicketBackGround.MagRed:
 			case CRTicketBackGround.MagBlue:
 			case CRTicketBackGround.MagNoneBackground:
-				return initialMethods.scaleX(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeHori) / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]) + drawParameters.offsetX;
+				return initialMethods.scaleX(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeHori) / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]) + (addOffsetValue ? drawParameters.offsetX : 0);
 			case CRTicketBackGround.SoftRed:
 			case CRTicketBackGround.SoftBlue:
 			case CRTicketBackGround.SoftNoneBackground:
@@ -97,12 +96,12 @@ export const drawCRWideTicket = (
 				return initialMethods.scaleX(value) + drawParameters.offsetX;
 		}
 	};
-	const offsetScaleY = (value: number) => {
+	const offsetScaleY = (value: number, addOffsetValue: boolean = true) => {
 		switch (drawParameters.background) {
 			case CRTicketBackGround.MagRed:
 			case CRTicketBackGround.MagBlue:
 			case CRTicketBackGround.MagNoneBackground:
-				return initialMethods.scaleY(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeVert) / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]) + drawParameters.offsetY;
+				return initialMethods.scaleY(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeVert) / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]) + (addOffsetValue ? drawParameters.offsetY : 0);
 			case CRTicketBackGround.SoftRed:
 			case CRTicketBackGround.SoftBlue:
 			case CRTicketBackGround.SoftNoneBackground:
@@ -157,7 +156,7 @@ export const drawCRWideTicket = (
 		// 票号
 		ctx.fillStyle = '#f89c9c';
 		ctx.font = `${resizedFont(8, 'HeiTi')}`;
-		drawText(ctx, drawParameters.ticketNo, offsetScaleX(118), offsetScaleY(224), resizedScaleX(443), TextAlign.Left, DrawTextMethod.fillText, 1);
+		drawText(ctx, drawParameters.ticketNo, offsetScaleX(118, false), offsetScaleY(224, false), resizedScaleX(443), TextAlign.Left, DrawTextMethod.fillText, 1);
 
 		// 水印
 		if (drawParameters.showWatermark) {
@@ -165,7 +164,7 @@ export const drawCRWideTicket = (
 			ctx.strokeStyle = '#ffbbbb';
 			ctx.lineWidth = 1;
 			ctx.font = `bold ${resizedFont(26, 'HeiTi')}`;
-			drawText(ctx, drawParameters.watermark, offsetScaleX(350), offsetScaleY(670), resizedScaleX(1000), TextAlign.JustifyAround, DrawTextMethod.strokeText);
+			drawText(ctx, drawParameters.watermark, offsetScaleX(350, false), offsetScaleY(670, false), resizedScaleX(1000), TextAlign.JustifyAround, DrawTextMethod.strokeText);
 			ctx.closePath();
 		}
 
