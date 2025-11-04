@@ -2,8 +2,11 @@ import { AppContext } from '@/app/app';
 import { TicketListItemProperty } from '@/utils/utils';
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { TicketListViewItem } from './ticketListViewItem';
+import { useLocale } from '@/utils/hooks/useLocale';
 
 export const TicketListView = () => {
+	const { t } = useLocale();
+
 	const { ticketListItems, setTicketListItems }: { ticketListItems: TicketListItemProperty[]; setTicketListItems: Dispatch<SetStateAction<TicketListItemProperty[]>> } = useContext(AppContext);
 
 	const { selectedCompanyId, setSelectedCompanyId } = useContext(AppContext);
@@ -46,15 +49,15 @@ export const TicketListView = () => {
 						]);
 					}}
 				>
-					添加当前编辑结果到列表中
+					{t('ticketListView.addResultToListButton')}
 				</button>
-				<button>导出列表为A4</button>
+				<button>{t('ticketListView.exportList')}</button>
 				<button
 					onClick={() => {
 						setTicketListItems([]);
 					}}
 				>
-					清空列表
+					{t('ticketListView.clearListButton')}
 				</button>
 			</div>
 		</div>

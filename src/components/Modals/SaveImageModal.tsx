@@ -3,6 +3,7 @@ import { Modal } from '../InfrastructureCompo/Modal';
 import Toggle from '../InfrastructureCompo/Toggle';
 import TabBox from '../InfrastructureCompo/TabBox';
 import clsx from 'clsx';
+import { useLocale } from '@/utils/hooks/useLocale';
 
 interface Props {
 	show: boolean;
@@ -12,17 +13,18 @@ interface Props {
 }
 
 export const SAVE_IMAGE_SIZES = [
-	{ title: '小', desc: '~100KB', scale: 1 },
-	{ title: '普通', desc: '~500KB', scale: 2 },
-	{ title: '高清', desc: '~3MB', scale: 5 },
-	{ title: '超高清', desc: '~10MB', scale: 10 },
+	{ title: 'SaveImageModal.SAVE_IMAGE_SIZES.small', desc: '~100KB', scale: 1 },
+	{ title: 'SaveImageModal.SAVE_IMAGE_SIZES.normal', desc: '~500KB', scale: 2 },
+	{ title: 'SaveImageModal.SAVE_IMAGE_SIZES.HD', desc: '~3MB', scale: 5 },
+	{ title: 'SaveImageModal.SAVE_IMAGE_SIZES.UHD', desc: '~10MB', scale: 10 },
 ];
 
 export const SaveImageModal = ({ show, defaultCanvasSize, onClose, onSave }: Props) => {
+	const { t } = useLocale();
 	const [width, setWidth] = useState(defaultCanvasSize[0]);
 	const [height, setHeight] = useState(defaultCanvasSize[1]);
 	return (
-		<Modal title={'选择保存尺寸'} isOpen={show} onClose={onClose}>
+		<Modal title={t('SaveImageModal.title')} isOpen={show} onClose={onClose}>
 			<div className="flex flex-col">
 				{SAVE_IMAGE_SIZES.map((SAVE_IMAGE_SIZE) => {
 					return (
@@ -34,17 +36,17 @@ export const SaveImageModal = ({ show, defaultCanvasSize, onClose, onSave }: Pro
 								onSave(SAVE_IMAGE_SIZE.scale, SAVE_IMAGE_SIZE.title);
 							}}
 						>
-							<span>{SAVE_IMAGE_SIZE.title}</span>
+							<span>{t(SAVE_IMAGE_SIZE.title)}</span>
 							<span>{`${SAVE_IMAGE_SIZE.scale * defaultCanvasSize[0]} × ${SAVE_IMAGE_SIZE.scale * defaultCanvasSize[1]}`}</span>
 							<span>{SAVE_IMAGE_SIZE.desc}</span>
 						</button>
 					);
 				})}
 			</div>
-			<TabBox styleOuter={{ marginTop: '20px' }} title={'自定义尺寸'}>
+			<TabBox styleOuter={{ marginTop: '20px' }} title={t('SaveImageModal.customizeSizeTab.title')}>
 				<div className="flex gap-2">
 					<span>
-						宽
+						{t('SaveImageModal.customizeSizeTab.widthText')}
 						<input
 							value={width}
 							style={{ width: '80px' }}
@@ -60,7 +62,7 @@ export const SaveImageModal = ({ show, defaultCanvasSize, onClose, onSave }: Pro
 						px
 					</span>
 					<span>
-						高
+						{t('SaveImageModal.customizeSizeTab.heightText')}
 						<input
 							value={height}
 							style={{ width: '80px' }}
@@ -81,10 +83,10 @@ export const SaveImageModal = ({ show, defaultCanvasSize, onClose, onSave }: Pro
 					className={clsx('flex justify-between w-full', !Number.isNaN(width) && !Number.isNaN(height) && width > 0 && height > 0 ? '' : 'disabled')}
 					style={{ padding: '10px 10px', marginTop: '12px' }}
 					onClick={() => {
-						onSave(width / defaultCanvasSize[0], '自定义');
+						onSave(width / defaultCanvasSize[0], t('SaveImageModal.customizeSizeTab.buttonTitle'));
 					}}
 				>
-					<span>{'自定义'}</span>
+					<span>{t('SaveImageModal.customizeSizeTab.buttonTitle')}</span>
 					<span>{`${width} × ${height}`}</span>
 					<span>{}</span>
 				</button>

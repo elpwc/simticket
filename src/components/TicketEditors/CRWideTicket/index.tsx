@@ -31,6 +31,7 @@ import {
 import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType } from './type';
 import { drawCRWideTicket } from './draw';
 import { AppContext } from '@/app/app';
+import { useLocale } from '@/utils/hooks/useLocale';
 
 export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
@@ -44,6 +45,7 @@ export const HeiTi = localFonts({
 });
 
 export default function CRWideTicket() {
+	const { t } = useLocale();
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
 	const scaleXRef = useRef<(x: number) => number>(null);
@@ -160,13 +162,13 @@ export default function CRWideTicket() {
 			isFontLoading={isFontLoading}
 			form={
 				<div className="flex flex-col gap-4 m-4">
-					<TabBox title="票面" className="flex flex-wrap gap-1">
+					<TabBox title={t('editor.common.ticketFace.title')} className="flex flex-wrap gap-1">
 						<label className="ticket-form-label">
-							车票用纸
+							{t('editor.common.ticketFace.paper')}
 							<CRWideTicketBgSelector value={drawParameters.background} onChange={(value: CRTicketBackGround) => setDrawParameters((prev) => ({ ...prev, background: value }))} />
 						</label>
 						<label className="ticket-form-label">
-							印刷偏移
+							{t('editor.common.ticketFace.offset')}
 							<div className="flex grid-cols-3 gap-2">
 								<label className="flex gap-1 items-center">
 									X
@@ -201,7 +203,7 @@ export default function CRWideTicket() {
 						</label>
 						<label className="ticket-form-label">
 							<div>
-								水印
+								{t('editor.common.ticketFace.watermark')}
 								<Toggle
 									value={drawParameters.showWatermark}
 									onChange={(value) => {
@@ -230,7 +232,7 @@ export default function CRWideTicket() {
 												setDrawParameters((prev) => ({ ...prev, isHKWestKowloonStyle: value }));
 											}}
 										/>
-										使用香港西九龍站發售樣式
+										{t('editor.cr.jisuanjikepiao2010.ticketFace.useHKWestKowloonStyle')}
 									</div>
 								</label>
 								<label className="flex">
@@ -241,16 +243,16 @@ export default function CRWideTicket() {
 												setDrawParameters((prev) => ({ ...prev, showBorder: value }));
 											}}
 										/>
-										为软纸票和无背景显示边框
+										{t('editor.cr.jisuanjikepiao2010.ticketFace.showBorderForNonBorder')}
 									</div>
 								</label>
 							</div>
 						</div>
 					</TabBox>
-					<TabBox title="车站信息" className="flex flex-wrap gap-1">
+					<TabBox title={t('editor.common.stationInfo.title')} className="flex flex-wrap gap-1">
 						<div className="flex flex-col gap-[2px]">
 							<label className="ticket-form-label">
-								出发
+								{t('editor.common.stationInfo.departure')}
 								<input
 									value={drawParameters.station1}
 									onChange={(e) => {
@@ -267,7 +269,7 @@ export default function CRWideTicket() {
 								/>
 							</label>
 							<label className="ticket-form-label">
-								出发外文
+								{t('editor.common.stationInfo.departureForeign')}
 								<input value={drawParameters.station1en} onChange={(e) => setDrawParameters((prev) => ({ ...prev, station1en: e.target.value }))} />
 							</label>
 							<label>
@@ -278,17 +280,18 @@ export default function CRWideTicket() {
 									}}
 								/>
 								<span>
-									使用<span className={HuawenXinwei.className}>魏碑体</span>
+									{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
+									<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
 									<DescriptionButton modalTitle="魏碑体">
-										<p>　曾经CR上海局发行的车票中，当里程在400km以内时，两方车站名使用魏碑体</p>
-										<p>　但仍存在不少一方是黑体一方是魏碑体的车票，故在此对两车站分别设置字体而不是统一设置</p>
+										<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
+										<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
 									</DescriptionButton>
 								</span>
 							</label>
 						</div>
 						<div className="flex flex-col gap-[2px]">
 							<label className="ticket-form-label">
-								到达
+								{t('editor.common.stationInfo.arrival')}
 								<input
 									value={drawParameters.station2}
 									onChange={(e) => {
@@ -304,7 +307,7 @@ export default function CRWideTicket() {
 								/>
 							</label>
 							<label className="ticket-form-label">
-								到达外文
+								{t('editor.common.stationInfo.arrivalForeign')}
 								<input value={drawParameters.station2en} onChange={(e) => setDrawParameters((prev) => ({ ...prev, station2en: e.target.value }))} />
 							</label>
 							<label>
@@ -315,7 +318,12 @@ export default function CRWideTicket() {
 									}}
 								/>
 								<span>
-									使用<span className={HuawenXinwei.className}>魏碑体</span>
+									{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
+									<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
+									<DescriptionButton modalTitle="魏碑体">
+										<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
+										<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
+									</DescriptionButton>
 								</span>
 							</label>
 						</div>
@@ -327,7 +335,7 @@ export default function CRWideTicket() {
 										setDrawParameters((prev) => ({ ...prev, doShowZhan: value }));
 									}}
 								/>
-								<span>显示「站」</span>
+								<span>{t('editor.common.stationInfo.showTheTextOfStation')}</span>
 							</label>
 							<label>
 								<Toggle
@@ -336,7 +344,7 @@ export default function CRWideTicket() {
 										setDrawParameters((prev) => ({ ...prev, doShowEnglish: value }));
 									}}
 								/>
-								<span>显示外文</span>
+								<span>{t('editor.common.stationInfo.showForeignLanguageStationName')}</span>
 							</label>
 						</div>
 					</TabBox>

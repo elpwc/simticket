@@ -8,9 +8,10 @@ import Toggle from '../../InfrastructureCompo/Toggle';
 import { useIsMobile } from '@/utils/hooks';
 import clsx from 'clsx';
 import { SaveImageModal } from '@/components/Modals/SaveImageModal';
+import { useLocale } from '@/utils/hooks/useLocale';
 
 export const getInitialMethods = (w: number, h: number, scaleXWidth: number, scaleYWidth: number, currentSizeScale: number = 1) => {
-	console.log(w ,h)
+	console.log(w, h);
 	const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
 	const scaleY = (y: number) => (y / (scaleYWidth * currentSizeScale)) * h;
 	const font = (size: number, fontName: string, isBold: boolean = false) => `${isBold ? 'bold' : ''} ${(size / (100 * currentSizeScale)) * h}px ${fontName}`;
@@ -40,6 +41,7 @@ interface Props {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 0, canvasShowShandow = true, scaleXWidth, scaleYWidth, saveFilename, form, isFontLoading, onScaleChange }: Props) => {
 	const isMobile = useIsMobile();
+	const { t } = useLocale();
 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -125,7 +127,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 							<path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
 							<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
 						</svg>
-						画像更新
+						{t('TicketEditorTemplate.updateButton')}
 					</button>
 					<button
 						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
@@ -137,7 +139,7 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 							<path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z" />
 							<path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z" />
 						</svg>
-						画像保存
+						{t('TicketEditorTemplate.saveButton')}
 					</button>
 					<label className="ticketEditorTemplateToolBarItem">
 						<Toggle
@@ -146,10 +148,10 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 								setEnableCanvasTilt(value);
 							}}
 						/>
-						<span>翻转效果</span>
+						<span>{t('TicketEditorTemplate.flipEffectButton')}</span>
 					</label>
 				</div>
-				<div>{isFontLoading && <span className="text-sm text-gray-500">フォント読み込み中...</span>}</div>
+				<div>{isFontLoading && <span className="text-sm text-gray-500">{t('TicketEditorTemplate.loadingFontText')}</span>}</div>
 
 				<TiltCanvas
 					doTilt={enableCanvasTilt}

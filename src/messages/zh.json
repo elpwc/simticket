@@ -1,18 +1,79 @@
 {
-	"InputRadioGroup": {
-		"placeholder": "空 (自定义)"
-	},
-  "DevProgressModal":{
+  "InputRadioGroup": {
+    "placeholder": "空 (自定义)"
+  },
+  "DevProgressModal": {
     "text1": "欢迎使用 simTicket 内部测试版本 \n simTicket 是在2025年10月 CR（中国国铁）彻底废止纸质报销凭证之际，由我（うに@elpwc）推出的在线票面生成工具&nbsp; <br /> \r\n目前 simTicket 还在未完成的开發阶段。但是由于测试网址在10月22日突然被泄露和广泛传播，于是我决定以半成品的形式先行向大家以内部测试的形式公开网页。\n在 CR 车票样式以外，我也计划提供 JR，TR, VNR, THSR 等我坐过的铁道公司的车票制作器。\n我会尽可能考虑、覆盖到票面上所有可能出现的情况，努力坐到最完美的车票制作器。\n\n注意，绝对不要将此工具用于不合法规的地方。\n\n可以前往我的推特实时关注开發进度：",
     "text2": ""
   },
-	"app": {
-		"menu": {
-			"about": "关于",
-			"post": "投稿"
-		}
-	},
+  "app": {
+    "menu": {
+      "about": "关于",
+      "post": "投稿"
+    }
+  },
   "text": {
     "construction": "正在开發中"
+  },
+  "TicketEditorTemplate": {
+    "flipEffectButton": "翻转效果",
+    "loadingFontText": "加载字体文件中...",
+    "updateButton": "刷新图像",
+    "saveButton": "保存图像"
+  },
+  "SaveImageModal": {
+    "title": "选择保存尺寸",
+    "customizeSizeTab": {
+      "buttonTitle": "自定义",
+      "heightText": "高",
+      "title": "自定义尺寸",
+      "widthText": "宽"
+    },
+    "SAVE_IMAGE_SIZES": {
+      "small": "小",
+      "normal": "普通",
+      "HD": "高清",
+      "UHD": "超高清"
+    }
+  },
+  "ticketListView": {
+    "exportList": "导出列表为A4",
+    "addResultToListButton": "添加当前编辑结果到列表中",
+    "clearListButton": "清空列表"
+  },
+  "editor": {
+    "cr": {
+      "jisuanjikepiao2010": {
+        "ticketFace": {
+          "showBorderForNonBorder": "为软纸票和无背景显示边框",
+          "useHKWestKowloonStyle": "使用香港西九龍站發售樣式"
+        },
+        "stationInfo": {
+          "useWeibeiti": {
+            "desc1": "　曾经CR上海局发行的车票中，当里程在400km以内时，两方车站名使用魏碑体",
+            "desc2": "　但仍存在不少一方是黑体一方是魏碑体的车票，故在此对两车站分别设置字体而不是统一设置",
+            "weibeitiText": "魏碑体",
+            "useText": "使用"
+          }
+        }
+      }
+    },
+    "common": {
+      "ticketFace": {
+        "watermark": "水印",
+        "offset": "印刷偏移",
+        "paper": "车票用纸",
+        "title": "票面"
+      },
+      "stationInfo": {
+        "title": "车站信息",
+        "showForeignLanguageStationName": "显示外文",
+        "showTheTextOfStation": "显示「站」",
+        "arrivalForeign": "到达外文",
+        "arrival": "到达",
+        "departureForeign": "出发外文",
+        "departure": "出发"
+      }
+    }
   }
 }

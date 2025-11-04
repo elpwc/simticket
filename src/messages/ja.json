@@ -2,17 +2,78 @@
 	"InputRadioGroup": {
 		"placeholder": "空（カスタム）"
 	},
-  "DevProgressModal":{
-    "text1": "欢迎使用 simTicket 内部测试版本 \n simTicket 是在2025年10月 CR（中国国铁）彻底废止纸质报销凭证之际，由我（うに@elpwc）推出的在线票面生成工具 \n目前 simTicket 还在未完成的开發阶段。但是由于测试网址在10月22日突然被泄露和广泛传播，于是我决定以半成品的形式先行向大家以内部测试的形式公开网页。\n在 CR 车票样式以外，我也计划提供 JR，TR, VNR, THSR 等我坐过的铁道公司的车票制作器。\n我会尽可能考虑、覆盖到票面上所有可能出现的情况，努力坐到最完美的车票制作器。\n\n注意，绝对不要将此工具用于不合法规的地方。\n\n可以前往我的推特实时关注开發进度：",
-    "text2": ""
-  },
+	"DevProgressModal": {
+		"text1": "欢迎使用 simTicket 内部测试版本 \n simTicket 是在2025年10月 CR（中国国铁）彻底废止纸质报销凭证之际，由我（うに@elpwc）推出的在线票面生成工具 \n目前 simTicket 还在未完成的开發阶段。但是由于测试网址在10月22日突然被泄露和广泛传播，于是我决定以半成品的形式先行向大家以内部测试的形式公开网页。\n在 CR 车票样式以外，我也计划提供 JR，TR, VNR, THSR 等我坐过的铁道公司的车票制作器。\n我会尽可能考虑、覆盖到票面上所有可能出现的情况，努力坐到最完美的车票制作器。\n\n注意，绝对不要将此工具用于不合法规的地方。\n\n可以前往我的推特实时关注开發进度：",
+		"text2": ""
+	},
 	"app": {
 		"menu": {
 			"about": "説明",
 			"post": "投稿"
 		}
 	},
-  "text": {
-    "construction": "開発中です"
-  }
+	"text": {
+		"construction": "開発中です"
+	},
+	"TicketEditorTemplate": {
+		"flipEffectButton": "揺れ",
+		"loadingFontText": "フォント読み込み中...",
+		"updateButton": "画像更新",
+		"saveButton": "画像保存"
+	},
+	"SaveImageModal": {
+		"customizeSizeTab": {
+			"buttonTitle": "カスタム",
+			"heightText": "高さ",
+			"widthText": "幅",
+			"title": "カスタムサイズ"
+		},
+		"title": "保存画像サイズを選びなさい",
+		"SAVE_IMAGE_SIZES": {
+			"small": "小",
+			"normal": "普通",
+			"HD": "高解像度",
+			"UHD": "超高解像度"
+		}
+	},
+	"ticketListView": {
+		"clearListButton": "リスト全消",
+		"exportList": "リストをA4一枚に",
+		"addResultToListButton": "今の編集結果をリストに追加"
+	},
+	"editor": {
+		"common": {
+			"ticketFace": {
+				"title": "券面",
+				"paper": "券面用紙",
+				"offset": "印刷ズレ",
+				"watermark": "ウォーターマーク"
+			},
+			"stationInfo": {
+				"arrival": "到着",
+				"arrivalForeign": "到着外国語",
+				"departure": "出発",
+				"departureForeign": "出発外国語",
+				"showForeignLanguageStationName": "外国語を表示",
+				"showTheTextOfStation": "「駅」を表示",
+				"title": "駅情報"
+			}
+		},
+		"cr": {
+			"jisuanjikepiao2010": {
+				"ticketFace": {
+					"useHKWestKowloonStyle": "香港西九龍駅の発券仕様を使う",
+					"showBorderForNonBorder": "软纸券と無背景に枠を表示"
+				},
+				"stationInfo": {
+					"useWeibeiti": {
+						"desc1": "　昔CR上海局が発行する乗車券は、走行距離が400km以内の場合、両駅名が魏碑体を使用していました。",
+						"desc2": "　しかし、片方がゴシック体、片方が魏碑体となっている乗車券もしばしば見られた故、ここで別々に対処します。",
+						"useText": "表示フォント：",
+						"weibeitiText": "魏碑体"
+					}
+				}
+			}
+		}
+	}
 }
