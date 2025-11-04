@@ -1,13 +1,10 @@
 {
-	"i18n-ally": {
-		"localesPaths": ["src/i18n", "src/messages"],
-		"keystyle": "nested",
-		"defaultNamespace": "Home",
-		"sourceLanguage": "zh",
-		"languages": ["zh", "ja"],
-		"enableTelemetry": false,
-		"displayLanguage": "zh",
-		"sortKeys": true,
-		"inlineDecorations": true
-	}
+	"i18n-ally.defaultNamespace": "",
+	"i18n-ally.review.enabled": true,
+	"i18n-ally.review.gutters": true,
+	"i18n-ally.showFlags": true,
+	"i18n-ally.localesPaths": "src/messages",
+	"i18n-ally.displayLanguage": "zh",
+	"i18n-ally.keystyle": "nested",
+	"i18n-ally.sourceLanguage": "zh",
 }

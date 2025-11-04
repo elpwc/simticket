@@ -11,12 +11,12 @@ type Props = {
 	placeholder?: string;
 };
 
-const InputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, placeholder = '空(自定义)' }) => {
+const InputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, placeholder }) => {
 	const { t } = useLocale();
 	const [diyValue, setDiyValue] = useState('');
-
-	// Placeholder translation
-	const placeholderTranslation = t('InputRadioGroup.placeholder');
+	if (!placeholder) {
+		placeholder = t('InputRadioGroup.placeholder');
+	}
 
 	return (
 		<div className="flex gap-1 flex-wrap">
