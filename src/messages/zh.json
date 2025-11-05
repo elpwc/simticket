@@ -12,6 +12,52 @@
       "post": "投稿"
     }
   },
+  "value": {
+    "purchaseMethod": {
+      "type": {
+        "TicketType": "票种",
+        "PurchaseMethod": "售票方式",
+        "POSPrint": "窗口POS支付打印字",
+        "WebPurchase": "网上购买车票窗口改签打印字",
+        "Other": "其他"
+      },
+      "list": {
+        "hai": "儿童票",
+        "xue": "学生票",
+        "jun": "残疾军人票",
+        "tan": "探亲乘车证签证票",
+        "ban": "省部级领导车票",
+        "bing": "军人票",
+        "hong": "红色旅游学生团体硬座20%优惠",
+        "xuefan": "学生返程票",
+        "tuan": "全价票团体票",
+        "tuanyou": "0票价团优票",
+        "fan": "农民工返程票",
+        "wang": "互联网售票",
+        "gong": "工行POS刷卡支付车票打印字",
+        "nong": "农行POS刷卡支付车票打印字",
+        "zhong": "中行POS刷卡支付车票打印字",
+        "zhao": "招行POS刷卡支付车票打印字",
+        "jian": "网上建行购票窗口改签打印",
+        "zhi": "网上支付宝购票窗口改签打印",
+        "yin": "网上银通卡购票窗口改签打印",
+        "wei": "网上微信购票窗口改签打印",
+        "jing": "网上京东购票窗口改签打印",
+        "xian": "现购票窗口打印",
+        "zeng": "网上积分购票换票时打印",
+        "zhe": "折扣票",
+        "bu": "进站补票打印",
+        "zhuan": "残疾人专用票额车票打印",
+        "xing": "行李票",
+        "che": "",
+        "can": "",
+        "ruan": "",
+        "ying": "",
+        "jinian": "纪念票",
+        "guashi": "挂失补票"
+      }
+    }
+  },
   "text": {
     "construction": "正在开發中"
   },
@@ -19,7 +65,8 @@
     "flipEffectButton": "翻转效果",
     "loadingFontText": "加载字体文件中...",
     "updateButton": "刷新图像",
-    "saveButton": "保存图像"
+    "saveButton": "保存图像",
+    "reverse": "背面"
   },
   "SaveImageModal": {
     "title": "选择保存尺寸",
@@ -55,6 +102,42 @@
             "weibeitiText": "魏碑体",
             "useText": "使用"
           }
+        },
+        "trainInfo": {
+          "pukepukuaiOrCustom": "普客普快 / 自定义",
+          "routeIdentifier": "车次"
+        },
+        "purchaseInfo": {
+          "rightUpContentText": "右上角显示",
+          "rightUpContentTextNotShow": "不显示",
+          "showSoldPlaceDown": "下方显示购票处",
+          "passengerIdNumber": "乘车人证件号",
+          "passengerName": "乘车人",
+          "showPassengerInfo": "显示乘车人信息",
+          "addCircleToPurchaseMethod": "购票方式添加圆环",
+          "info1": {
+            "text": "信息1",
+            "inputBox1": "列车类型",
+            "inputBox2": "经由",
+            "inputBox3": "终到站"
+          },
+          "info2": "信息2",
+          "info3": "信息3"
+        },
+        "ticketNoInfo": {
+          "title": "票号数据",
+          "ticketSerialCode": "车票标识码",
+          "qrCodeText": "二维码数据",
+          "message": "虚线框内文字",
+          "presetText": "预设文字：",
+          "align": {
+            "left": "左对齐",
+            "center": "居中",
+            "right": "右对齐",
+            "justifyBetween": "靠边铺开",
+            "justifyEvenly": "等距铺开",
+            "justifyAround": "最优铺开"
+          }
         }
       }
     },
@@ -62,7 +145,7 @@
       "ticketFace": {
         "watermark": "水印",
         "offset": "印刷偏移",
-        "paper": "车票用纸",
+        "paper": "票面用纸",
         "title": "票面"
       },
       "stationInfo": {
@@ -73,7 +156,34 @@
         "arrival": "到达",
         "departureForeign": "出发外文",
         "departure": "出发"
+      },
+      "trainInfo": {
+        "routeIdentifier": "车次",
+        "title": "运行信息",
+        "returnTrain": "回送车次",
+        "departureDate": "發车日期",
+        "departureTime": "發车时间",
+        "carriage": "车厢",
+        "noCarriage": "无指定车厢",
+        "seatNo": "座位号",
+        "noSeatNo": "无座",
+        "seat2": "座位",
+        "seat3": "铺位",
+        "seatClass": "座席"
+      },
+      "purchaseInfo": {
+        "title": "购票信息",
+        "soldPlace": "购票处",
+        "price": "价格",
+        "turnstile": "检票",
+        "purchaseMethod": "购票方式"
+      },
+      "ticketNoInfo": {
+        "ticketNo": "票号"
       }
     }
+  },
+  "DescriptionButton": {
+    "text": "※说明"
   }
 }

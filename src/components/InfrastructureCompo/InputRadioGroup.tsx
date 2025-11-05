@@ -14,7 +14,7 @@ type Props = {
 const InputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, placeholder }) => {
 	const { t } = useLocale();
 	const [diyValue, setDiyValue] = useState('');
-	if (!placeholder) {
+	if (!placeholder || placeholder === '') {
 		placeholder = t('InputRadioGroup.placeholder');
 	}
 

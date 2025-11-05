@@ -282,7 +282,7 @@ export default function CRWideTicket() {
 								<span>
 									{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
 									<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
-									<DescriptionButton modalTitle="魏碑体">
+									<DescriptionButton modalTitle={t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}>
 										<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
 										<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
 									</DescriptionButton>
@@ -320,7 +320,7 @@ export default function CRWideTicket() {
 								<span>
 									{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
 									<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
-									<DescriptionButton modalTitle="魏碑体">
+									<DescriptionButton modalTitle={t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}>
 										<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
 										<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
 									</DescriptionButton>
@@ -349,9 +349,9 @@ export default function CRWideTicket() {
 						</div>
 					</TabBox>
 
-					<TabBox title="运行信息" className="flex flex-wrap gap-2">
+					<TabBox title={t('editor.common.trainInfo.title')} className="flex flex-wrap gap-2">
 						<label className="ticket-form-label">
-							车次
+							{t('editor.cr.jisuanjikepiao2010.trainInfo.routeIdentifier')}
 							<div className="flex gap-4 items-center flex-wrap">
 								<input value={drawParameters.routeIdentifier} onChange={(e) => setDrawParameters((prev) => ({ ...prev, routeIdentifier: e.target.value }))} />
 								<label className="">
@@ -369,7 +369,7 @@ export default function CRWideTicket() {
 											}
 										}}
 									/>
-									<span>回送车次</span>
+									<span>{t('editor.common.trainInfo.returnTrain')}</span>
 								</label>
 							</div>
 						</label>
@@ -415,21 +415,21 @@ export default function CRWideTicket() {
 
 								setDrawParameters((prev) => ({ ...prev, seat3: value }));
 							}}
-							placeholder="普客普快(自定义)"
+							placeholder={t('editor.cr.jisuanjikepiao2010.trainInfo.pukepukuaiOrCustom')}
 						/>
 
 						<label className="ticket-form-label">
-							發车日期
+							{t('editor.common.trainInfo.departureDate')}
 							<input type="date" value={drawParameters.date.toISOString().slice(0, 10)} onChange={(e) => setDrawParameters((prev) => ({ ...prev, date: new Date(e.target.value) }))} />
 						</label>
 						<label className="ticket-form-label">
-							發车时间
+							{t('editor.common.trainInfo.departureTime')}
 							<input type="time" value={drawParameters.time} onChange={(e) => setDrawParameters((prev) => ({ ...prev, time: e.target.value }))} />
 						</label>
 						<Divider />
 						<label className="ticket-form-label">
 							<div className="flex gap-2">
-								车厢
+								{t('editor.common.trainInfo.carriage')}
 								<label className="flex items-center text-[12px]">
 									<input
 										type="checkbox"
@@ -438,14 +438,14 @@ export default function CRWideTicket() {
 											setDrawParameters((prev) => ({ ...prev, noCarriage: e.target.checked }));
 										}}
 									/>
-									<span>无指定车厢</span>
+									<span>{t('editor.common.trainInfo.noCarriage')}</span>
 								</label>
 							</div>
 							<input value={drawParameters.carriage} onChange={(e) => setDrawParameters((prev) => ({ ...prev, carriage: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							<div className="flex gap-2">
-								座位号
+								{t('editor.common.trainInfo.seatNo')}
 								<label className="flex items-center text-[12px]">
 									<input
 										type="checkbox"
@@ -454,13 +454,13 @@ export default function CRWideTicket() {
 											setDrawParameters((prev) => ({ ...prev, noSeat: e.target.checked }));
 										}}
 									/>
-									<span>无座</span>
+									<span>{t('editor.common.trainInfo.noSeatNo')}</span>
 								</label>
 							</div>
 							<input value={drawParameters.seat1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, seat1: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							座位
+							{t('editor.common.trainInfo.seat2')}
 							<PrettyInputRadioGroup
 								list={[
 									{ value: 'A', title: 'A' },
@@ -477,7 +477,7 @@ export default function CRWideTicket() {
 							/>
 						</label>
 						<label className="ticket-form-label">
-							铺位
+							{t('editor.common.trainInfo.seat3')}
 							<div className="flex gap-3 flex-wrap">
 								<PrettyInputRadioGroup
 									list={[
@@ -493,7 +493,7 @@ export default function CRWideTicket() {
 							</div>
 						</label>
 						<label className="ticket-form-label">
-							座席
+							{t('editor.common.trainInfo.seatClass')}
 							<PrettyInputRadioGroup
 								list={seatType.map((seatTypeItem) => {
 									return { value: seatTypeItem, title: seatTypeItem };
@@ -512,25 +512,25 @@ export default function CRWideTicket() {
 						</label>
 					</TabBox>
 
-					<TabBox title="购票信息" className="flex flex-wrap">
+					<TabBox title={t('editor.common.purchaseInfo.title')} className="flex flex-wrap">
 						<label className="ticket-form-label">
-							价格 {drawParameters.isHKWestKowloonStyle ? 'HK＄' : '￥'}
+							{t('editor.common.purchaseInfo.price')} {drawParameters.isHKWestKowloonStyle ? 'HK＄' : '￥'}
 							<input value={drawParameters.price} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							购票处
+							{t('editor.common.purchaseInfo.soldPlace')}
 							<input className="" value={drawParameters.soldplace} onChange={(e) => setDrawParameters((prev) => ({ ...prev, soldplace: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							检票
+							{t('editor.common.purchaseInfo.turnstile')}
 							<input className="" value={drawParameters.turnstile} onChange={(e) => setDrawParameters((prev) => ({ ...prev, turnstile: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							右上角显示
+							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.rightUpContentText')}
 							<div className="flex items-center flex-wrap">
 								<PrettyInputRadioGroup
 									list={[
-										{ value: RightUpContentType.None, title: '不显示' },
+										{ value: RightUpContentType.None, title: t('editor.cr.jisuanjikepiao2010.purchaseInfo.rightUpContentTextNotShow') },
 										{ value: RightUpContentType.SoldPlace, title: '售票站' },
 										{ value: RightUpContentType.Turnstile, title: '检票口' },
 										{ value: RightUpContentType.International, title: '国际联运' },
@@ -539,7 +539,7 @@ export default function CRWideTicket() {
 									onChange={(value: string) => {
 										setDrawParameters((prev) => ({ ...prev, rightUpContentType: value as RightUpContentType }));
 									}}
-									placeholder="自定义"
+									placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 								/>
 
 								<label>
@@ -549,17 +549,17 @@ export default function CRWideTicket() {
 											setDrawParameters((prev) => ({ ...prev, showSoldPlaceDown: value }));
 										}}
 									/>
-									<span>下方显示购票处</span>
+									<span>{t('editor.cr.jisuanjikepiao2010.purchaseInfo.showSoldPlaceDown')}</span>
 								</label>
 							</div>
 						</label>
 
 						<label className="ticket-form-label">
-							乘车人证件号
+							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.passengerIdNumber')}
 							<input value={drawParameters.idNumber} onChange={(e) => setDrawParameters((prev) => ({ ...prev, idNumber: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							乘车人
+							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.passengerName')}
 							<div>
 								<input value={drawParameters.passenger} onChange={(e) => setDrawParameters((prev) => ({ ...prev, passenger: e.target.value }))} />
 								<label>
@@ -569,13 +569,13 @@ export default function CRWideTicket() {
 											setDrawParameters((prev) => ({ ...prev, doShowPassenger: value }));
 										}}
 									/>
-									<span>显示乘车人信息</span>
+									<span>{t('editor.cr.jisuanjikepiao2010.purchaseInfo.showPassengerInfo')}</span>
 								</label>
 							</div>
 						</label>
 						<label className="ticket-form-label">
 							<div>
-								购票方式
+								{t('editor.common.purchaseInfo.purchaseMethod')}
 								<DescriptionButton>
 									<div className="flex flex-row gap-1 flex-wrap">
 										{Object.entries(
@@ -585,7 +585,7 @@ export default function CRWideTicket() {
 											}, {})
 										).map(([type, items]) => (
 											<div key={type} className="w-full">
-												<div className="text-sm font-semibold mt-2 mb-1">{type}</div>
+												<div className="text-sm font-semibold mt-2 mb-1">{t(type)}</div>
 												<div className="flex flex-wrap gap-2">
 													{items.map((purchaseMethodItem) => {
 														return (
@@ -599,7 +599,7 @@ export default function CRWideTicket() {
 																>
 																	{purchaseMethodItem.title}
 																</span>
-																<span className="text-[12px] text-[#242424]">{purchaseMethodItem.desc}</span>
+																<span className="text-[12px] text-[#242424]">{t(purchaseMethodItem.desc)}</span>
 															</label>
 														);
 													})}
@@ -617,12 +617,12 @@ export default function CRWideTicket() {
 									}, {})
 								).map(([type, items]) => (
 									<div key={type} className="w-full">
-										<div className="text-sm font-semibold mt-1">{type}</div>
+										<div className="text-sm font-semibold mt-1">{t(type)}</div>
 										<div className="flex flex-wrap gap-1">
 											{items.map((purchaseMethodItem) => {
 												const isChecked = drawParameters.purchaseMethod.some((pm) => pm.type === purchaseMethodItem.type && pm.title === purchaseMethodItem.title);
 												return (
-													<label title={purchaseMethodItem.desc} key={purchaseMethodItem.type + '_' + purchaseMethodItem.title} className="flex items-center">
+													<label title={t(purchaseMethodItem.desc)} key={purchaseMethodItem.type + '_' + purchaseMethodItem.title} className="flex items-center">
 														<input
 															type="checkbox"
 															checked={isChecked}
@@ -663,13 +663,13 @@ export default function CRWideTicket() {
 											setDrawParameters((prev) => ({ ...prev, doPurchaseMethodHaveCircle: value }));
 										}}
 									/>
-									<span>购票方式添加圆环</span>
+									<span>{t('editor.cr.jisuanjikepiao2010.purchaseInfo.addCircleToPurchaseMethod')}</span>
 								</label>
 							</div>
 						</label>
 						<Divider />
 						<label className="ticket-form-label border-t-[solid_1px_#ccc]">
-							信息1
+							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.text')}
 							<div className="flex gap-3 flex-wrap">
 								<PrettyInputRadioGroup
 									list={[
@@ -681,7 +681,7 @@ export default function CRWideTicket() {
 													<input
 														type="text"
 														value={drawParameters.info1TrainType}
-														placeholder="列车类型"
+														placeholder={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.inputBox1')}
 														onChange={(e) => {
 															const val = e.target.value;
 															setDrawParameters((prev) => ({ ...prev, info1TrainType: val }));
@@ -692,7 +692,7 @@ export default function CRWideTicket() {
 													<input
 														type="text"
 														value={drawParameters.info1from}
-														placeholder="经由"
+														placeholder={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.inputBox2')}
 														onChange={(e) => {
 															const val = e.target.value;
 															setDrawParameters((prev) => ({ ...prev, info1from: val }));
@@ -703,7 +703,7 @@ export default function CRWideTicket() {
 													<input
 														type="text"
 														value={drawParameters.info1to}
-														placeholder="终到站"
+														placeholder={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.inputBox3')}
 														onChange={(e) => {
 															const val = e.target.value;
 															setDrawParameters((prev) => ({ ...prev, info1to: val }));
@@ -729,7 +729,7 @@ export default function CRWideTicket() {
 						</label>
 						<Divider />
 						<label className="ticket-form-label border-t-[#ccc_!important]">
-							信息2
+							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.info2')}
 							<div className="flex gap-3 flex-wrap">
 								<InputRadioGroup
 									name="info2"
@@ -743,7 +743,7 @@ export default function CRWideTicket() {
 						</label>
 						<Divider />
 						<label className="ticket-form-label border-t-[solid_1px_#ccc]">
-							信息3
+							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.info3')}
 							<div className="flex gap-3 flex-wrap">
 								<InputRadioGroup
 									name="info3"
@@ -756,23 +756,23 @@ export default function CRWideTicket() {
 							</div>
 						</label>
 					</TabBox>
-					<TabBox title="票号数据" className="flex flex-wrap">
+					<TabBox title={t('editor.cr.jisuanjikepiao2010.ticketNoInfo.title')} className="flex flex-wrap">
 						<label className="ticket-form-label">
-							票号
+							{t('editor.common.ticketNoInfo.ticketNo')}
 							<input className="text-red-500" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							车票标识码
+							{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketSerialCode')}
 							<input value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							二维码数据
+							{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.qrCodeText')}
 							<textarea className="w-full h-[100px]" value={drawParameters.qrCodeText} onChange={(e) => setDrawParameters((prev) => ({ ...prev, qrCodeText: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							<div>
 								<label>
-									<span>虚线框内文字</span>
+									<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.message')}</span>
 									<Toggle
 										value={drawParameters.doShowMessage}
 										onChange={(value) => {
@@ -785,21 +785,21 @@ export default function CRWideTicket() {
 								<textarea className="w-full h-[100px]" value={drawParameters.message} onChange={(e) => setDrawParameters((prev) => ({ ...prev, message: e.target.value }))} />
 								<PrettyInputRadioGroup
 									list={[
-										{ value: TextAlign.Left.toString(), title: '左对齐' },
-										{ value: TextAlign.Center.toString(), title: '居中' },
-										{ value: TextAlign.Right.toString(), title: '右对齐' },
-										{ value: TextAlign.JustifyBetween.toString(), title: '靠边铺开' },
-										{ value: TextAlign.JustifyEvenly.toString(), title: '等距铺开' },
-										{ value: TextAlign.JustifyAround.toString(), title: '最优铺开' },
+										{ value: TextAlign.Left.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.left') },
+										{ value: TextAlign.Center.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.center') },
+										{ value: TextAlign.Right.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.right') },
+										{ value: TextAlign.JustifyBetween.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyBetween') },
+										{ value: TextAlign.JustifyEvenly.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyEvenly') },
+										{ value: TextAlign.JustifyAround.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyAround') },
 									]}
 									value={drawParameters.messageAlign.toString()}
 									onChange={(value: string) => {
 										setDrawParameters((prev) => ({ ...prev, messageAlign: Number(value) as TextAlign }));
 									}}
-									placeholder="自定义"
+									placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 									showInputBox={false}
 								/>
-								<p>预设文字：</p>
+								<p>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.presetText')}</p>
 								<PrettyInputRadioGroup
 									list={messageList.map((messageListItem) => {
 										return { value: messageListItem, title: messageListItem };
@@ -808,7 +808,7 @@ export default function CRWideTicket() {
 									onChange={(value: string) => {
 										setDrawParameters((prev) => ({ ...prev, message: value }));
 									}}
-									placeholder="自定义"
+									placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 									showInputBox={false}
 								/>
 							</div>

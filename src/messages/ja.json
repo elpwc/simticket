@@ -1,79 +1,189 @@
 {
-	"InputRadioGroup": {
-		"placeholder": "空（カスタム）"
-	},
-	"DevProgressModal": {
-		"text1": "欢迎使用 simTicket 内部测试版本 \n simTicket 是在2025年10月 CR（中国国铁）彻底废止纸质报销凭证之际，由我（うに@elpwc）推出的在线票面生成工具 \n目前 simTicket 还在未完成的开發阶段。但是由于测试网址在10月22日突然被泄露和广泛传播，于是我决定以半成品的形式先行向大家以内部测试的形式公开网页。\n在 CR 车票样式以外，我也计划提供 JR，TR, VNR, THSR 等我坐过的铁道公司的车票制作器。\n我会尽可能考虑、覆盖到票面上所有可能出现的情况，努力坐到最完美的车票制作器。\n\n注意，绝对不要将此工具用于不合法规的地方。\n\n可以前往我的推特实时关注开發进度：",
-		"text2": ""
-	},
-	"app": {
-		"menu": {
-			"about": "説明",
-			"post": "投稿"
-		}
-	},
-	"text": {
-		"construction": "開発中です"
-	},
-	"TicketEditorTemplate": {
-		"flipEffectButton": "揺れ",
-		"loadingFontText": "フォント読み込み中...",
-		"updateButton": "画像更新",
-		"saveButton": "画像保存"
-	},
-	"SaveImageModal": {
-		"customizeSizeTab": {
-			"buttonTitle": "カスタム",
-			"heightText": "高さ",
-			"widthText": "幅",
-			"title": "カスタムサイズ"
-		},
-		"title": "保存画像サイズを選びなさい",
-		"SAVE_IMAGE_SIZES": {
-			"small": "小",
-			"normal": "普通",
-			"HD": "高解像度",
-			"UHD": "超高解像度"
-		}
-	},
-	"ticketListView": {
-		"clearListButton": "リスト全消",
-		"exportList": "リストをA4一枚に",
-		"addResultToListButton": "今の編集結果をリストに追加"
-	},
-	"editor": {
-		"common": {
-			"ticketFace": {
-				"title": "券面",
-				"paper": "券面用紙",
-				"offset": "印刷ズレ",
-				"watermark": "ウォーターマーク"
-			},
-			"stationInfo": {
-				"arrival": "到着",
-				"arrivalForeign": "到着外国語",
-				"departure": "出発",
-				"departureForeign": "出発外国語",
-				"showForeignLanguageStationName": "外国語を表示",
-				"showTheTextOfStation": "「駅」を表示",
-				"title": "駅情報"
-			}
-		},
-		"cr": {
-			"jisuanjikepiao2010": {
-				"ticketFace": {
-					"useHKWestKowloonStyle": "香港西九龍駅の発券仕様を使う",
-					"showBorderForNonBorder": "软纸券と無背景に枠を表示"
-				},
-				"stationInfo": {
-					"useWeibeiti": {
-						"desc1": "　昔CR上海局が発行する乗車券は、走行距離が400km以内の場合、両駅名が魏碑体を使用していました。",
-						"desc2": "　しかし、片方がゴシック体、片方が魏碑体となっている乗車券もしばしば見られた故、ここで別々に対処します。",
-						"useText": "表示フォント：",
-						"weibeitiText": "魏碑体"
-					}
-				}
-			}
-		}
-	}
+  "InputRadioGroup": {
+    "placeholder": "空（カスタム）"
+  },
+  "DevProgressModal": {
+    "text1": "欢迎使用 simTicket 内部测试版本 \n simTicket 是在2025年10月 CR（中国国铁）彻底废止纸质报销凭证之际，由我（うに@elpwc）推出的在线票面生成工具 \n目前 simTicket 还在未完成的开發阶段。但是由于测试网址在10月22日突然被泄露和广泛传播，于是我决定以半成品的形式先行向大家以内部测试的形式公开网页。\n在 CR 车票样式以外，我也计划提供 JR，TR, VNR, THSR 等我坐过的铁道公司的车票制作器。\n我会尽可能考虑、覆盖到票面上所有可能出现的情况，努力坐到最完美的车票制作器。\n\n注意，绝对不要将此工具用于不合法规的地方。\n\n可以前往我的推特实时关注开發进度：",
+    "text2": ""
+  },
+  "app": {
+    "menu": {
+      "about": "説明",
+      "post": "投稿"
+    }
+  },
+  "value": {
+    "purchaseMethod": {
+      "type": {
+        "TicketType": "券種",
+        "PurchaseMethod": "購入方法",
+        "POSPrint": "窓口POS支払い印字",
+        "WebPurchase": "ネット購入・窓口変更印字",
+        "Other": "その他"
+      },
+      "list": {
+        "hai": "こども割引",
+        "xue": "学生割引",
+        "jun": "傷痍軍人割引",
+        "tan": "親族訪問割引",
+        "ban": "省庁級幹部割引",
+        "bing": "軍人割引",
+        "hong": "赤色観光学生団体座席2割引",
+        "xuefan": "学生帰省割引",
+        "tuan": "通常団体割引",
+        "tuanyou": "0元優待団体割引",
+        "fan": "出稼ぎ帰省割引",
+        "wang": "ネット販売",
+        "gong": "工商銀行POS決済印字",
+        "nong": "農業銀行POS決済印字",
+        "zhong": "中国銀行POS決済印字",
+        "zhao": "招商銀行POS決済印字",
+        "jian": "建設銀行オンライン購入・窓口変更印字",
+        "zhi": "Alipayオンライン購入・窓口変更印字",
+        "yin": "銀通カードオンライン購入・窓口変更印字",
+        "wei": "WeChatオンライン購入・窓口変更印字",
+        "jing": "JD.comオンライン購入・窓口変更印字",
+        "xian": "現金購入・窓口印字",
+        "zeng": "ポイント交換乗車券印字",
+        "zhe": "割引乗車券",
+        "bu": "入場時追加入場印字",
+        "zhuan": "障碍者専用印字",
+        "xing": "荷物券",
+        "che": "",
+        "can": "",
+        "ruan": "",
+        "ying": "",
+        "jinian": "記念券",
+        "guashi": "紛失再発行"
+      }
+    }
+  },
+  "text": {
+    "construction": "開発中です"
+  },
+  "TicketEditorTemplate": {
+    "flipEffectButton": "揺れ",
+    "loadingFontText": "フォント読み込み中...",
+    "updateButton": "画像更新",
+    "saveButton": "画像保存",
+    "reverse": "裏面"
+  },
+  "SaveImageModal": {
+    "customizeSizeTab": {
+      "buttonTitle": "カスタム",
+      "heightText": "高さ",
+      "widthText": "幅",
+      "title": "カスタムサイズ"
+    },
+    "title": "保存画像サイズを選びなさい",
+    "SAVE_IMAGE_SIZES": {
+      "small": "小",
+      "normal": "普通",
+      "HD": "高解像度",
+      "UHD": "超高解像度"
+    }
+  },
+  "ticketListView": {
+    "clearListButton": "リスト全消",
+    "exportList": "リストをA4一枚に",
+    "addResultToListButton": "今の編集結果をリストに追加"
+  },
+  "editor": {
+    "common": {
+      "ticketFace": {
+        "title": "券面",
+        "paper": "券面用紙",
+        "offset": "印刷ズレ",
+        "watermark": "ウォーターマーク"
+      },
+      "stationInfo": {
+        "arrival": "到着",
+        "arrivalForeign": "到着外国語",
+        "departure": "出発",
+        "departureForeign": "出発外国語",
+        "showForeignLanguageStationName": "外国語を表示",
+        "showTheTextOfStation": "「駅」を表示",
+        "title": "駅情報"
+      },
+      "trainInfo": {
+        "departureDate": "発車日付",
+        "carriage": "車両",
+        "departureTime": "発車時間",
+        "noCarriage": "番号なし",
+        "seatNo": "座席番",
+        "title": "運行情報",
+        "noSeatNo": "座席なし",
+        "returnTrain": "回送車両",
+        "routeIdentifier": "車番",
+        "seat2": "座席",
+        "seat3": "寝台",
+        "seatClass": "座席タイプ"
+      },
+      "purchaseInfo": {
+        "turnstile": "改札口",
+        "price": "金額",
+        "purchaseMethod": "支払い方法",
+        "soldPlace": "発券所",
+        "title": "支払い情報"
+      },
+      "ticketNoInfo": {
+        "ticketNo": "券番"
+      }
+    },
+    "cr": {
+      "jisuanjikepiao2010": {
+        "ticketFace": {
+          "useHKWestKowloonStyle": "香港西九龍駅の発券仕様を使う",
+          "showBorderForNonBorder": "软纸券と無背景に枠を表示"
+        },
+        "stationInfo": {
+          "useWeibeiti": {
+            "desc1": "　昔CR上海局が発行する乗車券は、走行距離が400km以内の場合、両駅名が魏碑体を使用していました。",
+            "desc2": "　しかし、片方がゴシック体、片方が魏碑体となっている乗車券もしばしば見られた故、ここで別々に対処します。",
+            "useText": "表示フォント：",
+            "weibeitiText": "魏碑体"
+          }
+        },
+        "trainInfo": {
+          "pukepukuaiOrCustom": "普客普快 / カスタム",
+          "routeIdentifier": "車番(车次)"
+        },
+        "purchaseInfo": {
+          "addCircleToPurchaseMethod": "購入方式に丸を付く",
+          "info1": {
+            "inputBox1": "列車種別",
+            "inputBox2": "経由",
+            "inputBox3": "終着駅",
+            "text": "テキスト１"
+          },
+          "info2": "テキスト２",
+          "info3": "テキスト３",
+          "passengerIdNumber": "乗客個人証明番号",
+          "passengerName": "乗客名前",
+          "rightUpContentText": "右上表示",
+          "rightUpContentTextNotShow": "表示しない",
+          "showPassengerInfo": "乗客情報を表示",
+          "showSoldPlaceDown": "下に発券所を表示"
+        },
+        "ticketNoInfo": {
+          "align": {
+            "center": "中寄せ",
+            "left": "左寄せ",
+            "right": "右寄せ",
+            "justifyBetween": "両端揃え",
+            "justifyEvenly": "均等揃え",
+            "justifyAround": "最適揃え"
+          },
+          "message": "破線内文字",
+          "presetText": "定型文：",
+          "qrCodeText": "QRデータ",
+          "ticketSerialCode": "乗車券シリアルコード",
+          "title": "券番データ"
+        }
+      }
+    }
+  },
+  "DescriptionButton": {
+    "text": "※説明"
+  }
 }

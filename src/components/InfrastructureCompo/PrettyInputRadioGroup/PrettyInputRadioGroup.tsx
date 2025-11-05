@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './PrettyInputRadioGroup.css';
+import { useLocale } from '@/utils/hooks/useLocale';
 
 export type Option = {
 	value: string;
@@ -16,8 +17,12 @@ type Props = {
 	showInputBox?: boolean;
 };
 
-const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeholder = '空(自定义)', showInputBox = true }) => {
+const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeholder, showInputBox = true }) => {
+	const { t } = useLocale();
 	const [diyValue, setDiyValue] = useState('');
+	if (!placeholder || placeholder === '') {
+		placeholder = t('InputRadioGroup.placeholder');
+	}
 
 	const handleSelect = (val: string) => {
 		onChange(val);

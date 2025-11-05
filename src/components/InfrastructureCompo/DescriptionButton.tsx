@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { Modal } from './Modal';
+import { useLocale } from '@/utils/hooks/useLocale';
 
 interface Props {
 	title?: string;
@@ -7,8 +8,12 @@ interface Props {
 	children: string | ReactNode;
 }
 
-export const DescriptionButton = ({ title = '※说明', modalTitle = '', children }: Props) => {
+export const DescriptionButton = ({ title, modalTitle = '', children }: Props) => {
+	const { t } = useLocale();
 	const [showDescModal, setShowDescModal] = useState(false);
+	if (!title) {
+		title = t('DescriptionButton.text');
+	}
 	return (
 		<>
 			<button

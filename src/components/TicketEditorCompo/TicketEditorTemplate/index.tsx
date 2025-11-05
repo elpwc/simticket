@@ -141,6 +141,14 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 						</svg>
 						{t('TicketEditorTemplate.saveButton')}
 					</button>
+					<button
+						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
+						onClick={() => {
+							setShowSaveImageModal(true);
+						}}
+					>
+						{t('TicketEditorTemplate.reverse')}
+					</button>
 					<label className="ticketEditorTemplateToolBarItem">
 						<Toggle
 							value={enableCanvasTilt}
