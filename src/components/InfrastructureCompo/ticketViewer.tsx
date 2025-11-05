@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { drawCRWideTicket } from '../TicketEditors/CRWideTicket/draw';
 import { MAG_TICKET_SIZE, PAPER_TICKET_SIZE } from '../TicketEditors/CRWideTicket/value';
 import { CRTicketBackGround } from '../TicketEditors/CRWideTicket/type';
+import { drawJRWideTicket } from '../TicketEditors/JRWideTicket/draw';
+import { JR_MARS_PAPER_TICKET_SIZE } from '../TicketEditors/JRWideTicket/value';
 
 interface Props {
 	width: number;
@@ -65,6 +67,13 @@ export const TicketViewer = ({ width, height, className, borderRadius, companyId
 					case 0:
 						break;
 					case 1:
+						if (width < 0) {
+							setCanvasWidth((canvasHeight / JR_MARS_PAPER_TICKET_SIZE[1]) * JR_MARS_PAPER_TICKET_SIZE[0]);
+						}
+						if (height < 0) {
+							setCanvasHeight((canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1]);
+						}
+						drawJRWideTicket(canvas, ctx, ticketData);
 						break;
 					case 2:
 					default:
