@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useEffect, useRef, useState } from 'react';
+import { JSX, useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import { saveCanvasToLocal } from '@/utils/utils';
 import TiltCanvas from '../TiltCanvas';
@@ -9,6 +9,7 @@ import { useIsMobile } from '@/utils/hooks';
 import clsx from 'clsx';
 import { SaveImageModal } from '@/components/Modals/SaveImageModal';
 import { useLocale } from '@/utils/hooks/useLocale';
+import { AppContext } from '@/app/app';
 
 export const getInitialMethods = (w: number, h: number, scaleXWidth: number, scaleYWidth: number, currentSizeScale: number = 1) => {
 	const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
@@ -31,14 +32,30 @@ interface Props {
 	canvasShowShandow?: boolean;
 	scaleXWidth: number;
 	scaleYWidth: number;
+	// save
+	ticketData: any;
 	saveFilename: string;
+	// form
 	form: JSX.Element | null;
 	isFontLoading?: boolean;
 	onScaleChange?: (scale: number) => void;
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 0, canvasShowShandow = true, scaleXWidth, scaleYWidth, saveFilename, form, isFontLoading, onScaleChange }: Props) => {
+export default ({
+	onCanvasLoad,
+	canvasWidth,
+	canvasHeight,
+	canvasBorderRadius = 0,
+	canvasShowShandow = true,
+	scaleXWidth,
+	scaleYWidth,
+	ticketData,
+	saveFilename,
+	form,
+	isFontLoading,
+	onScaleChange,
+}: Props) => {
 	const isMobile = useIsMobile();
 	const { t } = useLocale();
 
@@ -47,6 +64,9 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 	const [enableCanvasTilt, setEnableCanvasTilt] = useState(true);
 	const [currentSizeScale, setCurrentSizeScale] = useState(isMobile ? 1 : 1.4);
 	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
+
+	const { selectedCompanyId, setSelectedCompanyId } = useContext(AppContext);
+	const { selectedTicketId, setSelectedTicketId } = useContext(AppContext);
 
 	const drawTicket = () => {
 		const canvas = canvasRef.current;
@@ -179,22 +199,15 @@ export default ({ onCanvasLoad, canvasWidth, canvasHeight, canvasBorderRadius = 
 			<div className={clsx(isMobile ? 'w-[100%]' : 'w-[60%]')}>{form}</div>
 			<SaveImageModal
 				show={showSaveImageModal}
+				ticketInfo={{
+					companyId: selectedCompanyId,
+					ticketTypeId: selectedTicketId,
+					ticketData: ticketData,
+					id: '',
+				}}
+				saveFilename={saveFilename}
 				onClose={() => {
 					setShowSaveImageModal(false);
-				}}
-				onSave={(scale: number, title: string) => {
-					const prevSizeScale = currentSizeScale;
-					setCurrentSizeScale(scale);
-
-					setTimeout(() => {
-						saveCanvasToLocal(
-							canvasRef.current,
-							saveFilename + '_' + title,
-							/* onSave */ () => {
-								setCurrentSizeScale(prevSizeScale);
-							}
-						);
-					}, 1000);
 				}}
 				defaultCanvasSize={[canvasWidth, canvasHeight]}
 			/>

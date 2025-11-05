@@ -1,14 +1,18 @@
 import { AppContext } from '@/app/app';
-import { TicketListItemProperty } from '@/utils/utils';
-import { Dispatch, SetStateAction, useContext, useState } from 'react';
+import { get_CanvasOrImageSize_Of_Ticket_By_TicketType, TicketListItemProperty, TicketSizeType } from '@/utils/utils';
+import { Dispatch, SetStateAction, useContext, useRef, useState } from 'react';
 import { TicketListViewItem } from './ticketListViewItem';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { SaveListModal } from '../Modals/SaveListModal';
+import { SaveImageModal } from '../Modals/SaveImageModal';
 
 export const TicketListView = () => {
 	const { t } = useLocale();
+	// object to save
+	const currentOperatingTicketItemRef = useRef<TicketListItemProperty | null>(null);
 
 	const [saveListModalOpen, setSaveListModalOpen] = useState(false);
+	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
 
 	const { ticketListItems, setTicketListItems }: { ticketListItems: TicketListItemProperty[]; setTicketListItems: Dispatch<SetStateAction<TicketListItemProperty[]>> } = useContext(AppContext);
 
@@ -18,7 +22,7 @@ export const TicketListView = () => {
 
 	return (
 		<div>
-			<div className="flex gap-2 overflow-x-auto">
+			<div className="flex gap-2 overflow-x-auto justify-center">
 				{ticketListItems.map((item: TicketListItemProperty, index: number) => (
 					<TicketListViewItem
 						key={`${item.id}`}
@@ -33,6 +37,10 @@ export const TicketListView = () => {
 									return ci.id !== item.id;
 								})
 							);
+						}}
+						onSave={() => {
+							currentOperatingTicketItemRef.current = item;
+							setShowSaveImageModal(true);
 						}}
 					/>
 				))}
@@ -74,6 +82,20 @@ export const TicketListView = () => {
 				onClose={() => {
 					setSaveListModalOpen(false);
 				}}
+			/>
+			<SaveImageModal
+				show={showSaveImageModal}
+				ticketInfo={currentOperatingTicketItemRef.current!}
+				saveFilename={''}
+				onClose={() => {
+					setShowSaveImageModal(false);
+				}}
+				defaultCanvasSize={get_CanvasOrImageSize_Of_Ticket_By_TicketType(
+					currentOperatingTicketItemRef.current!.companyId,
+					currentOperatingTicketItemRef.current!.ticketData,
+					TicketSizeType.CanvasSize,
+					currentOperatingTicketItemRef.current!.ticketData.background ?? 0
+				)}
 			/>
 		</div>
 	);

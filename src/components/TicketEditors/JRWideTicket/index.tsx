@@ -93,6 +93,7 @@ export default function JRWideTicket() {
 			canvasShowShandow={true}
 			scaleXWidth={size[0]}
 			scaleYWidth={size[1]}
+			ticketData={drawParameters}
 			saveFilename={`ticket_${drawParameters.station1}-${drawParameters.station2}`}
 			onScaleChange={setCurrentScale}
 			isFontLoading={isFontLoading}

@@ -470,7 +470,7 @@ export const get_CanvasOrImageSize_Of_Ticket_By_TicketType = (
 	ticketTypeId: number,
 	sizeType: TicketSizeType = TicketSizeType.CanvasSize,
 	crTicketType: CRTicketBackGround = CRTicketBackGround.SoftRed
-) => {
+): [number, number] => {
 	switch (companyId) {
 		case 0: //CR
 			switch (ticketTypeId) {

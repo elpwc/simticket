@@ -13,9 +13,10 @@ interface Props {
 	ticketTypeId: number;
 	ticketData?: any;
 	onDelete?: () => void;
+	onSave?: () => void;
 }
 
-export const TicketListViewItem = ({ width, height, className, borderRadius, companyId, ticketTypeId, ticketData, onDelete }: Props) => {
+export const TicketListViewItem = ({ width, height, className, borderRadius, companyId, ticketTypeId, ticketData, onDelete, onSave }: Props) => {
 	const isMobile = useIsMobile();
 
 	const [hovered, setHovered] = useState(false);
@@ -56,7 +57,14 @@ export const TicketListViewItem = ({ width, height, className, borderRadius, com
 						transition={{ duration: 0.1 }}
 						className="absolute bottom-0 left-0 w-full bg-white/60 backdrop-blur-sm flex justify-around py-1 text-sm"
 					>
-						<button className="w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition">保存</button>
+						<button
+							className="w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition"
+							onClick={() => {
+								onSave?.();
+							}}
+						>
+							保存
+						</button>
 						<button className="w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition">投稿</button>
 					</motion.div>
 				)}

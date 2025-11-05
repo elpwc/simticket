@@ -158,6 +158,7 @@ export default function CRWideTicket() {
 			canvasShowShandow={drawParameters.background !== CRTicketBackGround.MagBlue && drawParameters.background !== CRTicketBackGround.MagRed}
 			scaleXWidth={size[0]}
 			scaleYWidth={size[1]}
+			ticketData={drawParameters}
 			saveFilename={`ticket_${drawParameters.station1}-${drawParameters.station2}`}
 			isFontLoading={isFontLoading}
 			form={

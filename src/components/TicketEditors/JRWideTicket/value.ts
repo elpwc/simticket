@@ -1,9 +1,9 @@
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
 import { JRWideTicketDrawParameters } from './type';
 
-export const JR_MARS_PAPER_TICKET_SIZE = [1477, 1000];
-export const JR_MARS_PAPER_TICKET_CANVAS_SIZE = [310, 210];
-export const JR_MARS_PAPER_TICKET_A4_SIZE = [85 / 210, 57 / 297];
+export const JR_MARS_PAPER_TICKET_SIZE: [number, number] = [1477, 1000];
+export const JR_MARS_PAPER_TICKET_CANVAS_SIZE: [number, number] = [310, 210];
+export const JR_MARS_PAPER_TICKET_A4_SIZE: [number, number] = [85 / 210, 57 / 297];
 
 export const JR_TICKET_TYPE = [
 	{ name: '乗車券', title: '' },
