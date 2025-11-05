@@ -24,17 +24,28 @@ export const TicketListViewItem = ({ width, height, className, borderRadius, com
 
 	return (
 		<div
-			className={`relative inline-block overflow-y-clip ${className ?? ''}`}
-			style={{ width, height, borderRadius, border: 'solid 1px gray' }}
+			className={`relative inline-block overflow-y-clip box-content py-1 ${className ?? ''}`}
+			style={{ width, height, borderRadius }}
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
 		>
-			<TicketViewer width={width} height={height} className="w-full h-full" borderRadius={borderRadius} companyId={companyId} ticketTypeId={ticketTypeId} ticketData={ticketData} />
+			<div className="flex w-full h-full justify-center">
+				<TicketViewer
+					width={width}
+					height={height}
+					className="w-full m-auto"
+					style={{ boxShadow: '0 0 3px 0px #858585' }}
+					borderRadius={borderRadius}
+					companyId={companyId}
+					ticketTypeId={ticketTypeId}
+					ticketData={ticketData}
+				/>
+			</div>
 
 			<AnimatePresence>
 				{showButtons && (
 					<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.1 }} className="absolute top-1 right-1 z-20">
-						<button onClick={onDelete} className="text-xs hover:bg-white text-black rounded-md px-1 py-1 shadow-sm transition">
+						<button onClick={onDelete} className="text-xs hover:bg-white text-black rounded-md px-1 py-1 shadow-sm transition disabled">
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 								<path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5" />
 							</svg>
@@ -65,7 +76,7 @@ export const TicketListViewItem = ({ width, height, className, borderRadius, com
 						>
 							保存
 						</button>
-						<button className="w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition">投稿</button>
+						<button className="w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition disabled">投稿</button>
 					</motion.div>
 				)}
 			</AnimatePresence>

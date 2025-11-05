@@ -5,13 +5,14 @@ interface Props {
 	width: number;
 	height: number;
 	className?: string;
+	style?: React.CSSProperties;
 	borderRadius?: string;
 	companyId: number;
 	ticketTypeId: number;
 	ticketData?: any;
 }
 
-export const TicketViewer = ({ width, height, className, borderRadius, companyId, ticketTypeId, ticketData = {} }: Props) => {
+export const TicketViewer = ({ width, height, className, style, borderRadius, companyId, ticketTypeId, ticketData = {} }: Props) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
 	const [canvasWidth, setCanvasWidth] = useState(width);
@@ -44,15 +45,5 @@ export const TicketViewer = ({ width, height, className, borderRadius, companyId
 		);
 	}, []);
 
-	return (
-		<div
-			style={{
-				display: 'inline-table',
-				width: canvasWidth,
-				height: '100%',
-			}}
-		>
-			<canvas className={className} ref={canvasRef} width={canvasWidth} height={canvasHeight} />
-		</div>
-	);
+	return <canvas className={className} style={style} ref={canvasRef} width={canvasWidth} height={canvasHeight} />;
 };

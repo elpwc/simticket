@@ -91,10 +91,10 @@ export const TicketListView = () => {
 					setShowSaveImageModal(false);
 				}}
 				defaultCanvasSize={get_CanvasOrImageSize_Of_Ticket_By_TicketType(
-					currentOperatingTicketItemRef.current!.companyId,
-					currentOperatingTicketItemRef.current!.ticketData,
+					currentOperatingTicketItemRef.current?.companyId ?? 0,
+					currentOperatingTicketItemRef.current?.ticketData ?? 0,
 					TicketSizeType.CanvasSize,
-					currentOperatingTicketItemRef.current!.ticketData.background ?? 0
+					currentOperatingTicketItemRef.current?.ticketData.background ?? 0
 				)}
 			/>
 		</div>
