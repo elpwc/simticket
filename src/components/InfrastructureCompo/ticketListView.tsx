@@ -1,11 +1,14 @@
 import { AppContext } from '@/app/app';
 import { TicketListItemProperty } from '@/utils/utils';
-import { Dispatch, SetStateAction, useContext } from 'react';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { TicketListViewItem } from './ticketListViewItem';
 import { useLocale } from '@/utils/hooks/useLocale';
+import { SaveListModal } from '../Modals/SaveListModal';
 
 export const TicketListView = () => {
 	const { t } = useLocale();
+
+	const [saveListModalOpen, setSaveListModalOpen] = useState(false);
 
 	const { ticketListItems, setTicketListItems }: { ticketListItems: TicketListItemProperty[]; setTicketListItems: Dispatch<SetStateAction<TicketListItemProperty[]>> } = useContext(AppContext);
 
@@ -15,7 +18,7 @@ export const TicketListView = () => {
 
 	return (
 		<div>
-			<div>
+			<div className="flex gap-2 overflow-x-auto">
 				{ticketListItems.map((item: TicketListItemProperty, index: number) => (
 					<TicketListViewItem
 						key={`${item.id}`}
@@ -51,7 +54,13 @@ export const TicketListView = () => {
 				>
 					{t('ticketListView.addResultToListButton')}
 				</button>
-				<button>{t('ticketListView.exportList')}</button>
+				<button
+					onClick={() => {
+						setSaveListModalOpen(true);
+					}}
+				>
+					{t('ticketListView.exportList')}
+				</button>
 				<button
 					onClick={() => {
 						setTicketListItems([]);
@@ -60,6 +69,12 @@ export const TicketListView = () => {
 					{t('ticketListView.clearListButton')}
 				</button>
 			</div>
+			<SaveListModal
+				show={saveListModalOpen}
+				onClose={() => {
+					setSaveListModalOpen(false);
+				}}
+			/>
 		</div>
 	);
 };

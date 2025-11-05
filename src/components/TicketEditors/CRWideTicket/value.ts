@@ -28,6 +28,8 @@ export const PAPER_TICKET_SIZE = [1698, 1162];
 export const MAG_TICKET_SIZE = [1689, 1042];
 export const PAPER_TICKET_CANVAS_SIZE = [322, 220];
 export const MAG_TICKET_CANVAS_SIZE = [320, 197];
+export const PAPER_TICKET_A4_SIZE = [89.7 / 210, 61 / 297];
+export const MAG_TICKET_A4_SIZE = [88 / 210, 54 / 297];
 
 export enum PurchaseMethodType {
 	TicketType = 'value.purchaseMethod.type.TicketType',
@@ -84,8 +86,7 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	info3: '',
 	message: `买票请到12306 发货请到95306
 中国铁路祝您旅途愉快`,
-
-	messageAlign: TextAlign.Center,
+	messageAlign: 1,
 	doShowMessage: true,
 	info1TrainType: '',
 	info1from: '',

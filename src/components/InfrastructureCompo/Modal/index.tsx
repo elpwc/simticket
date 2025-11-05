@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import './index.css';
+import clsx from 'clsx';
 
 type Props = {
 	isOpen: boolean;
@@ -14,6 +15,8 @@ type Props = {
 	children: React.ReactNode;
 	mobileMode?: 'fullscreen' | 'scroll' | 'center';
 	showCloseButton?: boolean;
+	classname?: string;
+	style?: React.CSSProperties;
 };
 
 export const Modal: React.FC<Props> = ({
@@ -29,6 +32,8 @@ export const Modal: React.FC<Props> = ({
 	children,
 	mobileMode = 'fullscreen',
 	showCloseButton = true,
+	classname,
+	style,
 }) => {
 	if (!isOpen) return null;
 
@@ -41,7 +46,7 @@ export const Modal: React.FC<Props> = ({
 					onClose();
 				}}
 			>
-				<div className={`modal-content mobile-${mobileMode}`} onClick={(e) => e.stopPropagation()}>
+				<div className={clsx(`modal-content mobile-${mobileMode}`, classname)} style={style} onClick={(e) => e.stopPropagation()}>
 					{showCloseButton && (
 						<button
 							className="modal-close-btn"

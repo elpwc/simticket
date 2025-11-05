@@ -20,7 +20,8 @@ export const drawJRWideTicket = (
 				scaleY: (y: number) => number;
 				font: (size: number, fontName: string, isBold?: boolean) => string;
 		  }
-		| undefined = undefined
+		| undefined = undefined,
+	onDone?: () => void
 ) => {
 	if (!ctx || !canvas) {
 		return;
@@ -217,6 +218,8 @@ export const drawJRWideTicket = (
 		ctx.fillText(`￥`, offsetScaleX(1093), offsetScaleY(534), resizedScaleX(100));
 		ctx.font = resizedFont(7, 'DotFont');
 		drawText(ctx, `${drawParameters.price}`, offsetScaleX(1133), offsetScaleY(534), resizedScaleX(300), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 1.25);
+
+		onDone?.();
 	};
 
 	switch (drawParameters.background) {

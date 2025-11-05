@@ -11,7 +11,6 @@ import { SaveImageModal } from '@/components/Modals/SaveImageModal';
 import { useLocale } from '@/utils/hooks/useLocale';
 
 export const getInitialMethods = (w: number, h: number, scaleXWidth: number, scaleYWidth: number, currentSizeScale: number = 1) => {
-	console.log(w, h);
 	const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
 	const scaleY = (y: number) => (y / (scaleYWidth * currentSizeScale)) * h;
 	const font = (size: number, fontName: string, isBold: boolean = false) => `${isBold ? 'bold' : ''} ${(size / (100 * currentSizeScale)) * h}px ${fontName}`;

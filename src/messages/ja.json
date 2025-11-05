@@ -85,7 +85,7 @@
   },
   "ticketListView": {
     "clearListButton": "リスト全消",
-    "exportList": "リストをA4一枚に",
+    "exportList": "リストをA4一枚に保存",
     "addResultToListButton": "今の編集結果をリストに追加"
   },
   "editor": {
@@ -185,5 +185,10 @@
   },
   "DescriptionButton": {
     "text": "※説明"
+  },
+  "SaveListModal": {
+    "title": "リストをA4紙に保存",
+    "printPreview": "プレビュー",
+    "selectTicketToSave": "A4紙に保存したい乗車券を選んで下さい："
   }
 }

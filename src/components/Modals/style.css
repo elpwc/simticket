@@ -1,0 +1,14 @@
+.saveListModal-ticketListItem {
+	border-radius: 2px;
+	border: solid 1px transparent;
+}
+
+.saveListModal-ticketListItem-selected {
+	border-color: #e6e6e6 !important;
+	background-color: rgb(192, 192, 192) !important;
+}
+
+.saveListModal-ticketListItem:hover {
+	border-color: #e6e6e6;
+	background-color: rgb(150, 150, 150);
+}

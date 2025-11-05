@@ -17,7 +17,8 @@ export const drawCRWideTicket = (
 				scaleY: (y: number) => number;
 				font: (size: number, fontName: string, isBold?: boolean) => string;
 		  }
-		| undefined = undefined
+		| undefined = undefined,
+	onDone?: () => void
 ) => {
 	if (!ctx || !canvas) return;
 
@@ -440,6 +441,8 @@ export const drawCRWideTicket = (
 		// code 下方购票处
 		ctx.font = resizedFont(5.5, 'SongTi');
 		ctx.fillText(drawParameters.serialCode + (drawParameters.showSoldPlaceDown ? `  ${drawParameters.soldplace}售` : ''), offsetScaleX(133), offsetScaleY(1080), resizedScaleX(1090));
+
+		onDone?.();
 	};
 
 	switch (drawParameters.background) {

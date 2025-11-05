@@ -92,7 +92,7 @@ export default function HomePage() {
 							<menu className="px-2 flex gap-1 flex-wrap shadow-sm items-center bg-white sticky bottom-0">
 								{companyList[selectedCompanyId].tickets?.map((ticket, index) => {
 									return (
-										<>
+										<div key={index} className="flex items-center">
 											<div
 												className={'ticket-menu-item' + (selectedTicketId === index ? ' selected' : '') + (ticket.disabled ? ' disabled' : '')}
 												key={index}
@@ -105,7 +105,7 @@ export default function HomePage() {
 												{ticket.name}
 											</div>
 											<div className="border-r-1 border-r-[#ccc] h-5 w-1"></div>
-										</>
+										</div>
 									);
 								})}
 							</menu>
@@ -161,7 +161,7 @@ export default function HomePage() {
 					}
 				})()}
 			</motion.div>
-			<footer className="fixed bottom-0 left-0 right-0 bg-white text-center text-sm text-gray-500 py-2 border-t border-gray-300">
+			<footer className="fixed bottom-0 left-0 right-0 bg-white text-center text-sm text-gray-500 py-2 border-t border-gray-300 z-[100]">
 				<TicketListView />
 			</footer>
 		</div>
