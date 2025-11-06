@@ -42,9 +42,41 @@ button {
 	padding: 2px 6px;
 	margin: 2px 4px;
 	border: solid 1px #ccc;
-	border-radius: 2px;
+	border-radius: 4px;
 	background-color: white;
 	transition: all 0.2s;
+}
+
+button.large {
+	padding: 8px 16px;
+	font-weight: 500;
+}
+
+button.primary {
+	color: white;
+	background-color: #2b7fff;
+}
+
+button.primaryt:hover {
+	background-color: #1447e6;
+}
+
+button.primary.green {
+	color: white;
+	background-color: #27d335;
+}
+
+button.primaryt.green:hover {
+	background-color: #219c2c;
+}
+
+button.alert {
+	color: #c10007;
+	background-color: #ffe2e2;
+}
+
+button.alert:hover {
+	background-color: oklch(88.5% 0.062 18.334);
 }
 
 button:hover {
