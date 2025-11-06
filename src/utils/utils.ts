@@ -21,24 +21,17 @@ export const saveCanvasToLocal = (canvas: HTMLCanvasElement | null, filename: st
 	}, 'image/png');
 };
 
-export const drawQRCode = async (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, text: string) => {
-	try {
-		const qrDataUrl = await QRCode.toDataURL(text, {
-			color: {
-				dark: '#000000',
-				light: '#00000000',
-			},
-		});
-
-		const img = new Image();
-		img.src = qrDataUrl;
-		img.onload = () => {
-			ctx.drawImage(img, x, y, size, size);
-		};
-	} catch (err) {
-		console.error(err);
-	}
+export const drawQRCode = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, text: string) => {
+	const tmpCanvas = document.createElement('canvas');
+	QRCode.toCanvas(tmpCanvas, text, {
+		color: {
+			dark: '#000000',
+			light: '#00000000',
+		},
+	});
+	ctx.drawImage(tmpCanvas, x, y, size, size);
 };
+
 export enum TextAlign {
 	Left,
 	Right,
