@@ -36,8 +36,8 @@ export const drawQRCode = (ctx: CanvasRenderingContext2D, x: number, y: number, 
 
 export enum TextAlign {
 	Left,
-	Right,
 	Center,
+	Right,
 	JustifyBetween, // space-between
 	JustifyAround, // space-around
 	JustifyEvenly, // space-evenly
