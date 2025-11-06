@@ -41,8 +41,18 @@ export default function JRWideTicket() {
 	const { editingTicketData, setEditingTicketData } = useContext(AppContext);
 
 	const getInitialValues = () => {
+		const comParam = searchParams.get('com');
+		const ticketParam = searchParams.get('ticket');
+		let companyId = 0,
+			ticketTypeId = 0;
+		if (comParam !== null && !isNaN(Number(comParam))) {
+			companyId = Number(comParam);
+		}
+		if (ticketParam !== null && !isNaN(Number(ticketParam))) {
+			ticketTypeId = Number(ticketParam);
+		}
 		const ticketDataStr = searchParams.get('data');
-		if (ticketDataStr !== null && ticketDataStr !== '') {
+		if (ticketDataStr !== null && ticketDataStr !== '' && companyId === 1 && ticketTypeId === 1) {
 			const comParam = searchParams.get('com');
 			const ticketParam = searchParams.get('ticket');
 			let companyId = 0,

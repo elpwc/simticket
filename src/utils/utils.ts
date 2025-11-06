@@ -1,6 +1,7 @@
 import { CRTicketBackGround } from '@/components/TicketEditors/CRWideTicket/type';
 import { decodeCRWideTicketParams, encodeCRWideTicketParams } from '@/components/TicketEditors/CRWideTicket/utils';
 import { MAG_TICKET_A4_SIZE, MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_A4_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from '@/components/TicketEditors/CRWideTicket/value';
+import { decodeJRWideTicketParams, encodeJRWideTicketParams } from '@/components/TicketEditors/JRWideTicket/utils';
 import { JR_MARS_PAPER_TICKET_A4_SIZE, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, JRWideTicketDrawParametersInitialValues } from '@/components/TicketEditors/JRWideTicket/value';
 import QRCode from 'qrcode';
 
@@ -557,7 +558,7 @@ export const encodeTicket = (companyId: number, ticketTypeId: number, ticketData
 				case 0:
 					break;
 				case 1:
-					return ''; //encodeCRWideTicketParams(ticketData);
+					return encodeJRWideTicketParams(ticketData);
 				case 2:
 				default:
 					break;
@@ -596,7 +597,6 @@ export const decodeTicket = (companyId: number, ticketTypeId: number, ticketData
 					break;
 				case 4:
 					return decodeCRWideTicketParams(ticketData);
-
 				default:
 					break;
 			}
@@ -605,8 +605,7 @@ export const decodeTicket = (companyId: number, ticketTypeId: number, ticketData
 				case 0:
 					break;
 				case 1:
-					return JRWideTicketDrawParametersInitialValues; //decodeCRWideTicketParams(ticketData)
-
+					return decodeJRWideTicketParams(ticketData);
 				case 2:
 				default:
 					break;
