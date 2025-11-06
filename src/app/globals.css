@@ -57,17 +57,17 @@ button.primary {
 	background-color: #2b7fff;
 }
 
-button.primaryt:hover {
+button.primary:hover {
 	background-color: #1447e6;
 }
 
 button.primary.green {
 	color: white;
-	background-color: #27d335;
+	background-color: #009688;
 }
 
-button.primaryt.green:hover {
-	background-color: #219c2c;
+button.primary.green:hover {
+	background-color: #00695f;
 }
 
 button.alert {
