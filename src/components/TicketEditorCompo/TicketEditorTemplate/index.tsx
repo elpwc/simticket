@@ -2,7 +2,7 @@
 
 import { JSX, useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
-import { saveCanvasToLocal } from '@/utils/utils';
+import { getTicketURL, saveCanvasToLocal } from '@/utils/utils';
 import TiltCanvas from '../TiltCanvas';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import { useIsMobile } from '@/utils/hooks';
@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import { SaveImageModal } from '@/components/Modals/SaveImageModal';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { AppContext } from '@/app/app';
+import { useHint } from '@/components/InfrastructureCompo/HintProvider';
 
 export const getInitialMethods = (w: number, h: number, scaleXWidth: number, scaleYWidth: number, currentSizeScale: number = 1) => {
 	const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
@@ -60,6 +61,7 @@ export default ({
 }: Props) => {
 	const isMobile = useIsMobile();
 	const { t } = useLocale();
+	const hint = useHint();
 
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -171,6 +173,19 @@ export default ({
 						}}
 					>
 						{isFlipSide ? t('TicketEditorTemplate.reverse2') : t('TicketEditorTemplate.reverse')}
+					</button>{' '}
+					<button
+						onClick={() => {
+							navigator.clipboard
+								.writeText(getTicketURL(selectedCompanyId, selectedTicketId, ticketData))
+								.then(() => hint('top', t('TicketListViewItem.copyLink.hint.success')))
+								.catch((err) => hint('top', t('TicketListViewItem.copyLink.hint.fail'), 'red', 2000));
+						}}
+						className="text-xs text-black rounded-md px-1 py-1 shadow-sm transition"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+							<path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5" />
+						</svg>
 					</button>
 					<label className="ticketEditorTemplateToolBarItem">
 						<Toggle

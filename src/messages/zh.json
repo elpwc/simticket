@@ -195,5 +195,13 @@
     "saveFront": "保存正面",
     "saveFlipside": "保存背面",
     "close": "关闭"
+  },
+  "TicketListViewItem": {
+    "copyLink": {
+      "hint": {
+        "success": "此车票的链接已拷贝进剪切板中！",
+        "fail": "链接复制到剪切板失败了.."
+      }
+    }
   }
 }

@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TicketViewer } from './ticketViewer';
 import { useState } from 'react';
 import { useIsMobile } from '@/utils/hooks';
+import { useHint } from './HintProvider';
+import { useLocale } from '@/utils/hooks/useLocale';
+import { encodeTicket, getTicketURL } from '@/utils/utils';
 
 interface Props {
 	width: number;
@@ -17,7 +20,9 @@ interface Props {
 }
 
 export const TicketListViewItem = ({ width, height, className, borderRadius, companyId, ticketTypeId, ticketData, onDelete, onSave }: Props) => {
+	const { t } = useLocale();
 	const isMobile = useIsMobile();
+	const hint = useHint();
 
 	const [hovered, setHovered] = useState(false);
 	const showButtons = hovered || isMobile;
@@ -45,12 +50,20 @@ export const TicketListViewItem = ({ width, height, className, borderRadius, com
 			<AnimatePresence>
 				{showButtons && (
 					<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.1 }} className="absolute top-1 right-1 z-20">
-						<button onClick={onDelete} className="text-xs hover:bg-white text-black rounded-md px-1 py-1 shadow-sm transition disabled">
+						<button
+							onClick={() => {
+								navigator.clipboard
+									.writeText(getTicketURL(companyId, ticketTypeId, ticketData))
+									.then(() => hint('top', t('TicketListViewItem.copyLink.hint.success')))
+									.catch((err) => hint('top', t('TicketListViewItem.copyLink.hint.fail'), 'red', 2000));
+							}}
+							className="text-xs text-black rounded-md px-1 py-1 shadow-sm transition"
+						>
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 								<path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5" />
 							</svg>
 						</button>
-						<button onClick={onDelete} className="text-xs hover:bg-white text-white rounded-md px-1 py-1 shadow-sm transition" style={{ backgroundColor: 'red' }}>
+						<button onClick={onDelete} className="text-xs bg-red-600 hover:bg-red-700 text-white rounded-md px-1 py-1 shadow-sm transition">
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 								<path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
 							</svg>

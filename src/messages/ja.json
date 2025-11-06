@@ -195,5 +195,13 @@
     "close": "キャンセル",
     "saveFlipside": "裏面を保存",
     "saveFront": "表面を保存"
+  },
+  "TicketListViewItem": {
+    "copyLink": {
+      "hint": {
+        "success": "この乗車券のURLをｸﾘｯﾌﾟﾎﾞｰﾄにコピーしました！",
+        "fail": "この乗車券のURLをｸﾘｯﾌﾟﾎﾞｰﾄにコピーできませんでした.."
+      }
+    }
   }
 }

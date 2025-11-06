@@ -633,3 +633,7 @@ export const decodeTicket = (companyId: number, ticketTypeId: number, ticketData
 	}
 	return JRWideTicketDrawParametersInitialValues;
 };
+
+export const getTicketURL = (companyId: number, ticketTypeId: number, ticketData: any) => {
+	return `${window.location.origin}/?com=${companyId}&ticket=${ticketTypeId}&data=${encodeTicket(companyId, ticketTypeId, ticketData)}`;
+};
