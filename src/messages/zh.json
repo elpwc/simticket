@@ -66,7 +66,8 @@
     "loadingFontText": "加载字体文件中...",
     "updateButton": "刷新图像",
     "saveButton": "保存图像",
-    "reverse": "背面"
+    "reverse": "背面",
+    "reverse2": "正面"
   },
   "SaveImageModal": {
     "title": "选择保存尺寸",

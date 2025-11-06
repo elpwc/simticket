@@ -49,7 +49,7 @@ export const drawTicket = (
 							onHeightChanged?.((canvasWidth / MAG_TICKET_SIZE[0]) * MAG_TICKET_SIZE[1]);
 						}
 					}
-					drawCRWideTicket(canvas, ctx, ticketData, undefined, onDone);
+					drawCRWideTicket(canvas, ctx, ticketData, undefined, false, onDone);
 					break;
 				default:
 					break;

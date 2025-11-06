@@ -29,7 +29,7 @@ import {
 	sleepingCarSeatType,
 } from './value';
 import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType } from './type';
-import { drawCRWideTicket, drawCRWideTicketFlipSide } from './draw';
+import { drawCRWideTicket } from './draw';
 import { AppContext } from '@/app/app';
 import { useLocale } from '@/utils/hooks/useLocale';
 
@@ -82,11 +82,7 @@ export default function CRWideTicket() {
 	}, []);
 
 	const drawTicket = () => {
-		if (isFlipSide) {
-			drawCRWideTicketFlipSide(canvasRef.current, ctxRef.current, drawParameters);
-		} else {
-			drawCRWideTicket(canvasRef.current, ctxRef.current, drawParameters);
-		}
+		drawCRWideTicket(canvasRef.current, ctxRef.current, drawParameters, undefined, isFlipSide);
 	};
 
 	useEffect(() => {
@@ -166,8 +162,8 @@ export default function CRWideTicket() {
 			ticketData={drawParameters}
 			saveFilename={`ticket_${drawParameters.station1}-${drawParameters.station2}`}
 			isFontLoading={isFontLoading}
-			onFlip={() => {
-				setIsFlipSide((prev) => !prev);
+			onFlip={(isFlip: boolean) => {
+				setIsFlipSide(isFlip);
 			}}
 			form={
 				<div className="flex flex-col gap-4 m-4">

@@ -39,7 +39,7 @@ interface Props {
 	form: JSX.Element | null;
 	isFontLoading?: boolean;
 	onScaleChange?: (scale: number) => void;
-	onFlip?: () => void;
+	onFlip?: (isFlip: boolean) => void;
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -66,6 +66,7 @@ export default ({
 	const [enableCanvasTilt, setEnableCanvasTilt] = useState(true);
 	const [currentSizeScale, setCurrentSizeScale] = useState(isMobile ? 1 : 1.4);
 	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
+	const [isFlipSide, setIsFlipSide] = useState(false);
 
 	const { selectedCompanyId, setSelectedCompanyId } = useContext(AppContext);
 	const { selectedTicketId, setSelectedTicketId } = useContext(AppContext);
@@ -165,10 +166,11 @@ export default ({
 					<button
 						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
 						onClick={() => {
-							onFlip?.();
+							onFlip?.(!isFlipSide);
+							setIsFlipSide((prev) => !prev);
 						}}
 					>
-						{t('TicketEditorTemplate.reverse')}
+						{isFlipSide ? t('TicketEditorTemplate.reverse2') : t('TicketEditorTemplate.reverse')}
 					</button>
 					<label className="ticketEditorTemplateToolBarItem">
 						<Toggle
