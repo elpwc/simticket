@@ -1,6 +1,6 @@
 import { drawQRCode, drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
 import { CRTicketBackGround, CRWideTicketDrawParameters, RightUpContentType } from './type';
-import { CRWideTicketDrawParametersInitialValues, MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from './value';
+import { CRTicketFlipSideText, CRWideTicketDrawParametersInitialValues, MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from './value';
 import cr_red from '../../../assets/tickets/cr_red.png';
 import cr_blue from '../../../assets/tickets/cr_blue.png';
 import cr_mag_blue from '../../../assets/tickets/cr_mag_blue.png';
@@ -26,11 +26,14 @@ export const drawCRWideTicket = (
 		...CRWideTicketDrawParametersInitialValues,
 		...partialDrawParameters,
 	};
+
+	const isMag = [CRTicketBackGround.MagRed, CRTicketBackGround.MagBlue, CRTicketBackGround.MagNoneBackground].includes(drawParameters.background || CRTicketBackGround.SoftRed);
+
 	if (initialMethods === undefined) {
-		if ([CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground].includes(drawParameters.background || CRTicketBackGround.SoftRed)) {
-			initialMethods = getInitialMethods(canvas?.width || PAPER_TICKET_CANVAS_SIZE[0], canvas?.height || PAPER_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
-		} else {
+		if (isMag) {
 			initialMethods = getInitialMethods(canvas?.width || MAG_TICKET_CANVAS_SIZE[0], canvas?.height || MAG_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
+		} else {
+			initialMethods = getInitialMethods(canvas?.width || PAPER_TICKET_CANVAS_SIZE[0], canvas?.height || PAPER_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
 		}
 	}
 
@@ -460,4 +463,143 @@ export const drawCRWideTicket = (
 			draw();
 			break;
 	}
+};
+
+export const drawCRWideTicketFlipSide = (
+	canvas: HTMLCanvasElement | null,
+	ctx: CanvasRenderingContext2D | null,
+	partialDrawParameters: Partial<CRWideTicketDrawParameters>,
+	initialMethods:
+		| {
+				scaleX: (x: number) => number;
+				scaleY: (y: number) => number;
+				font: (size: number, fontName: string, isBold?: boolean) => string;
+		  }
+		| undefined = undefined,
+	onDone?: () => void
+) => {
+	if (!ctx || !canvas) return;
+
+	const drawParameters: CRWideTicketDrawParameters = {
+		...CRWideTicketDrawParametersInitialValues,
+		...partialDrawParameters,
+	};
+
+	const isMag = [CRTicketBackGround.MagRed, CRTicketBackGround.MagBlue, CRTicketBackGround.MagNoneBackground].includes(drawParameters.background || CRTicketBackGround.SoftRed);
+
+	if (initialMethods === undefined) {
+		if (isMag) {
+			initialMethods = getInitialMethods(canvas?.width || PAPER_TICKET_CANVAS_SIZE[0], canvas?.height || PAPER_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
+		} else {
+			initialMethods = getInitialMethods(canvas?.width || MAG_TICKET_CANVAS_SIZE[0], canvas?.height || MAG_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
+		}
+	}
+
+	const w = canvas.width;
+	const h = canvas.height;
+	const backgroundEdgeHori = 0.04;
+	const backgroundEdgeVert = 0.07;
+
+	const resizedScaleX = (value: number) => {
+		switch (drawParameters.background) {
+			case CRTicketBackGround.MagRed:
+			case CRTicketBackGround.MagBlue:
+			case CRTicketBackGround.MagNoneBackground:
+				return initialMethods.scaleX((value / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]);
+			case CRTicketBackGround.SoftRed:
+			case CRTicketBackGround.SoftBlue:
+			case CRTicketBackGround.SoftNoneBackground:
+			default:
+				return initialMethods.scaleX(value);
+		}
+	};
+	const resizedScaleY = (value: number) => {
+		switch (drawParameters.background) {
+			case CRTicketBackGround.MagRed:
+			case CRTicketBackGround.MagBlue:
+			case CRTicketBackGround.MagNoneBackground:
+				return initialMethods.scaleY((value / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]);
+			case CRTicketBackGround.SoftRed:
+			case CRTicketBackGround.SoftBlue:
+			case CRTicketBackGround.SoftNoneBackground:
+			default:
+				return initialMethods.scaleY(value);
+		}
+	};
+	const offsetScaleX = (value: number, addOffsetValue: boolean = true) => {
+		switch (drawParameters.background) {
+			case CRTicketBackGround.MagRed:
+			case CRTicketBackGround.MagBlue:
+			case CRTicketBackGround.MagNoneBackground:
+				return initialMethods.scaleX(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeHori) / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]) + (addOffsetValue ? drawParameters.offsetX : 0);
+			case CRTicketBackGround.SoftRed:
+			case CRTicketBackGround.SoftBlue:
+			case CRTicketBackGround.SoftNoneBackground:
+			default:
+				return initialMethods.scaleX(value) + drawParameters.offsetX;
+		}
+	};
+	const offsetScaleY = (value: number, addOffsetValue: boolean = true) => {
+		switch (drawParameters.background) {
+			case CRTicketBackGround.MagRed:
+			case CRTicketBackGround.MagBlue:
+			case CRTicketBackGround.MagNoneBackground:
+				return initialMethods.scaleY(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeVert) / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]) + (addOffsetValue ? drawParameters.offsetY : 0);
+			case CRTicketBackGround.SoftRed:
+			case CRTicketBackGround.SoftBlue:
+			case CRTicketBackGround.SoftNoneBackground:
+			default:
+				return initialMethods.scaleY(value) + drawParameters.offsetY;
+		}
+	};
+	const resizedFont = (size: number, fontName: string, isBold?: boolean) => {
+		switch (drawParameters.background) {
+			case CRTicketBackGround.MagRed:
+			case CRTicketBackGround.MagBlue:
+			case CRTicketBackGround.MagNoneBackground:
+				return initialMethods.font((size / MAG_TICKET_CANVAS_SIZE[1]) * PAPER_TICKET_CANVAS_SIZE[1], fontName, isBold);
+			case CRTicketBackGround.SoftRed:
+			case CRTicketBackGround.SoftBlue:
+			case CRTicketBackGround.SoftNoneBackground:
+			default:
+				return initialMethods.font(size, fontName, isBold);
+		}
+	};
+
+	ctx.clearRect(0, 0, w, h);
+
+	if (isMag) {
+		ctx.fillStyle = '#000000';
+	} else {
+		ctx.fillStyle = '#ffffff';
+	}
+	ctx.fillRect(0, 0, w, h);
+
+	// border
+	if (
+		drawParameters.showBorder &&
+		[CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground, CRTicketBackGround.MagNoneBackground].includes(drawParameters.background)
+	) {
+		ctx.strokeStyle = 'gray';
+		ctx.lineWidth = resizedScaleX(2);
+		ctx.strokeRect(0, 0, w || 0, h || 0);
+	}
+	if (isMag) {
+		ctx.fillStyle = '#999999';
+	} else {
+		ctx.fillStyle = '#000000';
+	}
+
+	const mag_Y_offset = 50;
+
+	ctx.font = `${resizedFont(6.1, 'HeiTi', true)}`;
+	drawText(ctx, '乘车须知：', offsetScaleX(242, false), offsetScaleY(178 + (isMag ? mag_Y_offset : 0), false), resizedScaleX(552), TextAlign.Left, DrawTextMethod.fillText, 0);
+	ctx.font = `${resizedFont(4.2, 'SongTi')}`;
+	drawText(ctx, CRTicketFlipSideText, offsetScaleX(127, false), offsetScaleY(175 + (isMag ? mag_Y_offset : 0), false), resizedScaleX(1568 - 127), TextAlign.Left, DrawTextMethod.fillText, 0, 1.25);
+
+	if (!isMag) {
+		ctx.strokeStyle = 'black';
+		ctx.fillRect(offsetScaleX(0), offsetScaleY(1016), resizedScaleX(1700), resizedScaleY(1098 - 1016));
+	}
+	onDone?.();
 };

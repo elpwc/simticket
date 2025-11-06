@@ -29,7 +29,7 @@ import {
 	sleepingCarSeatType,
 } from './value';
 import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType } from './type';
-import { drawCRWideTicket } from './draw';
+import { drawCRWideTicket, drawCRWideTicketFlipSide } from './draw';
 import { AppContext } from '@/app/app';
 import { useLocale } from '@/utils/hooks/useLocale';
 
@@ -56,6 +56,7 @@ export default function CRWideTicket() {
 	const [canvasSize, setCanvasSize] = useState(PAPER_TICKET_CANVAS_SIZE);
 
 	const [isFontLoading, setIsFontLoading] = useState(false);
+	const [isFlipSide, setIsFlipSide] = useState(false);
 
 	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(CRWideTicketDrawParametersInitialValues);
 
@@ -81,7 +82,11 @@ export default function CRWideTicket() {
 	}, []);
 
 	const drawTicket = () => {
-		drawCRWideTicket(canvasRef.current, ctxRef.current, drawParameters);
+		if (isFlipSide) {
+			drawCRWideTicketFlipSide(canvasRef.current, ctxRef.current, drawParameters);
+		} else {
+			drawCRWideTicket(canvasRef.current, ctxRef.current, drawParameters);
+		}
 	};
 
 	useEffect(() => {
@@ -161,6 +166,9 @@ export default function CRWideTicket() {
 			ticketData={drawParameters}
 			saveFilename={`ticket_${drawParameters.station1}-${drawParameters.station2}`}
 			isFontLoading={isFontLoading}
+			onFlip={() => {
+				setIsFlipSide((prev) => !prev);
+			}}
 			form={
 				<div className="flex flex-col gap-4 m-4">
 					<TabBox title={t('editor.common.ticketFace.title')} className="flex flex-wrap gap-1">

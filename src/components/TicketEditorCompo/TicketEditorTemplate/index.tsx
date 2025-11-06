@@ -39,6 +39,7 @@ interface Props {
 	form: JSX.Element | null;
 	isFontLoading?: boolean;
 	onScaleChange?: (scale: number) => void;
+	onFlip?: () => void;
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -55,6 +56,7 @@ export default ({
 	form,
 	isFontLoading,
 	onScaleChange,
+	onFlip,
 }: Props) => {
 	const isMobile = useIsMobile();
 	const { t } = useLocale();
@@ -163,7 +165,7 @@ export default ({
 					<button
 						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
 						onClick={() => {
-							setShowSaveImageModal(true);
+							onFlip?.();
 						}}
 					>
 						{t('TicketEditorTemplate.reverse')}
