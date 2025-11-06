@@ -36,7 +36,7 @@ export function encodeCRWideTicketParams(p: CRWideTicketDrawParameters): string 
 		p.rightUpContentType,
 		p.serialCode,
 		p.qrCodeText,
-		p.purchaseMethod.join(','),
+		p.purchaseMethod,
 		+p.doPurchaseMethodHaveCircle,
 		+p.noSeat,
 		+p.noCarriage,
@@ -53,12 +53,18 @@ export function encodeCRWideTicketParams(p: CRWideTicketDrawParameters): string 
 
 	// JSON → UTF-8 → Base64 (URL safe)
 	const json = JSON.stringify(arr);
-	const b64 = btoa(encodeURIComponent(json));
+	const bytes = new TextEncoder().encode(json);
+	const binary = Array.from(bytes, (b) => String.fromCharCode(b)).join('');
+	const b64 = btoa(binary);
+
 	return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameters {
-	const json = decodeURIComponent(atob(str.replace(/-/g, '+').replace(/_/g, '/')));
+	const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+	const binary = atob(base64);
+	const bytes = new Uint8Array([...binary].map((c) => c.charCodeAt(0)));
+	const json = new TextDecoder().decode(bytes);
 	const arr = JSON.parse(json);
 
 	const [
@@ -146,7 +152,7 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		rightUpContentType,
 		serialCode,
 		qrCodeText,
-		purchaseMethod: purchaseMethod.split(','),
+		purchaseMethod,
 		doPurchaseMethodHaveCircle: !!doPurchaseMethodHaveCircle,
 		noSeat: !!noSeat,
 		noCarriage: !!noCarriage,

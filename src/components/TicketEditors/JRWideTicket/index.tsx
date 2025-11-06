@@ -3,7 +3,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
-import { fontsLoader } from '@/utils/utils';
+import { decodeTicket, fontsLoader } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import TabBox from '../../InfrastructureCompo/TabBox';
 import { Divider } from '../../InfrastructureCompo/Divider';
@@ -15,6 +15,7 @@ import { JR_TICKET_TYPE, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_
 import { JRWideTicketDrawParameters } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
+import { useSearchParams } from 'next/navigation';
 
 export const DotFont = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
@@ -23,6 +24,8 @@ export const DotFont = localFonts({
 });
 
 export default function JRWideTicket() {
+	const searchParams = useSearchParams();
+
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
 	const scaleXRef = useRef<(x: number) => number>(null);
@@ -35,9 +38,27 @@ export default function JRWideTicket() {
 
 	const [isFontLoading, setIsFontLoading] = useState(false);
 
-	const [drawParameters, setDrawParameters] = useState<JRWideTicketDrawParameters>(JRWideTicketDrawParametersInitialValues);
-
 	const { editingTicketData, setEditingTicketData } = useContext(AppContext);
+
+	const getInitialValues = () => {
+		const ticketDataStr = searchParams.get('data');
+		if (ticketDataStr !== null && ticketDataStr !== '') {
+			const comParam = searchParams.get('com');
+			const ticketParam = searchParams.get('ticket');
+			let companyId = 0,
+				ticketTypeId = 4;
+			if (comParam !== null && !isNaN(Number(comParam))) {
+				companyId = Number(comParam);
+			}
+			if (ticketParam !== null && !isNaN(Number(ticketParam))) {
+				ticketTypeId = Number(ticketParam);
+			}
+			return decodeTicket(companyId, ticketTypeId, ticketDataStr);
+		} else {
+			return JRWideTicketDrawParametersInitialValues;
+		}
+	};
+	const [drawParameters, setDrawParameters] = useState<JRWideTicketDrawParameters>(getInitialValues());
 
 	useEffect(() => {
 		fontsLoader(

@@ -3,7 +3,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
-import { fontsLoader, TextAlign } from '@/utils/utils';
+import { decodeTicket, fontsLoader, getTicketURL, TextAlign } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import TabBox from '../../InfrastructureCompo/TabBox';
 import InputRadioGroup from '../../InfrastructureCompo/InputRadioGroup';
@@ -32,6 +32,7 @@ import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUp
 import { drawCRWideTicket } from './draw';
 import { AppContext } from '@/app/app';
 import { useLocale } from '@/utils/hooks/useLocale';
+import { useSearchParams } from 'next/navigation';
 
 export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
@@ -46,6 +47,8 @@ export const HeiTi = localFonts({
 
 export default function CRWideTicket() {
 	const { t } = useLocale();
+	const searchParams = useSearchParams();
+
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
 	const scaleXRef = useRef<(x: number) => number>(null);
@@ -58,9 +61,27 @@ export default function CRWideTicket() {
 	const [isFontLoading, setIsFontLoading] = useState(false);
 	const [isFlipSide, setIsFlipSide] = useState(false);
 
-	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(CRWideTicketDrawParametersInitialValues);
-
 	const { editingTicketData, setEditingTicketData } = useContext(AppContext);
+
+	const getInitialValues = () => {
+		const ticketDataStr = searchParams.get('data');
+		if (ticketDataStr !== null && ticketDataStr !== '') {
+			const comParam = searchParams.get('com');
+			const ticketParam = searchParams.get('ticket');
+			let companyId = 0,
+				ticketTypeId = 4;
+			if (comParam !== null && !isNaN(Number(comParam))) {
+				companyId = Number(comParam);
+			}
+			if (ticketParam !== null && !isNaN(Number(ticketParam))) {
+				ticketTypeId = Number(ticketParam);
+			}
+			return decodeTicket(companyId, ticketTypeId, ticketDataStr);
+		} else {
+			return CRWideTicketDrawParametersInitialValues;
+		}
+	};
+	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(getInitialValues());
 
 	useEffect(() => {
 		fontsLoader(
@@ -101,6 +122,10 @@ export default function CRWideTicket() {
 	}, [drawParameters.background]);
 
 	useEffect(() => {
+		// setDrawParameters((prev) => ({
+		// 	...prev,
+		// 	qrCodeText: getTicketURL(0, 4, drawParameters),
+		// }));
 		drawTicket();
 	}, [drawTicket, size, canvasSize, drawParameters, isFontLoading]);
 
