@@ -1,6 +1,7 @@
 import { CRTicketBackGround } from '@/components/TicketEditors/CRWideTicket/type';
+import { decodeCRWideTicketParams, encodeCRWideTicketParams } from '@/components/TicketEditors/CRWideTicket/utils';
 import { MAG_TICKET_A4_SIZE, MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_A4_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from '@/components/TicketEditors/CRWideTicket/value';
-import { JR_MARS_PAPER_TICKET_A4_SIZE, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE } from '@/components/TicketEditors/JRWideTicket/value';
+import { JR_MARS_PAPER_TICKET_A4_SIZE, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, JRWideTicketDrawParametersInitialValues } from '@/components/TicketEditors/JRWideTicket/value';
 import QRCode from 'qrcode';
 
 export const saveCanvasToLocal = (canvas: HTMLCanvasElement | null, filename: string, onSave?: () => void) => {
@@ -535,4 +536,100 @@ export const get_CanvasOrImageSize_Of_Ticket_By_TicketType = (
 			break;
 	}
 	return MAG_TICKET_CANVAS_SIZE;
+};
+
+export const encodeTicket = (companyId: number, ticketTypeId: number, ticketData: any): string => {
+	switch (companyId) {
+		case 0: //CR
+			switch (ticketTypeId) {
+				case 0:
+				case 1:
+				case 2:
+				case 3:
+					break;
+				case 4:
+					return encodeCRWideTicketParams(ticketData);
+				default:
+					break;
+			}
+		case 1: // JR
+			switch (ticketTypeId) {
+				case 0:
+					break;
+				case 1:
+					return ''; //encodeCRWideTicketParams(ticketData);
+				case 2:
+				default:
+					break;
+			}
+		case 2: // JNR
+			switch (ticketTypeId) {
+				case 0:
+				default:
+					break;
+			}
+		case 3: // TR
+			switch (ticketTypeId) {
+				case 0:
+				case 1:
+				case 2:
+				default:
+					break;
+			}
+		case 4: // THSR
+		case 5: // VNR
+		case 6: // KR
+		default:
+			break;
+	}
+	return '';
+};
+
+export const decodeTicket = (companyId: number, ticketTypeId: number, ticketData: string): any => {
+	switch (companyId) {
+		case 0: //CR
+			switch (ticketTypeId) {
+				case 0:
+				case 1:
+				case 2:
+				case 3:
+					break;
+				case 4:
+					return decodeCRWideTicketParams(ticketData);
+
+				default:
+					break;
+			}
+		case 1: // JR
+			switch (ticketTypeId) {
+				case 0:
+					break;
+				case 1:
+					return JRWideTicketDrawParametersInitialValues; //decodeCRWideTicketParams(ticketData)
+
+				case 2:
+				default:
+					break;
+			}
+		case 2: // JNR
+			switch (ticketTypeId) {
+				case 0:
+				default:
+					break;
+			}
+		case 3: // TR
+			switch (ticketTypeId) {
+				case 0:
+				case 1:
+				case 2:
+				default:
+					break;
+			}
+		case 4: // THSR
+		case 5: // VNR
+		case 6: // KR
+		default:
+			break;
+	}
+	return JRWideTicketDrawParametersInitialValues;
 };
