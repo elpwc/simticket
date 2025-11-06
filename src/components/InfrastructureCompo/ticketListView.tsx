@@ -47,7 +47,7 @@ export const TicketListView = () => {
 			</div>
 			<div>
 				<button
-					className="bg-blue-500 text-white"
+					className="primary"
 					onClick={() => {
 						setTicketListItems((prev: TicketListItemProperty[]) => [
 							...prev,
@@ -63,6 +63,7 @@ export const TicketListView = () => {
 					{t('ticketListView.addResultToListButton')}
 				</button>
 				<button
+				className='primary green'
 					onClick={() => {
 						setSaveListModalOpen(true);
 					}}
@@ -70,6 +71,7 @@ export const TicketListView = () => {
 					{t('ticketListView.exportList')}
 				</button>
 				<button
+				className='alert'
 					onClick={() => {
 						setTicketListItems([]);
 					}}

@@ -152,7 +152,7 @@ export default ({
 						{t('TicketEditorTemplate.updateButton')}
 					</button>
 					<button
-						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
+						className="ticketEditorTemplateToolBarItem flex items-center gap-1 primary green"
 						onClick={() => {
 							setShowSaveImageModal(true);
 						}}
