@@ -189,7 +189,11 @@
   },
   "SaveListModal": {
     "title": "保存列表到A4纸",
-    "printPreview": "打印预览",
-    "selectTicketToSave": "请选择想保存在A4纸上的票："
+    "printPreview": "正面预览",
+    "selectTicketToSave": "请选择保存在A4纸上的票：",
+    "printPreviewFlip": "背面预览",
+    "saveFront": "保存正面",
+    "saveFlipside": "保存背面",
+    "close": "关闭"
   }
 }

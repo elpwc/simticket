@@ -14,6 +14,7 @@ export const drawTicket = (
 	height: number,
 	onWidthChanged?: (newValue: number) => void,
 	onHeightChanged?: (newValue: number) => void,
+	isFlip?: boolean,
 	onDone?: () => void
 ) => {
 	if (!ticketData) {
@@ -49,7 +50,7 @@ export const drawTicket = (
 							onHeightChanged?.((canvasWidth / MAG_TICKET_SIZE[0]) * MAG_TICKET_SIZE[1]);
 						}
 					}
-					drawCRWideTicket(canvas, ctx, ticketData, undefined, false, onDone);
+					drawCRWideTicket(canvas, ctx, ticketData, undefined, isFlip, onDone);
 					break;
 				default:
 					break;
@@ -65,7 +66,7 @@ export const drawTicket = (
 					if (height < 0) {
 						onHeightChanged?.((canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1]);
 					}
-					drawJRWideTicket(canvas, ctx, ticketData, undefined, onDone);
+					drawJRWideTicket(canvas, ctx, ticketData, undefined, isFlip, onDone);
 					break;
 				case 2:
 				default:

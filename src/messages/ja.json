@@ -189,7 +189,11 @@
   },
   "SaveListModal": {
     "title": "リストをA4紙に保存",
-    "printPreview": "プレビュー",
-    "selectTicketToSave": "A4紙に保存したい乗車券を選んで下さい："
+    "printPreview": "表面プレビュー",
+    "selectTicketToSave": "A4紙に保存したい乗車券を選んで下さい：",
+    "printPreviewFlip": "裏面プレビュー",
+    "close": "キャンセル",
+    "saveFlipside": "裏面を保存",
+    "saveFront": "表面を保存"
   }
 }

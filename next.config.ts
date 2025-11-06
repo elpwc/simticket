@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
 	/* config options here */
 	output: 'export',
 	images: { unoptimized: true },
-	basePath: '/simticket',
-	assetPrefix: '/simticket',
+	//basePath: '/simticket',
+	//assetPrefix: '/simticket',
 	eslint: {
 		ignoreDuringBuilds: true,
 	},

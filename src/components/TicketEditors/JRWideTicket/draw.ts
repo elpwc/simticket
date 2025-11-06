@@ -21,6 +21,7 @@ export const drawJRWideTicket = (
 				font: (size: number, fontName: string, isBold?: boolean) => string;
 		  }
 		| undefined = undefined,
+	isFlip?: boolean,
 	onDone?: () => void
 ) => {
 	if (!ctx || !canvas) {

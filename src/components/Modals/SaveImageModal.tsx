@@ -46,6 +46,7 @@ export const SaveImageModal = ({ show, ticketInfo, saveFilename, defaultCanvasSi
 			tmpCanvas.height,
 			(newValue) => {},
 			(newValue) => {},
+			false,
 			() => {
 				saveCanvasToLocal(tmpCanvas, saveFilename + '_' + title, /* onSave */ () => {});
 				onSaved?.();
