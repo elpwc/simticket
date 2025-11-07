@@ -228,7 +228,7 @@ export const drawCRWideTicket = (
 		ctx.font = `${drawParameters.doUseHuaWenXinWei1 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
 		drawText(
 			ctx,
-			drawParameters.station1,
+			drawParameters.station1.length === 2 ? drawParameters.station1.substring(0, 1) + '　' + drawParameters.station1.substring(1, 2) : drawParameters.station1,
 			offsetScaleX(167),
 			offsetScaleY(drawParameters.doShowEnglish ? 335 : 365),
 			resizedScaleX(drawParameters.doShowZhan ? (drawParameters.station1.length > 4 ? 452 : 365) : 500),
@@ -237,7 +237,7 @@ export const drawCRWideTicket = (
 		ctx.font = `${drawParameters.doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
 		drawText(
 			ctx,
-			drawParameters.station2,
+			drawParameters.station2.length === 2 ? drawParameters.station2.substring(0, 1) + '　' + drawParameters.station2.substring(1, 2) : drawParameters.station2,
 			offsetScaleX(1044),
 			offsetScaleY(drawParameters.doShowEnglish ? 335 : 365),
 			resizedScaleX(drawParameters.doShowZhan ? (drawParameters.station2.length > 4 ? 452 : 365) : 500),
