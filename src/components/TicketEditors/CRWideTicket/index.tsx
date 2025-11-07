@@ -147,9 +147,9 @@ export default function CRWideTicket() {
 	useEffect(() => {
 		setDrawParameters((prev) => ({
 			...prev,
-			qrCodeText: `${drawParameters.station1}-${drawParameters.station2} No.${drawParameters.ticketNo} ${drawParameters.date.toISOString().slice(0, 10)} ${drawParameters.time} ${
-				drawParameters.seatClass
-			}车 ${drawParameters.carriage}${drawParameters.seat1}${drawParameters.seat2}号${drawParameters.seat3} ￥${drawParameters.price}元`,
+			qrCodeText: `${window.location.origin}/?${drawParameters.station1}-${drawParameters.station2} No.${drawParameters.ticketNo} ${drawParameters.date.toISOString().slice(0, 10)} ${
+				drawParameters.time
+			} ${drawParameters.seatClass}车 ${drawParameters.carriage}${drawParameters.seat1}${drawParameters.seat2}号${drawParameters.seat3} ￥${drawParameters.price}元`,
 		}));
 	}, [
 		drawParameters.ticketNo,
