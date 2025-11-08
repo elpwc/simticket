@@ -49,7 +49,6 @@ const JRPresetStationNames = [
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: 'ひたち野/うしく', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: 'ヤナバ/スキー場前', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'W', name: 'ユニバーサル/シティ', areaChar: '' },
-	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: 'ひたち野/うしく', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: 'ＢＲＴ/奇跡の一本松', areaChar: '' },
 	{ type: JRStationNameType.LeftVerticalAndRightLarge, company: 'E', name: '岩原/スキー場前', areaChar: '' },
 	{ type: JRStationNameType.LeftVerticalAndRightLarge, company: 'E', name: '行川/アイランド', areaChar: '' },
