@@ -82,9 +82,10 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	info1: '乘车纪念',
 };
 
-export const DaitoshiKinkouKukan = [
+export const TokuteiTokuShinai = [
 	{ char: '区', name: '東京都区内' },
 	{ char: '山', name: '東京山手線内', fontSize: 'middle' },
+	{ char: '札', name: '札幌市内' },
 	{ char: '仙', name: '仙台市内' },
 	{ char: '名', name: '名古屋市内' },
 	{ char: '浜', name: '浜松市内' },
@@ -156,7 +157,7 @@ export const JRCompanies = [
 	},
 	{
 		value: 'O',
-		name: '他会社',
+		name: '他会社連絡',
 		color: '#000000',
 	},
 ];

@@ -11,7 +11,7 @@ import localFonts from 'next/font/local';
 import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGroup/PrettyInputRadioGroup';
 import { JRWideTicketBgSelector } from './JRWideTicketBgSelector';
 import { UnderConstruction } from '@/components/TicketEditorCompo/UnderConstruction';
-import { JR_TICKET_TYPE, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, DaitoshiKinkouKukan, JRStationNameTypeRadioboxItemData } from './value';
+import { JR_TICKET_TYPE, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, JRStationNameTypeRadioboxItemData, TokuteiTokuShinai } from './value';
 import { JRStationNameType, JRWideTicketDrawParameters } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
@@ -220,17 +220,17 @@ export default function JRWideTicket() {
 									onChange={(value) => {
 										setDrawParameters((prev) => ({ ...prev, station1AreaChar: value }));
 									}}
-									list={DaitoshiKinkouKukan.map((daitoshiKinkinKukanItem) => {
+									list={TokuteiTokuShinai.map((TokuteiTokuShinaiItem) => {
 										return {
-											value: daitoshiKinkinKukanItem.char,
+											value: TokuteiTokuShinaiItem.char,
 											title: (
 												<span
 													className={clsx(
 														'text-10 text-white bg-black p-[0px]',
-														drawParameters.station1AreaChar === daitoshiKinkinKukanItem.char ? 'border-2 border-blue-600' : ''
+														drawParameters.station1AreaChar === TokuteiTokuShinaiItem.char ? 'border-2 border-blue-600' : ''
 													)}
 												>
-													{daitoshiKinkinKukanItem.char}
+													{TokuteiTokuShinaiItem.char}
 												</span>
 											),
 										};
@@ -321,17 +321,17 @@ export default function JRWideTicket() {
 									onChange={(value) => {
 										setDrawParameters((prev) => ({ ...prev, station2AreaChar: value }));
 									}}
-									list={DaitoshiKinkouKukan.map((daitoshiKinkinKukanItem) => {
+									list={TokuteiTokuShinai.map((TokuteiTokuShinaiItem) => {
 										return {
-											value: daitoshiKinkinKukanItem.char,
+											value: TokuteiTokuShinaiItem.char,
 											title: (
 												<span
 													className={clsx(
 														'text-10 text-white bg-black p-[0px]',
-														drawParameters.station2AreaChar === daitoshiKinkinKukanItem.char ? 'border-2 border-blue-600' : ''
+														drawParameters.station2AreaChar === TokuteiTokuShinaiItem.char ? 'border-2 border-blue-600' : ''
 													)}
 												>
-													{daitoshiKinkinKukanItem.char}
+													{TokuteiTokuShinaiItem.char}
 												</span>
 											),
 										};
