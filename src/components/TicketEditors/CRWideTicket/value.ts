@@ -39,6 +39,69 @@ export enum PurchaseMethodType {
 	Other = 'value.purchaseMethod.type.Other',
 }
 
+export const CRPresetStations = [
+	{
+		station1: '格尔木',
+		station2: '拉萨',
+		station1en: "Ge'ermu",
+		station2en: 'Lasa',
+	},
+	{
+		background: CRTicketBackGround.MagBlue,
+		station1: '西安北',
+		station2: '乌鲁木齐',
+		station1en: "Xi'anbei",
+		station2en: 'Wulumuqi',
+	},
+	{
+		background: CRTicketBackGround.MagBlue,
+		station1: '东京',
+		station2: '上海松江',
+		station1en: 'Tokyo',
+		station2en: 'Shanghaisongjiang',
+	},
+	{
+		station1: '深圳',
+		station2: '九龙',
+		station1en: 'Shenzhen',
+		station2en: 'Kowloon',
+	},
+	{
+		station1: '南宁',
+		station2: '河内嘉林',
+		station1en: 'Nam Ninh',
+		station2en: 'Gia Lâm Hà Nội',
+	},
+	{
+		station1: '北京',
+		station2: '平壤',
+		station1en: 'Beijing',
+		station2en: 'Pyongyang',
+	},
+	{
+		background: CRTicketBackGround.MagBlue,
+		station1: '北京东',
+		station2: '北京城市副中心',
+		station1en: 'Beijingdong',
+		station2en: 'Beijingchengshifuzhongxin',
+	},
+	{
+		station1: '上海虹桥',
+		station2: '南京',
+		station1en: 'Shanghaihongqiao',
+		station2en: 'Nanjing',
+		doUseHuaWenXinWei1: true,
+		doUseHuaWenXinWei2: true,
+	},
+	{
+		background: CRTicketBackGround.MagBlue,
+		station1: '东京都区内',
+		station2: '北京朝阳',
+		station1en: 'Tokyo Ward Area',
+		station2en: 'Beijingchaoyang',
+	},
+];
+
 export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters = {
 	background: CRTicketBackGround.SoftRed,
 	showBorder: true,

@@ -11,7 +11,15 @@ import localFonts from 'next/font/local';
 import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGroup/PrettyInputRadioGroup';
 import { JRWideTicketBgSelector } from './JRWideTicketBgSelector';
 import { UnderConstruction } from '@/components/TicketEditorCompo/UnderConstruction';
-import { JR_TICKET_TYPE, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, JRStationNameTypeRadioboxItemData, TokuteiTokuShinai } from './value';
+import {
+	JR_TICKET_TYPE,
+	JRWideTicketDrawParametersInitialValues,
+	JR_MARS_PAPER_TICKET_CANVAS_SIZE,
+	JR_MARS_PAPER_TICKET_SIZE,
+	JRStationNameTypeRadioboxItemData,
+	TokuteiTokuShinai,
+	JRPresetStations,
+} from './value';
 import { JRStationNameType, JRWideTicketDrawParameters } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
@@ -73,7 +81,10 @@ export default function JRWideTicket() {
 			}
 			return decodeTicket(companyId, ticketTypeId, ticketDataStr);
 		} else {
-			return JRWideTicketDrawParametersInitialValues;
+			return {
+				...JRWideTicketDrawParametersInitialValues,
+				...JRPresetStations[Math.floor(Math.random() * JRPresetStations.length)],
+			};
 		}
 	};
 	const [drawParameters, setDrawParameters] = useState<JRWideTicketDrawParameters>(getInitialValues());

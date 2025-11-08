@@ -15,6 +15,7 @@ import { DescriptionButton } from '@/components/InfrastructureCompo/DescriptionB
 import {
 	CR_TRAIN_TYPE_ARRAY,
 	CR_TRAIN_TYPES,
+	CRPresetStations,
 	CRWideTicketDrawParametersInitialValues,
 	info1List,
 	info2List,
@@ -88,7 +89,10 @@ export default function CRWideTicket() {
 			}
 			return decodeTicket(companyId, ticketTypeId, ticketDataStr);
 		} else {
-			return CRWideTicketDrawParametersInitialValues;
+			return {
+				...CRWideTicketDrawParametersInitialValues,
+				...CRPresetStations[Math.floor(Math.random() * CRPresetStations.length)],
+			};
 		}
 	};
 	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(getInitialValues());
