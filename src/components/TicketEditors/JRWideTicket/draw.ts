@@ -1,7 +1,7 @@
 import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTemplate';
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
 import { JRStationNameType, JRWideTicketDrawParameters } from './type';
-import { JRPaymentMethod, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE } from './value';
+import { JRPaymentMethod, JRTicketFlipSideText, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE } from './value';
 import { drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
 import jr_h from '../../../assets/tickets/jr_h.jpg';
 import jr_e from '../../../assets/tickets/jr_e.jpg';
@@ -382,20 +382,48 @@ export const drawJRWideTicket = (
 		onDone?.();
 	};
 
-	switch (drawParameters.background) {
-		case JRTicketBackGround.JR_H:
-		case JRTicketBackGround.JR_E:
-		case JRTicketBackGround.JR_C:
-		case JRTicketBackGround.JR_W:
-		case JRTicketBackGround.JR_S:
-		case JRTicketBackGround.JR_K:
-			// 有背景的
-			bg.onload = () => {
+	const drawFlip = () => {
+		// 清空
+		ctx.clearRect(0, 0, w, h);
+
+		// bg
+		ctx.fillStyle = '#000000';
+		ctx.fillRect(0, 0, w, h);
+
+		const drawJRBackText = (x: number) => {
+			ctx.fillStyle = '#999999';
+			ctx.font = `${resizedFont(4.2, 'sans-serif')}`;
+			drawText(ctx, JRTicketFlipSideText, offsetScaleX(x + 127, false), offsetScaleY(175, false), resizedScaleX(1568 - 127), TextAlign.Left, DrawTextMethod.fillText, 0, 1.25);
+		};
+
+		const startOffset = Math.random() * 700;
+		for (let i = -1; i < 4; i++) {
+			drawJRBackText(i * 750 + startOffset);
+		}
+		ctx.fillStyle = '#555555';
+		ctx.fillRect(offsetScaleX(0), offsetScaleY(920), resizedScaleX(1700), resizedScaleY(30));
+
+		onDone?.();
+	};
+
+	if (isFlip) {
+		drawFlip();
+	} else {
+		switch (drawParameters.background) {
+			case JRTicketBackGround.JR_H:
+			case JRTicketBackGround.JR_E:
+			case JRTicketBackGround.JR_C:
+			case JRTicketBackGround.JR_W:
+			case JRTicketBackGround.JR_S:
+			case JRTicketBackGround.JR_K:
+				// 有背景的
+				bg.onload = () => {
+					draw();
+				};
+				break;
+			case JRTicketBackGround.JR_Empty:
 				draw();
-			};
-			break;
-		case JRTicketBackGround.JR_Empty:
-			draw();
-			break;
+				break;
+		}
 	}
 };

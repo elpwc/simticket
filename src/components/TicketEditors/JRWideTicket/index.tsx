@@ -40,6 +40,7 @@ export default function JRWideTicket() {
 	const [currentScale, setCurrentScale] = useState(1);
 
 	const [isFontLoading, setIsFontLoading] = useState(false);
+	const [isFlipSide, setIsFlipSide] = useState(false);
 	/** 0: close, 1: station1, 2: station2 */
 	const [showJRPresetStationsModal, setShowJRPresetStationsModal] = useState(0);
 
@@ -91,7 +92,7 @@ export default function JRWideTicket() {
 	}, []);
 
 	const drawTicket = () => {
-		drawJRWideTicket(canvasRef.current, ctxRef.current, drawParameters);
+		drawJRWideTicket(canvasRef.current, ctxRef.current, drawParameters, undefined, isFlipSide);
 	};
 
 	useEffect(() => {
@@ -133,6 +134,9 @@ export default function JRWideTicket() {
 			saveFilename={`ticket_${drawParameters.station1}-${drawParameters.station2}`}
 			onScaleChange={setCurrentScale}
 			isFontLoading={isFontLoading}
+			onFlip={(isFlip) => {
+				setIsFlipSide(isFlip);
+			}}
 			form={
 				<div className="flex flex-col gap-4 m-4">
 					<UnderConstruction size="small" />
