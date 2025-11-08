@@ -161,7 +161,7 @@ export default function HomePage() {
 					}
 				})()}
 			</motion.div>
-			<footer className="fixed bottom-0 left-0 right-0 bg-white text-center text-sm text-gray-500 py-2 border-t border-gray-300 z-[100]">
+			<footer className="">
 				<TicketListView />
 			</footer>
 		</div>
