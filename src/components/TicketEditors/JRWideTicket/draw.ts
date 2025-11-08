@@ -1,6 +1,6 @@
 import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTemplate';
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
-import { JRWideTicketDrawParameters } from './type';
+import { JRStationNameType, JRWideTicketDrawParameters } from './type';
 import { JRPaymentMethod, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE } from './value';
 import { drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
 import jr_h from '../../../assets/tickets/jr_h.jpg';
@@ -139,34 +139,159 @@ export const drawJRWideTicket = (
 		ctx.font = `${resizedFont(8, 'DotFont')}`;
 		drawText(ctx, drawParameters.ticketType, offsetScaleX(313), offsetScaleY(163), resizedScaleX(400), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 0.6);
 
-		// 站名
-		ctx.fillStyle = 'black';
-		ctx.font = `${resizedFont(11.5, 'DotFont')}`;
-		drawText(
-			ctx,
-			drawParameters.station1,
-			offsetScaleX(113),
-			offsetScaleY(drawParameters.doShowEnglish ? 335 : 387),
-			resizedScaleX(554),
-			TextAlign.JustifyAround,
-			DrawTextMethod.fillText,
-			0,
-			0,
-			0.7
-		);
-		ctx.font = `${resizedFont(11.5, 'DotFont')}`;
-		drawText(
-			ctx,
-			drawParameters.station2,
-			offsetScaleX(838),
-			offsetScaleY(drawParameters.doShowEnglish ? 335 : 387),
-			resizedScaleX(554),
-			TextAlign.JustifyAround,
-			DrawTextMethod.fillText,
-			0,
-			0,
-			0.7
-		);
+		// station
+		const drawJRStation = (isRight: boolean, stationName: string, stationAreaChar: string, stationType: JRStationNameType, x: number, y: number = 370) => {
+			ctx.fillStyle = 'black';
+			const horizPositionX = [x, x + 95, x + 193, x + 289, x + 385, x + 479];
+			const horizPositions = isRight
+				? // right
+				  [[2], [1, 4], [1, 3, 5], [1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4, 5]]
+				: // left
+				  [[3], [1, 4], [0, 2, 4], [1, 2, 3, 4], [1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]];
+			const Y = y;
+
+			// 近郊区间
+			if (stationAreaChar.length > 0) {
+				const tmpCanvas = document.createElement('canvas');
+				const tmpCtx = tmpCanvas.getContext('2d');
+				if (tmpCtx) {
+					tmpCtx.fillStyle = 'black';
+					tmpCtx.fillRect(0, 0, resizedScaleX(66), resizedScaleY(105));
+					tmpCtx.globalCompositeOperation = 'destination-out';
+					//ctx.fillStyle = 'white';
+					tmpCtx.font = resizedFont(9.8, 'DotFont', true);
+					drawText(tmpCtx, stationAreaChar, resizedScaleX(3), resizedScaleY(91), resizedScaleX(58));
+					tmpCtx.globalCompositeOperation = 'source-over';
+				}
+				ctx.drawImage(tmpCanvas, offsetScaleX(x + 13), offsetScaleY(y - 95));
+			}
+
+			// 站名
+			let stationName1 = stationName,
+				stationName2 = '';
+			if (stationName.includes('/')) {
+				const splitRes = stationName.split('/');
+				stationName1 = splitRes[0];
+				stationName2 = splitRes.slice(1, splitRes.length).join('/');
+			}
+
+			ctx.fillStyle = 'black';
+			const hasKinkouKukan = stationAreaChar.length > 0;
+			switch (stationType) {
+				case JRStationNameType.Normal:
+					if (hasKinkouKukan && stationName.length > 5) {
+						ctx.font = resizedFont(9.8, 'DotFont');
+						drawText(ctx, stationName, offsetScaleX(x + 95), offsetScaleY(Y - 2), resizedScaleX(466), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 1.85);
+					} else if (stationName.length > 6) {
+						ctx.font = resizedFont(9.8, 'DotFont');
+						drawText(ctx, stationName, offsetScaleX(x), offsetScaleY(Y - 2), resizedScaleX(585), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 1.85);
+					} else {
+						ctx.font = resizedFont(11.0, 'DotFont');
+						for (let i = 0; i < stationName.length; i++) {
+							const char = stationName.substring(i, i + 1);
+							let X = horizPositionX[horizPositions[stationName.length - 1][i]];
+							if (hasKinkouKukan) {
+								if (horizPositions[stationName.length - 1][0] === 0) {
+									X = horizPositionX[horizPositions[stationName.length - 1][i] + 1];
+								}
+							}
+							drawText(ctx, char, offsetScaleX(X), offsetScaleY(Y), resizedScaleX(75));
+						}
+					}
+					break;
+				case JRStationNameType.Small:
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName, offsetScaleX(x), offsetScaleY(Y), resizedScaleX(585));
+					break;
+				case JRStationNameType.UpAndDownAlignLieft:
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName1, offsetScaleX(x), offsetScaleY(Y - 70), resizedScaleX(585));
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName2, offsetScaleX(x), offsetScaleY(Y), resizedScaleX(585));
+					break;
+				case JRStationNameType.UpAlignLeftAndDownAlignRight:
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName1, offsetScaleX(x), offsetScaleY(Y - 70), resizedScaleX(585));
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName2, offsetScaleX(x), offsetScaleY(Y), resizedScaleX(585), TextAlign.Right);
+					break;
+				case JRStationNameType.UpAlignLeftAndDownAlignCenter:
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName1, offsetScaleX(x), offsetScaleY(Y - 70), resizedScaleX(585));
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName2, offsetScaleX(x), offsetScaleY(Y), resizedScaleX(585), TextAlign.Center);
+					break;
+				case JRStationNameType.LeftLargeAndRightSmall:
+					ctx.font = resizedFont(11.0, 'DotFont');
+					for (let i = 0; i < stationName1.length; i++) {
+						drawText(ctx, stationName1.substring(i, i + 1), offsetScaleX(horizPositionX[i]), offsetScaleY(Y), resizedScaleX(75));
+					}
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName2, offsetScaleX(horizPositionX[stationName1.length]), offsetScaleY(Y), resizedScaleX(585 - horizPositionX[stationName1.length - 1] + x));
+					break;
+				case JRStationNameType.LeftSmallAndRightLarge:
+					//progress
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					const width = ctx.measureText(stationName1).width * 3;
+					drawText(ctx, stationName1, offsetScaleX(x), offsetScaleY(Y), resizedScaleX(585 - horizPositionX[stationName1.length - 1] + x));
+					ctx.font = resizedFont(11.0, 'DotFont');
+					for (let i = 0; i < stationName2.length; i++) {
+						drawText(ctx, stationName2.substring(i, i + 1), offsetScaleX(width + horizPositionX[i]), offsetScaleY(Y), resizedScaleX(75));
+					}
+					break;
+				case JRStationNameType.LeftVerticalAndRightLarge:
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					for (let i = 0; i < stationName1.length; i++) {
+						drawText(
+							ctx,
+							stationName1.substring(i, i + 1),
+							offsetScaleX(x + 10),
+							offsetScaleY(Y - (140 / stationName1.length) * (stationName1.length - i - 1)),
+							resizedScaleX(585),
+							TextAlign.Left,
+							DrawTextMethod.fillText,
+							0,
+							0,
+							1,
+							2 / stationName1.length > 1 ? 1 : 2 / stationName1.length
+						);
+					}
+					ctx.font = resizedFont(11.0, 'DotFont');
+					for (let i = 0; i < stationName2.length; i++) {
+						drawText(ctx, stationName2.substring(i, i + 1), offsetScaleX(horizPositionX[i + 1]), offsetScaleY(Y), resizedScaleX(75));
+					}
+
+					break;
+				case JRStationNameType.LeftLargeAndRightVertical:
+					ctx.font = resizedFont(11.0, 'DotFont');
+					for (let i = 0; i < stationName1.length; i++) {
+						drawText(ctx, stationName1.substring(i, i + 1), offsetScaleX(horizPositionX[i]), offsetScaleY(Y), resizedScaleX(75));
+					}
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+
+					for (let i = 0; i < stationName2.length; i++) {
+						drawText(
+							ctx,
+							stationName2.substring(i, i + 1),
+							offsetScaleX(horizPositionX[stationName1.length]),
+							offsetScaleY(Y - (140 / stationName2.length) * (stationName2.length - i - 1)),
+							resizedScaleX(585 - horizPositionX[stationName1.length - 1] + x),
+							TextAlign.Left,
+							DrawTextMethod.fillText,
+							0,
+							0,
+							1,
+							2 / stationName2.length > 1 ? 1 : 2 / stationName2.length
+						);
+					}
+					break;
+				default:
+					break;
+			}
+		};
+
+		drawJRStation(false, drawParameters.station1, drawParameters.station1AreaChar, drawParameters.station1Type, 116);
+		drawJRStation(true, drawParameters.station2, drawParameters.station2AreaChar, drawParameters.station2Type, 838);
 
 		// 英文站名
 		if (drawParameters.doShowEnglish) {

@@ -60,7 +60,9 @@ export const drawText = (
 	/** 行间距 相对于字体大小的倍数 */
 	lineHeight: number = 1.2,
 	/** 文字水平压缩（每个字符独立缩放） */
-	charHorizonalScale: number = 1
+	charHorizonalScale: number = 1,
+	/** 文字垂直压缩（每个字符独立缩放） */
+	charVerticalScale: number = 1
 ) => {
 	if (!text) return;
 
@@ -119,7 +121,7 @@ export const drawText = (
 					const ch = chars[i];
 					ctx.save();
 					ctx.translate(cursorX, 0);
-					ctx.scale(charHorizonalScale, 1);
+					ctx.scale(charHorizonalScale, charVerticalScale);
 					method === DrawTextMethod.fillText ? ctx.fillText(ch, 0, 0) : ctx.strokeText(ch, 0, 0);
 					ctx.restore();
 					cursorX += charWidths[i] + gap;
@@ -150,7 +152,7 @@ export const drawText = (
 			const ch = chars[i];
 			ctx.save();
 			ctx.translate(cursorX, 0);
-			ctx.scale(charHorizonalScale, 1);
+			ctx.scale(charHorizonalScale, charVerticalScale);
 			method === DrawTextMethod.fillText ? ctx.fillText(ch, 0, 0) : ctx.strokeText(ch, 0, 0);
 			ctx.restore();
 

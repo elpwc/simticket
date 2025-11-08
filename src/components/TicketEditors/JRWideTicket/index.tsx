@@ -11,11 +11,12 @@ import localFonts from 'next/font/local';
 import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGroup/PrettyInputRadioGroup';
 import { JRWideTicketBgSelector } from './JRWideTicketBgSelector';
 import { UnderConstruction } from '@/components/TicketEditorCompo/UnderConstruction';
-import { JR_TICKET_TYPE, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE } from './value';
+import { JR_TICKET_TYPE, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, DaitoshiKinkouKukan, JRStationNameTypeRadioboxItemData } from './value';
 import { JRWideTicketDrawParameters } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
 import { useSearchParams } from 'next/navigation';
+import clsx from 'clsx';
 
 export const DotFont = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
@@ -205,43 +206,179 @@ export default function JRWideTicket() {
 					<TabBox title="駅情報" className="flex flex-wrap gap-1">
 						<div className="flex flex-col gap-[2px]">
 							<label className="ticket-form-label">
-								出発
-								<input
-									value={drawParameters.station1}
-									onChange={(e) => {
-										setDrawParameters((prev) => ({ ...prev, station1: e.target.value }));
+								出発駅大都市近郊区間
+								<PrettyInputRadioGroup
+									value={drawParameters.station1AreaChar}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, station1AreaChar: value }));
 									}}
+									list={DaitoshiKinkouKukan.map((daitoshiKinkinKukanItem) => {
+										return {
+											value: daitoshiKinkinKukanItem.char,
+											title: (
+												<span
+													className={clsx(
+														'text-10 text-white bg-black p-[0px]',
+														drawParameters.station1AreaChar === daitoshiKinkinKukanItem.char ? 'border-2 border-blue-600' : ''
+													)}
+												>
+													{daitoshiKinkinKukanItem.char}
+												</span>
+											),
+										};
+									})}
+									itemStyle={{ padding: 0, minWidth: 0, height: 'fit-content' }}
 								/>
 							</label>
+							<label className="ticket-form-label">
+								出発
+								<div className="flex">
+									<input
+										value={drawParameters.station1}
+										onChange={(e) => {
+											setDrawParameters((prev) => ({ ...prev, station1: e.target.value }));
+										}}
+									/>
+									<button className="flex items-center">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+											<path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" />
+										</svg>
+										プリセット
+									</button>
+								</div>
+							</label>
+							<p>
+								※2段式駅名は半角/で分割してください（例：高輪/ゲートウェイ→
+								<span className={''} style={{ fontFamily: 'DotFont', fontWeight: 'bold' }}>
+									<span className={'text-[16px]'}>高輪</span>
+									<span className={'text-[10px]'}>ゲートウェイ</span>
+								</span>
+								）
+							</p>
+
+							<label className="ticket-form-label">
+								2段式駅名種類
+								<PrettyInputRadioGroup
+									value={drawParameters.station1Type.toString()}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, station1Type: Number(value) }));
+									}}
+									list={JRStationNameTypeRadioboxItemData.map((JRStationNameTypeRadioboxItemDataItem) => {
+										return {
+											value: JRStationNameTypeRadioboxItemDataItem.type.toString(),
+											title: (
+												<div className="flex flex-col !text-black">
+													<div className={clsx('', JRStationNameTypeRadioboxItemDataItem.style)} style={{ fontFamily: 'DotFont', fontWeight: 'bold' }}>
+														<span className={clsx(JRStationNameTypeRadioboxItemDataItem.style1)}>{JRStationNameTypeRadioboxItemDataItem.desc?.split('/')[0]}</span>
+														<span className={clsx(JRStationNameTypeRadioboxItemDataItem.style2)}>{JRStationNameTypeRadioboxItemDataItem.desc?.split('/')[1]}</span>
+													</div>
+													<p
+														className={clsx('border-t-1 text-[11px] h-fit bg-white')}
+														style={{
+															fontWeight: drawParameters.station1Type === JRStationNameTypeRadioboxItemDataItem.type ? 'bold' : '',
+															backgroundColor: drawParameters.station1Type === JRStationNameTypeRadioboxItemDataItem.type ? 'black' : 'white',
+															color: drawParameters.station1Type === JRStationNameTypeRadioboxItemDataItem.type ? 'white' : 'black',
+														}}
+													>
+														{JRStationNameTypeRadioboxItemDataItem.name}
+													</p>
+												</div>
+											),
+										};
+									})}
+									itemStyle={{ padding: 0, minWidth: 0, display: 'flex', alignItems: 'flex-end', backgroundColor: '#DDF6EE' }}
+									showInputBox={false}
+								/>
+							</label>
+
 							<label className="ticket-form-label">
 								出発外国語
 								<input value={drawParameters.station1en} onChange={(e) => setDrawParameters((prev) => ({ ...prev, station1en: e.target.value }))} />
 							</label>
 						</div>
+
+						<Divider />
+
 						<div className="flex flex-col gap-[2px]">
 							<label className="ticket-form-label">
-								到着
-								<input
-									value={drawParameters.station2}
-									onChange={(e) => {
-										setDrawParameters((prev) => ({ ...prev, station2: e.target.value }));
+								到着駅大都市近郊区間
+								<PrettyInputRadioGroup
+									value={drawParameters.station2AreaChar}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, station2AreaChar: value }));
 									}}
+									list={DaitoshiKinkouKukan.map((daitoshiKinkinKukanItem) => {
+										return {
+											value: daitoshiKinkinKukanItem.char,
+											title: (
+												<span
+													className={clsx(
+														'text-10 text-white bg-black p-[0px]',
+														drawParameters.station2AreaChar === daitoshiKinkinKukanItem.char ? 'border-2 border-blue-600' : ''
+													)}
+												>
+													{daitoshiKinkinKukanItem.char}
+												</span>
+											),
+										};
+									})}
+									itemStyle={{ padding: 0, minWidth: 0, height: 'fit-content' }}
+								/>
+							</label>
+							<label className="ticket-form-label">
+								到着
+								<div className="flex">
+									<input
+										value={drawParameters.station2}
+										onChange={(e) => {
+											setDrawParameters((prev) => ({ ...prev, station2: e.target.value }));
+										}}
+									/>
+									<button className="flex items-center">
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+											<path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" />
+										</svg>
+										プリセット
+									</button>
+								</div>
+							</label>
+							<label className="ticket-form-label">
+								2段式駅名種類
+								<PrettyInputRadioGroup
+									value={drawParameters.station2Type.toString()}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, station2Type: Number(value) }));
+									}}
+									list={JRStationNameTypeRadioboxItemData.map((JRStationNameTypeRadioboxItemDataItem) => {
+										return {
+											value: JRStationNameTypeRadioboxItemDataItem.type.toString(),
+											title: (
+												<div className="flex flex-col !text-black">
+													<div className={clsx('', JRStationNameTypeRadioboxItemDataItem.style)} style={{ fontFamily: 'DotFont', fontWeight: 'bold' }}>
+														<span className={clsx(JRStationNameTypeRadioboxItemDataItem.style1)}>{JRStationNameTypeRadioboxItemDataItem.desc?.split('/')[0]}</span>
+														<span className={clsx(JRStationNameTypeRadioboxItemDataItem.style2)}>{JRStationNameTypeRadioboxItemDataItem.desc?.split('/')[1]}</span>
+													</div>
+													<p
+														className="border-t-1 text-[11px] h-fit bg-white"
+														style={{
+															fontWeight: drawParameters.station2Type === JRStationNameTypeRadioboxItemDataItem.type ? 'bold' : '',
+															backgroundColor: drawParameters.station2Type === JRStationNameTypeRadioboxItemDataItem.type ? 'black' : 'white',
+															color: drawParameters.station2Type === JRStationNameTypeRadioboxItemDataItem.type ? 'white' : 'black',
+														}}
+													>
+														{JRStationNameTypeRadioboxItemDataItem.name}
+													</p>
+												</div>
+											),
+										};
+									})}
+									itemStyle={{ padding: 0, minWidth: 0, display: 'flex', alignItems: 'flex-end', backgroundColor: '#DDF6EE' }}
+									showInputBox={false}
 								/>
 							</label>
 							<label className="ticket-form-label">
 								到着外国語
 								<input value={drawParameters.station2en} onChange={(e) => setDrawParameters((prev) => ({ ...prev, station2en: e.target.value }))} />
-							</label>
-						</div>
-						<div className="flex flex-wrap gap-2">
-							<label>
-								<Toggle
-									value={drawParameters.doShowEnglish}
-									onChange={(value) => {
-										setDrawParameters((prev) => ({ ...prev, doShowEnglish: value }));
-									}}
-								/>
-								<span>外国語を表示</span>
 							</label>
 						</div>
 					</TabBox>

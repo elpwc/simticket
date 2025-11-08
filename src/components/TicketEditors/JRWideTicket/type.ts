@@ -12,6 +12,10 @@ export type JRWideTicketDrawParameters = {
 	ticketNo: string;
 	station1: string;
 	station2: string;
+	station1AreaChar: string;
+	station2AreaChar: string;
+	station1Type: JRStationNameType;
+	station2Type: JRStationNameType;
 	station1en: string;
 	station2en: string;
 	doShowEnglish: boolean;
@@ -31,3 +35,15 @@ export type JRWideTicketDrawParameters = {
 	noCarriage: boolean;
 	info1: string;
 };
+
+export enum JRStationNameType {
+	Normal,
+	Small,
+	UpAndDownAlignLieft,
+	UpAlignLeftAndDownAlignRight,
+	UpAlignLeftAndDownAlignCenter,
+	LeftLargeAndRightSmall,
+	LeftSmallAndRightLarge,
+	LeftVerticalAndRightLarge,
+	LeftLargeAndRightVertical,
+}

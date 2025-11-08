@@ -1,5 +1,5 @@
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
-import { JRWideTicketDrawParameters } from './type';
+import { JRStationNameType, JRWideTicketDrawParameters } from './type';
 
 export const JR_MARS_PAPER_TICKET_SIZE: [number, number] = [1477, 1000];
 export const JR_MARS_PAPER_TICKET_CANVAS_SIZE: [number, number] = [310, 210];
@@ -56,12 +56,16 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	watermark: '見本',
 	ticketType: '乗車券',
 	ticketNo: 'A000001',
-	station1: '小田原',
-	station2: '沼津',
-	station1en: 'Odawara',
-	station2en: 'Numazu',
+	station1: '東京都区内',
+	station2: '北海道/医療大学',
+	station1AreaChar: '区',
+	station2AreaChar: '',
+	station1Type: JRStationNameType.Normal,
+	station2Type: JRStationNameType.LeftLargeAndRightSmall,
+	station1en: 'Tokyo Metro Area',
+	station2en: 'Hokkaido Iryo Daigaku',
 	doShowEnglish: false,
-	railways: ['東海道', '御殿場'],
+	railways: ['新幹線', '函館', '室蘭', '札沼'],
 	paymentMethod: JRPaymentMethod.CreditCard,
 	date: new Date(),
 	time: '11:55',
@@ -77,3 +81,43 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	noCarriage: false,
 	info1: '乘车纪念',
 };
+
+export const DaitoshiKinkouKukan = [
+	{ char: '区', name: '東京都区内' },
+	{ char: '山', name: '東京山手線内', fontSize: 'middle' },
+	{ char: '仙', name: '仙台市内' },
+	{ char: '名', name: '名古屋市内' },
+	{ char: '浜', name: '浜松市内' },
+	{ char: '京', name: '京都市内' },
+	{ char: '阪', name: '大阪市内' },
+	{ char: '神', name: '神戸市内' },
+	{ char: '広', name: '広島市内' },
+	{ char: '九', name: '北九州市内' },
+	{ char: '福', name: '福岡市内' },
+];
+
+export const JRStationNameTypeRadioboxItemData = [
+	{ type: JRStationNameType.Normal, name: '一般', desc: '根室', style: 'text-[16px]', style1: '', style2: '' },
+	{ type: JRStationNameType.Small, name: '小文字', desc: 'りんくうタウン', style: 'text-[10px]', style1: '', style2: '' },
+	{ type: JRStationNameType.LeftLargeAndRightSmall, name: '左大右小', desc: '高輪/ゲートウェイ', style: '', style1: 'text-[16px]', style2: 'text-[10px]' },
+	{ type: JRStationNameType.LeftSmallAndRightLarge, name: '左小右大', desc: '(信)/横川', style: '', style1: 'text-[10px]', style2: 'text-[16px]' },
+	{ type: JRStationNameType.LeftVerticalAndRightLarge, name: '左縦右大', desc: '行川/アイランド', style: '', style1: 'text-[10px] [writing-mode:vertical-lr]', style2: 'text-[16px]' },
+	{ type: JRStationNameType.LeftLargeAndRightVertical, name: '左大右縦', desc: 'かみのやま/温泉', style: '', style1: 'text-[16px]', style2: 'text-[10px] [writing-mode:vertical-lr]' },
+	{
+		type: JRStationNameType.UpAlignLeftAndDownAlignRight,
+		name: '上左詰め下右詰め',
+		desc: 'サッポロ/ビール庭園',
+		style: 'flex flex-col',
+		style1: 'text-[10px] text-left',
+		style2: 'text-[10px] text-right',
+	},
+	{
+		type: JRStationNameType.UpAlignLeftAndDownAlignCenter,
+		name: '上左詰め下中寄せ',
+		desc: 'ユニバーサル/シティ',
+		style: 'flex flex-col',
+		style1: 'text-[10px] text-left',
+		style2: 'text-[10px] text-center',
+	},
+	{ type: JRStationNameType.UpAndDownAlignLieft, name: '上下左詰め', desc: '上越/国際スキー場前', style: 'flex flex-col', style1: 'text-[10px] text-left', style2: 'text-[10px] text-left' },
+];

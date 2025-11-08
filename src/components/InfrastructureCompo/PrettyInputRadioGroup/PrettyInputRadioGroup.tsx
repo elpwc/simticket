@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { CSSProperties, useState } from 'react';
 import './PrettyInputRadioGroup.css';
 import { useLocale } from '@/utils/hooks/useLocale';
 
@@ -15,9 +15,10 @@ type Props = {
 	list: Option[];
 	placeholder?: string;
 	showInputBox?: boolean;
+	itemStyle?: CSSProperties;
 };
 
-const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeholder, showInputBox = true }) => {
+const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeholder, showInputBox = true, itemStyle }) => {
 	const { t } = useLocale();
 	const [diyValue, setDiyValue] = useState('');
 	if (!placeholder || placeholder === '') {
@@ -35,7 +36,7 @@ const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeho
 			{list.map((item, idx) => {
 				const isActive = value === item.value;
 				return (
-					<button key={idx} className={`radio-btn ${isActive ? 'active' : ''}`} onClick={() => handleSelect(item.value)}>
+					<button key={idx} className={`radio-btn ${isActive ? 'active' : ''}`} style={itemStyle} onClick={() => handleSelect(item.value)}>
 						{item.title}
 					</button>
 				);
