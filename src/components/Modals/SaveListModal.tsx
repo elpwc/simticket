@@ -40,6 +40,9 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 		const h = canvas.height;
 		const edge = 0.025;
 		ctx.clearRect(0, 0, w, h);
+		// 透明色だと、実践では一部のプリンターに黒に扱われてしまう場合があるのでここで白全塗にする
+		ctx.fillStyle = 'white';
+		ctx.fillRect(0, 0, w, h);
 
 		let i = 0;
 		/** 绘制的票面的放大倍数（基于 CANVAS_SIZE） */
@@ -87,7 +90,17 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 							TicketSizeType.A4Size,
 							currentTicketListItem.ticketData.background || false
 						);
-						ctx.drawImage(tmpCanvas, edge * w + ticketAreaWidth * x, edge * h + ticketAreaHeight * y, w * ticketA4SizeScale[0], h * ticketA4SizeScale[1]);
+						if (isFlip) {
+							ctx.drawImage(
+								tmpCanvas,
+								w - w * ticketA4SizeScale[0] - edge * w + ticketAreaWidth * (2 - x - 2),
+								edge * h + ticketAreaHeight * y,
+								w * ticketA4SizeScale[0],
+								h * ticketA4SizeScale[1]
+							);
+						} else {
+							ctx.drawImage(tmpCanvas, edge * w + ticketAreaWidth * x, edge * h + ticketAreaHeight * y, w * ticketA4SizeScale[0], h * ticketA4SizeScale[1]);
+						}
 					}
 				);
 				i++;
