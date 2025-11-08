@@ -441,7 +441,10 @@ export const drawCRWideTicket = (
 		}
 
 		//QR
-		drawQRCode(ctx, offsetScaleX(1223), offsetScaleY(730), resizedScaleX(380), drawParameters.qrCodeText);
+		if (drawParameters.doShowQRCode) {
+			drawQRCode(ctx, offsetScaleX(1223), offsetScaleY(730), resizedScaleX(380), drawParameters.qrCodeText);
+		}
+
 		// code 下方购票处
 		ctx.font = resizedFont(5.5, 'SongTi');
 		ctx.fillText(drawParameters.serialCode + (drawParameters.showSoldPlaceDown ? `  ${drawParameters.soldplace}售` : ''), offsetScaleX(133), offsetScaleY(1080), resizedScaleX(1090));

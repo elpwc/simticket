@@ -36,6 +36,7 @@ export function encodeCRWideTicketParams(p: CRWideTicketDrawParameters): string 
 		p.rightUpContentType,
 		p.serialCode,
 		p.qrCodeText,
+		+p.doShowQRCode,
 		p.purchaseMethod,
 		+p.doPurchaseMethodHaveCircle,
 		+p.noSeat,
@@ -102,6 +103,7 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		rightUpContentType,
 		serialCode,
 		qrCodeText,
+		doShowQRCode,
 		purchaseMethod,
 		doPurchaseMethodHaveCircle,
 		noSeat,
@@ -152,6 +154,7 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		rightUpContentType,
 		serialCode,
 		qrCodeText,
+		doShowQRCode: !!doShowQRCode,
 		purchaseMethod,
 		doPurchaseMethodHaveCircle: !!doPurchaseMethodHaveCircle,
 		noSeat: !!noSeat,
@@ -167,3 +170,14 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		info1to,
 	} as CRWideTicketDrawParameters;
 }
+
+export const getRandomCRTicketNo = () => {
+	const pre = Math.floor(Math.random() * 200).toString();
+	const alphabetPosition = Math.floor(Math.random() * 26);
+	const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.substring(alphabetPosition, alphabetPosition + 1);
+	const no = Math.floor(Math.random() * 99999)
+		.toString()
+		.padStart(6, '0');
+
+	return (Math.random() > 0.1 ? (Math.random() > 0.6 ? pre : '') + alphabet : '') + no;
+};

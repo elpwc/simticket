@@ -51,6 +51,7 @@ export type CRWideTicketDrawParameters = {
 	rightUpContentType: RightUpContentType;
 	serialCode: string;
 	qrCodeText: string;
+	doShowQRCode: boolean;
 	purchaseMethod: PurchaseMethod[];
 	doPurchaseMethodHaveCircle: boolean;
 	noSeat: boolean;

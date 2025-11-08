@@ -3,10 +3,9 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
-import { decodeTicket, fontsLoader, getTicketURL, TextAlign } from '@/utils/utils';
+import { decodeTicket, fontsLoader, TextAlign } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import TabBox from '../../InfrastructureCompo/TabBox';
-import InputRadioGroup from '../../InfrastructureCompo/InputRadioGroup';
 import { Divider } from '../../InfrastructureCompo/Divider';
 import localFonts from 'next/font/local';
 import { CRWideTicketBgSelector } from './CRWideTicketBgSelector';
@@ -33,6 +32,7 @@ import { drawCRWideTicket } from './draw';
 import { AppContext } from '@/app/app';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { useSearchParams } from 'next/navigation';
+import { getRandomCRTicketNo } from './utils';
 
 export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
@@ -792,14 +792,36 @@ export default function CRWideTicket() {
 					<TabBox title={t('editor.cr.jisuanjikepiao2010.ticketNoInfo.title')} className="flex flex-wrap">
 						<label className="ticket-form-label">
 							{t('editor.common.ticketNoInfo.ticketNo')}
-							<input className="text-red-500" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />
+							<div className="flex">
+								<input className="text-red-500 w-full" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />
+								<button
+									onClick={() => {
+										setDrawParameters((prev) => ({ ...prev, ticketNo: getRandomCRTicketNo() }));
+									}}
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+										<path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+										<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+									</svg>
+								</button>
+							</div>
 						</label>
 						<label className="ticket-form-label">
 							{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketSerialCode')}
 							<input value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.qrCodeText')}
+							<div>
+								<label>
+									<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.qrCodeText')}</span>
+									<Toggle
+										value={drawParameters.doShowQRCode}
+										onChange={(value) => {
+											setDrawParameters((prev) => ({ ...prev, doShowQRCode: value }));
+										}}
+									/>
+								</label>
+							</div>
 							<textarea className="w-full h-[100px]" value={drawParameters.qrCodeText} onChange={(e) => setDrawParameters((prev) => ({ ...prev, qrCodeText: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">

@@ -1,5 +1,5 @@
-import { TextAlign } from '@/utils/utils';
 import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType } from './type';
+import { getRandomCRTicketNo } from './utils';
 
 export const CR_TRAIN_TYPES = [
 	{ value: 'G', desc: '高铁' },
@@ -47,7 +47,7 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	offsetY: 0,
 	showWatermark: true,
 	watermark: '票样',
-	ticketNo: 'A000001',
+	ticketNo: getRandomCRTicketNo(),
 	station1: '东京都区内',
 	station2: '北京朝阳',
 	station1en: 'Tokyo Ward Area',
@@ -74,6 +74,7 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	rightUpContentType: RightUpContentType.Turnstile,
 	serialCode: '1145141919810A000001 JM',
 	qrCodeText: '1145141919810',
+	doShowQRCode: true,
 	purchaseMethod: [
 		{ type: PurchaseMethodType.TicketType, title: '学', desc: '学生票' },
 		{ type: PurchaseMethodType.PurchaseMethod, title: '网', desc: '互联网售票' },
