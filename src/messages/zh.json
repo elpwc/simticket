@@ -87,7 +87,9 @@
   "ticketListView": {
     "exportList": "导出列表为A4",
     "addResultToListButton": "添加当前编辑结果到列表中",
-    "clearListButton": "清空列表"
+    "clearListButton": "清空列表",
+    "emptyList": "空列表",
+    "listSummary": "列表中的车票数："
   },
   "editor": {
     "cr": {

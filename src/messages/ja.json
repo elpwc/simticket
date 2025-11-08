@@ -87,7 +87,9 @@
   "ticketListView": {
     "clearListButton": "リスト全消",
     "exportList": "リストをA4一枚に保存",
-    "addResultToListButton": "今の編集結果をリストに追加"
+    "addResultToListButton": "今の編集結果をリストに追加",
+    "emptyList": "空リスト",
+    "listSummary": "リスト内の切符数："
   },
   "editor": {
     "common": {
