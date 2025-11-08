@@ -764,9 +764,9 @@ export default function CRWideTicket() {
 						<label className="ticket-form-label border-t-[#ccc_!important]">
 							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.info2')}
 							<div className="flex gap-3 flex-wrap">
-								<InputRadioGroup
+								<PrettyInputRadioGroup
 									name="info2"
-									list={info2List}
+									list={info2List.map((item) => ({ title: item, value: item }))}
 									value={drawParameters.info2}
 									onChange={(value: string) => {
 										setDrawParameters((prev) => ({ ...prev, info2: value }));
@@ -778,9 +778,9 @@ export default function CRWideTicket() {
 						<label className="ticket-form-label border-t-[solid_1px_#ccc]">
 							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.info3')}
 							<div className="flex gap-3 flex-wrap">
-								<InputRadioGroup
+								<PrettyInputRadioGroup
 									name="info3"
-									list={info3List}
+									list={info3List.map((item) => ({ title: item, value: item }))}
 									value={drawParameters.info3}
 									onChange={(value: string) => {
 										setDrawParameters((prev) => ({ ...prev, info3: value }));

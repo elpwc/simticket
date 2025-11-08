@@ -10,6 +10,7 @@ export type Option = {
 };
 
 type Props = {
+	name?: string;
 	value: string;
 	onChange: (value: string) => void;
 	list: Option[];
@@ -18,7 +19,7 @@ type Props = {
 	itemStyle?: CSSProperties;
 };
 
-const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeholder, showInputBox = true, itemStyle }) => {
+const PrettyInputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, placeholder, showInputBox = true, itemStyle }) => {
 	const { t } = useLocale();
 	const [diyValue, setDiyValue] = useState('');
 	if (!placeholder || placeholder === '') {
@@ -36,7 +37,7 @@ const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeho
 			{list.map((item, idx) => {
 				const isActive = value === item.value;
 				return (
-					<button key={idx} className={`radio-btn ${isActive ? 'active' : ''}`} style={itemStyle} onClick={() => handleSelect(item.value)}>
+					<button key={idx} name={name || ''} className={`radio-btn ${isActive ? 'active' : ''}`} style={itemStyle} onClick={() => handleSelect(item.value)}>
 						{item.title}
 					</button>
 				);
@@ -44,6 +45,7 @@ const PrettyInputRadioGroup: React.FC<Props> = ({ value, onChange, list, placeho
 
 			{showInputBox && (
 				<input
+					name={name || ''}
 					type="text"
 					className={`radio-diy-input ${isCustomActive ? 'active' : ''}`}
 					placeholder={placeholder}
