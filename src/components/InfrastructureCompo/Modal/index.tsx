@@ -15,8 +15,10 @@ type Props = {
 	children: React.ReactNode;
 	mobileMode?: 'fullscreen' | 'scroll' | 'center';
 	showCloseButton?: boolean;
-	classname?: string;
+	className?: string;
 	style?: React.CSSProperties;
+	bodyClassName?: string;
+	bodyStyle?: React.CSSProperties;
 };
 
 export const Modal: React.FC<Props> = ({
@@ -32,8 +34,10 @@ export const Modal: React.FC<Props> = ({
 	children,
 	mobileMode = 'fullscreen',
 	showCloseButton = true,
-	classname,
+	className,
 	style,
+	bodyClassName,
+	bodyStyle,
 }) => {
 	if (!isOpen) return null;
 
@@ -46,7 +50,7 @@ export const Modal: React.FC<Props> = ({
 					onClose();
 				}}
 			>
-				<div className={clsx(`modal-content mobile-${mobileMode}`, classname)} style={style} onClick={(e) => e.stopPropagation()}>
+				<div className={clsx(`modal-content mobile-${mobileMode}`, className)} style={style} onClick={(e) => e.stopPropagation()}>
 					{showCloseButton && (
 						<button
 							className="modal-close-btn"
@@ -61,7 +65,9 @@ export const Modal: React.FC<Props> = ({
 
 					{title && <div className="modal-title">{title}</div>}
 
-					<div className="modal-body">{children}</div>
+					<div className={clsx('modal-body', bodyClassName)} style={bodyStyle}>
+						{children}
+					</div>
 
 					<div className="modal-footer">
 						{showCancelButton && (

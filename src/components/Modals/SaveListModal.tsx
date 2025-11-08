@@ -125,7 +125,7 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 	// }, [show]);
 
 	return (
-		<Modal classname="" style={{ maxWidth: 'fit-content' }} title={t('SaveListModal.title')} isOpen={show} onClose={onClose}>
+		<Modal className="" style={{ maxWidth: 'fit-content' }} title={t('SaveListModal.title')} isOpen={show} onClose={onClose}>
 			<div className={clsx('flex gap-6 justify-center items-start p-4', isMobile ? 'flex-col' : 'flex-col')}>
 				<div className="flex w-full flex-wrap gap-5 justify-around items-center bg-gray-50 rounded-lg shadow-inner p-4 min-w-[320px]">
 					<div>

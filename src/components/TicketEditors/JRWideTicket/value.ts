@@ -97,27 +97,66 @@ export const DaitoshiKinkouKukan = [
 ];
 
 export const JRStationNameTypeRadioboxItemData = [
-	{ type: JRStationNameType.Normal, name: '一般', desc: '根室', style: 'text-[16px]', style1: '', style2: '' },
-	{ type: JRStationNameType.Small, name: '小文字', desc: 'りんくうタウン', style: 'text-[10px]', style1: '', style2: '' },
-	{ type: JRStationNameType.LeftLargeAndRightSmall, name: '左大右小', desc: '高輪/ゲートウェイ', style: '', style1: 'text-[16px]', style2: 'text-[10px]' },
-	{ type: JRStationNameType.LeftSmallAndRightLarge, name: '左小右大', desc: '(信)/横川', style: '', style1: 'text-[10px]', style2: 'text-[16px]' },
-	{ type: JRStationNameType.LeftVerticalAndRightLarge, name: '左縦右大', desc: '行川/アイランド', style: '', style1: 'text-[10px] [writing-mode:vertical-lr]', style2: 'text-[16px]' },
-	{ type: JRStationNameType.LeftLargeAndRightVertical, name: '左大右縦', desc: 'かみのやま/温泉', style: '', style1: 'text-[16px]', style2: 'text-[10px] [writing-mode:vertical-lr]' },
-	{
-		type: JRStationNameType.UpAlignLeftAndDownAlignRight,
-		name: '上左詰め下右詰め',
-		desc: 'サッポロ/ビール庭園',
-		style: 'flex flex-col',
-		style1: 'text-[10px] text-left',
-		style2: 'text-[10px] text-right',
-	},
+	{ type: JRStationNameType.Normal, name: '一般', desc: '根室' },
+	{ type: JRStationNameType.Small, name: '小文字', desc: 'りんくうタウン' },
+	{ type: JRStationNameType.UpAndDownAlignLeft, name: '上下左詰め', desc: '上越/国際スキー場前' },
 	{
 		type: JRStationNameType.UpAlignLeftAndDownAlignCenter,
 		name: '上左詰め下中寄せ',
 		desc: 'ユニバーサル/シティ',
-		style: 'flex flex-col',
-		style1: 'text-[10px] text-left',
-		style2: 'text-[10px] text-center',
 	},
-	{ type: JRStationNameType.UpAndDownAlignLieft, name: '上下左詰め', desc: '上越/国際スキー場前', style: 'flex flex-col', style1: 'text-[10px] text-left', style2: 'text-[10px] text-left' },
+	{
+		type: JRStationNameType.UpAlignLeftAndDownAlignRight,
+		name: '上左詰め下右詰め',
+		desc: 'サッポロ/ビール庭園',
+	},
+	{ type: JRStationNameType.LeftLargeAndRightSmall, name: '左大右小', desc: '高輪/ゲートウェイ' },
+	{ type: JRStationNameType.LeftSmallAndRightLarge, name: '左小右大', desc: '(信)/横川' },
+	{ type: JRStationNameType.LeftVerticalAndRightLarge, name: '左縦右大', desc: '行川/アイランド' },
+	{ type: JRStationNameType.LeftLargeAndRightVertical, name: '左大右縦', desc: 'かみのやま/温泉' },
+	{ type: JRStationNameType.LeftLargeRightUpAndDown, name: '左大右2行', desc: '鹿島/サッカー/スタジアム' },
+	{ type: JRStationNameType.LeftUpAndDownRightLarge, name: '左2行右大', desc: '運転/免許/試験場' },
+];
+
+export const JRCompanies = [
+	{
+		value: 'H',
+		name: 'JR北海道',
+		color: 'rgb(77, 211, 91)',
+	},
+	{
+		value: 'E',
+		name: 'JR東日本',
+		color: 'rgb(0, 160, 64)',
+	},
+	{
+		value: 'C',
+		name: 'JR東海',
+		color: 'rgb(241, 90, 34)',
+	},
+	{
+		value: 'W',
+		name: 'JR西日本',
+		color: 'rgb(0, 178, 227)',
+	},
+	{
+		value: 'S',
+		name: 'JR四国',
+		color: 'rgb(6, 218, 255)',
+	},
+	{
+		value: 'K',
+		name: 'JR九州',
+		color: 'rgb(229, 61, 74)',
+	},
+	{
+		value: 'P',
+		name: 'JR貨物',
+		color: '#bb0764',
+	},
+	{
+		value: 'O',
+		name: '他会社',
+		color: '#000000',
+	},
 ];

@@ -12,11 +12,13 @@ import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGro
 import { JRWideTicketBgSelector } from './JRWideTicketBgSelector';
 import { UnderConstruction } from '@/components/TicketEditorCompo/UnderConstruction';
 import { JR_TICKET_TYPE, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, DaitoshiKinkouKukan, JRStationNameTypeRadioboxItemData } from './value';
-import { JRWideTicketDrawParameters } from './type';
+import { JRStationNameType, JRWideTicketDrawParameters } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
 import { useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
+import { JRStationNameText } from '@/components/InfrastructureCompo/JRStationNameText';
+import { JRPresetStationsModal } from '@/components/Modals/JRPresetStationsModal';
 
 export const DotFont = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
@@ -38,6 +40,8 @@ export default function JRWideTicket() {
 	const [currentScale, setCurrentScale] = useState(1);
 
 	const [isFontLoading, setIsFontLoading] = useState(false);
+	/** 0: close, 1: station1, 2: station2 */
+	const [showJRPresetStationsModal, setShowJRPresetStationsModal] = useState(0);
 
 	const { editingTicketData, setEditingTicketData } = useContext(AppContext);
 
@@ -239,11 +243,16 @@ export default function JRWideTicket() {
 											setDrawParameters((prev) => ({ ...prev, station1: e.target.value }));
 										}}
 									/>
-									<button className="flex items-center">
+									<button
+										className="flex items-center border-[#f179f2]"
+										onClick={() => {
+											setShowJRPresetStationsModal(1);
+										}}
+									>
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 											<path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" />
 										</svg>
-										プリセット
+										特殊駅名プリセット
 									</button>
 								</div>
 							</label>
@@ -267,11 +276,12 @@ export default function JRWideTicket() {
 										return {
 											value: JRStationNameTypeRadioboxItemDataItem.type.toString(),
 											title: (
-												<div className="flex flex-col !text-black">
-													<div className={clsx('', JRStationNameTypeRadioboxItemDataItem.style)} style={{ fontFamily: 'DotFont', fontWeight: 'bold' }}>
-														<span className={clsx(JRStationNameTypeRadioboxItemDataItem.style1)}>{JRStationNameTypeRadioboxItemDataItem.desc?.split('/')[0]}</span>
-														<span className={clsx(JRStationNameTypeRadioboxItemDataItem.style2)}>{JRStationNameTypeRadioboxItemDataItem.desc?.split('/')[1]}</span>
-													</div>
+												<div className="flex flex-col !text-[#222222]">
+													<JRStationNameText
+														className="min-w-16 px-1 pb-1"
+														stationName={JRStationNameTypeRadioboxItemDataItem.desc}
+														stationNameType={JRStationNameTypeRadioboxItemDataItem.type}
+													/>
 													<p
 														className={clsx('border-t-1 text-[11px] h-fit bg-white')}
 														style={{
@@ -334,11 +344,16 @@ export default function JRWideTicket() {
 											setDrawParameters((prev) => ({ ...prev, station2: e.target.value }));
 										}}
 									/>
-									<button className="flex items-center">
+									<button
+										className="flex items-center border-[#f179f2]"
+										onClick={() => {
+											setShowJRPresetStationsModal(2);
+										}}
+									>
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 											<path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" />
 										</svg>
-										プリセット
+										特殊駅名プリセット
 									</button>
 								</div>
 							</label>
@@ -353,11 +368,12 @@ export default function JRWideTicket() {
 										return {
 											value: JRStationNameTypeRadioboxItemDataItem.type.toString(),
 											title: (
-												<div className="flex flex-col !text-black">
-													<div className={clsx('', JRStationNameTypeRadioboxItemDataItem.style)} style={{ fontFamily: 'DotFont', fontWeight: 'bold' }}>
-														<span className={clsx(JRStationNameTypeRadioboxItemDataItem.style1)}>{JRStationNameTypeRadioboxItemDataItem.desc?.split('/')[0]}</span>
-														<span className={clsx(JRStationNameTypeRadioboxItemDataItem.style2)}>{JRStationNameTypeRadioboxItemDataItem.desc?.split('/')[1]}</span>
-													</div>
+												<div className="flex flex-col !text-[#222222]">
+													<JRStationNameText
+														className="min-w-16 px-1 pb-1"
+														stationName={JRStationNameTypeRadioboxItemDataItem.desc}
+														stationNameType={JRStationNameTypeRadioboxItemDataItem.type}
+													/>
 													<p
 														className="border-t-1 text-[11px] h-fit bg-white"
 														style={{
@@ -483,6 +499,32 @@ export default function JRWideTicket() {
 							<input value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
 					</TabBox>
+					<JRPresetStationsModal
+						show={showJRPresetStationsModal > 0}
+						onClose={() => {
+							setShowJRPresetStationsModal(0);
+						}}
+						onSelect={(selectedStationName: { type: JRStationNameType; company: string; name: string; areaChar: string; en?: string }) => {
+							if (showJRPresetStationsModal === 1) {
+								setDrawParameters((prev) => ({
+									...prev,
+									station1: selectedStationName.name,
+									station1Type: selectedStationName.type,
+									station1AreaChar: selectedStationName.areaChar,
+									station1en: selectedStationName.en || '',
+								}));
+							} else {
+								setDrawParameters((prev) => ({
+									...prev,
+									station2: selectedStationName.name,
+									station2Type: selectedStationName.type,
+									station2AreaChar: selectedStationName.areaChar,
+									station2en: selectedStationName.en || '',
+								}));
+							}
+							setShowJRPresetStationsModal(0);
+						}}
+					/>
 				</div>
 			}
 		/>

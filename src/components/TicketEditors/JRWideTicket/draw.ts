@@ -168,15 +168,22 @@ export const drawJRWideTicket = (
 
 			// 站名
 			let stationName1 = stationName,
-				stationName2 = '';
+				stationName2 = '',
+				stationName3 = '';
 			if (stationName.includes('/')) {
 				const splitRes = stationName.split('/');
 				stationName1 = splitRes[0];
-				stationName2 = splitRes.slice(1, splitRes.length).join('/');
+				if (stationType === JRStationNameType.LeftLargeRightUpAndDown || stationType === JRStationNameType.LeftUpAndDownRightLarge) {
+					stationName2 = splitRes[1];
+					stationName3 = splitRes.slice(2, splitRes.length).join('/');
+				} else {
+					stationName2 = splitRes.slice(1, splitRes.length).join('/');
+				}
 			}
 
 			ctx.fillStyle = 'black';
 			const hasKinkouKukan = stationAreaChar.length > 0;
+			let width = 0;
 			switch (stationType) {
 				case JRStationNameType.Normal:
 					if (hasKinkouKukan && stationName.length > 5) {
@@ -203,7 +210,7 @@ export const drawJRWideTicket = (
 					ctx.font = `${resizedFont(7, 'DotFont')}`;
 					drawText(ctx, stationName, offsetScaleX(x), offsetScaleY(Y), resizedScaleX(585));
 					break;
-				case JRStationNameType.UpAndDownAlignLieft:
+				case JRStationNameType.UpAndDownAlignLeft:
 					ctx.font = `${resizedFont(7, 'DotFont')}`;
 					drawText(ctx, stationName1, offsetScaleX(x), offsetScaleY(Y - 70), resizedScaleX(585));
 					ctx.font = `${resizedFont(7, 'DotFont')}`;
@@ -232,7 +239,7 @@ export const drawJRWideTicket = (
 				case JRStationNameType.LeftSmallAndRightLarge:
 					//progress
 					ctx.font = `${resizedFont(7, 'DotFont')}`;
-					const width = ctx.measureText(stationName1).width * 3;
+					width = stationName1.length * 80;
 					drawText(ctx, stationName1, offsetScaleX(x), offsetScaleY(Y), resizedScaleX(585 - horizPositionX[stationName1.length - 1] + x));
 					ctx.font = resizedFont(11.0, 'DotFont');
 					for (let i = 0; i < stationName2.length; i++) {
@@ -284,6 +291,33 @@ export const drawJRWideTicket = (
 							2 / stationName2.length > 1 ? 1 : 2 / stationName2.length
 						);
 					}
+					break;
+
+				case JRStationNameType.LeftLargeRightUpAndDown:
+					ctx.font = resizedFont(11.0, 'DotFont');
+					for (let i = 0; i < stationName1.length; i++) {
+						drawText(ctx, stationName1.substring(i, i + 1), offsetScaleX(horizPositionX[i]), offsetScaleY(Y), resizedScaleX(75));
+					}
+
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName2, offsetScaleX(horizPositionX[stationName1.length]), offsetScaleY(Y - 70 + 10), resizedScaleX(585));
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName3, offsetScaleX(horizPositionX[stationName1.length]), offsetScaleY(Y + 10), resizedScaleX(585));
+
+					break;
+				case JRStationNameType.LeftUpAndDownRightLarge:
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName1, offsetScaleX(x), offsetScaleY(Y - 70 + 10), resizedScaleX(585));
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, stationName2, offsetScaleX(x), offsetScaleY(Y + 10), resizedScaleX(585));
+
+					width = Math.max(stationName1.length, stationName2.length) * 80;
+
+					ctx.font = resizedFont(11.0, 'DotFont');
+					for (let i = 0; i < stationName3.length; i++) {
+						drawText(ctx, stationName3.substring(i, i + 1), offsetScaleX(width + horizPositionX[i]), offsetScaleY(Y), resizedScaleX(75));
+					}
+
 					break;
 				default:
 					break;

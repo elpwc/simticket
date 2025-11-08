@@ -205,5 +205,8 @@
         "fail": "链接复制到剪切板失败了.."
       }
     }
+  },
+  "JRPresetStationsModal": {
+    "showAsCompanyButton": "按照公司分类"
   }
 }

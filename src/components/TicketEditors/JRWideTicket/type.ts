@@ -39,11 +39,13 @@ export type JRWideTicketDrawParameters = {
 export enum JRStationNameType {
 	Normal,
 	Small,
-	UpAndDownAlignLieft,
-	UpAlignLeftAndDownAlignRight,
+	UpAndDownAlignLeft,
 	UpAlignLeftAndDownAlignCenter,
+	UpAlignLeftAndDownAlignRight,
 	LeftLargeAndRightSmall,
 	LeftSmallAndRightLarge,
 	LeftVerticalAndRightLarge,
 	LeftLargeAndRightVertical,
+	LeftLargeRightUpAndDown,
+	LeftUpAndDownRightLarge,
 }

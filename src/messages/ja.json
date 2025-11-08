@@ -205,5 +205,8 @@
         "fail": "この乗車券のURLをｸﾘｯﾌﾟﾎﾞｰﾄにコピーできませんでした.."
       }
     }
+  },
+  "JRPresetStationsModal": {
+    "showAsCompanyButton": "所属会社で分類"
   }
 }
