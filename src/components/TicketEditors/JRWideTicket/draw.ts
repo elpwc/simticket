@@ -353,7 +353,7 @@ export const drawJRWideTicket = (
 
 		// 経由
 		ctx.font = resizedFont(5.5, 'DotFont');
-		drawText(ctx, '経由:' + drawParameters.railways.join('・'), offsetScaleX(113), offsetScaleY(458), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+		drawText(ctx, '経由:' + drawParameters.railways.join('･'), offsetScaleX(113), offsetScaleY(458), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 
 		// 日期时间
 		ctx.font = resizedFont(5.5, 'DotFont');

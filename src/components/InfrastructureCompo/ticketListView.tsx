@@ -6,9 +6,11 @@ import { useLocale } from '@/utils/hooks/useLocale';
 import { SaveListModal } from '../Modals/SaveListModal';
 import { SaveImageModal } from '../Modals/SaveImageModal';
 import { motion } from 'framer-motion';
+import { useIsMobile } from '@/utils/hooks';
 
 export const TicketListView = () => {
 	const { t } = useLocale();
+	const isMobile = useIsMobile();
 	// object to save
 	const currentOperatingTicketItemRef = useRef<TicketListItemProperty | null>(null);
 
@@ -96,7 +98,7 @@ export const TicketListView = () => {
 										]);
 									}}
 								>
-									{t('ticketListView.addResultToListButton')}
+									{isMobile ? t('ticketListView.addResultToListButtonShort') : t('ticketListView.addResultToListButton')}
 								</button>
 								<button
 									className="primary green"
@@ -104,7 +106,7 @@ export const TicketListView = () => {
 										setSaveListModalOpen(true);
 									}}
 								>
-									{t('ticketListView.exportList')}
+									{isMobile ? t('ticketListView.exportListShort') : t('ticketListView.exportList')}
 								</button>
 								<button
 									className="alert"

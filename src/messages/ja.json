@@ -89,7 +89,9 @@
     "exportList": "リストをA4一枚に保存",
     "addResultToListButton": "今の編集結果をリストに追加",
     "emptyList": "空リスト",
-    "listSummary": "リスト内の切符数："
+    "listSummary": "リスト内の切符数：",
+    "addResultToListButtonShort": "リストに追加",
+    "exportListShort": "A4に保存"
   },
   "editor": {
     "common": {
@@ -184,6 +186,14 @@
           "title": "券番データ"
         }
       }
+    },
+    "jr": {
+      "mars": {
+        "stationInfo": {
+          "specialStationNamePresetButton": "特殊駅名プリセット",
+          "specialStationNameTip": "2/3段式駅名は半角/で各部分を分けて下さい"
+        }
+      }
     }
   },
   "DescriptionButton": {
@@ -207,6 +217,8 @@
     }
   },
   "JRPresetStationsModal": {
-    "showAsCompanyButton": "所属会社で分類"
+    "showAsCompanyButton": "所属会社で分類",
+    "tip": "ここにない駅名も「駅情報」で手動で生成できます",
+    "title": "特殊駅名プリセット"
   }
 }

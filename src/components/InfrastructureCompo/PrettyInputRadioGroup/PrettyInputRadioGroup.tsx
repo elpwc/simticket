@@ -3,6 +3,7 @@
 import React, { CSSProperties, useState } from 'react';
 import './PrettyInputRadioGroup.css';
 import { useLocale } from '@/utils/hooks/useLocale';
+import clsx from 'clsx';
 
 export type Option = {
 	value: string;
@@ -16,10 +17,13 @@ type Props = {
 	list: Option[];
 	placeholder?: string;
 	showInputBox?: boolean;
+	className?: string;
+	style?: CSSProperties;
 	itemStyle?: CSSProperties;
+	inputStyle?: CSSProperties;
 };
 
-const PrettyInputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, placeholder, showInputBox = true, itemStyle }) => {
+const PrettyInputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, placeholder, showInputBox = true, className, style, itemStyle, inputStyle }) => {
 	const { t } = useLocale();
 	const [diyValue, setDiyValue] = useState('');
 	if (!placeholder || placeholder === '') {
@@ -33,7 +37,7 @@ const PrettyInputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, p
 	const isCustomActive = !list.some((item) => item.value === value);
 
 	return (
-		<div className="radio-group">
+		<div className={clsx('radio-group', className)} style={style}>
 			{list.map((item, idx) => {
 				const isActive = value === item.value;
 				return (
@@ -48,6 +52,7 @@ const PrettyInputRadioGroup: React.FC<Props> = ({ name, value, onChange, list, p
 					name={name || ''}
 					type="text"
 					className={`radio-diy-input ${isCustomActive ? 'active' : ''}`}
+					style={inputStyle}
 					placeholder={placeholder}
 					value={diyValue}
 					onClick={() => handleSelect(diyValue)}

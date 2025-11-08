@@ -5,6 +5,7 @@ import { JRStationNameText } from '../InfrastructureCompo/JRStationNameText';
 import { JRCompanies, JRStationNameTypeRadioboxItemData } from '../TicketEditors/JRWideTicket/value';
 import Toggle from '../InfrastructureCompo/Toggle';
 import { useState } from 'react';
+import { useIsMobile } from '@/utils/hooks';
 
 interface Props {
 	show: boolean;
@@ -44,17 +45,16 @@ const JRPresetStationNames = [
 	{ type: JRStationNameType.UpAndDownAlignLeft, company: 'O', name: 'とうきょう/スカイツリー', areaChar: '' },
 	{ type: JRStationNameType.UpAndDownAlignLeft, company: 'E', name: '成田空港/（成田第１）', areaChar: '' },
 	{ type: JRStationNameType.UpAndDownAlignLeft, company: 'E', name: '空港第２ビル/（成田第２）', areaChar: '' },
-	{ type: JRStationNameType.UpAndDownAlignLeft, company: 'E', name: '羽田空港国内線/ターミナル', areaChar: '' },
-	{ type: JRStationNameType.UpAndDownAlignLeft, company: 'E', name: '羽田空港国際線/ターミナル', areaChar: '' },
-	{ type: JRStationNameType.UpAndDownAlignLeft, company: 'E', name: '羽田空港第１ビル/羽田空港第２ビル', areaChar: '' },
-	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: '羽田空港/第２ビル', areaChar: '' },
+	{ type: JRStationNameType.UpAndDownAlignLeft, company: 'O', name: '羽田空港国内線/ターミナル', areaChar: '' },
+	{ type: JRStationNameType.UpAndDownAlignLeft, company: 'O', name: '羽田空港国際線/ターミナル', areaChar: '' },
+	{ type: JRStationNameType.UpAndDownAlignLeft, company: 'O', name: '羽田空港第１ビル/羽田空港第２ビル', areaChar: '' },
+	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'O', name: '羽田空港/第２ビル', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'C', name: '池の浦/シーサイド', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'H', name: '奥津軽/いまべつ', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'S', name: 'オレンジ/タウン', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: 'さいたま/新都心', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: 'さくらんぼ/東根', areaChar: '' },
-	{ type: JRStationNameType.UpAlignLeftAndDownAlignRight, company: 'O', name: '鈴鹿/サーキツト稲生', areaChar: '', en: 'Suzukasakittoinoo' },
-	{ type: JRStationNameType.UpAlignLeftAndDownAlignRight, company: 'H', name: 'サッポロ/ビール庭園', areaChar: '' },
+	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'O', name: '鈴鹿/サーキツト稲生', areaChar: '', en: 'Suzukasakittoinoo' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'O', name: '長者ヶ浜潮騒/はまなす公園前', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: '東京・品川/（山手線内）', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'O', name: '東武ワールド/スクウェア', areaChar: '' },
@@ -64,6 +64,7 @@ const JRPresetStationNames = [
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: 'ヤナバ/スキー場前', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'W', name: 'ユニバーサル/シティ', areaChar: '' },
 	{ type: JRStationNameType.UpAlignLeftAndDownAlignCenter, company: 'E', name: 'ＢＲＴ/奇跡の一本松', areaChar: '' },
+	{ type: JRStationNameType.UpAlignLeftAndDownAlignRight, company: 'H', name: 'サッポロ/ビール庭園', areaChar: '' },
 	{ type: JRStationNameType.LeftVerticalAndRightLarge, company: 'E', name: '岩原/スキー場前', areaChar: '' },
 	{ type: JRStationNameType.LeftVerticalAndRightLarge, company: 'E', name: '行川/アイランド', areaChar: '' },
 	{ type: JRStationNameType.LeftVerticalAndRightLarge, company: 'O', name: '府中/競馬正門前', areaChar: '' },
@@ -82,11 +83,13 @@ const JRPresetStationNames = [
 
 export const JRPresetStationsModal = ({ show, onClose, onSelect }: Props) => {
 	const { t, locale } = useLocale();
+	const isMobile = useIsMobile();
 
 	const [showAsCompany, setShowAsCompany] = useState(true);
 
 	return (
-		<Modal title={'特殊駅名プリセット'} isOpen={show} onClose={onClose} style={{ maxWidth: '60%' }}>
+		<Modal title={t('JRPresetStationsModal.title')} isOpen={show} onClose={onClose} style={{ maxWidth: isMobile ? '100%' : '60%' }}>
+			<p className="ml-10">※{t('JRPresetStationsModal.tip')}</p>
 			<div className="flex flex-row flex-wrap mb-10">
 				{Object.entries(
 					JRPresetStationNames.reduce<Record<string, { type: JRStationNameType; company: string; name: string; areaChar: string; en?: string }[]>>((acc, item) => {
@@ -94,7 +97,7 @@ export const JRPresetStationsModal = ({ show, onClose, onSelect }: Props) => {
 						return acc;
 					}, {})
 				).map(([type, items]) => (
-					<div key={type} className="w-fit ml-10">
+					<div key={type} className="w-fit" style={{ marginLeft: isMobile ? '0' : '40px' }}>
 						<div className="text-sm font-semibold mt-1 mb-0" style={{ color: showAsCompany ? JRCompanies.find((item) => item.value === type)?.color : 'black' }}>
 							{showAsCompany ? JRCompanies.find((item) => item.value === type)?.name : JRStationNameTypeRadioboxItemData[Number(type)].name}
 						</div>

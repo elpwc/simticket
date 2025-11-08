@@ -126,15 +126,25 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 
 	return (
 		<Modal className="" style={{ maxWidth: 'fit-content' }} title={t('SaveListModal.title')} isOpen={show} onClose={onClose}>
-			<div className={clsx('flex gap-6 justify-center items-start p-4', isMobile ? 'flex-col' : 'flex-col')}>
-				<div className="flex w-full flex-wrap gap-5 justify-around items-center bg-gray-50 rounded-lg shadow-inner p-4 min-w-[320px]">
+			<div className={clsx('flex gap-6 justify-center items-start flex-col')} style={{ padding: isMobile ? '0' : '16px' }}>
+				<div className="flex w-full gap-5 justify-around items-center bg-gray-50 rounded-lg shadow-inner min-w-[320px]" style={{ padding: isMobile ? '8px' : '16px' }}>
 					<div>
 						<span className="font-semibold text-gray-700 mb-2">{t('SaveListModal.printPreview')}</span>
-						<canvas ref={canvasRef} className="border border-gray-400 bg-white max-w-[280px]" width={A4_SIZE[0]} height={A4_SIZE[1]} />
+						<canvas
+							ref={canvasRef}
+							className="border border-gray-400 bg-white max-w-[280px]"
+							width={window.innerWidth * 0.4}
+							height={((window.innerWidth * 0.4) / A4_SIZE[0]) * A4_SIZE[1]}
+						/>
 					</div>
 					<div>
 						<span className="font-semibold text-gray-700 mt-4 mb-2">{t('SaveListModal.printPreviewFlip')}</span>
-						<canvas ref={flipCanvasRef} className="border border-gray-400 bg-white max-w-[280px]" width={A4_SIZE[0]} height={A4_SIZE[1]} />
+						<canvas
+							ref={flipCanvasRef}
+							className="border border-gray-400 bg-white max-w-[280px]"
+							width={window.innerWidth * 0.4}
+							height={((window.innerWidth * 0.4) / A4_SIZE[0]) * A4_SIZE[1]}
+						/>
 					</div>
 				</div>
 

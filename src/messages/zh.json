@@ -89,7 +89,9 @@
     "addResultToListButton": "添加当前编辑结果到列表中",
     "clearListButton": "清空列表",
     "emptyList": "空列表",
-    "listSummary": "列表中的车票数："
+    "listSummary": "列表中的车票数：",
+    "addResultToListButtonShort": "添加到列表",
+    "exportListShort": "导出为A4"
   },
   "editor": {
     "cr": {
@@ -184,6 +186,14 @@
       "ticketNoInfo": {
         "ticketNo": "票号"
       }
+    },
+    "jr": {
+      "mars": {
+        "stationInfo": {
+          "specialStationNamePresetButton": "特殊站名预设",
+          "specialStationNameTip": "2/3段式站名请用半角/分割开各部分"
+        }
+      }
     }
   },
   "DescriptionButton": {
@@ -207,6 +217,8 @@
     }
   },
   "JRPresetStationsModal": {
-    "showAsCompanyButton": "按照公司分类"
+    "showAsCompanyButton": "按照公司分类",
+    "title": "特殊站名预设",
+    "tip": "这里沒有的站名也可以在「车站信息」中手动生成"
   }
 }

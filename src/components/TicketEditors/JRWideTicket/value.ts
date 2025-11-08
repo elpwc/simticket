@@ -98,25 +98,25 @@ export const TokuteiTokuShinai = [
 ];
 
 export const JRStationNameTypeRadioboxItemData = [
-	{ type: JRStationNameType.Normal, name: '一般', desc: '根室' },
-	{ type: JRStationNameType.Small, name: '小文字', desc: 'りんくうタウン' },
-	{ type: JRStationNameType.UpAndDownAlignLeft, name: '上下左詰め', desc: '上越/国際スキー場前' },
+	{ type: JRStationNameType.Normal, name: '一般', desc: '埼玉' },
+	{ type: JRStationNameType.Small, name: '小文字', desc: '埼玉シーサイド' },
+	{ type: JRStationNameType.UpAndDownAlignLeft, name: '上下左詰め', desc: '埼玉/シーサイド' },
 	{
 		type: JRStationNameType.UpAlignLeftAndDownAlignCenter,
 		name: '上左詰め下中寄せ',
-		desc: 'ユニバーサル/シティ',
+		desc: '埼玉/シーサイド',
 	},
 	{
 		type: JRStationNameType.UpAlignLeftAndDownAlignRight,
 		name: '上左詰め下右詰め',
-		desc: 'サッポロ/ビール庭園',
+		desc: '埼玉/シーサイド',
 	},
-	{ type: JRStationNameType.LeftLargeAndRightSmall, name: '左大右小', desc: '高輪/ゲートウェイ' },
-	{ type: JRStationNameType.LeftSmallAndRightLarge, name: '左小右大', desc: '(信)/横川' },
-	{ type: JRStationNameType.LeftVerticalAndRightLarge, name: '左縦右大', desc: '行川/アイランド' },
-	{ type: JRStationNameType.LeftLargeAndRightVertical, name: '左大右縦', desc: 'かみのやま/温泉' },
-	{ type: JRStationNameType.LeftLargeRightUpAndDown, name: '左大右2行', desc: '鹿島/サッカー/スタジアム' },
-	{ type: JRStationNameType.LeftUpAndDownRightLarge, name: '左2行右大', desc: '運転/免許/試験場' },
+	{ type: JRStationNameType.LeftLargeAndRightSmall, name: '左大右小', desc: '埼玉/シーサイド' },
+	{ type: JRStationNameType.LeftSmallAndRightLarge, name: '左小右大', desc: 'シーサイド/公園' },
+	{ type: JRStationNameType.LeftVerticalAndRightLarge, name: '左縦右大', desc: '埼玉/シーサイド' },
+	{ type: JRStationNameType.LeftLargeAndRightVertical, name: '左大右縦', desc: '埼玉海浜/公園' },
+	{ type: JRStationNameType.LeftLargeRightUpAndDown, name: '左大右2行', desc: '埼玉/シーサイド/パーク' },
+	{ type: JRStationNameType.LeftUpAndDownRightLarge, name: '左2行右大', desc: 'シーサイド/パーク/埼玉' },
 ];
 
 export const JRCompanies = [

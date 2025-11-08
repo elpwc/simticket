@@ -19,6 +19,7 @@ import { useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
 import { JRStationNameText } from '@/components/InfrastructureCompo/JRStationNameText';
 import { JRPresetStationsModal } from '@/components/Modals/JRPresetStationsModal';
+import { useLocale } from '@/utils/hooks/useLocale';
 
 export const DotFont = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
@@ -27,6 +28,7 @@ export const DotFont = localFonts({
 });
 
 export default function JRWideTicket() {
+	const { t } = useLocale();
 	const searchParams = useSearchParams();
 
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -214,7 +216,7 @@ export default function JRWideTicket() {
 					<TabBox title="駅情報" className="flex flex-wrap gap-1">
 						<div className="flex flex-col gap-[2px]">
 							<label className="ticket-form-label">
-								出発駅大都市近郊区間
+								出発駅特定都区市内
 								<PrettyInputRadioGroup
 									value={drawParameters.station1AreaChar}
 									onChange={(value) => {
@@ -235,20 +237,23 @@ export default function JRWideTicket() {
 											),
 										};
 									})}
+									className="items-center"
 									itemStyle={{ padding: 0, minWidth: 0, height: 'fit-content' }}
+									inputStyle={{ width: '100px' }}
 								/>
 							</label>
 							<label className="ticket-form-label">
-								出発
-								<div className="flex">
+								<span className="font-bold">出発駅</span>
+								<div className="flex flex-wrap">
 									<input
+										className="border-[#79b8f2] border-2 font-bold"
 										value={drawParameters.station1}
 										onChange={(e) => {
 											setDrawParameters((prev) => ({ ...prev, station1: e.target.value }));
 										}}
 									/>
 									<button
-										className="flex items-center border-[#f179f2]"
+										className="flex items-center border-[#79b8f2] border-2 w-max"
 										onClick={() => {
 											setShowJRPresetStationsModal(1);
 										}}
@@ -256,12 +261,12 @@ export default function JRWideTicket() {
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 											<path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" />
 										</svg>
-										特殊駅名プリセット
+										{t('editor.jr.mars.stationInfo.specialStationNamePresetButton')}
 									</button>
 								</div>
 							</label>
 							<p>
-								※2段式駅名は半角/で分割してください（例：高輪/ゲートウェイ→
+								※{t('editor.jr.mars.stationInfo.specialStationNameTip')}（例：高輪/ゲートウェイ→
 								<span className={''} style={{ fontFamily: 'DotFont', fontWeight: 'bold' }}>
 									<span className={'text-[16px]'}>高輪</span>
 									<span className={'text-[10px]'}>ゲートウェイ</span>
@@ -270,7 +275,7 @@ export default function JRWideTicket() {
 							</p>
 
 							<label className="ticket-form-label">
-								2段式駅名種類
+								2/3段式駅名種類
 								<PrettyInputRadioGroup
 									value={drawParameters.station1Type.toString()}
 									onChange={(value) => {
@@ -315,7 +320,7 @@ export default function JRWideTicket() {
 
 						<div className="flex flex-col gap-[2px]">
 							<label className="ticket-form-label">
-								到着駅大都市近郊区間
+								到着駅特定都区市内
 								<PrettyInputRadioGroup
 									value={drawParameters.station2AreaChar}
 									onChange={(value) => {
@@ -336,20 +341,23 @@ export default function JRWideTicket() {
 											),
 										};
 									})}
+									className="items-center"
 									itemStyle={{ padding: 0, minWidth: 0, height: 'fit-content' }}
+									inputStyle={{ width: '100px' }}
 								/>
 							</label>
 							<label className="ticket-form-label">
-								到着
-								<div className="flex">
+								<span className="font-bold">到着駅</span>
+								<div className="flex flex-wrap">
 									<input
+										className="border-[#79b8f2] border-2 font-bold"
 										value={drawParameters.station2}
 										onChange={(e) => {
 											setDrawParameters((prev) => ({ ...prev, station2: e.target.value }));
 										}}
 									/>
 									<button
-										className="flex items-center border-[#f179f2]"
+										className="flex items-center border-[#79b8f2] border-2"
 										onClick={() => {
 											setShowJRPresetStationsModal(2);
 										}}
@@ -357,12 +365,12 @@ export default function JRWideTicket() {
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 											<path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z" />
 										</svg>
-										特殊駅名プリセット
+										{t('editor.jr.mars.stationInfo.specialStationNamePresetButton')}
 									</button>
 								</div>
 							</label>
 							<label className="ticket-form-label">
-								2段式駅名種類
+								2/3段式駅名種類
 								<PrettyInputRadioGroup
 									value={drawParameters.station2Type.toString()}
 									onChange={(value) => {
@@ -401,6 +409,13 @@ export default function JRWideTicket() {
 								<input value={drawParameters.station2en} onChange={(e) => setDrawParameters((prev) => ({ ...prev, station2en: e.target.value }))} />
 							</label>
 						</div>
+
+						<Divider />
+
+						<label className="ticket-form-label">
+							経由
+							<input value={drawParameters.railways.join(',')} onChange={(e) => setDrawParameters((prev) => ({ ...prev, railways: e.target.value.split(',') }))} />
+						</label>
 					</TabBox>
 
 					<TabBox title="運行情報" className="flex flex-wrap gap-2">
