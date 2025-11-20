@@ -138,10 +138,7 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	serialCode: '1145141919810A000001 JM',
 	qrCodeText: '1145141919810',
 	doShowQRCode: true,
-	purchaseMethod: [
-		{ type: PurchaseMethodType.TicketType, title: '学', desc: '学生票' },
-		{ type: PurchaseMethodType.PurchaseMethod, title: '网', desc: '互联网售票' },
-	],
+	purchaseMethod: ['学', '网'],
 	doPurchaseMethodHaveCircle: true,
 	noSeat: false,
 	noCarriage: false,

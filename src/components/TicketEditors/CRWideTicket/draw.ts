@@ -374,7 +374,7 @@ export const drawCRWideTicket = (
 		// 购票方式
 		const wordWidth = 3; // ctx.measureText('永').width;
 		drawParameters.purchaseMethod.forEach((purchaseMethodItem, index) => {
-			if (purchaseMethodItem.title.length === 1) {
+			if (purchaseMethodItem.length === 1) {
 				if (drawParameters.doPurchaseMethodHaveCircle) {
 					ctx.beginPath();
 					ctx.arc(offsetScaleX(700 + index * wordWidth * 35), offsetScaleY(550), resizedScaleY(36), 0, 2 * Math.PI);
@@ -385,16 +385,16 @@ export const drawCRWideTicket = (
 
 					ctx.font = `${resizedFont(5.6, 'SongTi')}`;
 					ctx.fillStyle = 'black';
-					ctx.fillText(purchaseMethodItem.title, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(574));
+					ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(574));
 				} else {
 					ctx.font = `${resizedFont(6, 'SongTi')}`;
 					ctx.fillStyle = 'black';
-					ctx.fillText(purchaseMethodItem.title, offsetScaleX(667 + index * wordWidth * 25), offsetScaleY(581));
+					ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 25), offsetScaleY(581));
 				}
 			} else {
 				ctx.font = `${resizedFont(6, 'SongTi')}`;
 				ctx.fillStyle = 'black';
-				ctx.fillText(purchaseMethodItem.title, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(581));
+				ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(581));
 			}
 		});
 

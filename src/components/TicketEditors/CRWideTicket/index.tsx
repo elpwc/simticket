@@ -659,7 +659,7 @@ export default function CRWideTicket() {
 										<div className="text-sm font-semibold mt-1">{t(type)}</div>
 										<div className="flex flex-wrap gap-1">
 											{items.map((purchaseMethodItem) => {
-												const isChecked = drawParameters.purchaseMethod.some((pm) => pm.type === purchaseMethodItem.type && pm.title === purchaseMethodItem.title);
+												const isChecked = drawParameters.purchaseMethod.some((pm) => pm === purchaseMethodItem.title);
 												return (
 													<label title={t(purchaseMethodItem.desc)} key={purchaseMethodItem.type + '_' + purchaseMethodItem.title} className="flex items-center">
 														<input
@@ -669,12 +669,10 @@ export default function CRWideTicket() {
 																if (isChecked) {
 																	setDrawParameters((prev) => ({
 																		...prev,
-																		purchaseMethod: prev.purchaseMethod.filter(
-																			(j) => !(j.type === purchaseMethodItem.type && j.title === purchaseMethodItem.title)
-																		),
+																		purchaseMethod: prev.purchaseMethod.filter((j) => !(j === purchaseMethodItem.title)),
 																	}));
 																} else {
-																	setDrawParameters((prev) => ({ ...prev, purchaseMethod: [...prev.purchaseMethod, purchaseMethodItem] }));
+																	setDrawParameters((prev) => ({ ...prev, purchaseMethod: [...prev.purchaseMethod, purchaseMethodItem.title] }));
 																}
 															}}
 														/>

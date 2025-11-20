@@ -52,7 +52,7 @@ export type CRWideTicketDrawParameters = {
 	serialCode: string;
 	qrCodeText: string;
 	doShowQRCode: boolean;
-	purchaseMethod: PurchaseMethod[];
+	purchaseMethod: string[];
 	doPurchaseMethodHaveCircle: boolean;
 	noSeat: boolean;
 	noCarriage: boolean;
