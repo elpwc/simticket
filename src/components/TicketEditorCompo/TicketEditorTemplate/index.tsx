@@ -188,7 +188,29 @@ export default ({
 							<path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5" />
 						</svg>
 					</button>
-					<button title={'投稿'} className="text-xs rounded-md px-1 py-1 shadow-sm transition disabled">
+					<button
+						title={'投稿'}
+						className="text-xs rounded-md px-1 py-1 shadow-sm transition"
+						onClick={async () => {
+							await fetch('/api/ticket', {
+								method: 'POST',
+								headers: { 'Content-Type': 'application/json' },
+								body: JSON.stringify({
+									name: 'test',
+									companyId: selectedCompanyId,
+									ticketId: selectedTicketId,
+									data: '{}',
+									ip: '127.0.0.1',
+								}),
+							})
+								.then((e) => {
+									console.log(e);
+								})
+								.catch((e) => {
+									console.log(e);
+								});
+						}}
+					>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 							<path
 								fillRule="evenodd"

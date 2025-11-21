@@ -638,3 +638,9 @@ export const decodeTicket = (companyId: number, ticketTypeId: number, ticketData
 export const getTicketURL = (companyId: number, ticketTypeId: number, ticketData: any) => {
 	return `${window.location.origin}${window.location.pathname}?com=${companyId}&ticket=${ticketTypeId}&data=${encodeTicket(companyId, ticketTypeId, ticketData)}`;
 };
+
+export enum PublicStatus {
+	WaitForChecking,
+	NotPassed,
+	Public,
+}
