@@ -59,13 +59,8 @@ export default function App({
 							<Link href="/about">
 								<div className="navitem">{t('app.menu.about')}</div>
 							</Link>
-							<Link
-								href=""
-								onClick={() => {
-									alert(t('text.construction'));
-								}}
-							>
-								<div className="navitem text-[#cccccc]">{t('app.menu.post')}</div>
+							<Link href="/works">
+								<div className="navitem">{t('app.menu.post')}</div>
 							</Link>
 							<LangSwitcher />
 						</section>
