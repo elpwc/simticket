@@ -43,7 +43,7 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 				setCanvasHeight(newValue);
 			}
 		);
-	}, []);
+	}, [canvasWidth, canvasHeight, canvasRef.current?.width, canvasRef.current?.height, canvasRef.current]);
 
 	return <canvas className={className} style={style} ref={canvasRef} width={canvasWidth} height={canvasHeight} />;
 };

@@ -39,18 +39,22 @@ export const drawTicket = (
 					if (width < 0) {
 						if ([CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground].includes(ticketData.background || CRTicketBackGround.SoftRed)) {
 							onWidthChanged?.((canvasHeight / PAPER_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[0]);
+							width = (canvasHeight / PAPER_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[0];
 						} else {
 							onWidthChanged?.((canvasHeight / MAG_TICKET_SIZE[1]) * MAG_TICKET_SIZE[0]);
+							width = (canvasHeight / MAG_TICKET_SIZE[1]) * MAG_TICKET_SIZE[0];
 						}
 					}
 					if (height < 0) {
 						if ([CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground].includes(ticketData.background || CRTicketBackGround.SoftRed)) {
 							onHeightChanged?.((canvasWidth / PAPER_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[1]);
+							height = (canvasWidth / PAPER_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[1];
 						} else {
 							onHeightChanged?.((canvasWidth / MAG_TICKET_SIZE[0]) * MAG_TICKET_SIZE[1]);
+							height = (canvasWidth / MAG_TICKET_SIZE[0]) * MAG_TICKET_SIZE[1];
 						}
 					}
-					drawCRWideTicket(canvas, ctx, ticketData, undefined, isFlip, onDone);
+					drawCRWideTicket(canvas, width, height, ctx, ticketData, undefined, isFlip, onDone);
 					break;
 				default:
 					break;
@@ -62,11 +66,13 @@ export const drawTicket = (
 				case 1:
 					if (width < 0) {
 						onWidthChanged?.((canvasHeight / JR_MARS_PAPER_TICKET_SIZE[1]) * JR_MARS_PAPER_TICKET_SIZE[0]);
+						width = (canvasHeight / JR_MARS_PAPER_TICKET_SIZE[1]) * JR_MARS_PAPER_TICKET_SIZE[0];
 					}
 					if (height < 0) {
 						onHeightChanged?.((canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1]);
+						height = (canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1];
 					}
-					drawJRWideTicket(canvas, ctx, ticketData, undefined, isFlip, onDone);
+					drawJRWideTicket(canvas, width, height, ctx, ticketData, undefined, isFlip, onDone);
 					break;
 				case 2:
 				default:

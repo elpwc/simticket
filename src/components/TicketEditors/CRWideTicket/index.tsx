@@ -117,7 +117,7 @@ export default function CRWideTicket() {
 	}, []);
 
 	const drawTicket = () => {
-		drawCRWideTicket(canvasRef.current, ctxRef.current, drawParameters, undefined, isFlipSide);
+		drawCRWideTicket(canvasRef.current, canvasRef.current?.width || canvasSize[0], canvasRef.current?.height || canvasSize[1], ctxRef.current, drawParameters, undefined, isFlipSide);
 	};
 
 	useEffect(() => {

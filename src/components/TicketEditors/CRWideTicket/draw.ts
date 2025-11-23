@@ -9,6 +9,8 @@ import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTe
 
 export const drawCRWideTicket = (
 	canvas: HTMLCanvasElement | null,
+	width: number,
+	height: number,
 	ctx: CanvasRenderingContext2D | null,
 	partialDrawParameters: Partial<CRWideTicketDrawParameters>,
 	initialMethods:
@@ -30,11 +32,16 @@ export const drawCRWideTicket = (
 
 	const isMag = [CRTicketBackGround.MagRed, CRTicketBackGround.MagBlue, CRTicketBackGround.MagNoneBackground].includes(drawParameters.background || CRTicketBackGround.SoftRed);
 
+	const w = canvas.width > width ? canvas.width : width;
+	const h = canvas.height > height ? canvas.height : height;
+	const backgroundEdgeHori = 0.04;
+	const backgroundEdgeVert = 0.07;
+
 	if (initialMethods === undefined) {
 		if (isMag) {
-			initialMethods = getInitialMethods(canvas?.width || MAG_TICKET_CANVAS_SIZE[0], canvas?.height || MAG_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
+			initialMethods = getInitialMethods(w || MAG_TICKET_CANVAS_SIZE[0], h || MAG_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
 		} else {
-			initialMethods = getInitialMethods(canvas?.width || PAPER_TICKET_CANVAS_SIZE[0], canvas?.height || PAPER_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
+			initialMethods = getInitialMethods(w || PAPER_TICKET_CANVAS_SIZE[0], h || PAPER_TICKET_CANVAS_SIZE[1], PAPER_TICKET_SIZE[0], PAPER_TICKET_SIZE[1], 1);
 		}
 	}
 
@@ -56,11 +63,6 @@ export const drawCRWideTicket = (
 		case CRTicketBackGround.SoftNoneBackground:
 			break;
 	}
-
-	const w = canvas.width;
-	const h = canvas.height;
-	const backgroundEdgeHori = 0.04;
-	const backgroundEdgeVert = 0.07;
 
 	const resizedScaleX = (value: number) => {
 		switch (drawParameters.background) {

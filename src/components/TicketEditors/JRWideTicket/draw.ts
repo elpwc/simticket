@@ -12,6 +12,8 @@ import jr_k from '../../../assets/tickets/jr_k.jpg';
 
 export const drawJRWideTicket = (
 	canvas: HTMLCanvasElement | null,
+	width: number,
+	height: number,
 	ctx: CanvasRenderingContext2D | null,
 	partialDrawParameters: Partial<JRWideTicketDrawParameters>,
 	initialMethods:
@@ -28,22 +30,16 @@ export const drawJRWideTicket = (
 		return;
 	}
 
+	const w = canvas.width > width ? canvas.width : width;
+	const h = canvas.height > height ? canvas.height : height;
+
 	const drawParameters: JRWideTicketDrawParameters = {
 		...JRWideTicketDrawParametersInitialValues,
 		...partialDrawParameters,
 	};
 	if (initialMethods === undefined) {
-		initialMethods = getInitialMethods(
-			canvas?.width || JR_MARS_PAPER_TICKET_CANVAS_SIZE[0],
-			canvas?.height || JR_MARS_PAPER_TICKET_CANVAS_SIZE[1],
-			JR_MARS_PAPER_TICKET_SIZE[0],
-			JR_MARS_PAPER_TICKET_SIZE[1],
-			1
-		);
+		initialMethods = getInitialMethods(width || JR_MARS_PAPER_TICKET_CANVAS_SIZE[0], height || JR_MARS_PAPER_TICKET_CANVAS_SIZE[1], JR_MARS_PAPER_TICKET_SIZE[0], JR_MARS_PAPER_TICKET_SIZE[1], 1);
 	}
-
-	const w = canvas.width;
-	const h = canvas.height;
 
 	const resizedScaleX = (value: number) => {
 		return initialMethods.scaleX(value);
@@ -87,7 +83,7 @@ export const drawJRWideTicket = (
 
 	const draw = () => {
 		// 清空
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.clearRect(0, 0, w, h);
 		// 底图
 		switch (drawParameters.background) {
 			case JRTicketBackGround.JR_H:
