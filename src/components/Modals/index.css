@@ -1,0 +1,112 @@
+.login-container {
+  background: linear-gradient(151deg, rgba(233, 209, 237, 1) 0%, rgba(233, 209, 237, 1) 36%, rgba(0, 212, 255, 1) 100%);
+  min-height: 100%;
+  display: flex;
+  padding-top: 100px;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.login-form {
+  background: white;
+  box-shadow: 0 0 7px 1px rgba(0, 0, 0, 0.1);
+  border-color: rgb(173, 173, 173);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 2rem;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: fit-content;
+  align-items: center;
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #374151;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-input {
+  width: 100%;
+  padding: 0.5rem 0.5rem;
+  box-sizing: border-box;
+  border-color: rgb(132, 132, 132);
+  border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+  background-color: #f5f5f5;
+}
+
+.login-input:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: white;
+  border-color: rgb(132, 132, 132);
+  border-radius: 3px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+
+.login-button:hover{
+  background-color: #f0f0f0;
+}
+
+.login-tip {
+  text-align: center;
+  margin-top: 0.75rem;
+  color: #222222;
+  min-height: 1rem;
+}
+
+.login-form-checkbox-container{
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.auto-login-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.auto-login-label {
+  user-select: none;
+}
+
+.login-form-item-container {
+  width: 100%;
+}
+
+.login-form-footer-buttons-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.login-form-footer-link {
+  color: #898989;
+  text-decoration: none;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.login-form-footer-link:hover {
+  color: #2c2c2c;
+}

@@ -46,7 +46,7 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 
 export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameters {
 	const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
-	const binary = atob(base64);
+	const binary = Buffer.from(base64, 'base64').toString('binary'); // browser method: atob(base64);
 	const bytes = new Uint8Array([...binary].map((c) => c.charCodeAt(0)));
 	const json = new TextDecoder().decode(bytes);
 	const arr = JSON.parse(json);

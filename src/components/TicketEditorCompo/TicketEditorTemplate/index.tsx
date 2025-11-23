@@ -2,7 +2,7 @@
 
 import { JSX, useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
-import { getTicketURL, saveCanvasToLocal } from '@/utils/utils';
+import { getTicketURL } from '@/utils/utils';
 import TiltCanvas from '../TiltCanvas';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import { useIsMobile } from '@/utils/hooks';
@@ -11,6 +11,7 @@ import { SaveImageModal } from '@/components/Modals/SaveImageModal';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { AppContext } from '@/app/app';
 import { useHint } from '@/components/InfrastructureCompo/HintProvider';
+import { UploadTicketModal } from '@/components/Modals/UploadTicketModal';
 
 export const getInitialMethods = (w: number, h: number, scaleXWidth: number, scaleYWidth: number, currentSizeScale: number = 1) => {
 	const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
@@ -68,6 +69,7 @@ export default ({
 	const [enableCanvasTilt, setEnableCanvasTilt] = useState(true);
 	const [currentSizeScale, setCurrentSizeScale] = useState(isMobile ? 1 : 1.4);
 	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
+	const [showUploadTicketModal, setShowUploadTicketModal] = useState(false);
 	const [isFlipSide, setIsFlipSide] = useState(false);
 
 	const { selectedCompanyId, setSelectedCompanyId } = useContext(AppContext);
@@ -191,24 +193,8 @@ export default ({
 					<button
 						title={'投稿'}
 						className="text-xs rounded-md px-1 py-1 shadow-sm transition"
-						onClick={async () => {
-							await fetch('/api/ticket', {
-								method: 'POST',
-								headers: { 'Content-Type': 'application/json' },
-								body: JSON.stringify({
-									name: 'test',
-									companyId: selectedCompanyId,
-									ticketId: selectedTicketId,
-									data: '{}',
-									ip: '127.0.0.1',
-								}),
-							})
-								.then((e) => {
-									console.log(e);
-								})
-								.catch((e) => {
-									console.log(e);
-								});
+						onClick={() => {
+							setShowUploadTicketModal(true);
 						}}
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -260,6 +246,18 @@ export default ({
 					setShowSaveImageModal(false);
 				}}
 				defaultCanvasSize={[canvasWidth, canvasHeight]}
+			/>
+			<UploadTicketModal
+				show={showUploadTicketModal}
+				ticketInfo={{
+					companyId: selectedCompanyId,
+					ticketTypeId: selectedTicketId,
+					ticketData: ticketData,
+					id: '',
+				}}
+				onClose={() => {
+					setShowUploadTicketModal(false);
+				}}
 			/>
 		</div>
 	);

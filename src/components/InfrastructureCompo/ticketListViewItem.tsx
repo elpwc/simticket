@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useIsMobile } from '@/utils/hooks';
 import { useHint } from './HintProvider';
 import { useLocale } from '@/utils/hooks/useLocale';
-import { encodeTicket, getTicketURL } from '@/utils/utils';
+import { getTicketURL } from '@/utils/utils';
 
 interface Props {
 	width: number;
@@ -17,9 +17,10 @@ interface Props {
 	ticketData?: any;
 	onDelete?: () => void;
 	onSave?: () => void;
+	onUpload?: () => void;
 }
 
-export const TicketListViewItem = ({ width, height, className, borderRadius, companyId, ticketTypeId, ticketData, onDelete, onSave }: Props) => {
+export const TicketListViewItem = ({ width, height, className, borderRadius, companyId, ticketTypeId, ticketData, onDelete, onSave, onUpload }: Props) => {
 	const { t } = useLocale();
 	const isMobile = useIsMobile();
 	const hint = useHint();
@@ -90,7 +91,12 @@ export const TicketListViewItem = ({ width, height, className, borderRadius, com
 						>
 							保存
 						</button>
-						<button className="flex justify-center gap-1 w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition disabled">
+						<button
+							className="flex justify-center gap-1 w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition"
+							onClick={() => {
+								onUpload?.();
+							}}
+						>
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 								<path
 									fillRule="evenodd"

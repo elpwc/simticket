@@ -82,6 +82,10 @@ export const drawJRWideTicket = (
 	}
 
 	const draw = () => {
+		if (typeof drawParameters.date === 'string') {
+			drawParameters.date = new Date(drawParameters.date);
+		}
+
 		// 清空
 		ctx.clearRect(0, 0, w, h);
 		// 底图

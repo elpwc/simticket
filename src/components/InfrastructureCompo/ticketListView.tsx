@@ -7,6 +7,7 @@ import { SaveListModal } from '../Modals/SaveListModal';
 import { SaveImageModal } from '../Modals/SaveImageModal';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/utils/hooks';
+import { UploadTicketModal } from '../Modals/UploadTicketModal';
 
 export const TicketListView = () => {
 	const { t } = useLocale();
@@ -16,6 +17,7 @@ export const TicketListView = () => {
 
 	const [saveListModalOpen, setSaveListModalOpen] = useState(false);
 	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
+	const [showUploadTicketModal, setShowUploadTicketModal] = useState(false);
 	const [collapsed, setCollapsed] = useState(false);
 
 	const {
@@ -75,6 +77,10 @@ export const TicketListView = () => {
 											onSave={() => {
 												currentOperatingTicketItemRef.current = item;
 												setShowSaveImageModal(true);
+											}}
+											onUpload={() => {
+												currentOperatingTicketItemRef.current = item;
+												setShowUploadTicketModal(true);
 											}}
 										/>
 									</motion.div>
@@ -142,6 +148,18 @@ export const TicketListView = () => {
 					TicketSizeType.CanvasSize,
 					currentOperatingTicketItemRef.current?.ticketData.background ?? 0
 				)}
+			/>
+			<UploadTicketModal
+				show={showUploadTicketModal}
+				ticketInfo={{
+					companyId: currentOperatingTicketItemRef.current?.companyId ?? 0,
+					ticketTypeId: currentOperatingTicketItemRef.current?.ticketTypeId ?? 0,
+					ticketData: currentOperatingTicketItemRef.current?.ticketData ?? 0,
+					id: currentOperatingTicketItemRef.current?.id ?? '',
+				}}
+				onClose={() => {
+					setShowUploadTicketModal(false);
+				}}
 			/>
 		</div>
 	);

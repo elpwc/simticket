@@ -589,6 +589,9 @@ export const encodeTicket = (companyId: number, ticketTypeId: number, ticketData
 };
 
 export const decodeTicket = (companyId: number, ticketTypeId: number, ticketData: string): any => {
+	if (ticketData === '') {
+		return {};
+	}
 	switch (companyId) {
 		case 0: //CR
 			switch (ticketTypeId) {
@@ -643,4 +646,16 @@ export enum PublicStatus {
 	WaitForChecking,
 	NotPassed,
 	Public,
+}
+
+export interface UploadedTicketInfo {
+	id: number;
+	name: string;
+	companyId: number;
+	ticketId: number;
+	data: any;
+	editorName: string;
+	like: number;
+	views: number;
+	createdAt: Date;
 }

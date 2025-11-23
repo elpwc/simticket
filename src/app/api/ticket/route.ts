@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { PublicStatus } from '@/utils/utils';
+import { decodeTicket, PublicStatus } from '@/utils/utils';
 import { NextRequest } from 'next/server';
 
 /**
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 	const companyId = searchParams.get('companyId');
 	const orderBy = searchParams.get('orderBy'); // views | like
 
-	const tickets = await prisma.ticket.findMany({
+	let tickets = await prisma.ticket.findMany({
 		where: {
 			deleted: false,
 			...(ip ? { ip } : {}),
@@ -31,7 +31,24 @@ export async function GET(req: NextRequest) {
 		},
 		orderBy: orderBy === 'views' ? { views: 'desc' } : orderBy === 'like' ? { like: 'desc' } : { createdAt: 'desc' },
 		take: limit,
+		select: {
+			id: true,
+			name: true,
+			companyId: true,
+			ticketId: true,
+			data: true,
+			editorName: true,
+			like: true,
+			views: true,
+			createdAt: true,
+		},
 	});
+
+	tickets = tickets.map((item) => ({
+		...item,
+		views: item.views + 1,
+		data: decodeTicket(item.companyId, item.ticketId, item.data),
+	}));
 
 	return Response.json(tickets);
 }
