@@ -15,16 +15,16 @@ datasource db {
 }
 
 model Ticket {
-  id        Int      @id @default(autoincrement())
-  name      String
-  companyId Int
-  ticketId  Int
-  data      String
-  like      Int     @default(0)
-  publicStatus  Int @default(0) //0 wait for checking, 1 not passed, 2 public
-  ip        String  @default("")
-  editorName  String  @default("")
-  views   Int     @default(0)
-  createdAt DateTime @default(now())
-  deleted Boolean @default(false)
+  id           Int      @id @default(autoincrement())
+  name         String
+  companyId    Int
+  ticketId     Int
+  data         String   @db.VarChar(2048)
+  like         Int      @default(0)
+  publicStatus Int      @default(0) //0 wait for checking, 1 not passed, 2 public
+  ip           String   @default("")
+  editorName   String   @default("")
+  views        Int      @default(0)
+  createdAt    DateTime @default(now())
+  deleted      Boolean  @default(false)
 }
