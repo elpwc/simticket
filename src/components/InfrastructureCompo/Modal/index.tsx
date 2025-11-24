@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import './index.css';
 import clsx from 'clsx';
 
@@ -11,8 +11,8 @@ type Props = {
 	showCancelButton?: boolean;
 	okText?: string;
 	cancelText?: string;
-	title?: string;
-	children: React.ReactNode;
+	title?: string | ReactNode;
+	children: ReactNode;
 	mobileMode?: 'fullscreen' | 'scroll' | 'center';
 	showCloseButton?: boolean;
 	className?: string;

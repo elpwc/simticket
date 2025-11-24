@@ -3,12 +3,13 @@ import { Modal } from './Modal';
 import { useLocale } from '@/utils/hooks/useLocale';
 
 interface Props {
-	title?: string;
-	modalTitle?: string;
+	title?: string | ReactNode;
+	modalTitle?: string | ReactNode;
 	children: string | ReactNode;
+	textColor?: string;
 }
 
-export const DescriptionButton = ({ title, modalTitle = '', children }: Props) => {
+export const DescriptionButton = ({ title, modalTitle = '', children, textColor = '#a81919' }: Props) => {
 	const { t } = useLocale();
 	const [showDescModal, setShowDescModal] = useState(false);
 	if (!title) {
@@ -18,7 +19,8 @@ export const DescriptionButton = ({ title, modalTitle = '', children }: Props) =
 		<>
 			<button
 				type="button"
-				className="border-0 text-[12px] text-[#a81919]"
+				className="border-0 text-[12px]"
+				style={{ color: textColor }}
 				onClick={() => {
 					setShowDescModal(true);
 				}}
