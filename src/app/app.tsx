@@ -52,15 +52,25 @@ export default function App({
 			<HintProvider>
 				<header className="sticky top-0 h-[60px] z-[100]">
 					<nav className="bg-[#007fd4] text-white flex items-center justify-between">
-						<section className="px-2 py-4 flex gap-1 max-h-[56px]">
+						<section className="px-2 py-1 flex gap-1 max-h-[56px]">
 							<Link href="/">
 								<div className="navitem">SimTicket</div>
 							</Link>
 							<Link href="/about">
-								<div className="navitem">{t('app.menu.about')}</div>
+								<div className="navitem">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+										<path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm5 4a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
+									</svg>
+									{t('app.menu.about')}
+								</div>
 							</Link>
 							<Link href="/works">
-								<div className="navitem">{t('app.menu.post')}</div>
+								<div className="navitem">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+										<path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+									</svg>
+									{t('app.menu.post')}
+								</div>
 							</Link>
 							<LangSwitcher />
 						</section>

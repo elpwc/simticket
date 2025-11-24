@@ -62,7 +62,7 @@ export default function HomePage() {
 						animate={{ y: 0, opacity: 1 }}
 						exit={{ y: -40, opacity: 0 }}
 						transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-						className="ticket-select-menu-container absolute top-[56px] left-0 right-0"
+						className="ticket-select-menu-container absolute top-[50px] left-0 right-0"
 					>
 						<menu className="flex gap-2 flex-wrap bg-[#b9e3ff]">
 							{companyList.map((company, index) => {
