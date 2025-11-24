@@ -1,32 +1,44 @@
 import { UploadedTicketInfo } from '@/utils/utils';
 import { TicketViewer } from './ticketViewer';
+import { addLiked, hasLiked, undoLiked } from '@/utils/localStorage';
+import { useEffect, useState } from 'react';
 
 interface Props {
 	uploadedTicketInfo: UploadedTicketInfo;
+	onLiked: () => void;
+	onUndoLiked: () => void;
 }
 
-export const UploadedWorkItem = ({ uploadedTicketInfo }: Props) => {
+export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked }: Props) => {
+	const [doHasLiked, setDoHasLiked] = useState(hasLiked(uploadedTicketInfo.id));
+
 	return (
 		<div
 			className="
 			bg-white 
-			rounded-xl 
+			rounded-[6px] 
 			shadow-sm 
 			hover:shadow-md 
 			transition 
 			hover:-translate-y-[2px] 
 			p-3 
+			pb-1
 			w-[260px] 
 			md:w-[360px] 
 			m-2 
 			border border-gray-200
 		"
 		>
-			<div className="mb-2 overflow-hidden rounded-lg">
-				<TicketViewer width={360} height={-1} companyId={uploadedTicketInfo.companyId} ticketTypeId={uploadedTicketInfo.ticketId} ticketData={uploadedTicketInfo.data} />
+			<div
+				className="mb-2 overflow-hidden rounded-lg cursor-pointer"
+				onClick={() => {
+					// open modal
+				}}
+			>
+				<TicketViewer width={340} height={-1} companyId={uploadedTicketInfo.companyId} ticketTypeId={uploadedTicketInfo.ticketId} ticketData={uploadedTicketInfo.data} />
 			</div>
 
-			<div className="flex justify-between items-center mb-1">
+			<div className="flex justify-between items-center">
 				<p className="font-semibold text-sm truncate">{uploadedTicketInfo.name}</p>
 
 				<button
@@ -39,9 +51,25 @@ export const UploadedWorkItem = ({ uploadedTicketInfo }: Props) => {
 						active:scale-90 
 						cursor-pointer
 					"
+					onClick={() => {
+						if (!doHasLiked) {
+							addLiked(uploadedTicketInfo.id);
+							setDoHasLiked(true);
+							onLiked();
+						} else {
+							undoLiked(uploadedTicketInfo.id);
+							setDoHasLiked(false);
+							onUndoLiked();
+						}
+					}}
+					style={{
+						color: doHasLiked ? '#fb2c36' : '#4a5565',
+					}}
 				>
-					<span>{uploadedTicketInfo.like}</span>
-					<span className="text-lg leading-none">♥</span>
+					<span>{uploadedTicketInfo.like > 0 ? uploadedTicketInfo.like : '　'}</span>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+						<path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+					</svg>
 				</button>
 			</div>
 

@@ -1,0 +1,17 @@
+.menu-input {
+	width: 100%;
+	padding: 2px;
+	box-sizing: border-box;
+	border-color: rgb(132, 132, 132);
+	border-radius: 3px;
+	border-width: 1px;
+	border-style: solid;
+	transition: all 0.3s ease;
+	background-color: #fdfdfd;
+}
+
+.menu-input:focus {
+	outline: none;
+	background-color: #ffffff;
+	box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+}

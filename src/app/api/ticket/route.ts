@@ -20,6 +20,7 @@ export async function GET(req: NextRequest) {
 	const ticketId = searchParams.get('ticketId');
 	const companyId = searchParams.get('companyId');
 	const orderBy = searchParams.get('orderBy'); // views | like
+	const asc = searchParams.get('asc') === 'asc' ? 'asc' : 'desc'; // asc | desc
 
 	let tickets = await prisma.ticket.findMany({
 		where: {
@@ -29,8 +30,9 @@ export async function GET(req: NextRequest) {
 			...(ticketId ? { ticketId: Number(ticketId) } : {}),
 			...(companyId ? { companyId: Number(companyId) } : {}),
 		},
-		orderBy: orderBy === 'views' ? { views: 'desc' } : orderBy === 'like' ? { like: 'desc' } : { createdAt: 'desc' },
+		orderBy: orderBy === 'views' ? { views: asc } : orderBy === 'like' ? { like: asc } : { createdAt: asc },
 		take: limit,
+
 		select: {
 			id: true,
 			name: true,
@@ -46,7 +48,6 @@ export async function GET(req: NextRequest) {
 
 	tickets = tickets.map((item) => ({
 		...item,
-		views: item.views + 1,
 		data: decodeTicket(item.companyId, item.ticketId, item.data),
 	}));
 

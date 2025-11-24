@@ -5,76 +5,57 @@ import { getUploadedTickets, OrderType } from '@/utils/api';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { UploadedTicketInfo } from '@/utils/utils';
 import { useEffect, useState } from 'react';
+import './style.css';
 
 export default function Works() {
 	const { t, locale } = useLocale();
 
 	const [orderBy, setOrderBy] = useState<OrderType>(OrderType.createTime);
 	const [asc, setAsc] = useState<boolean>(false);
-	const [companyId, setCompanyId] = useState<string>('');
-	const [ticketId, setTicketId] = useState<string>('');
+	const [companyId, setCompanyId] = useState<number>(-1);
+	const [ticketId, setTicketId] = useState<number>(-1);
 	const [startStation, setStartStation] = useState<string>('');
 	const [endStation, setEndStation] = useState<string>('');
 	const [anyText, setAnyText] = useState<string>('');
 
 	const [works, setWorks] = useState<UploadedTicketInfo[]>([]);
 
-	useEffect(() => {
-		load();
-	}, []);
-
 	const load = () => {
-		getUploadedTickets(-1, -1, orderBy, '', 20).then((e) => {
+		getUploadedTickets(companyId, ticketId, orderBy, '', 10, asc).then((e) => {
 			setWorks(e);
 		});
 	};
+
+	useEffect(() => {
+		load();
+	}, [orderBy, asc, companyId, ticketId]);
 
 	return (
 		<div className="p-4 md:p-8 max-w-screen-xl mx-auto">
 			<div className="bg-white shadow-md rounded-2xl p-4 md:p-6 mb-6">
 				<div className="flex flex-wrap gap-4 mb-4">
 					<div className="flex flex-col w-full md:w-auto">
-						<input
-							value={companyId}
-							onChange={(e) => setCompanyId(e.target.value)}
-							className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none transition w-full md:w-48"
-							placeholder="companyId"
-						/>
+						<p className="w-max">公司</p>
+						<input value={companyId} onChange={(e) => setCompanyId(Number(e.target.value))} className="menu-input" placeholder="companyId" />
 					</div>
 
 					<div className="flex flex-col w-full md:w-auto">
-						<input
-							value={ticketId}
-							onChange={(e) => setTicketId(e.target.value)}
-							className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none transition w-full md:w-48"
-							placeholder="ticketId"
-						/>
+						<p className="w-max">票种</p>
+						<input value={ticketId} onChange={(e) => setTicketId(Number(e.target.value))} className="menu-input" placeholder="ticketId" />
 					</div>
 
 					<div className="flex flex-col w-full md:w-auto">
-						<input
-							value={startStation}
-							onChange={(e) => setStartStation(e.target.value)}
-							className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none transition w-full md:w-48"
-							placeholder="from"
-						/>
+						<p className="w-max">出发</p>
+						<input value={startStation} onChange={(e) => setStartStation(e.target.value)} className="menu-input" placeholder="from" />
 					</div>
 
 					<div className="flex flex-col w-full md:w-auto">
-						<input
-							value={endStation}
-							onChange={(e) => setEndStation(e.target.value)}
-							className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none transition w-full md:w-48"
-							placeholder="to"
-						/>
+						<p className="w-max">到达</p>
+						<input value={endStation} onChange={(e) => setEndStation(e.target.value)} className="menu-input" placeholder="to" />
 					</div>
 					<div className="flex flex-col w-full md:w-auto">
-						<input
-							value={anyText}
-							onChange={(e) => setAnyText(e.target.value)}
-							className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none transition w-full md:w-48"
-							placeholder="any text"
-						/>
+						<p className="w-max">搜索</p>
+						<input value={anyText} onChange={(e) => setAnyText(e.target.value)} className="menu-input" placeholder="any text" />
 					</div>
 				</div>
 
@@ -116,8 +97,8 @@ export default function Works() {
 
 					<button
 						onClick={() => {
-							setCompanyId('');
-							setTicketId('');
+							setCompanyId(-1);
+							setTicketId(-1);
 							setStartStation('');
 							setEndStation('');
 							setOrderBy(OrderType.createTime);
@@ -134,7 +115,18 @@ export default function Works() {
 			<div>
 				<div className="flex flex-wrap gap-4 justify-start">
 					{works.map((work: UploadedTicketInfo) => {
-						return <UploadedWorkItem key={work.id} uploadedTicketInfo={work} />;
+						return (
+							<UploadedWorkItem
+								key={work.id}
+								uploadedTicketInfo={work}
+								onLiked={() => {
+									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
+								}}
+								onUndoLiked={() => {
+									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
+								}}
+							/>
+						);
 					})}
 				</div>
 			</div>
