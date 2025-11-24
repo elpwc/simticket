@@ -17,9 +17,9 @@ export const DescriptionButton = ({ title, modalTitle = '', children }: Props) =
 	return (
 		<>
 			<button
+				type="button"
 				className="border-0 text-[12px] text-[#a81919]"
 				onClick={() => {
-					console.log(showDescModal, 123);
 					setShowDescModal(true);
 				}}
 			>
@@ -28,8 +28,8 @@ export const DescriptionButton = ({ title, modalTitle = '', children }: Props) =
 			<Modal
 				title={modalTitle}
 				isOpen={showDescModal}
+				className="text-[16px]"
 				onClose={() => {
-					console.log(showDescModal, 456);
 					setShowDescModal(false);
 				}}
 			>
