@@ -50,7 +50,7 @@ export default function App({
 			}}
 		>
 			<HintProvider>
-				<header className="sticky top-0 h-[60px] z-[100]">
+				<header className="sticky top-0 h-[50px] z-[100]">
 					<nav className="bg-[#007fd4] text-white flex items-center justify-between">
 						<section className="px-2 py-1 flex gap-1 max-h-[56px]">
 							<Link href="/">

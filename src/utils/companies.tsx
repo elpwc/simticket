@@ -68,6 +68,7 @@ export const companyList: Company[] = [
 		logo: JNR_logo,
 		abbr: 'JNR',
 		name: '日本国有鉄道',
+		defaultSelectedTicketId: 0,
 		tickets: [
 			{
 				name: '硬券(C型券)',
@@ -101,6 +102,8 @@ export const companyList: Company[] = [
 		logo: THSR_logo,
 		abbr: 'THSR',
 		name: '台灣高鐵',
+		defaultSelectedTicketId: 0,
+		tickets: [],
 		disabled: true,
 	},
 	{
@@ -111,6 +114,8 @@ export const companyList: Company[] = [
 				總<rt>Tổng</rt>公<rt>công</rt>司<rt>ty</rt>塘<rt>Đường</rt>鐡<rt>sắt</rt>越<rt>Việt</rt>南<rt>Nam</rt>
 			</ruby>
 		),
+		defaultSelectedTicketId: 0,
+		tickets: [],
 		disabled: true,
 	},
 	{
@@ -121,6 +126,8 @@ export const companyList: Company[] = [
 				韓<rt>한</rt>國<rt>국</rt>鐵<rt>철</rt>道<rt>도</rt>公<rt>공</rt>社<rt>사</rt>
 			</ruby>
 		),
+		defaultSelectedTicketId: 0,
+		tickets: [],
 		disabled: true,
 	},
 ];

@@ -4,13 +4,26 @@ import { UploadedWorkItem } from '@/components/InfrastructureCompo/UploadedWorkI
 import { getUploadedTickets, OrderType } from '@/utils/api';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { UploadedTicketInfo } from '@/utils/utils';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import './style.css';
+import PrettyDropdown from '@/components/InfrastructureCompo/PrettyDropdown';
+import { companyList } from '@/utils/companies';
+import Image from 'next/image';
+import InfiniteScroll from 'react-infinite-scroller';
 
 export default function Works() {
 	const { t, locale } = useLocale();
 
-	const [orderBy, setOrderBy] = useState<OrderType>(OrderType.createTime);
+	const infiniteScrollRef = useRef(null);
+
+	const resetInfiniteScrollPage = () => {
+		if (infiniteScrollRef.current) {
+			//@ts-expect-error outer library
+			infiniteScrollRef.current.pageLoaded = 0;
+		}
+	};
+
+	const [orderBy, setOrderBy] = useState<OrderType>(OrderType.views);
 	const [asc, setAsc] = useState<boolean>(false);
 	const [companyId, setCompanyId] = useState<number>(-1);
 	const [ticketId, setTicketId] = useState<number>(-1);
@@ -19,102 +32,58 @@ export default function Works() {
 	const [anyText, setAnyText] = useState<string>('');
 
 	const [works, setWorks] = useState<UploadedTicketInfo[]>([]);
+	const [latestWorks, setLatestWorks] = useState<UploadedTicketInfo[]>([]);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [hasMore, setHasMore] = useState<boolean>(true);
 
-	const load = () => {
-		getUploadedTickets(companyId, ticketId, orderBy, '', 10, asc).then((e) => {
+	const pageSize = 5;
+
+	const load = useCallback(async () => {
+		getUploadedTickets(companyId, ticketId, orderBy, '', pageSize, asc).then((e) => {
+			resetInfiniteScrollPage();
 			setWorks(e);
 		});
+	}, [companyId, ticketId, orderBy, anyText, asc]);
+
+	const loadLatest = useCallback(async () => {
+		getUploadedTickets(companyId, ticketId, OrderType.createTime, '', 10, asc).then((e) => {
+			setLatestWorks(e);
+		});
+	}, [companyId, ticketId, asc]);
+
+	const loadMore = async (nextPageIndex: number) => {
+		if (isLoading || !hasMore) return;
+		setIsLoading(true);
+		try {
+			const res = await getUploadedTickets(companyId, ticketId, orderBy, anyText, pageSize, asc, nextPageIndex);
+			if (!res || res.length === 0) {
+				setHasMore(false);
+			} else {
+				setWorks((prev) => [...prev, ...res]);
+				if (res.length < pageSize) setHasMore(false);
+			}
+		} catch (e) {
+			console.error(e);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	useEffect(() => {
 		load();
 	}, [orderBy, asc, companyId, ticketId]);
 
+	useEffect(() => {
+		loadLatest();
+	}, [companyId, ticketId]);
+
 	return (
-		<div className="p-4 md:p-8 max-w-screen-xl mx-auto">
-			<div className="bg-white shadow-md rounded-2xl p-4 md:p-6 mb-6">
-				<div className="flex flex-wrap gap-4 mb-4">
-					<div className="flex flex-col w-full md:w-auto">
-						<p className="w-max">公司</p>
-						<input value={companyId} onChange={(e) => setCompanyId(Number(e.target.value))} className="menu-input" placeholder="companyId" />
-					</div>
+		<div className="">
+			<div className="h-fit w-full overflow-x-scroll bg-gray-900">
+				<p className="text-white">{t('worksPage.latest.title')}</p>
 
-					<div className="flex flex-col w-full md:w-auto">
-						<p className="w-max">票种</p>
-						<input value={ticketId} onChange={(e) => setTicketId(Number(e.target.value))} className="menu-input" placeholder="ticketId" />
-					</div>
-
-					<div className="flex flex-col w-full md:w-auto">
-						<p className="w-max">出发</p>
-						<input value={startStation} onChange={(e) => setStartStation(e.target.value)} className="menu-input" placeholder="from" />
-					</div>
-
-					<div className="flex flex-col w-full md:w-auto">
-						<p className="w-max">到达</p>
-						<input value={endStation} onChange={(e) => setEndStation(e.target.value)} className="menu-input" placeholder="to" />
-					</div>
-					<div className="flex flex-col w-full md:w-auto">
-						<p className="w-max">搜索</p>
-						<input value={anyText} onChange={(e) => setAnyText(e.target.value)} className="menu-input" placeholder="any text" />
-					</div>
-				</div>
-
-				{/*  ORDER */}
-				<div className="flex flex-wrap items-center gap-4 mb-4">
-					<label className="text-sm text-gray-600">order by</label>
-
-					<select value={orderBy} onChange={(e) => setOrderBy(e.target.value as OrderType)} className="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400 outline-none transition">
-						<option value={OrderType.none}>不排序</option>
-						<option value={OrderType.createTime}>最新</option>
-						<option value={OrderType.like}>like</option>
-						<option value={OrderType.views}>浏览量</option>
-					</select>
-
-					<div className="flex gap-2">
-						<button
-							onClick={() => setAsc(true)}
-							className={`px-3 py-2 rounded-lg border transition hover:bg-gray-100 active:scale-95 
-								${asc ? 'bg-blue-200 border-blue-400' : ''}
-							`}
-						>
-							↑ 升序
-						</button>
-						<button
-							onClick={() => setAsc(false)}
-							className={`px-3 py-2 rounded-lg border transition hover:bg-gray-100 active:scale-95
-								${!asc ? 'bg-blue-200 border-blue-400' : ''}
-							`}
-						>
-							↓ 降序
-						</button>
-					</div>
-				</div>
-
-				<div className="flex flex-wrap gap-2 mt-4">
-					<button onClick={load} className="px-5 py-2 rounded-xl bg-blue-500 text-white shadow hover:bg-blue-600 active:scale-95 transition">
-						应用筛选
-					</button>
-
-					<button
-						onClick={() => {
-							setCompanyId(-1);
-							setTicketId(-1);
-							setStartStation('');
-							setEndStation('');
-							setOrderBy(OrderType.createTime);
-							setAsc(false);
-							load();
-						}}
-						className="px-5 py-2 rounded-xl bg-gray-200 shadow hover:bg-gray-300 active:scale-95 transition"
-					>
-						重置
-					</button>
-				</div>
-			</div>
-
-			<div>
-				<div className="flex flex-wrap gap-4 justify-start">
-					{works.map((work: UploadedTicketInfo) => {
+				<div className="flex">
+					{latestWorks.map((work: UploadedTicketInfo) => {
 						return (
 							<UploadedWorkItem
 								key={work.id}
@@ -130,6 +99,159 @@ export default function Works() {
 					})}
 				</div>
 			</div>
+			<div className="bg-white shadow-md rounded-2xl p-2 mb-4 flex flex-wrap gap-2">
+				<div className="flex flex-wrap gap-4">
+					<div className="flex flex-col w-fit md:w-auto">
+						<PrettyDropdown
+							options={[
+								{
+									value: -1,
+									getCaption: (isShownOnTop?: boolean, isSelected?: boolean) => {
+										return <span className="flex">{t('worksPage.filter.allCompany')}</span>;
+									},
+								},
+								...companyList.map((company, index) => {
+									return {
+										value: index,
+										getCaption: (isShownOnTop?: boolean, isSelected?: boolean) => {
+											return (
+												<span className="flex gap-1">
+													<Image style={{ height: 'auto', width: '20px' }} src={company.logo} alt={company.abbr} />
+													{company.name}
+												</span>
+											);
+										},
+									};
+								}),
+							]}
+							value={companyId}
+							onChange={(i) => {
+								setCompanyId(Number(i));
+							}}
+						/>
+					</div>
+
+					<div className="flex flex-col w-fit md:w-auto">
+						<PrettyDropdown
+							options={[
+								{
+									value: -1,
+									getCaption: (isShownOnTop?: boolean, isSelected?: boolean) => {
+										return <span className="flex">{t('worksPage.filter.allTicketType')}</span>;
+									},
+								},
+								...(companyList[companyId]?.tickets?.map((company, index) => {
+									return {
+										value: index,
+										getCaption: (isShownOnTop?: boolean, isSelected?: boolean) => {
+											return <>{company.name}</>;
+										},
+									};
+								}) || []),
+							]}
+							value={ticketId}
+							onChange={(i) => {
+								setTicketId(Number(i));
+							}}
+						/>
+					</div>
+				</div>
+
+				<div className="flex flex-wrap items-center gap-1">
+					<span className="text-sm text-gray-600">{t('worksPage.filter.order.label')}</span>
+
+					<select
+						value={orderBy}
+						onChange={(e) => setOrderBy(e.target.value as OrderType)}
+						className="border-1 border-[#cccccc] rounded-[4px] px-1 py-1 focus:ring-2 focus:ring-blue-400 outline-none transition"
+					>
+						<option value={OrderType.none}>{t('worksPage.filter.order.none')}</option>
+						<option value={OrderType.createTime}>{t('worksPage.filter.order.createTime')}</option>
+						<option value={OrderType.like}>{t('worksPage.filter.order.like')}</option>
+						<option value={OrderType.views}>{t('worksPage.filter.order.views')}</option>
+					</select>
+
+					<div className="flex gap-1">
+						<button
+							onClick={() => setAsc(true)}
+							className={`px-2 transition hover:bg-gray-100 active:scale-95 
+								${asc ? 'bg-blue-200 border-blue-400' : ''}
+							`}
+						>
+							↑ {t('worksPage.filter.order.asc')}
+						</button>
+						<button
+							onClick={() => setAsc(false)}
+							className={`px-2 transition hover:bg-gray-100 active:scale-95
+								${!asc ? 'bg-blue-200 border-blue-400' : ''}
+							`}
+						>
+							↓ {t('worksPage.filter.order.desc')}
+						</button>
+					</div>
+				</div>
+
+				<div className="flex flex-wrap gap-2">
+					<div className="flex flex-row w-full md:w-auto items-center gap-1">
+						<p className="break-keep">{t('worksPage.filter.search.from')}</p>
+						<input value={startStation} onChange={(e) => setStartStation(e.target.value)} className="menu-input w-full" placeholder="from" />
+					</div>
+
+					<div className="flex flex-row w-full md:w-auto items-center gap-1">
+						<p className="break-keep">{t('worksPage.filter.search.to')}</p>
+						<input value={endStation} onChange={(e) => setEndStation(e.target.value)} className="menu-input" placeholder="to" />
+					</div>
+					<div className="flex flex-row w-full md:w-auto items-center gap-1">
+						<p className="break-keep">{t('worksPage.filter.search.searchText')}</p>
+						<input value={anyText} onChange={(e) => setAnyText(e.target.value)} className="menu-input" placeholder="any text" />
+					</div>
+					<button onClick={load} className="primary px-4">
+						{t('worksPage.filter.search.search')}
+					</button>
+
+					<button
+						onClick={() => {
+							setCompanyId(-1);
+							setTicketId(-1);
+							setStartStation('');
+							setEndStation('');
+							setOrderBy(OrderType.createTime);
+							setAsc(false);
+							load();
+						}}
+						className=""
+					>
+						{t('worksPage.filter.reset')}
+					</button>
+				</div>
+			</div>
+
+			<InfiniteScroll
+				ref={infiniteScrollRef}
+				pageStart={0}
+				loadMore={loadMore}
+				hasMore={hasMore}
+				loader={<div className="horizonal-end">loading...</div>}
+				useWindow={true}
+				className="flex flex-wrap"
+			>
+				{works.map((work: UploadedTicketInfo) => {
+					return (
+						<div className="h-item" key={work.id}>
+							<UploadedWorkItem
+								key={work.id}
+								uploadedTicketInfo={work}
+								onLiked={() => {
+									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
+								}}
+								onUndoLiked={() => {
+									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
+								}}
+							/>
+						</div>
+					);
+				})}
+			</InfiniteScroll>
 		</div>
 	);
 }

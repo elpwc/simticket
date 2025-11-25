@@ -235,5 +235,30 @@
     },
     "tooLong": "投稿的数据长度过长，请适当减少内容",
     "done": "投稿成功~"
+  },
+  "worksPage": {
+    "filter": {
+      "allTicketType": "全部票种",
+      "allCompany": "全部公司",
+      "order": {
+        "label": "排序",
+        "none": "不排序",
+        "createTime": "时间",
+        "like": "like",
+        "views": "浏览量",
+        "asc": "升序",
+        "desc": "降序"
+      },
+      "search": {
+        "from": "出發",
+        "to": "到达",
+        "searchText": "搜索文字",
+        "search": "搜索"
+      },
+      "reset": "重置"
+    },
+    "latest": {
+      "title": "最新投稿"
+    }
   }
 }

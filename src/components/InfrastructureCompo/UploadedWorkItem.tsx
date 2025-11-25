@@ -21,21 +21,22 @@ export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked }: P
 			hover:shadow-md 
 			transition 
 			hover:-translate-y-[2px] 
-			p-3 
-			pb-1
-			w-[260px] 
-			md:w-[360px] 
-			m-2 
+			p-2 
+			pb-0
+			w-fit 
+			md:w-fit 
+			h-fit
+			m-1 
 			border border-gray-200
 		"
 		>
 			<div
-				className="mb-2 overflow-hidden rounded-lg cursor-pointer"
+				className="overflow-hidden rounded-lg cursor-pointer h-fit"
 				onClick={() => {
 					// open modal
 				}}
 			>
-				<TicketViewer width={340} height={-1} companyId={uploadedTicketInfo.companyId} ticketTypeId={uploadedTicketInfo.ticketId} ticketData={uploadedTicketInfo.data} />
+				<TicketViewer width={280} height={-1} companyId={uploadedTicketInfo.companyId} ticketTypeId={uploadedTicketInfo.ticketId} ticketData={uploadedTicketInfo.data} />
 			</div>
 
 			<div className="flex justify-between items-center">

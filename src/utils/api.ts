@@ -17,7 +17,15 @@ export enum OrderType {
 	createTime = 'createTime',
 }
 
-export const getUploadedTickets = async (companyId: number = -1, ticketTypeId: number = -1, orderBy: OrderType = OrderType.like, ip: string = '', limit: number = 20, asc: boolean = false) => {
+export const getUploadedTickets = async (
+	companyId: number = -1,
+	ticketTypeId: number = -1,
+	orderBy: OrderType = OrderType.like,
+	ip: string = '',
+	limit: number = 20,
+	asc: boolean = false,
+	page: number = 0
+) => {
 	const params = new URLSearchParams();
 	if (companyId >= 0) params.append('companyId', String(companyId));
 	if (ticketTypeId >= 0) params.append('ticketTypeId', String(ticketTypeId));
@@ -25,6 +33,7 @@ export const getUploadedTickets = async (companyId: number = -1, ticketTypeId: n
 	if (ip !== '') params.append('ip', ip);
 	if (limit >= 0) params.append('limit', String(limit));
 	if (asc) params.append('asc', asc ? 'asc' : 'desc');
+	if (page) params.append('page', page.toString());
 
 	return await fetch('/api/ticket' + (params.toString() ? `?${params.toString()}` : ''))
 		.then((response) => response.json())

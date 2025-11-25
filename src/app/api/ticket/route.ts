@@ -14,13 +14,16 @@ import { NextRequest } from 'next/server';
 export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url);
 
-	const limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 50;
+	const limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 20;
 	const ip = searchParams.get('ip') || undefined;
 	const publicStatus = searchParams.get('publicStatus');
 	const ticketId = searchParams.get('ticketId');
 	const companyId = searchParams.get('companyId');
 	const orderBy = searchParams.get('orderBy'); // views | like
 	const asc = searchParams.get('asc') === 'asc' ? 'asc' : 'desc'; // asc | desc
+	const page = searchParams.get('page') ? Math.max(Number(searchParams.get('page')), 0) : 0;
+
+	const skip = page * limit;
 
 	let tickets = await prisma.ticket.findMany({
 		where: {
@@ -31,6 +34,7 @@ export async function GET(req: NextRequest) {
 			...(companyId ? { companyId: Number(companyId) } : {}),
 		},
 		orderBy: orderBy === 'views' ? { views: asc } : orderBy === 'like' ? { like: asc } : { createdAt: asc },
+		skip,
 		take: limit,
 
 		select: {

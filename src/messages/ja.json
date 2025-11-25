@@ -235,5 +235,30 @@
     },
     "tooLong": "投稿のデータサイズが大きすぎる。適当に減らして下さい",
     "done": "投稿しました～"
+  },
+  "worksPage": {
+    "filter": {
+      "allCompany": "全部会社",
+      "allTicketType": "全部券種",
+      "order": {
+        "createTime": "時間",
+        "label": "並べ替え",
+        "like": "like",
+        "none": "しない",
+        "views": "閲覧",
+        "asc": "昇順",
+        "desc": "降順"
+      },
+      "search": {
+        "from": "出発",
+        "search": "検索",
+        "searchText": "検索キーワード",
+        "to": "到着"
+      },
+      "reset": "リセット"
+    },
+    "latest": {
+      "title": "最新投稿"
+    }
   }
 }
