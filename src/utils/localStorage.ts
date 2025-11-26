@@ -15,8 +15,8 @@ export const hasLiked = (id: number): boolean => {
 	return getLikedTickets().includes(id);
 };
 
-export const addLiked = (id: number) => {
-	addLikeUploadedTicket(id).then((e) => {
+export const addLiked = async (id: number) => {
+	return await addLikeUploadedTicket(id).then((e) => {
 		const list = getLikedTickets();
 		if (!list.includes(id)) {
 			list.push(id);
@@ -25,8 +25,8 @@ export const addLiked = (id: number) => {
 	});
 };
 
-export const undoLiked = (id: number) => {
-	undoLikeUploadedTicket(id).then((e) => {
+export const undoLiked = async (id: number) => {
+	return await undoLikeUploadedTicket(id).then((e) => {
 		const list = getLikedTickets();
 		const index = list.indexOf(id);
 		if (index !== -1) {
