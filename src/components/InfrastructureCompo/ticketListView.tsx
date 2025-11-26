@@ -9,7 +9,11 @@ import { motion } from 'framer-motion';
 import { useIsMobile } from '@/utils/hooks';
 import { UploadTicketModal } from '../Modals/UploadTicketModal';
 
-export const TicketListView = () => {
+interface Props {
+	showAddButton?: boolean;
+}
+
+export const TicketListView = ({ showAddButton = true }: Props) => {
 	const { t } = useLocale();
 	const isMobile = useIsMobile();
 	// object to save
@@ -40,20 +44,20 @@ export const TicketListView = () => {
 				transition={{ type: 'keyframes', duration: 0.2, damping: 15, stiffness: 240 }}
 				className="fixed bottom-0 left-0 right-0 z-[100] bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md shadow-[0_-2px_10px_rgba(0,0,0,0.15)] border-t border-neutral-300 dark:border-neutral-700 overflow-hidden"
 			>
-				{/* 折叠後的细栏 */}
+				{/* 折叠後下方footer */}
 				{collapsed && (
 					<div className="h-10 flex items-center justify-center text-neutral-600 dark:text-neutral-300 text-sm relative" onClick={() => setCollapsed(false)}>
 						<span className="select-none">{t('ticketListView.listSummary') + ticketListItems.length.toString()}</span>
-						<button
-							className="absolute right-4 w-6 h-6 flex items-center justify-center rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700 transition"
-							onClick={() => setCollapsed(false)}
-						>
-							<span className="text-lg leading-none">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-									<path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z" />
-								</svg>
-							</span>
-						</button>
+						<div className="absolute right-1 flex w-fit items-center">
+							<span>{t('ticketListView.openListButtonText')}</span>
+							<button className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700 transition" onClick={() => setCollapsed(false)}>
+								<span className="text-lg leading-none">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+										<path fillRule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z" />
+									</svg>
+								</span>
+							</button>
+						</div>
 					</div>
 				)}
 
@@ -90,28 +94,38 @@ export const TicketListView = () => {
 
 						<div className="flex justify-center items-center gap-3 p-1 border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800">
 							<div className="flex flex-wrap justify-center w-full">
+								{showAddButton && (
+									<button
+										className="primary flex items-center"
+										onClick={() => {
+											setTicketListItems((prev: TicketListItemProperty[]) => [
+												...prev,
+												{
+													id: crypto.randomUUID(),
+													companyId: selectedCompanyId,
+													ticketTypeId: selectedTicketId,
+													ticketData: structuredClone(editingTicketData),
+												},
+											]);
+										}}
+									>
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+											<path fillRule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+										</svg>
+										{isMobile ? t('ticketListView.addResultToListButtonShort') : t('ticketListView.addResultToListButton')}
+									</button>
+								)}
+
 								<button
-									className="primary"
-									onClick={() => {
-										setTicketListItems((prev: TicketListItemProperty[]) => [
-											...prev,
-											{
-												id: crypto.randomUUID(),
-												companyId: selectedCompanyId,
-												ticketTypeId: selectedTicketId,
-												ticketData: structuredClone(editingTicketData),
-											},
-										]);
-									}}
-								>
-									{isMobile ? t('ticketListView.addResultToListButtonShort') : t('ticketListView.addResultToListButton')}
-								</button>
-								<button
-									className="primary green"
+									className="primary green flex items-center"
 									onClick={() => {
 										setSaveListModalOpen(true);
 									}}
 								>
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+										<path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1" />
+										<path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+									</svg>
 									{isMobile ? t('ticketListView.exportListShort') : t('ticketListView.exportList')}
 								</button>
 								<button
@@ -123,7 +137,8 @@ export const TicketListView = () => {
 									{t('ticketListView.clearListButton')}
 								</button>
 							</div>
-							<div className="flex justify-end">
+							<div className="flex w-fit items-center justify-end text-neutral-600 dark:text-neutral-300 text-sm">
+								<span className="break-keep">{t('ticketListView.hideListButtonText')}</span>
 								<button className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700 transition" onClick={() => setCollapsed(true)}>
 									<span className="text-lg leading-none">
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
