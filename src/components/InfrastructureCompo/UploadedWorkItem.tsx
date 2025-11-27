@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react
 import { AppContext } from '@/app/app';
 import { CRWideTicketDrawParameters } from '../TicketEditors/CRWideTicket/type';
 import { JRWideTicketDrawParameters } from '../TicketEditors/JRWideTicket/type';
+import { addViewsUploadedTicket } from '@/utils/api';
 
 interface Props {
 	uploadedTicketInfo: UploadedTicketInfo;
@@ -30,7 +31,12 @@ export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked }: P
 		}, 100);
 	}, [uploadedTicketInfo.like]);
 
+	const handleAddViews = () => {
+		addViewsUploadedTicket(uploadedTicketInfo.id);
+	};
+
 	const handleAddToList = () => {
+		handleAddViews();
 		setTicketListItems((prev: TicketListItemProperty[]) => [
 			...prev,
 			{
