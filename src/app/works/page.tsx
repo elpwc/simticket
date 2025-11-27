@@ -11,9 +11,11 @@ import { companyList } from '@/utils/companies';
 import Image from 'next/image';
 import InfiniteScroll from 'react-infinite-scroller';
 import { TicketListView } from '@/components/InfrastructureCompo/ticketListView';
+import { useIsMobile } from '@/utils/hooks';
 
 export default function Works() {
 	const { t, locale } = useLocale();
+	const isMobile = useIsMobile();
 
 	const infiniteScrollRef = useRef(null);
 
@@ -222,7 +224,7 @@ export default function Works() {
 							setTicketId(-1);
 							setStartStation('');
 							setEndStation('');
-							setAnyText('')
+							setAnyText('');
 							setOrderBy(OrderType.createTime);
 							setAsc(false);
 							load();
@@ -242,6 +244,7 @@ export default function Works() {
 				loader={<div className="horizonal-end">loading...</div>}
 				useWindow={true}
 				className="flex flex-wrap"
+				style={{ justifyContent: isMobile ? 'center' : 'start' }}
 			>
 				{works.map((work: UploadedTicketInfo) => {
 					return (

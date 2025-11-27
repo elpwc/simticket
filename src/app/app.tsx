@@ -58,7 +58,7 @@ export default function App({
 					<nav className="bg-[#007fd4] text-white flex items-center justify-between">
 						<section className="px-2 py-1 flex gap-1 max-h-[56px]">
 							<Link href="/">
-								<div className="navitem">SimTicket</div>
+								<div className="navitem">{isMobile ? 'ST' : 'SimTicket'}</div>
 							</Link>
 							<Link href="/about">
 								<div className="navitem">
