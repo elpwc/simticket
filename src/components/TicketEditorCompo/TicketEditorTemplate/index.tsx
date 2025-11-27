@@ -122,8 +122,9 @@ export default ({
 				)}
 			>
 				<div className="flex justify-center items-center flex-wrap">
-					<div className="ticketEditorTemplateToolBarItem flex">
+					<div className="ticketEditorTemplateToolBarItem flex items-center">
 						<button
+						className="text-xs rounded-md px-1 py-1 shadow-sm transition"
 							onClick={() => {
 								increaseScale();
 							}}
@@ -134,6 +135,7 @@ export default ({
 						</button>
 						<span>{currentSizeScale.toFixed(1) + '×'}</span>
 						<button
+						className="text-xs rounded-md px-1 py-1 shadow-sm transition"
 							onClick={() => {
 								reduceScale();
 							}}
@@ -144,7 +146,7 @@ export default ({
 						</button>
 					</div>
 					<button
-						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
+						className="text-xs rounded-md px-1 py-1 shadow-sm transition"
 						onClick={() => {
 							drawTicket();
 						}}
@@ -153,7 +155,7 @@ export default ({
 							<path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
 							<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
 						</svg>
-						{t('TicketEditorTemplate.updateButton')}
+						{/* {t('TicketEditorTemplate.updateButton')} */}
 					</button>
 					<button
 						className="ticketEditorTemplateToolBarItem flex items-center gap-1 primary green"
@@ -192,7 +194,7 @@ export default ({
 					</button>
 					<button
 						title={'投稿'}
-						className="text-xs rounded-md px-1 py-1 shadow-sm transition"
+						className="ticketEditorTemplateToolBarItem flex items-center gap-1"
 						onClick={() => {
 							setShowUploadTicketModal(true);
 						}}
@@ -203,6 +205,7 @@ export default ({
 								d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.5 14.5V11h1v3.5a.5.5 0 0 1-1 0"
 							/>
 						</svg>
+						投稿
 					</button>
 					<label className="ticketEditorTemplateToolBarItem">
 						<Toggle
