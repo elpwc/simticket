@@ -21,7 +21,8 @@ export const drawCRWideTicket = (
 		  }
 		| undefined = undefined,
 	isFlip?: boolean,
-	onDone?: () => void
+	onDone?: () => void,
+	onBgImageLoaded?: () => void
 ) => {
 	if (!ctx || !canvas) return;
 
@@ -520,11 +521,13 @@ export const drawCRWideTicket = (
 			case CRTicketBackGround.MagBlue:
 				// 有背景的
 				bg.onload = () => {
+					onBgImageLoaded?.();
 					draw();
 				};
 				break;
 			case CRTicketBackGround.MagNoneBackground:
 			case CRTicketBackGround.SoftNoneBackground:
+				onBgImageLoaded?.();
 				draw();
 				break;
 		}

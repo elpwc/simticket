@@ -49,6 +49,7 @@ export default function JRWideTicket() {
 	const [canvasSize, setCanvasSize] = useState(JR_MARS_PAPER_TICKET_CANVAS_SIZE);
 	const [currentScale, setCurrentScale] = useState(1);
 
+	const [isBgImageLoading, setIsBgImageLoading] = useState(false);
 	const [isFontLoading, setIsFontLoading] = useState(false);
 	const [isFlipSide, setIsFlipSide] = useState(false);
 	/** 0: close, 1: station1, 2: station2 */
@@ -115,10 +116,23 @@ export default function JRWideTicket() {
 	}, []);
 
 	const drawTicket = () => {
-		drawJRWideTicket(canvasRef.current, canvasRef.current?.width || canvasSize[0], canvasRef.current?.height || canvasSize[1], ctxRef.current, drawParameters, undefined, isFlipSide);
+		drawJRWideTicket(
+			canvasRef.current,
+			canvasRef.current?.width || canvasSize[0],
+			canvasRef.current?.height || canvasSize[1],
+			ctxRef.current,
+			drawParameters,
+			undefined,
+			isFlipSide,
+			() => {},
+			() => {
+				setIsBgImageLoading(false);
+			}
+		);
 	};
 
 	useEffect(() => {
+		setIsBgImageLoading(true);
 		setCanvasSize(JR_MARS_PAPER_TICKET_CANVAS_SIZE);
 	}, [drawParameters.background]);
 
@@ -156,6 +170,7 @@ export default function JRWideTicket() {
 			ticketData={drawParameters}
 			saveFilename={`ticket_${drawParameters.station1}-${drawParameters.station2}`}
 			onScaleChange={setCurrentScale}
+			isBgImageLoading={isBgImageLoading}
 			isFontLoading={isFontLoading}
 			onFlip={(isFlip) => {
 				setIsFlipSide(isFlip);

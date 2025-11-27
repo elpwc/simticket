@@ -24,7 +24,8 @@ export const drawJRWideTicket = (
 		  }
 		| undefined = undefined,
 	isFlip?: boolean,
-	onDone?: () => void
+	onDone?: () => void,
+	onBgImageLoaded?: () => void
 ) => {
 	if (!ctx || !canvas) {
 		return;
@@ -418,10 +419,12 @@ export const drawJRWideTicket = (
 			case JRTicketBackGround.JR_K:
 				// 有背景的
 				bg.onload = () => {
+					onBgImageLoaded?.();
 					draw();
 				};
 				break;
 			case JRTicketBackGround.JR_Empty:
+				onBgImageLoaded?.();
 				draw();
 				break;
 		}

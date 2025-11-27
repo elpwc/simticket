@@ -59,6 +59,7 @@ export default function CRWideTicket() {
 	const [size, setSize] = useState(PAPER_TICKET_SIZE);
 	const [canvasSize, setCanvasSize] = useState(PAPER_TICKET_CANVAS_SIZE);
 
+	const [isBgImageLoading, setIsBgImageLoading] = useState(false);
 	const [isFontLoading, setIsFontLoading] = useState(false);
 	const [isFlipSide, setIsFlipSide] = useState(false);
 
@@ -126,10 +127,23 @@ export default function CRWideTicket() {
 	}, []);
 
 	const drawTicket = () => {
-		drawCRWideTicket(canvasRef.current, canvasRef.current?.width || canvasSize[0], canvasRef.current?.height || canvasSize[1], ctxRef.current, drawParameters, undefined, isFlipSide);
+		drawCRWideTicket(
+			canvasRef.current,
+			canvasRef.current?.width || canvasSize[0],
+			canvasRef.current?.height || canvasSize[1],
+			ctxRef.current,
+			drawParameters,
+			undefined,
+			isFlipSide,
+			() => {},
+			() => {
+				setIsBgImageLoading(false);
+			}
+		);
 	};
 
 	useEffect(() => {
+		setIsBgImageLoading(true);
 		switch (drawParameters.background) {
 			case CRTicketBackGround.MagRed:
 			case CRTicketBackGround.MagBlue:
@@ -208,6 +222,7 @@ export default function CRWideTicket() {
 			scaleYWidth={size[1]}
 			ticketData={drawParameters}
 			saveFilename={`ticket_${drawParameters.station1}-${drawParameters.station2}`}
+			isBgImageLoading={isBgImageLoading}
 			isFontLoading={isFontLoading}
 			onFlip={(isFlip: boolean) => {
 				setIsFlipSide(isFlip);

@@ -67,7 +67,8 @@
     "updateButton": "画像更新",
     "saveButton": "画像保存",
     "reverse": "裏面",
-    "reverse2": "表面"
+    "reverse2": "表面",
+    "loadingImage": "背景画像を読み込み中..."
   },
   "SaveImageModal": {
     "customizeSizeTab": {

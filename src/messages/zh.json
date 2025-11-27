@@ -67,7 +67,8 @@
     "updateButton": "刷新图像",
     "saveButton": "保存图像",
     "reverse": "背面",
-    "reverse2": "正面"
+    "reverse2": "正面",
+    "loadingImage": "加载背景图像中..."
   },
   "SaveImageModal": {
     "title": "选择保存尺寸",

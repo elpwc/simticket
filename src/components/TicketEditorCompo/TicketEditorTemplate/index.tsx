@@ -40,6 +40,7 @@ interface Props {
 	// form
 	form: JSX.Element | null;
 	isFontLoading?: boolean;
+	isBgImageLoading?: boolean;
 	onScaleChange?: (scale: number) => void;
 	onFlip?: (isFlip: boolean) => void;
 }
@@ -57,6 +58,7 @@ export default ({
 	saveFilename,
 	form,
 	isFontLoading,
+	isBgImageLoading,
 	onScaleChange,
 	onFlip,
 }: Props) => {
@@ -124,7 +126,7 @@ export default ({
 				<div className="flex justify-center items-center flex-wrap">
 					<div className="ticketEditorTemplateToolBarItem flex items-center">
 						<button
-						className="text-xs rounded-md px-1 py-1 shadow-sm transition"
+							className="text-xs rounded-md px-1 py-1 shadow-sm transition"
 							onClick={() => {
 								increaseScale();
 							}}
@@ -135,7 +137,7 @@ export default ({
 						</button>
 						<span>{currentSizeScale.toFixed(1) + '×'}</span>
 						<button
-						className="text-xs rounded-md px-1 py-1 shadow-sm transition"
+							className="text-xs rounded-md px-1 py-1 shadow-sm transition"
 							onClick={() => {
 								reduceScale();
 							}}
@@ -217,7 +219,6 @@ export default ({
 						<span>{t('TicketEditorTemplate.flipEffectButton')}</span>
 					</label>
 				</div>
-				<div>{isFontLoading && <span className="text-sm text-gray-500">{t('TicketEditorTemplate.loadingFontText')}</span>}</div>
 
 				<TiltCanvas
 					doTilt={enableCanvasTilt}
@@ -234,6 +235,13 @@ export default ({
 						}
 					}}
 				/>
+				<div>
+					<span className="text-sm text-gray-500">
+						{isFontLoading && t('TicketEditorTemplate.loadingFontText')}
+						{'　'}
+						{isBgImageLoading && t('TicketEditorTemplate.loadingImage')}
+					</span>
+				</div>
 			</div>
 			<div className={clsx(isMobile ? 'w-[100%]' : 'w-[60%]')}>{form}</div>
 			<SaveImageModal
