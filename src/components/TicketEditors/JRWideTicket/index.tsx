@@ -90,11 +90,9 @@ export default function JRWideTicket() {
 			};
 		}
 	};
-	console.log(132, copyEditingTicketDataToDrawParameters);
 	const [drawParameters, setDrawParameters] = useState<JRWideTicketDrawParameters>(copyEditingTicketDataToDrawParameters ? editingTicketData : getInitialValues());
 
 	useEffect(() => {
-		console.log(456, copyEditingTicketDataToDrawParameters);
 		if (copyEditingTicketDataToDrawParameters) {
 			setDrawParameters(editingTicketData);
 			setCopyEditingTicketDataToDrawParameters(false);

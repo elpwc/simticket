@@ -102,7 +102,6 @@ export default function CRWideTicket() {
 	useEffect(() => {
 		if (copyEditingTicketDataToDrawParameters) {
 			setDrawParameters(editingTicketData);
-			console.log(editingTicketData, 11465);
 			setCopyEditingTicketDataToDrawParameters(false);
 		}
 	}, [copyEditingTicketDataToDrawParameters]);
