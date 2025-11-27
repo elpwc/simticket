@@ -132,6 +132,7 @@ export const TicketListViewItem = ({ width, height, className, borderRadius, tic
 			</AnimatePresence>
 			{/*editConfirmDialog */}
 			<Modal
+				style={{ minWidth: '500px' }}
 				isOpen={showEditComfirmDialog}
 				showCancelButton
 				showCancel2Button

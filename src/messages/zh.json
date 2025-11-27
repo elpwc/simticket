@@ -219,9 +219,9 @@
     },
     "editConfirmDialog": {
       "cancel": "取消",
-      "cancel2": "否，覆盖当前编辑",
+      "cancel2": "否，覆盖",
       "ok": "是",
-      "text": "是否保存当前编辑到列表再开始新编辑？"
+      "text": "是否保存当前编辑到列表？"
     }
   },
   "JRPresetStationsModal": {

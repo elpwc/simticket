@@ -216,6 +216,12 @@
         "success": "この乗車券のURLをｸﾘｯﾌﾟﾎﾞｰﾄにコピーしました！",
         "fail": "この乗車券のURLをｸﾘｯﾌﾟﾎﾞｰﾄにコピーできませんでした.."
       }
+    },
+    "editConfirmDialog": {
+      "cancel": "キャンセル",
+      "text": "当面の編集をリストに保存しますか？",
+      "ok": "はい",
+      "cancel2": "いいえ、上書きする"
     }
   },
   "JRPresetStationsModal": {
