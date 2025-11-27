@@ -3,6 +3,8 @@ import { TicketViewer } from './ticketViewer';
 import { addLiked, hasLiked, undoLiked } from '@/utils/localStorage';
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { AppContext } from '@/app/app';
+import { CRWideTicketDrawParameters } from '../TicketEditors/CRWideTicket/type';
+import { JRWideTicketDrawParameters } from '../TicketEditors/JRWideTicket/type';
 
 interface Props {
 	uploadedTicketInfo: UploadedTicketInfo;
@@ -35,7 +37,7 @@ export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked }: P
 				id: crypto.randomUUID(),
 				companyId: uploadedTicketInfo.companyId,
 				ticketTypeId: uploadedTicketInfo.ticketId,
-				ticketData: structuredClone(uploadedTicketInfo.data),
+				ticketData: structuredClone(uploadedTicketInfo.data) as CRWideTicketDrawParameters | JRWideTicketDrawParameters,
 			},
 		]);
 	};

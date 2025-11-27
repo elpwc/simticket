@@ -28,6 +28,8 @@ export default function App({
 	const [showDevProgressModal, setShowDevProgressModal] = useState(false);
 	const [ticketListItems, setTicketListItems] = useState<TicketListItemProperty[]>([]);
 
+	const [copyEditingTicketDataToDrawParameters, setCopyEditingTicketDataToDrawParameters] = useState(false);
+
 	const [editingTicketData, setEditingTicketData] = useState<any>(null);
 
 	useEffect(() => {
@@ -47,6 +49,8 @@ export default function App({
 				setTicketListItems,
 				editingTicketData,
 				setEditingTicketData,
+				copyEditingTicketDataToDrawParameters,
+				setCopyEditingTicketDataToDrawParameters,
 			}}
 		>
 			<HintProvider>

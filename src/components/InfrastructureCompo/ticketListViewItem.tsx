@@ -1,32 +1,53 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TicketViewer } from './ticketViewer';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { useIsMobile } from '@/utils/hooks';
 import { useHint } from './HintProvider';
 import { useLocale } from '@/utils/hooks/useLocale';
-import { getTicketURL } from '@/utils/utils';
+import { getTicketURL, TicketListItemProperty } from '@/utils/utils';
+import { AppContext } from '@/app/app';
+import { Modal } from './Modal';
+import { useRouter } from 'next/navigation';
 
 interface Props {
 	width: number;
 	height: number;
 	className?: string;
 	borderRadius?: string;
-	companyId: number;
-	ticketTypeId: number;
-	ticketData?: any;
+	ticketInfo: TicketListItemProperty;
 	onDelete?: () => void;
 	onSave?: () => void;
 	onUpload?: () => void;
 }
 
-export const TicketListViewItem = ({ width, height, className, borderRadius, companyId, ticketTypeId, ticketData, onDelete, onSave, onUpload }: Props) => {
+export const TicketListViewItem = ({ width, height, className, borderRadius, ticketInfo, onDelete, onSave, onUpload }: Props) => {
 	const { t } = useLocale();
 	const isMobile = useIsMobile();
 	const hint = useHint();
+	const router = useRouter();
 
 	const [hovered, setHovered] = useState(false);
 	const showButtons = hovered || isMobile;
+
+	const [showEditComfirmDialog, setShowEditComfirmDialog] = useState(false);
+
+	const { editingTicketData, setEditingTicketData } = useContext(AppContext);
+	const { copyEditingTicketDataToDrawParameters, setCopyEditingTicketDataToDrawParameters } = useContext(AppContext);
+
+	const {
+		ticketListItems,
+		setTicketListItems,
+	}: {
+		ticketListItems: TicketListItemProperty[];
+		setTicketListItems: Dispatch<SetStateAction<TicketListItemProperty[]>>;
+	} = useContext(AppContext);
+
+	const handleEdit = () => {
+		setShowEditComfirmDialog(true);
+	};
+	const { selectedCompanyId, setSelectedCompanyId } = useContext(AppContext);
+	const { selectedTicketId, setSelectedTicketId } = useContext(AppContext);
 
 	return (
 		<div
@@ -35,27 +56,33 @@ export const TicketListViewItem = ({ width, height, className, borderRadius, com
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
 		>
-			<div className="flex w-full h-full justify-center">
+			<div className="flex w-full h-full justify-center cursor-pointer" onClick={handleEdit}>
 				<TicketViewer
 					width={width}
 					height={height}
 					className="w-full m-auto"
 					style={{ boxShadow: '0 0 3px 0px #858585' }}
 					borderRadius={borderRadius}
-					companyId={companyId}
-					ticketTypeId={ticketTypeId}
-					ticketData={ticketData}
+					companyId={ticketInfo.companyId}
+					ticketTypeId={ticketInfo.ticketTypeId}
+					ticketData={ticketInfo.ticketData}
 				/>
 			</div>
 
 			<AnimatePresence>
 				{showButtons && (
 					<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.1 }} className="absolute top-1 right-1 z-20">
+						<button title={'save to local'} onClick={onSave} className="text-xs text-black rounded-md px-1 py-1 shadow-sm transition">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+								<path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+								<path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+							</svg>
+						</button>
 						<button
 							title={'copy URL'}
 							onClick={() => {
 								navigator.clipboard
-									.writeText(getTicketURL(companyId, ticketTypeId, ticketData))
+									.writeText(getTicketURL(ticketInfo.companyId, ticketInfo.ticketTypeId, ticketInfo.ticketData))
 									.then(() => hint('top', t('TicketListViewItem.copyLink.hint.success')))
 									.catch((err) => hint('top', t('TicketListViewItem.copyLink.hint.fail'), 'red', 2000));
 							}}
@@ -83,13 +110,8 @@ export const TicketListViewItem = ({ width, height, className, borderRadius, com
 						transition={{ duration: 0.1 }}
 						className="absolute bottom-0 left-0 w-full bg-white/60 backdrop-blur-sm flex justify-around py-1 text-sm"
 					>
-						<button
-							className="w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition"
-							onClick={() => {
-								onSave?.();
-							}}
-						>
-							保存
+						<button className="w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition" onClick={handleEdit}>
+							編集
 						</button>
 						<button
 							className="flex justify-center gap-1 w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition"
@@ -108,6 +130,54 @@ export const TicketListViewItem = ({ width, height, className, borderRadius, com
 					</motion.div>
 				)}
 			</AnimatePresence>
+			{/*editConfirmDialog */}
+			<Modal
+				isOpen={showEditComfirmDialog}
+				showCancelButton
+				showCancel2Button
+				showOkButton
+				showCloseButton
+				cancelText={t('TicketListViewItem.editConfirmDialog.cancel')}
+				cancel2Text={t('TicketListViewItem.editConfirmDialog.cancel2')}
+				okText={t('TicketListViewItem.editConfirmDialog.ok')}
+				onCancel={() => {
+					setShowEditComfirmDialog(false);
+				}}
+				onCancel2={() => {
+					setEditingTicketData(structuredClone(ticketInfo.ticketData));
+					setSelectedCompanyId(ticketInfo.companyId);
+					setSelectedTicketId(ticketInfo.ticketTypeId);
+					router.push(`/?com=${ticketInfo.companyId}&ticket=${ticketInfo.ticketTypeId}&id=${ticketInfo.id}`);
+					setTimeout(() => {
+						setCopyEditingTicketDataToDrawParameters(true);
+						setShowEditComfirmDialog(false);
+					}, 500);
+				}}
+				onOk={() => {
+					setTicketListItems((prev: TicketListItemProperty[]) => [
+						...prev,
+						{
+							id: crypto.randomUUID(),
+							companyId: selectedCompanyId,
+							ticketTypeId: selectedTicketId,
+							ticketData: structuredClone(editingTicketData),
+						},
+					]);
+					setEditingTicketData(structuredClone(ticketInfo.ticketData));
+					setSelectedCompanyId(ticketInfo.companyId);
+					setSelectedTicketId(ticketInfo.ticketTypeId);
+					router.push(`/?com=${ticketInfo.companyId}&ticket=${ticketInfo.ticketTypeId}&id=${ticketInfo.id}`);
+					setTimeout(() => {
+						setCopyEditingTicketDataToDrawParameters(true);
+						setShowEditComfirmDialog(false);
+					}, 500);
+				}}
+				onClose={() => {
+					setShowEditComfirmDialog(false);
+				}}
+			>
+				<p>{t('TicketListViewItem.editConfirmDialog.text')}</p>
+			</Modal>
 		</div>
 	);
 };

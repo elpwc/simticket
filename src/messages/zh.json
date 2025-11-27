@@ -85,13 +85,15 @@
     }
   },
   "ticketListView": {
-    "exportList": "导出列表为A4",
+    "exportList": "导出为A4",
     "addResultToListButton": "添加当前编辑结果到列表中",
     "clearListButton": "清空列表",
     "emptyList": "空列表",
     "listSummary": "列表中的车票数：",
     "addResultToListButtonShort": "添加到列表",
-    "exportListShort": "导出为A4"
+    "exportListShort": "导出为A4",
+    "openListButtonText": "展开",
+    "hideListButtonText": "收起"
   },
   "editor": {
     "cr": {
@@ -214,6 +216,12 @@
         "success": "此车票的链接已拷贝进剪切板中！",
         "fail": "链接复制到剪切板失败了.."
       }
+    },
+    "editConfirmDialog": {
+      "cancel": "取消",
+      "cancel2": "否，覆盖当前编辑",
+      "ok": "是",
+      "text": "是否保存当前编辑到列表再开始新编辑？"
     }
   },
   "JRPresetStationsModal": {
@@ -252,7 +260,7 @@
       "search": {
         "from": "出發",
         "to": "到达",
-        "searchText": "搜索文字",
+        "searchText": "搜索",
         "search": "搜索"
       },
       "reset": "重置"

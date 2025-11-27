@@ -86,12 +86,14 @@
   },
   "ticketListView": {
     "clearListButton": "リスト全消",
-    "exportList": "リストをA4一枚に保存",
+    "exportList": "A4に保存",
     "addResultToListButton": "今の編集結果をリストに追加",
     "emptyList": "空リスト",
     "listSummary": "リスト内の切符数：",
     "addResultToListButtonShort": "リストに追加",
-    "exportListShort": "A4に保存"
+    "exportListShort": "A4に保存",
+    "hideListButtonText": "折畳み",
+    "openListButtonText": "開く"
   },
   "editor": {
     "common": {
@@ -252,13 +254,13 @@
       "search": {
         "from": "出発",
         "search": "検索",
-        "searchText": "検索キーワード",
+        "searchText": "検索",
         "to": "到着"
       },
       "reset": "リセット"
     },
     "latest": {
-      "title": "最新投稿"
+      "title": "新着投稿"
     }
   }
 }

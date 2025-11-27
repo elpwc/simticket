@@ -63,10 +63,12 @@ export default function CRWideTicket() {
 	const [isFlipSide, setIsFlipSide] = useState(false);
 
 	const { editingTicketData, setEditingTicketData } = useContext(AppContext);
+	const { copyEditingTicketDataToDrawParameters, setCopyEditingTicketDataToDrawParameters } = useContext(AppContext);
 
 	const getInitialValues = () => {
 		const comParam = searchParams.get('com');
 		const ticketParam = searchParams.get('ticket');
+		//const id = searchParams.get('id');
 		let companyId = 0,
 			ticketTypeId = 0;
 		if (comParam !== null && !isNaN(Number(comParam))) {
@@ -95,7 +97,15 @@ export default function CRWideTicket() {
 			};
 		}
 	};
-	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(getInitialValues());
+	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(copyEditingTicketDataToDrawParameters ? editingTicketData : getInitialValues());
+
+	useEffect(() => {
+		if (copyEditingTicketDataToDrawParameters) {
+			setDrawParameters(editingTicketData);
+			console.log(editingTicketData, 11465);
+			setCopyEditingTicketDataToDrawParameters(false);
+		}
+	}, [copyEditingTicketDataToDrawParameters]);
 
 	useEffect(() => {
 		fontsLoader(
@@ -151,7 +161,11 @@ export default function CRWideTicket() {
 	useEffect(() => {
 		setDrawParameters((prev) => ({
 			...prev,
-			qrCodeText: `${window.location.origin + window.location.pathname}?${drawParameters.station1}-${drawParameters.station2} No.${drawParameters.ticketNo} ${drawParameters.date
+			qrCodeText: `${window.location.origin + window.location.pathname}?${drawParameters.station1}-${drawParameters.station2} No.${drawParameters.ticketNo} ${(typeof drawParameters.date ===
+			'string'
+				? new Date(drawParameters.date)
+				: drawParameters.date
+			)
 				.toISOString()
 				.slice(0, 10)} ${drawParameters.time} ${drawParameters.seatClass}车 ${drawParameters.carriage}${drawParameters.seat1}${drawParameters.seat2}号${drawParameters.seat3} ￥${
 				drawParameters.price
@@ -459,7 +473,11 @@ export default function CRWideTicket() {
 
 						<label className="ticket-form-label">
 							{t('editor.common.trainInfo.departureDate')}
-							<input type="date" value={drawParameters.date.toISOString().slice(0, 10)} onChange={(e) => setDrawParameters((prev) => ({ ...prev, date: new Date(e.target.value) }))} />
+							<input
+								type="date"
+								value={(typeof drawParameters.date === 'string' ? new Date(drawParameters.date) : drawParameters.date).toISOString().slice(0, 10)}
+								onChange={(e) => setDrawParameters((prev) => ({ ...prev, date: new Date(e.target.value) }))}
+							/>
 						</label>
 						<label className="ticket-form-label">
 							{t('editor.common.trainInfo.departureTime')}

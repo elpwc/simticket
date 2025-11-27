@@ -72,9 +72,7 @@ export const TicketListView = ({ showAddButton = true }: Props) => {
 										<TicketListViewItem
 											width={160}
 											height={-1}
-											companyId={item.companyId}
-											ticketTypeId={item.ticketTypeId}
-											ticketData={item.ticketData}
+											ticketInfo={item}
 											onDelete={() => {
 												setTicketListItems((items) => items.filter((ci) => ci.id !== item.id));
 											}}
@@ -159,9 +157,10 @@ export const TicketListView = ({ showAddButton = true }: Props) => {
 				onClose={() => setShowSaveImageModal(false)}
 				defaultCanvasSize={get_CanvasOrImageSize_Of_Ticket_By_TicketType(
 					currentOperatingTicketItemRef.current?.companyId ?? 0,
-					currentOperatingTicketItemRef.current?.ticketData ?? 0,
+					currentOperatingTicketItemRef.current?.ticketTypeId ?? 0,
 					TicketSizeType.CanvasSize,
-					currentOperatingTicketItemRef.current?.ticketData.background ?? 0
+					//@ts-expect-error wait to fix
+					currentOperatingTicketItemRef.current?.ticketData.background
 				)}
 			/>
 			<UploadTicketModal
@@ -169,7 +168,8 @@ export const TicketListView = ({ showAddButton = true }: Props) => {
 				ticketInfo={{
 					companyId: currentOperatingTicketItemRef.current?.companyId ?? 0,
 					ticketTypeId: currentOperatingTicketItemRef.current?.ticketTypeId ?? 0,
-					ticketData: currentOperatingTicketItemRef.current?.ticketData ?? 0,
+					//@ts-expect-error wait to fix
+					ticketData: currentOperatingTicketItemRef.current?.ticketData,
 					id: currentOperatingTicketItemRef.current?.id ?? '',
 				}}
 				onClose={() => {

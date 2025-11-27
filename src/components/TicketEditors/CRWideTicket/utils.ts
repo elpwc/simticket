@@ -118,7 +118,7 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		info1from,
 		info1to,
 	] = arr;
-
+console.log(date, new Date(date), typeof date, typeof new Date(date))
 	return {
 		background,
 		showBorder: !!showBorder,

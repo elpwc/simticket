@@ -7,10 +7,13 @@ type Props = {
 	onClose: () => void;
 	onOk?: () => void;
 	onCancel?: () => void;
+	onCancel2?: () => void;
 	showOkButton?: boolean;
 	showCancelButton?: boolean;
+	showCancel2Button?: boolean;
 	okText?: string;
 	cancelText?: string;
+	cancel2Text?: string;
 	title?: string | ReactNode;
 	children: ReactNode;
 	mobileMode?: 'fullscreen' | 'scroll' | 'center';
@@ -26,10 +29,13 @@ export const Modal: React.FC<Props> = ({
 	onClose,
 	onOk,
 	onCancel,
+	onCancel2,
 	showOkButton = false,
 	showCancelButton = false,
+	showCancel2Button = false,
 	okText = 'OK',
 	cancelText = 'キャンセル',
+	cancel2Text = '取り消し',
 	title,
 	children,
 	mobileMode = 'fullscreen',
@@ -73,6 +79,11 @@ export const Modal: React.FC<Props> = ({
 						{showCancelButton && (
 							<button className="modal-btn styled-button" onClick={onCancel || onClose}>
 								{cancelText}
+							</button>
+						)}
+						{showCancel2Button && (
+							<button className="modal-btn styled-button" onClick={onCancel2}>
+								{cancel2Text}
 							</button>
 						)}
 						{showOkButton && (

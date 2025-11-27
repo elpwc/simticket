@@ -55,10 +55,12 @@ export default function JRWideTicket() {
 	const [showJRPresetStationsModal, setShowJRPresetStationsModal] = useState(0);
 
 	const { editingTicketData, setEditingTicketData } = useContext(AppContext);
+	const { copyEditingTicketDataToDrawParameters, setCopyEditingTicketDataToDrawParameters } = useContext(AppContext);
 
 	const getInitialValues = () => {
 		const comParam = searchParams.get('com');
 		const ticketParam = searchParams.get('ticket');
+		//const id = searchParams.get('id');
 		let companyId = 0,
 			ticketTypeId = 0;
 		if (comParam !== null && !isNaN(Number(comParam))) {
@@ -67,6 +69,7 @@ export default function JRWideTicket() {
 		if (ticketParam !== null && !isNaN(Number(ticketParam))) {
 			ticketTypeId = Number(ticketParam);
 		}
+
 		const ticketDataStr = searchParams.get('data');
 		if (ticketDataStr !== null && ticketDataStr !== '' && companyId === 1 && ticketTypeId === 1) {
 			const comParam = searchParams.get('com');
@@ -87,7 +90,16 @@ export default function JRWideTicket() {
 			};
 		}
 	};
-	const [drawParameters, setDrawParameters] = useState<JRWideTicketDrawParameters>(getInitialValues());
+	console.log(132, copyEditingTicketDataToDrawParameters);
+	const [drawParameters, setDrawParameters] = useState<JRWideTicketDrawParameters>(copyEditingTicketDataToDrawParameters ? editingTicketData : getInitialValues());
+
+	useEffect(() => {
+		console.log(456, copyEditingTicketDataToDrawParameters);
+		if (copyEditingTicketDataToDrawParameters) {
+			setDrawParameters(editingTicketData);
+			setCopyEditingTicketDataToDrawParameters(false);
+		}
+	}, [copyEditingTicketDataToDrawParameters]);
 
 	useEffect(() => {
 		fontsLoader(
@@ -432,7 +444,11 @@ export default function JRWideTicket() {
 					<TabBox title="運行情報" className="flex flex-wrap gap-2">
 						<label className="ticket-form-label">
 							発車日付
-							<input type="date" value={drawParameters.date.toISOString().slice(0, 10)} onChange={(e) => setDrawParameters((prev) => ({ ...prev, date: new Date(e.target.value) }))} />
+							<input
+								type="date"
+								value={(typeof drawParameters.date === 'string' ? new Date(drawParameters.date) : drawParameters.date).toISOString().slice(0, 10)}
+								onChange={(e) => setDrawParameters((prev) => ({ ...prev, date: new Date(e.target.value) }))}
+							/>
 						</label>
 						<label className="ticket-form-label">
 							発車時間

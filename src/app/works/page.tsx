@@ -10,6 +10,7 @@ import PrettyDropdown from '@/components/InfrastructureCompo/PrettyDropdown';
 import { companyList } from '@/utils/companies';
 import Image from 'next/image';
 import InfiniteScroll from 'react-infinite-scroller';
+import { TicketListView } from '@/components/InfrastructureCompo/ticketListView';
 
 export default function Works() {
 	const { t, locale } = useLocale();
@@ -41,6 +42,7 @@ export default function Works() {
 	const load = useCallback(async () => {
 		getUploadedTickets(companyId, ticketId, orderBy, '', pageSize, asc).then((e) => {
 			resetInfiniteScrollPage();
+			setHasMore(true);
 			setWorks(e);
 		});
 	}, [companyId, ticketId, orderBy, anyText, asc]);
@@ -90,9 +92,11 @@ export default function Works() {
 								uploadedTicketInfo={work}
 								onLiked={() => {
 									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
+									setLatestWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
 								}}
 								onUndoLiked={() => {
 									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
+									setLatestWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
 								}}
 							/>
 						);
@@ -100,9 +104,10 @@ export default function Works() {
 				</div>
 			</div>
 			<div className="bg-white shadow-md rounded-2xl p-2 mb-4 flex flex-wrap gap-2">
-				<div className="flex flex-wrap gap-4">
-					<div className="flex flex-col w-fit md:w-auto">
+				<div className="flex flex-wrap md:flex-nowrap gap-4 w-full md:w-fit">
+					<div className="flex flex-col md:w-[200px] w-full">
 						<PrettyDropdown
+							mainClassname="w-full"
 							options={[
 								{
 									value: -1,
@@ -127,12 +132,14 @@ export default function Works() {
 							value={companyId}
 							onChange={(i) => {
 								setCompanyId(Number(i));
+								setTicketId(-1);
 							}}
 						/>
 					</div>
 
-					<div className="flex flex-col w-fit md:w-auto">
+					<div className="flex flex-col md:w-[200px] w-full">
 						<PrettyDropdown
+							mainClassname="w-full"
 							options={[
 								{
 									value: -1,
@@ -140,11 +147,11 @@ export default function Works() {
 										return <span className="flex">{t('worksPage.filter.allTicketType')}</span>;
 									},
 								},
-								...(companyList[companyId]?.tickets?.map((company, index) => {
+								...(companyList[companyId]?.tickets?.map((ticket, index) => {
 									return {
 										value: index,
 										getCaption: (isShownOnTop?: boolean, isSelected?: boolean) => {
-											return <>{company.name}</>;
+											return <>{ticket.name}</>;
 										},
 									};
 								}) || []),
@@ -243,15 +250,20 @@ export default function Works() {
 								uploadedTicketInfo={work}
 								onLiked={() => {
 									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
+									setLatestWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
 								}}
 								onUndoLiked={() => {
 									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
+									setLatestWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
 								}}
 							/>
 						</div>
 					);
 				})}
 			</InfiniteScroll>
+			<footer className="">
+				<TicketListView showAddButton={false} />
+			</footer>
 		</div>
 	);
 }

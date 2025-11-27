@@ -28,7 +28,7 @@ export const getUploadedTickets = async (
 ) => {
 	const params = new URLSearchParams();
 	if (companyId >= 0) params.append('companyId', String(companyId));
-	if (ticketTypeId >= 0) params.append('ticketTypeId', String(ticketTypeId));
+	if (ticketTypeId >= 0) params.append('ticketId', String(ticketTypeId));
 	if (orderBy !== OrderType.none) params.append('orderBy', orderBy);
 	if (ip !== '') params.append('ip', ip);
 	if (limit >= 0) params.append('limit', String(limit));

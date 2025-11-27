@@ -1,6 +1,7 @@
-import { CRTicketBackGround } from '@/components/TicketEditors/CRWideTicket/type';
+import { CRTicketBackGround, CRWideTicketDrawParameters } from '@/components/TicketEditors/CRWideTicket/type';
 import { decodeCRWideTicketParams, encodeCRWideTicketParams } from '@/components/TicketEditors/CRWideTicket/utils';
 import { MAG_TICKET_A4_SIZE, MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_A4_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from '@/components/TicketEditors/CRWideTicket/value';
+import { JRWideTicketDrawParameters } from '@/components/TicketEditors/JRWideTicket/type';
 import { decodeJRWideTicketParams, encodeJRWideTicketParams } from '@/components/TicketEditors/JRWideTicket/utils';
 import { JR_MARS_PAPER_TICKET_A4_SIZE, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, JRWideTicketDrawParametersInitialValues } from '@/components/TicketEditors/JRWideTicket/value';
 import QRCode from 'qrcode';
@@ -433,7 +434,7 @@ export interface TicketListItemProperty {
 	id: string;
 	companyId: number;
 	ticketTypeId: number;
-	ticketData?: any;
+	ticketData: CRWideTicketDrawParameters | JRWideTicketDrawParameters;
 }
 
 export const Object2String = (obj: any): string => {
