@@ -40,7 +40,7 @@ export default function Works() {
 	const pageSize = 5;
 
 	const load = useCallback(async () => {
-		getUploadedTickets(companyId, ticketId, orderBy, '', pageSize, asc).then((e) => {
+		getUploadedTickets(companyId, ticketId, orderBy, '', pageSize, asc, 0, startStation, endStation, anyText).then((e) => {
 			resetInfiniteScrollPage();
 			setHasMore(true);
 			setWorks(e);
@@ -48,7 +48,7 @@ export default function Works() {
 	}, [companyId, ticketId, orderBy, anyText, asc]);
 
 	const loadLatest = useCallback(async () => {
-		getUploadedTickets(companyId, ticketId, OrderType.createTime, '', 10, asc).then((e) => {
+		getUploadedTickets(companyId, ticketId, OrderType.createTime, '', 10, asc, 0, startStation, endStation, anyText).then((e) => {
 			setLatestWorks(e);
 		});
 	}, [companyId, ticketId, asc]);
@@ -57,7 +57,7 @@ export default function Works() {
 		if (isLoading || !hasMore) return;
 		setIsLoading(true);
 		try {
-			const res = await getUploadedTickets(companyId, ticketId, orderBy, anyText, pageSize, asc, nextPageIndex);
+			const res = await getUploadedTickets(companyId, ticketId, orderBy, anyText, pageSize, asc, nextPageIndex, startStation, endStation, anyText);
 			if (!res || res.length === 0) {
 				setHasMore(false);
 			} else {
@@ -222,6 +222,7 @@ export default function Works() {
 							setTicketId(-1);
 							setStartStation('');
 							setEndStation('');
+							setAnyText('')
 							setOrderBy(OrderType.createTime);
 							setAsc(false);
 							load();

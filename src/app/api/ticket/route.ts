@@ -22,6 +22,9 @@ export async function GET(req: NextRequest) {
 	const orderBy = searchParams.get('orderBy'); // views | like
 	const asc = searchParams.get('asc') === 'asc' ? 'asc' : 'desc'; // asc | desc
 	const page = searchParams.get('page') ? Math.max(Number(searchParams.get('page')), 0) : 0;
+	const from = searchParams.get('from');
+	const to = searchParams.get('to');
+	const search = searchParams.get('search');
 
 	const skip = page * limit;
 
@@ -32,6 +35,8 @@ export async function GET(req: NextRequest) {
 			...(publicStatus !== null ? { publicStatus: Number(publicStatus) as PublicStatus } : {}),
 			...(ticketId ? { ticketId: Number(ticketId) } : {}),
 			...(companyId ? { companyId: Number(companyId) } : {}),
+			...(from ? { from: from } : {}),
+			...(to ? { to: to } : {}),
 		},
 		orderBy: orderBy === 'views' ? { views: asc } : orderBy === 'like' ? { like: asc } : { createdAt: asc },
 		skip,
@@ -50,10 +55,21 @@ export async function GET(req: NextRequest) {
 		},
 	});
 
-	tickets = tickets.map((item) => ({
-		...item,
-		data: decodeTicket(item.companyId, item.ticketId, item.data),
-	}));
+	tickets = tickets
+		.filter((item) => {
+			if (search && search !== '') {
+				const bytes = new TextEncoder().encode(search || '');
+				const binary = Array.from(bytes, (b) => String.fromCharCode(b)).join('');
+				const b64 = Buffer.from(binary, 'binary').toString('base64');
+				return item.data.includes(b64);
+			} else {
+				return true;
+			}
+		})
+		.map((item) => ({
+			...item,
+			data: decodeTicket(item.companyId, item.ticketId, item.data),
+		}));
 
 	return Response.json(tickets);
 }
@@ -66,16 +82,20 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
 	const body = await req.json();
 
+	const createData: any = {
+		name: body.name,
+		companyId: body.companyId,
+		ticketId: body.ticketId,
+		data: body.data,
+		ip: body.ip,
+		editorName: body.editorName ?? '',
+		publicStatus: body.publicStatus ?? PublicStatus.WaitForChecking,
+		from: body.from,
+		to: body.to,
+	};
+
 	const newTicket = await prisma.ticket.create({
-		data: {
-			name: body.name,
-			companyId: body.companyId,
-			ticketId: body.ticketId,
-			data: body.data,
-			ip: body.ip,
-			editorName: body.editorName ?? '',
-			publicStatus: body.publicStatus ?? PublicStatus.WaitForChecking,
-		},
+		data: createData,
 	});
 
 	return Response.json(newTicket);

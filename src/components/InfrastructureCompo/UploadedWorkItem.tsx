@@ -55,7 +55,7 @@ export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked }: P
 			pb-0
 			w-fit 
 			md:w-fit 
-			h-fit
+			h-[initial]
 			m-1 
 			border border-gray-200
 		"

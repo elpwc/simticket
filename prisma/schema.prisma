@@ -14,7 +14,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Ticket {
+model ticket {
   id           Int      @id @default(autoincrement())
   name         String
   companyId    Int
@@ -27,4 +27,6 @@ model Ticket {
   views        Int      @default(0)
   createdAt    DateTime @default(now())
   deleted      Boolean  @default(false)
+  from         String   @default("")
+  to           String   @default("")
 }

@@ -34,8 +34,8 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 	}, [isAgree]);
 
 	const handleUpload = async (values: typeof defaultValues) => {
-		const ticketData = encodeTicket(ticketInfo.companyId, ticketInfo.ticketTypeId, ticketInfo.ticketData);
-		if (ticketData.length > 2048) {
+		const encodedTicketData = encodeTicket(ticketInfo.companyId, ticketInfo.ticketTypeId, ticketInfo.ticketData);
+		if (encodedTicketData.length > 2048) {
 			hint('top', t('UploadTicketModal.tooLong'), 'red');
 		} else {
 			await fetch('/api/ticket', {
@@ -46,8 +46,10 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 					editorName: values.editorName,
 					companyId: ticketInfo.companyId,
 					ticketId: ticketInfo.ticketTypeId,
-					data: ticketData,
+					data: encodedTicketData,
 					ip: await getIP(),
+					from: ticketInfo.ticketData.station1 ?? '',
+					to: ticketInfo.ticketData.station2 ?? '',
 				}),
 			})
 				.then((e) => {

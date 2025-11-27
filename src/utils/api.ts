@@ -24,9 +24,13 @@ export const getUploadedTickets = async (
 	ip: string = '',
 	limit: number = 20,
 	asc: boolean = false,
-	page: number = 0
+	page: number = 0,
+	from: string = '',
+	to: string = '',
+	search: string = ''
 ) => {
 	const params = new URLSearchParams();
+	console.log(companyId, from, to, search)
 	if (companyId >= 0) params.append('companyId', String(companyId));
 	if (ticketTypeId >= 0) params.append('ticketId', String(ticketTypeId));
 	if (orderBy !== OrderType.none) params.append('orderBy', orderBy);
@@ -34,7 +38,11 @@ export const getUploadedTickets = async (
 	if (limit >= 0) params.append('limit', String(limit));
 	if (asc) params.append('asc', asc ? 'asc' : 'desc');
 	if (page) params.append('page', page.toString());
+	if (from !== '') params.append('from', from);
+	if (to !== '') params.append('to', to);
+	if (search !== '') params.append('search', search);
 
+	console.log(params)
 	return await fetch('/api/ticket' + (params.toString() ? `?${params.toString()}` : ''))
 		.then((response) => response.json())
 		.then((data) => {
