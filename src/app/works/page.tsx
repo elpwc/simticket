@@ -248,7 +248,7 @@ export default function Works() {
 				hasMore={hasMore}
 				loader={<div className="horizonal-end">loading...</div>}
 				useWindow={true}
-				className="flex flex-wrap"
+				className="flex flex-wrap pb-[500px]"
 				style={{ justifyContent: isMobile ? 'center' : 'start' }}
 			>
 				{works.map((work: UploadedTicketInfo) => {
