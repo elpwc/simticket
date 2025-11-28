@@ -25,6 +25,15 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const flipCanvasRef = useRef<HTMLCanvasElement | null>(null);
 	const [selectedTicketListItems, setSelectedTicketListItems] = useState<string[]>([]);
+	const [canvasWidth, setCanvasWidth] = useState(0);
+	const [canvasHeight, setCanvasHeight] = useState(0);
+
+	useEffect(() => {
+		const w = window.innerWidth * 0.4;
+		const h = (w / A4_SIZE[0]) * A4_SIZE[1];
+		setCanvasWidth(w);
+		setCanvasHeight(h);
+	}, []);
 
 	const {
 		ticketListItems,
@@ -133,21 +142,11 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 				<div className="flex w-full gap-5 justify-around items-center bg-gray-50 rounded-lg shadow-inner min-w-[320px]" style={{ padding: isMobile ? '8px' : '16px' }}>
 					<div>
 						<span className="font-semibold text-gray-700 mb-2">{t('SaveListModal.printPreview')}</span>
-						<canvas
-							ref={canvasRef}
-							className="border border-gray-400 bg-white max-w-[280px]"
-							width={window.innerWidth * 0.4}
-							height={((window.innerWidth * 0.4) / A4_SIZE[0]) * A4_SIZE[1]}
-						/>
+						<canvas ref={canvasRef} className="border border-gray-400 bg-white max-w-[280px]" width={canvasWidth} height={canvasHeight} />
 					</div>
 					<div>
 						<span className="font-semibold text-gray-700 mt-4 mb-2">{t('SaveListModal.printPreviewFlip')}</span>
-						<canvas
-							ref={flipCanvasRef}
-							className="border border-gray-400 bg-white max-w-[280px]"
-							width={window.innerWidth * 0.4}
-							height={((window.innerWidth * 0.4) / A4_SIZE[0]) * A4_SIZE[1]}
-						/>
+						<canvas ref={flipCanvasRef} className="border border-gray-400 bg-white max-w-[280px]" width={canvasWidth} height={canvasHeight} />
 					</div>
 				</div>
 

@@ -22,20 +22,24 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 	const { t } = useLocale();
 	const hint = useHint();
 
-	const defaultValues = {
-		name: '',
-		editorName: localStorage.getItem('editorName'),
-	};
-
 	const [isAgree, setIsAgree]: [boolean, any] = useState(false);
 	const [buttonAvailable, setbuttonAvailable]: [boolean, any] = useState(false);
-	const [initialValues, setinitialValues]: [any, any] = useState(defaultValues);
+	const [initialValues, setinitialValues]: [any, any] = useState();
 
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			setinitialValues({
+				name: '',
+				editorName: localStorage.getItem('editorName') || '',
+			});
+		}
+	}, []);
+	
 	useEffect(() => {
 		setbuttonAvailable(isAgree);
 	}, [isAgree]);
 
-	const handleUpload = async (values: typeof defaultValues) => {
+	const handleUpload = async (values: typeof initialValues) => {
 		const ticketData = encodeTicket(ticketInfo.companyId, ticketInfo.ticketTypeId, ticketInfo.ticketData);
 		if (ticketData.length > 2048) {
 			hint('top', t('UploadTicketModal.tooLong'), 'red');
