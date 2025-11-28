@@ -251,6 +251,7 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	station1en: 'Tokyo Metro Area',
 	station2en: 'Hokkaido Iryo Daigaku',
 	doShowEnglish: false,
+	isKaisukenArrow: false,
 	railways: ['新幹線', '函館', '室蘭', '札沼'],
 	paymentMethod: JRPaymentMethod.CreditCard,
 	date: new Date(),

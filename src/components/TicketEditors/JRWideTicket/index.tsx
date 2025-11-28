@@ -485,6 +485,20 @@ export default function JRWideTicket() {
 								/>
 							</div>
 						</label>
+						<label className="ticket-form-label">
+							矢印様式
+							<PrettyInputRadioGroup
+								value={drawParameters.isKaisukenArrow ? '1' : '0'}
+								onChange={(value) => {
+									setDrawParameters((prev) => ({ ...prev, isKaisukenArrow: value === '1' }));
+								}}
+								list={[
+									{ value: '0', title: '→（一般）' },
+									{ value: '1', title: '↔（回数券）' },
+								]}
+								showInputBox={false}
+							/>
+						</label>
 					</TabBox>
 
 					<TabBox title="運行情報（仮）" className="flex flex-wrap gap-2">

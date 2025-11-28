@@ -19,6 +19,7 @@ export type JRWideTicketDrawParameters = {
 	station1en: string;
 	station2en: string;
 	doShowEnglish: boolean;
+	isKaisukenArrow: boolean;
 	railways: string[];
 	paymentMethod: JRPaymentMethod;
 	date: Date;

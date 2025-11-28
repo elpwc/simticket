@@ -366,6 +366,16 @@ export const drawJRWideTicket = (
 		ctx.fill();
 		ctx.closePath();
 
+		if (drawParameters.isKaisukenArrow) {
+			ctx.beginPath();
+			ctx.lineWidth = resizedScaleY(1);
+			ctx.moveTo(offsetScaleX(725), offsetScaleY(360));
+			ctx.lineTo(offsetScaleX(725 - 23), offsetScaleY(337));
+			ctx.lineTo(offsetScaleX(725), offsetScaleY(317));
+			ctx.fill();
+			ctx.closePath();
+		}
+
 		// 経由
 		ctx.font = resizedFont(5.5, 'DotFont');
 		drawText(ctx, '経由:' + drawParameters.railways.join('･'), offsetScaleX(113), offsetScaleY(458), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
