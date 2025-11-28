@@ -19,6 +19,9 @@ import {
 	JRStationNameTypeRadioboxItemData,
 	TokuteiTokuShinai,
 	JRPresetStations,
+	JRPAYMENT_METHOD_LIST,
+	JRPaymentMethod,
+	JR_info1List,
 } from './value';
 import { JRStationNameType, JRWideTicketDrawParameters } from './type';
 import { AppContext } from '@/app/app';
@@ -184,6 +187,18 @@ export default function JRWideTicket() {
 							<JRWideTicketBgSelector value={drawParameters.background} onChange={(e) => setDrawParameters((prev) => ({ ...prev, background: e }))} />
 						</label>
 						<label className="ticket-form-label">
+							券幅（仮）
+							<PrettyInputRadioGroup
+								value={'0'}
+								onChange={(value) => {}}
+								list={[
+									{ value: '0', title: '85ミリ券' },
+									{ value: '1', title: '120ミリ券' },
+								]}
+								showInputBox={false}
+							/>
+						</label>
+						<label className="ticket-form-label">
 							印刷ズレ
 							<div className="flex grid-cols-3 gap-2">
 								<label className="flex gap-1 items-center">
@@ -230,7 +245,7 @@ export default function JRWideTicket() {
 							<input className="" style={{ color: '#AF0508' }} value={drawParameters.watermark} onChange={(e) => setDrawParameters((prev) => ({ ...prev, watermark: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							乗車券種類
+							乗車券種類（仮）
 							<PrettyInputRadioGroup
 								list={JR_TICKET_TYPE.map((jrTicketTypeItem) => {
 									return { value: jrTicketTypeItem.name, title: jrTicketTypeItem.name };
@@ -245,7 +260,7 @@ export default function JRWideTicket() {
 							&nbsp;
 							<div>
 								<Toggle value={true} onChange={(value) => {}} />
-								英文付き券面
+								英文付き券面（仮）
 							</div>
 						</label>
 					</TabBox>
@@ -450,11 +465,29 @@ export default function JRWideTicket() {
 
 						<label className="ticket-form-label">
 							経由
-							<input value={drawParameters.railways.join(',')} onChange={(e) => setDrawParameters((prev) => ({ ...prev, railways: e.target.value.split(',') }))} />
+							<input
+								value={drawParameters.railways.join(',')}
+								placeholder="半角「,」で分けて下さい（例：東海道,御殿場）"
+								onChange={(e) => setDrawParameters((prev) => ({ ...prev, railways: e.target.value.split(',') }))}
+							/>
+						</label>
+
+						<label className="ticket-form-label border-t-[#ccc_!important]">
+							テキスト１
+							<div className="flex gap-3 flex-wrap">
+								<PrettyInputRadioGroup
+									name="info1"
+									list={JR_info1List.map((item) => ({ title: item, value: item }))}
+									value={drawParameters.info1}
+									onChange={(value: string) => {
+										setDrawParameters((prev) => ({ ...prev, info1: value }));
+									}}
+								/>
+							</div>
 						</label>
 					</TabBox>
 
-					<TabBox title="運行情報" className="flex flex-wrap gap-2">
+					<TabBox title="運行情報（仮）" className="flex flex-wrap gap-2">
 						<label className="ticket-form-label">
 							発車日付
 							<input
@@ -536,7 +569,20 @@ export default function JRWideTicket() {
 						</label>
 					</TabBox>
 
-					<TabBox title="購入情報" className="flex flex-wrap">
+					<TabBox title="購入情報（仮）" className="flex flex-wrap">
+						<label className="ticket-form-label">
+							購入手段（仮）
+							<PrettyInputRadioGroup
+								value={drawParameters.paymentMethod.toString()}
+								onChange={(e) => setDrawParameters((prev) => ({ ...prev, paymentMethod: Number(e) as JRPaymentMethod }))}
+								list={JRPAYMENT_METHOD_LIST.map((JRPAYMENTHOD) => {
+									return {
+										value: JRPAYMENTHOD.value.toString(),
+										title: <p title={JRPAYMENTHOD.title}>{JRPAYMENTHOD.text}</p>,
+									};
+								})}
+							/>
+						</label>
 						<label className="ticket-form-label">
 							値段 ￥
 							<input value={drawParameters.price} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price: e.target.value }))} />
@@ -548,7 +594,7 @@ export default function JRWideTicket() {
 
 						<Divider />
 					</TabBox>
-					<TabBox title="番号" className="flex flex-wrap">
+					<TabBox title="番号（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
 							発券番号
 							<input className="text-red-500" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />

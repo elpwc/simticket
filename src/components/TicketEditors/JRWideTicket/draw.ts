@@ -127,6 +127,20 @@ export const drawJRWideTicket = (
 				case JRPaymentMethod.CreditCard:
 					paymentText = 'C制';
 					break;
+				case JRPaymentMethod.JRE:
+					paymentText = '東C';
+					break;
+				case JRPaymentMethod.JRC:
+					paymentText = '海C';
+					break;
+				case JRPaymentMethod.JRW:
+					paymentText = '西C';
+					break;
+				case JRPaymentMethod.JRCreditCard:
+					paymentText = 'クレジツト';
+					break;
+				default:
+					break;
 			}
 			drawText(ctx, paymentText, offsetScaleX(120), offsetScaleY(220), resizedScaleX(183), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1);
 			ctx.strokeStyle = 'black';
@@ -379,6 +393,10 @@ export const drawJRWideTicket = (
 		ctx.fillText(`￥`, offsetScaleX(1093), offsetScaleY(534), resizedScaleX(100));
 		ctx.font = resizedFont(7, 'DotFont');
 		drawText(ctx, `${drawParameters.price}`, offsetScaleX(1133), offsetScaleY(534), resizedScaleX(300), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 1.25);
+
+		// 信息1
+		ctx.font = resizedFont(5.5, 'DotFont');
+		drawText(ctx, `${drawParameters.info1}`, offsetScaleX(155), offsetScaleY(606), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 
 		onDone?.();
 	};

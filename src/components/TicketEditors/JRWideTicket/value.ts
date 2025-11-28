@@ -30,20 +30,47 @@ export enum JRPaymentMethod {
 	Cash,
 	ICCard,
 	CreditCard,
+	JRE,
+	JRC,
+	JRW,
+	JRCreditCard,
 }
 
 export const JRPAYMENT_METHOD_LIST = [
 	{
 		value: JRPaymentMethod.Cash,
 		title: '現金',
+		text: '現金',
 	},
 	{
 		value: JRPaymentMethod.ICCard,
 		title: 'ＩＣカード',
+		text: 'ⅠＣ',
 	},
 	{
 		value: JRPaymentMethod.CreditCard,
 		title: 'クレジットカード',
+		text: 'Ｃ制',
+	},
+	{
+		value: JRPaymentMethod.JRE,
+		title: 'ビューカード',
+		text: '東Ｃ',
+	},
+	{
+		value: JRPaymentMethod.JRC,
+		title: 'JR東海エクスプレス・カード',
+		text: '海Ｃ',
+	},
+	{
+		value: JRPaymentMethod.JRW,
+		title: 'J-WEST CARD',
+		text: '西Ｃ',
+	},
+	{
+		value: JRPaymentMethod.JRCreditCard,
+		title: 'JRカード',
+		text: 'クレジット',
 	},
 ];
 
@@ -112,7 +139,7 @@ export const JRPresetStations = [
 		station2Type: JRStationNameType.Normal,
 		station2AreaChar: '',
 		station2en: '',
-		railways: ['宗谷','函館','室蘭','函館','新幹線','指宿枕崎線'],
+		railways: ['宗谷', '函館', '室蘭', '函館', '新幹線', '指宿枕崎線'],
 	},
 	{
 		station1: '那覇',
@@ -238,7 +265,7 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	serialCode: '1145141919810A000001 JM',
 	noSeat: false,
 	noCarriage: false,
-	info1: '乘车纪念',
+	info1: '下車前途無効',
 };
 
 export const TokuteiTokuShinai = [
@@ -335,3 +362,5 @@ export const JRTicketFlipSideText = `●このきっぶに関するお取扱い�
 途中下車･変更･払戻し･乗り遅れ時の
 取扱いなどに特別な制約があります。
 　詳しくは係員にお尋ね下さい。`;
+
+export const JR_info1List = ['下車前途無効', '山手線内各駅下車前途無効', '券面表示の都区市内各駅下車前途無効'];
