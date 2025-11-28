@@ -1,4 +1,5 @@
 'use client';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { TicketViewer } from './ticketViewer';
 import { Dispatch, SetStateAction, useContext, useState } from 'react';

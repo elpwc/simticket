@@ -68,6 +68,7 @@ export const useLocale = (...baseKeys: string[]) => {
 	const { locale, t: rawT, setLocale } = useContext(LocaleContext);
 
 	const t = (key: string) => {
+		if (typeof window === 'undefined') return '';
 		for (const baseKey of baseKeys) {
 			const fullKey = `${baseKey}.${key}`;
 			const translated = rawT(fullKey);

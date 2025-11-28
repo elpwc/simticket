@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { Modal } from '../InfrastructureCompo/Modal';
 import TabBox from '../InfrastructureCompo/TabBox';
@@ -5,6 +7,7 @@ import clsx from 'clsx';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { get_CanvasOrImageSize_Of_Ticket_By_TicketType, saveCanvasToLocal, TicketListItemProperty, TicketSizeType } from '@/utils/utils';
 import { drawTicket } from '@/utils/drawTicket';
+import { CRTicketBackGround } from '../TicketEditors/CRWideTicket/type';
 
 interface Props {
 	show: boolean;
@@ -30,7 +33,12 @@ export const SaveImageModal = ({ show, ticketInfo, saveFilename, defaultCanvasSi
 	const handleSave = (scale: number, title: string) => {
 		const tmpCanvas = document.createElement('canvas');
 
-		const canvasSize = get_CanvasOrImageSize_Of_Ticket_By_TicketType(ticketInfo.companyId || 0, ticketInfo.ticketTypeId, TicketSizeType.CanvasSize, ticketInfo.ticketData.background || false);
+		const canvasSize = get_CanvasOrImageSize_Of_Ticket_By_TicketType(
+			ticketInfo.companyId || 0,
+			ticketInfo.ticketTypeId,
+			TicketSizeType.CanvasSize,
+			ticketInfo.ticketData.background as CRTicketBackGround
+		);
 		tmpCanvas.width = canvasSize[0] * scale;
 		tmpCanvas.height = canvasSize[1] * scale;
 		const tmpCtx = tmpCanvas.getContext('2d')!;

@@ -20,9 +20,11 @@ export default function Works() {
 	const infiniteScrollRef = useRef(null);
 
 	const resetInfiniteScrollPage = () => {
-		if (infiniteScrollRef.current) {
-			//@ts-expect-error outer library
-			infiniteScrollRef.current.pageLoaded = 0;
+		if (typeof window !== 'undefined') {
+			if (infiniteScrollRef.current) {
+				//@ts-expect-error outer library
+				infiniteScrollRef.current.pageLoaded = 0;
+			}
 		}
 	};
 
@@ -42,11 +44,13 @@ export default function Works() {
 	const pageSize = 5;
 
 	const load = useCallback(async () => {
-		getUploadedTickets(companyId, ticketId, orderBy, '', pageSize, asc, 0, startStation, endStation, anyText).then((e) => {
-			resetInfiniteScrollPage();
-			setHasMore(true);
-			setWorks(e);
-		});
+		if (typeof window !== 'undefined') {
+			getUploadedTickets(companyId, ticketId, orderBy, '', pageSize, asc, 0, startStation, endStation, anyText).then((e) => {
+				resetInfiniteScrollPage();
+				setHasMore(true);
+				setWorks(e);
+			});
+		}
 	}, [companyId, ticketId, orderBy, anyText, asc]);
 
 	const loadLatest = useCallback(async () => {
@@ -56,6 +60,7 @@ export default function Works() {
 	}, [companyId, ticketId, asc]);
 
 	const loadMore = async (nextPageIndex: number) => {
+		if (typeof window === 'undefined') return;
 		if (isLoading || !hasMore) return;
 		setIsLoading(true);
 		try {

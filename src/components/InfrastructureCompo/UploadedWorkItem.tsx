@@ -1,3 +1,5 @@
+'use client';
+
 import { TicketListItemProperty, UploadedTicketInfo } from '@/utils/utils';
 import { TicketViewer } from './ticketViewer';
 import { addLiked, hasLiked, undoLiked } from '@/utils/localStorage';

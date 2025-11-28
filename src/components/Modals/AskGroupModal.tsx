@@ -1,3 +1,5 @@
+"use client";
+
 import { Modal } from '../InfrastructureCompo/Modal';
 import './modals.css';
 

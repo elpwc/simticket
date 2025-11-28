@@ -1,4 +1,5 @@
-import { useState } from 'react';
+"use client";
+
 import { Modal } from '../InfrastructureCompo/Modal';
 import OuterLink from '../InfrastructureCompo/OuterLink';
 import { useLocale } from '@/utils/hooks/useLocale';

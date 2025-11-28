@@ -1,3 +1,5 @@
+'use client';
+
 import { AppContext } from '@/app/app';
 import { get_CanvasOrImageSize_Of_Ticket_By_TicketType, TicketListItemProperty, TicketSizeType } from '@/utils/utils';
 import { Dispatch, SetStateAction, useContext, useRef, useState } from 'react';

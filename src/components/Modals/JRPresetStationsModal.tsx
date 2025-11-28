@@ -1,3 +1,5 @@
+'use client';
+
 import { Modal } from '../InfrastructureCompo/Modal';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { JRStationNameType } from '../TicketEditors/JRWideTicket/type';

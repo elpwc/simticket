@@ -1,3 +1,5 @@
+'use client';
+
 import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import { Modal } from '../InfrastructureCompo/Modal';
 import clsx from 'clsx';
@@ -7,6 +9,7 @@ import { AppContext } from '@/app/app';
 import { TicketViewer } from '../InfrastructureCompo/ticketViewer';
 import { drawTicket } from '@/utils/drawTicket';
 import { useIsMobile } from '@/utils/hooks';
+import { CRTicketBackGround } from '../TicketEditors/CRWideTicket/type';
 
 interface Props {
 	show: boolean;
@@ -61,7 +64,7 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 					currentTicketListItem.companyId || 0,
 					currentTicketListItem.ticketTypeId,
 					TicketSizeType.CanvasSize,
-					currentTicketListItem.ticketData.background || false
+					currentTicketListItem.ticketData.background as CRTicketBackGround
 				);
 
 				const tmpCanvas = document.createElement('canvas');
@@ -88,7 +91,7 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 							currentTicketListItem.companyId || 0,
 							currentTicketListItem.ticketTypeId,
 							TicketSizeType.A4Size,
-							currentTicketListItem.ticketData.background || false
+							currentTicketListItem.ticketData.background as CRTicketBackGround
 						);
 						if (isFlip) {
 							ctx.drawImage(

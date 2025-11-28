@@ -1,3 +1,5 @@
+'use client';
+
 import { ReactNode, useState } from 'react';
 import { Modal } from './Modal';
 import { useLocale } from '@/utils/hooks/useLocale';
