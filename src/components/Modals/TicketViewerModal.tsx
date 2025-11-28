@@ -7,7 +7,7 @@ import { encodeTicket, TicketListItemProperty } from '@/utils/utils';
 import { Field, Form, Formik } from 'formik';
 import './index.css';
 import { TicketViewer } from '../InfrastructureCompo/ticketViewer';
-import { getIP } from '@/utils/api';
+import { getIP, request } from '@/utils/api';
 import clsx from 'clsx';
 import { DescriptionButton } from '../InfrastructureCompo/DescriptionButton';
 import { useHint } from '../InfrastructureCompo/HintProvider';
@@ -34,7 +34,7 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 			});
 		}
 	}, []);
-	
+
 	useEffect(() => {
 		setbuttonAvailable(isAgree);
 	}, [isAgree]);
@@ -44,7 +44,7 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 		if (ticketData.length > 2048) {
 			hint('top', t('UploadTicketModal.tooLong'), 'red');
 		} else {
-			await fetch('/api/ticket', {
+			await request('/api/ticket', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({

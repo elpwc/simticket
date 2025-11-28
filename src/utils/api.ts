@@ -1,5 +1,11 @@
+const API_PREFIX = '/simticket';
+
+export const request = (input: string | URL | Request, init?: RequestInit | undefined) => {
+	return fetch(API_PREFIX + input, init);
+};
+
 export const getIP = async () => {
-	return await fetch('/api/ip')
+	return await request('/api/ip')
 		.then((response) => response.json())
 		.then((data) => {
 			console.log('IP:', data);
@@ -30,7 +36,7 @@ export const getUploadedTickets = async (
 	search: string = ''
 ) => {
 	const params = new URLSearchParams();
-	console.log(companyId, from, to, search)
+	console.log(companyId, from, to, search);
 	if (companyId >= 0) params.append('companyId', String(companyId));
 	if (ticketTypeId >= 0) params.append('ticketId', String(ticketTypeId));
 	if (orderBy !== OrderType.none) params.append('orderBy', orderBy);
@@ -42,8 +48,8 @@ export const getUploadedTickets = async (
 	if (to !== '') params.append('to', to);
 	if (search !== '') params.append('search', search);
 
-	console.log(params)
-	return await fetch('/api/ticket' + (params.toString() ? `?${params.toString()}` : ''))
+	console.log(params);
+	return await request('/api/ticket' + (params.toString() ? `?${params.toString()}` : ''))
 		.then((response) => response.json())
 		.then((data) => {
 			console.log(data);
@@ -55,7 +61,7 @@ export const getUploadedTickets = async (
 };
 
 export const getUploadedTicketById = async (id: number) => {
-	return await fetch('/api/ticket?ticketId=' + id.toString())
+	return await request('/api/ticket?ticketId=' + id.toString())
 		.then((response) => response.json())
 		.then((data) => {
 			console.log(data);
@@ -67,18 +73,18 @@ export const getUploadedTicketById = async (id: number) => {
 };
 
 export const addLikeUploadedTicket = async (id: number) => {
-	return await fetch(`/api/ticket/${id}/like`, {
+	return await request(`/api/ticket/${id}/like`, {
 		method: 'POST',
 	});
 };
 export const undoLikeUploadedTicket = async (id: number) => {
-	return await fetch(`/api/ticket/${id}/undolike`, {
+	return await request(`/api/ticket/${id}/undolike`, {
 		method: 'POST',
 	});
 };
 
 export const addViewsUploadedTicket = async (id: number) => {
-	return await fetch(`/api/ticket/${id}/views`, {
+	return await request(`/api/ticket/${id}/views`, {
 		method: 'POST',
 	});
 };

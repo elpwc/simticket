@@ -7,7 +7,7 @@ import { encodeTicket, TicketListItemProperty } from '@/utils/utils';
 import { Field, Form, Formik } from 'formik';
 import './index.css';
 import { TicketViewer } from '../InfrastructureCompo/ticketViewer';
-import { getIP } from '@/utils/api';
+import { getIP, request } from '@/utils/api';
 import clsx from 'clsx';
 import { DescriptionButton } from '../InfrastructureCompo/DescriptionButton';
 import { useHint } from '../InfrastructureCompo/HintProvider';
@@ -22,18 +22,15 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 	const { t } = useLocale();
 	const hint = useHint();
 
-	const [isAgree, setIsAgree]: [boolean, any] = useState(false);
-	const [buttonAvailable, setbuttonAvailable]: [boolean, any] = useState(false);
-	const [initialValues, setinitialValues]: [any, any] = useState();
+	const [localStorageEditorName, setLocalStorageEditorName]: [string, any] = useState('');
 
 	useEffect(() => {
-		if (typeof window !== 'undefined') {
-			setinitialValues({
-				name: '',
-				editorName: localStorage.getItem('editorName') || '',
-			});
-		}
+		setLocalStorageEditorName(localStorage.getItem('editorName') || '');
 	}, []);
+
+	const [isAgree, setIsAgree]: [boolean, any] = useState(false);
+	const [buttonAvailable, setbuttonAvailable]: [boolean, any] = useState(false);
+	const [initialValues, setinitialValues]: [any, any] = useState({ name: '', editorName: localStorageEditorName });
 
 	useEffect(() => {
 		setbuttonAvailable(isAgree);
@@ -44,7 +41,7 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 		if (encodedTicketData.length > 2048) {
 			hint('top', t('UploadTicketModal.tooLong'), 'red');
 		} else {
-			await fetch('/api/ticket', {
+			await request('/api/ticket', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
