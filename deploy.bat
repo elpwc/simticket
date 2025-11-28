@@ -1,10 +1,6 @@
-cd /d C:\node\simticket-project
-
 git pull
 
-call npm install
-::call npx prisma db push
-call npx prisma generate
-call npm run build
+npx next build
 
-pm2 restart simticket
+pm2 delete simticket-app
+pm2 start ecosystem.config.js
