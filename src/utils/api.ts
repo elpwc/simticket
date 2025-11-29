@@ -1,4 +1,5 @@
-const API_PREFIX = '/simticket';
+export const API_PREFIX = '/simticket';
+const prefix = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 export const request = (input: string | URL | Request, init?: RequestInit | undefined) => {
 	return fetch(API_PREFIX + input, init);

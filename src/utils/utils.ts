@@ -5,6 +5,7 @@ import { JRWideTicketDrawParameters } from '@/components/TicketEditors/JRWideTic
 import { decodeJRWideTicketParams, encodeJRWideTicketParams } from '@/components/TicketEditors/JRWideTicket/utils';
 import { JR_MARS_PAPER_TICKET_A4_SIZE, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, JRWideTicketDrawParametersInitialValues } from '@/components/TicketEditors/JRWideTicket/value';
 import QRCode from 'qrcode';
+import { API_PREFIX } from './api';
 
 export const saveCanvasToLocal = (canvas: HTMLCanvasElement | null, filename: string, onSave?: () => void) => {
 	if (!canvas) return;
@@ -417,7 +418,15 @@ export const drawTextNew = (
  */
 export const fontsLoader = (fontList: { name: string; file: string }[], onLoadStart: () => void, onLoadEnd: () => void, onNotNeeded: () => void) => {
 	const loadFonts = async () => {
-		const fonts = fontList.map((font) => new FontFace(font.name, `url(${font.file})`));
+		const fonts = fontList.map((font) => {
+			let finalPath = font.file;
+			console.log(finalPath);
+			if (finalPath.startsWith('/') && !finalPath.startsWith(API_PREFIX)) {
+				finalPath = `${API_PREFIX}${finalPath}`;
+			}
+			console.log(finalPath);
+			return new FontFace(font.name, `url(${finalPath})`);
+		});
 
 		await Promise.all(fonts.map((f) => f.load()));
 		fonts.forEach((f) => document.fonts.add(f));

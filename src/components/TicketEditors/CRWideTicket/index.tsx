@@ -39,7 +39,6 @@ export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
 });
 export const SongTi = localFonts({
-	//src: '../../assets/fonts/simsun.woff2',
 	src: '../../../assets/fonts/NotoSerifSC-VF.woff2',
 });
 export const HeiTi = localFonts({
