@@ -18,6 +18,7 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 		p.station1Type,
 		p.station2Type,
 		+p.doShowEnglish,
+		+p.isKaisukenArrow,
 		p.date.toISOString(),
 		p.time,
 		p.carriage,
