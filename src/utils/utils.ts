@@ -419,13 +419,17 @@ export const drawTextNew = (
 export const fontsLoader = (fontList: { name: string; file: string }[], onLoadStart: () => void, onLoadEnd: () => void, onNotNeeded: () => void) => {
 	const loadFonts = async () => {
 		const fonts = fontList.map((font) => {
-			let finalPath = font.file;
-			console.log(finalPath);
-			if (finalPath.startsWith('/') && !finalPath.startsWith(API_PREFIX)) {
-				finalPath = `${API_PREFIX}${finalPath}`;
+			let finalUrl = font.file;
+
+			if (finalUrl.includes('assets/')) {
+				finalUrl = finalUrl.substring(finalUrl.indexOf('assets/'));
 			}
-			console.log(finalPath);
-			return new FontFace(font.name, `url(${finalPath})`);
+
+			finalUrl = `${API_PREFIX}/${finalUrl}`.replace(/\/+/g, '/');
+
+			console.log(`Loading font [${font.name}]: ${finalUrl}`);
+
+			return new FontFace(font.name, `url('${finalUrl}')`);
 		});
 
 		await Promise.all(fonts.map((f) => f.load()));
