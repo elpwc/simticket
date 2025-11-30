@@ -41,7 +41,7 @@ export default function Works() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [hasMore, setHasMore] = useState<boolean>(true);
 
-	const pageSize = 5;
+	const pageSize = 10;
 
 	const load = useCallback(async () => {
 		if (typeof window !== 'undefined') {
