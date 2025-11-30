@@ -83,10 +83,6 @@ export const drawJRWideTicket = (
 	}
 
 	const draw = () => {
-		if (typeof drawParameters.date === 'string') {
-			drawParameters.date = new Date(drawParameters.date);
-		}
-
 		// 清空
 		ctx.clearRect(0, 0, w, h);
 		// 底图
@@ -387,7 +383,7 @@ export const drawJRWideTicket = (
 		ctx.font = resizedFont(7, 'DotFont');
 		drawText(
 			ctx,
-			`${(drawParameters.date.getMonth() + 1).toString().padStart(2, ' ')} ${drawParameters.date.getDate().toString().padStart(2, ' ')}`,
+			`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
 			offsetScaleX(113),
 			offsetScaleY(538),
 			resizedScaleX(225),

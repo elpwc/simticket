@@ -22,7 +22,7 @@ export type JRWideTicketDrawParameters = {
 	isKaisukenArrow: boolean;
 	railways: string[];
 	paymentMethod: JRPaymentMethod;
-	date: Date;
+	date: string;
 	time: string;
 	carriage: string;
 	seat1: string;

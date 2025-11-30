@@ -19,7 +19,7 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 		p.station2Type,
 		+p.doShowEnglish,
 		+p.isKaisukenArrow,
-		p.date.toISOString(),
+		p.date,
 		p.time,
 		p.carriage,
 		p.seat1,
@@ -51,7 +51,6 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 	const bytes = new Uint8Array([...binary].map((c) => c.charCodeAt(0)));
 	const json = new TextDecoder().decode(bytes);
 	const arr = JSON.parse(json);
-
 	const [
 		background,
 		showBorder,
@@ -105,7 +104,7 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		station2Type,
 		doShowEnglish: !!doShowEnglish,
 		isKaisukenArrow: !!isKaisukenArrow,
-		date: new Date(date),
+		date: date,
 		time,
 		carriage,
 		seat1,

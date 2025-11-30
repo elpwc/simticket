@@ -132,9 +132,6 @@ export const drawCRWideTicket = (
 	};
 
 	const draw = () => {
-		if (typeof drawParameters.date === 'string') {
-			drawParameters.date = new Date(drawParameters.date);
-		}
 		// 清空
 		ctx.clearRect(0, 0, w, h);
 		// 底图
@@ -299,10 +296,12 @@ export const drawCRWideTicket = (
 			ctx.fillText(`年          月         日                  开`, offsetScaleX(310), offsetScaleY(474));
 		}
 		ctx.font = resizedFont(6.5, 'HeiTi');
+
 		ctx.fillText(
-			`${drawParameters.date.getFullYear()}  ${(drawParameters.date.getMonth() + 1).toString().padStart(2, '0')}  ${drawParameters.date.getDate().toString().padStart(2, '0')}  ${
-				drawParameters.time
-			}`,
+			`${new Date(drawParameters.date).getFullYear()}  ${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, '0')}  ${new Date(drawParameters.date)
+				.getDate()
+				.toString()
+				.padStart(2, '0')}  ${drawParameters.time}`,
 			offsetScaleX(148),
 			offsetScaleY(482)
 		);

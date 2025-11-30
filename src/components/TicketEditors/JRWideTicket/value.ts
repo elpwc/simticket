@@ -254,7 +254,7 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	isKaisukenArrow: false,
 	railways: ['新幹線', '函館', '室蘭', '札沼'],
 	paymentMethod: JRPaymentMethod.CreditCard,
-	date: new Date(),
+	date: new Date().toISOString().slice(0, 10),
 	time: '11:55',
 	carriage: '04',
 	seat1: '012',

@@ -120,7 +120,7 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	doUseHuaWenXinWei1: false,
 	doUseHuaWenXinWei2: false,
 	routeIdentifier: 'Z1140',
-	date: new Date(),
+	date: new Date().toISOString().slice(0, 10),
 	time: '11:55',
 	carriage: '04',
 	seat1: '012',

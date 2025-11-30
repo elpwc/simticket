@@ -97,7 +97,18 @@ export default function CRWideTicket() {
 			};
 		}
 	};
+
 	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(copyEditingTicketDataToDrawParameters ? editingTicketData : getInitialValues());
+
+	const [offsetContent, setOffsetContent] = useState([drawParameters.offsetX.toString(), (0 - drawParameters.offsetY).toString()]);
+
+	useEffect(() => {
+		setDrawParameters((prev) => ({
+			...prev,
+			offsetX: Number(offsetContent[0]),
+			offsetY: 0 - Number(offsetContent[1]),
+		}));
+	}, [offsetContent]);
 
 	useEffect(() => {
 		if (copyEditingTicketDataToDrawParameters) {
@@ -165,7 +176,7 @@ export default function CRWideTicket() {
 		drawTicket();
 	}, [drawTicket, size, canvasSize, drawParameters, isFontLoading]);
 
-	// 下のリスト更新用
+	// 下のリスト更新
 	useEffect(() => {
 		setEditingTicketData(drawParameters);
 	}, [drawParameters]);
@@ -173,15 +184,11 @@ export default function CRWideTicket() {
 	useEffect(() => {
 		setDrawParameters((prev) => ({
 			...prev,
-			qrCodeText: `${window.location.origin + window.location.pathname}?${drawParameters.station1}-${drawParameters.station2} No.${drawParameters.ticketNo} ${(typeof drawParameters.date ===
-			'string'
-				? new Date(drawParameters.date)
-				: drawParameters.date
-			)
-				.toISOString()
-				.slice(0, 10)} ${drawParameters.time} ${drawParameters.seatClass}车 ${drawParameters.carriage}${drawParameters.seat1}${drawParameters.seat2}号${drawParameters.seat3} ￥${
-				drawParameters.price
-			}元`,
+			qrCodeText: `${window.location.origin + window.location.pathname}?${drawParameters.station1}-${drawParameters.station2} No.${drawParameters.ticketNo} ${
+				typeof drawParameters.date === 'string' && (drawParameters.date.includes('-') || drawParameters.date === '')
+					? drawParameters.date
+					: new Date(drawParameters.date).toISOString().slice(0, 10)
+			} ${drawParameters.time} ${drawParameters.seatClass}车 ${drawParameters.carriage}${drawParameters.seat1}${drawParameters.seat2}号${drawParameters.seat3} ￥${drawParameters.price}元`,
 		}));
 	}, [
 		drawParameters.ticketNo,
@@ -238,31 +245,35 @@ export default function CRWideTicket() {
 							<div className="flex grid-cols-3 gap-2">
 								<label className="flex gap-1 items-center">
 									X
-									<input
-										className="max-w-[50px]"
-										type="number"
-										value={drawParameters.offsetX}
-										onChange={(e) => setDrawParameters((prev) => ({ ...prev, offsetX: Number(e.target.value) }))}
-									/>
+									<input className="max-w-[50px]" type="number" value={offsetContent[0]} onChange={(e) => setOffsetContent([e.target.value, offsetContent[1]])} />
 								</label>
 								<label className="flex gap-1 items-center">
 									Y
-									<input
-										className="max-w-[50px]"
-										type="number"
-										value={0 - drawParameters.offsetY}
-										onChange={(e) => setDrawParameters((prev) => ({ ...prev, offsetY: 0 - Number(e.target.value) }))}
-									/>
+									<input className="max-w-[50px]" type="number" value={offsetContent[1]} onChange={(e) => setOffsetContent([offsetContent[0], e.target.value])} />
 								</label>
 								<button
 									className="w-[max-content] text-[12px]"
 									onClick={() => {
-										setDrawParameters((prev) => ({ ...prev, offsetX: 0, offsetY: 0 }));
+										setOffsetContent(['0', '0']);
 									}}
 								>
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 										<path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
 										<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+									</svg>
+								</button>
+								<button
+									className="w-[max-content] text-[12px]"
+									onClick={() => {
+										setOffsetContent([(Math.random() * 10 - 5).toFixed(1), (Math.random() * 10 - 5).toFixed(1)]);
+									}}
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+										<path
+											fillRule="evenodd"
+											d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.6 9.6 0 0 0 7.556 8a9.6 9.6 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.6 10.6 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.6 9.6 0 0 0 6.444 8a9.6 9.6 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5"
+										/>
+										<path d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192" />
 									</svg>
 								</button>
 							</div>
@@ -483,13 +494,18 @@ export default function CRWideTicket() {
 							}}
 							placeholder={t('editor.cr.jisuanjikepiao2010.trainInfo.pukepukuaiOrCustom')}
 						/>
-
 						<label className="ticket-form-label">
 							{t('editor.common.trainInfo.departureDate')}
 							<input
 								type="date"
-								value={(typeof drawParameters.date === 'string' ? new Date(drawParameters.date) : drawParameters.date).toISOString().slice(0, 10)}
-								onChange={(e) => setDrawParameters((prev) => ({ ...prev, date: new Date(e.target.value) }))}
+								value={drawParameters.date}
+								onChange={(e) => {
+									const value = e.target.value;
+									setDrawParameters((prev) => ({
+										...prev,
+										date: value,
+									}));
+								}}
 							/>
 						</label>
 						<label className="ticket-form-label">
