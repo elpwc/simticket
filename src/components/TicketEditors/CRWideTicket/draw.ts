@@ -101,7 +101,7 @@ export const drawCRWideTicket = (
 			case CRTicketBackGround.SoftBlue:
 			case CRTicketBackGround.SoftNoneBackground:
 			default:
-				return initialMethods.scaleX(value) + drawParameters.offsetX;
+				return initialMethods.scaleX(value) + (addOffsetValue ? drawParameters.offsetX : 0);
 		}
 	};
 	const offsetScaleY = (value: number, addOffsetValue: boolean = true) => {
@@ -114,7 +114,7 @@ export const drawCRWideTicket = (
 			case CRTicketBackGround.SoftBlue:
 			case CRTicketBackGround.SoftNoneBackground:
 			default:
-				return initialMethods.scaleY(value) + drawParameters.offsetY;
+				return initialMethods.scaleY(value) + (addOffsetValue ? drawParameters.offsetY : 0);
 		}
 	};
 	const resizedFont = (size: number, fontName: string, isBold?: boolean) => {
