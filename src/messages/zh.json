@@ -113,7 +113,9 @@
         },
         "trainInfo": {
           "pukepukuaiOrCustom": "普客普快 / 自定义",
-          "routeIdentifier": "车次"
+          "routeIdentifier": "车次",
+          "seat3": "铺位/层",
+          "coolerType": "空调类型"
         },
         "purchaseInfo": {
           "rightUpContentText": "右上角显示",
@@ -130,7 +132,11 @@
             "inputBox3": "终到站"
           },
           "info2": "信息2",
-          "info3": "信息3"
+          "info3": "信息3",
+          "purchaseCertType": "乘车人购票证件",
+          "purchasePassportCode": "护照国家码",
+          "machineNo": "售票机号",
+          "purchaseDate": "结账日期"
         },
         "ticketNoInfo": {
           "title": "票号数据",
@@ -145,7 +151,8 @@
             "justifyBetween": "靠边铺开",
             "justifyEvenly": "等距铺开",
             "justifyAround": "最优铺开"
-          }
+          },
+          "showMessageBorder": "显示边框"
         }
       }
     },
@@ -177,7 +184,7 @@
         "noSeatNo": "无座",
         "seat2": "座位",
         "seat3": "铺位",
-        "seatClass": "座席"
+        "seatClass": "席别"
       },
       "purchaseInfo": {
         "title": "购票信息",

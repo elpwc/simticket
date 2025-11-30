@@ -154,10 +154,12 @@
         },
         "trainInfo": {
           "pukepukuaiOrCustom": "普客普快 / カスタム",
-          "routeIdentifier": "車番(车次)"
+          "routeIdentifier": "車番(车次)",
+          "seat3": "寝台/階数",
+          "coolerType": "空調タイプ"
         },
         "purchaseInfo": {
-          "addCircleToPurchaseMethod": "購入方式に丸を付く",
+          "addCircleToPurchaseMethod": "支払い方法に丸付き",
           "info1": {
             "inputBox1": "列車種別",
             "inputBox2": "経由",
@@ -171,7 +173,11 @@
           "rightUpContentText": "右上表示",
           "rightUpContentTextNotShow": "表示しない",
           "showPassengerInfo": "乗客情報を表示",
-          "showSoldPlaceDown": "下に発券所を表示"
+          "showSoldPlaceDown": "下に発券所を表示",
+          "purchaseCertType": "乗客個人証明書",
+          "machineNo": "発券機番",
+          "purchaseDate": "支払日付",
+          "purchasePassportCode": "外国旅券国家コード"
         },
         "ticketNoInfo": {
           "align": {
@@ -186,7 +192,8 @@
           "presetText": "定型文：",
           "qrCodeText": "QRデータ",
           "ticketSerialCode": "乗車券シリアルコード",
-          "title": "券番データ"
+          "title": "券番データ",
+          "showMessageBorder": "枠を表示する"
         }
       }
     },

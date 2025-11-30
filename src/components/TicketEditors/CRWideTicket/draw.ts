@@ -131,6 +131,7 @@ export const drawCRWideTicket = (
 		}
 	};
 
+	// eslint-disable-next-line complexity
 	const draw = () => {
 		// 清空
 		ctx.clearRect(0, 0, w, h);
@@ -346,17 +347,22 @@ export const drawCRWideTicket = (
 
 			if (drawParameters.noSeat) {
 				ctx.font = resizedFont(6, 'SongTi');
-				ctx.fillText(`无座`, offsetScaleX(1250), offsetScaleY(484));
+				ctx.fillText(`无座`, offsetScaleX(drawParameters.noCarriage ? 1180 : 1250), offsetScaleY(484));
 			} else {
-				ctx.font = resizedFont(4, 'SongTi', true);
+				if (drawParameters.seatStatus === '') {
+					ctx.font = resizedFont(4, 'SongTi', true);
 
-				ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(484));
-				ctx.font = resizedFont(6.5, 'HeiTi');
-				drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 79), TextAlign.Right);
-				ctx.font = resizedFont(5.5, 'SongTi');
-				ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(489));
-				ctx.font = resizedFont(5, 'SongTi');
-				ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1308), offsetScaleY(481));
+					ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(484));
+					ctx.font = resizedFont(6.5, 'HeiTi');
+					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 79), TextAlign.Right);
+					ctx.font = resizedFont(5.5, 'SongTi');
+					ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(489));
+					ctx.font = resizedFont(5, 'SongTi');
+					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1308), offsetScaleY(481));
+				} else {
+					ctx.font = resizedFont(6, 'SongTi');
+					ctx.fillText(drawParameters.seatStatus, offsetScaleX(drawParameters.noCarriage ? 1180 : 1250), offsetScaleY(484));
+				}
 			}
 		}
 
@@ -434,15 +440,17 @@ export const drawCRWideTicket = (
 
 		// 说明
 		if (drawParameters.doShowMessage) {
-			ctx.strokeStyle = 'black';
-			ctx.lineWidth = resizedScaleX(4);
-			ctx.setLineDash([resizedScaleX(23), resizedScaleX(10)]);
-			ctx.strokeRect(offsetScaleX(208), offsetScaleY(850), resizedScaleX(959), resizedScaleY(150));
-			ctx.setLineDash([]);
-
 			ctx.font = resizedFont(4.5, 'SongTi');
-
-			drawText(ctx, drawParameters.message, offsetScaleX(216), offsetScaleY(908), resizedScaleX(942), drawParameters.messageAlign, DrawTextMethod.fillText, 0);
+			if (drawParameters.showMessageBorder) {
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = resizedScaleX(4);
+				ctx.setLineDash([resizedScaleX(23), resizedScaleX(10)]);
+				ctx.strokeRect(offsetScaleX(208), offsetScaleY(850), resizedScaleX(959), resizedScaleY(150));
+				ctx.setLineDash([]);
+				drawText(ctx, drawParameters.message, offsetScaleX(216), offsetScaleY(908), resizedScaleX(942), drawParameters.messageAlign, DrawTextMethod.fillText, 0);
+			} else {
+				drawText(ctx, drawParameters.message, offsetScaleX(133), offsetScaleY(890), resizedScaleX(1034), drawParameters.messageAlign, DrawTextMethod.fillText, 0);
+			}
 		}
 
 		//QR

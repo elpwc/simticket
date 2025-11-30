@@ -6,14 +6,14 @@ import { useLocale } from '@/utils/hooks/useLocale';
 import clsx from 'clsx';
 
 export type Option = {
-	value: string;
+	value: string | any;
 	title: React.ReactNode;
 };
 
 type Props = {
 	name?: string;
-	value: string;
-	onChange: (value: string) => void;
+	value: string | any;
+	onChange: (value: string | any) => void;
 	list: Option[];
 	placeholder?: string;
 	showInputBox?: boolean;

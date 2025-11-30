@@ -1,3 +1,4 @@
+import { TextAlign } from '@/utils/utils';
 import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType } from './type';
 import { getRandomCRTicketNo } from './utils';
 
@@ -135,7 +136,7 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	turnstile: 'A13',
 	showSoldPlaceDown: true,
 	rightUpContentType: RightUpContentType.Turnstile,
-	serialCode: '1145141919810A000001 JM',
+	serialCode: '45364000010301A114514 JM',
 	qrCodeText: '1145141919810',
 	doShowQRCode: true,
 	purchaseMethod: ['学', '网'],
@@ -152,6 +153,8 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	info1TrainType: '',
 	info1from: '',
 	info1to: '',
+	showMessageBorder: true,
+	seatStatus: '',
 };
 export const purchaseMethodList: PurchaseMethod[] = [
 	{ type: PurchaseMethodType.TicketType, title: '孩', desc: 'value.purchaseMethod.list.hai' },
@@ -195,34 +198,76 @@ export const info3List = ['仅供报销使用', '变更到站', '退票费', '�
 
 export const seatType = [
 	'商务座',
+	'特等座',
 	'一等座',
 	'二等座',
 	'动卧',
 	'高级动卧',
-	'新空调高级软卧',
-	'新空调软卧',
-	'新空调硬卧',
-	'新空调软座',
-	'新空调硬座',
+	'高级软卧',
+	'软卧',
+	'硬卧',
 	'软座',
 	'硬座',
 	'硬卧代硬座',
 	'软卧代软座',
-	'特等座',
 	'观光座',
+	'包厢硬卧',
+	'一等软座',
+	'二等软座',
+	'鸳鸯软座',
+	'鸳鸯软卧',
+	'混编硬座',
+	'混编硬卧',
+	'包厢软座',
+	'特等软座',
+	'四人软包',
+	'二人软包',
+	'一人软包',
+	'一等双软',
+	'二等双软',
+	'混编软座',
+	'混编软卧',
+	'多功能座',
+	'一等包座',
+	'二等包座',
 	'棚车',
 	'一等/First Class',
 	'二等/Second Class',
 ];
-export const sleepingCarSeatType = ['动卧', '高级动卧', '新空调高级软卧', '新空调软卧', '新空调硬卧'];
+export const sleepingCarSeatType = ['动卧', '高级动卧', '高级软卧', '软卧', '硬卧', '包厢硬卧', '鸳鸯软卧', '混编硬卧', '混编软卧'];
 
 export const messageList = [
-	`买票请到12306 发货请到95306
+	{
+		text: `买票请到12306 发货请到95306
 中国铁路祝您旅途愉快`,
-	`报销凭证 遗失不补
+		showBorder: true,
+		align: 1,
+	},
+	{
+		text: `报销凭证 遗失不补
 退票改签时须交回车站`,
-	`欢度国庆，祝福祖国
+		showBorder: true,
+		align: 1,
+	},
+	{
+		text: `欢度国庆，祝福祖国
 中国铁路祝您旅途愉快`,
+		showBorder: true,
+		align: 1,
+	},
+	{
+		text: `温馨提示：本次列车途经琼州海峡，特殊季节遇台
+风等恶劣天气，轮渡可能停航，敬请关注天气预报。`,
+		showBorder: false,
+		align: 0,
+	},
+	{
+		text: `温馨提示：您自愿选择了本次列车价格与有坐席相同
+的无坐席，在列车上请不要使用其他旅客的坐席，敬
+请理解配合。`,
+		showBorder: false,
+		align: 0,
+	},
 ];
 
 export const CRTicketFlipSideText = `　　　　　　　　　　☆请妥善保管车票。☆请凭车票和本人有效身份证
@@ -239,3 +284,17 @@ export const CRTicketFlipSideText = `　　　　　　　　　　☆请妥善�
 路 12306 手机客户端)是唯一官方网站,请勿通过其他网站技术手段抢票，
 以免遭受损失。☆未尽事宜详见⟪铁路旅客运输规程⟫等有关规定和车站
 公告｡跨境旅客事宜详见铁路跨境旅客相关运输组织规则和车站公告。`;
+
+export const purchaseCertTypeList = [
+	{ value: 'JM', title: '居民身份证' },
+	{ value: 'HZ', title: '中国护照' },
+	{ value: 'WH', title: '外国护照' },
+	{ value: 'NG', title: '港澳通行证' },
+	{ value: 'NT', title: '大陆居民往来台湾通行证' },
+	{ value: 'GN', title: '港澳居民来往内地通行证' },
+	{ value: 'TN', title: '台湾居民来往大陆通行证（台胞证）' },
+	{ value: 'QT', title: '其他' },
+	{ value: 'DL', title: '调度命令' },
+];
+
+export const purchasePassportNationList = [{ value: 'JPN', title: '日本' }];

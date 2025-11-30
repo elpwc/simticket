@@ -24,7 +24,9 @@ import {
 	messageList,
 	PAPER_TICKET_CANVAS_SIZE,
 	PAPER_TICKET_SIZE,
+	purchaseCertTypeList,
 	purchaseMethodList,
+	purchasePassportNationList,
 	seatType,
 	sleepingCarSeatType,
 } from './value';
@@ -101,6 +103,11 @@ export default function CRWideTicket() {
 	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(copyEditingTicketDataToDrawParameters ? editingTicketData : getInitialValues());
 
 	const [offsetContent, setOffsetContent] = useState([drawParameters.offsetX.toString(), (0 - drawParameters.offsetY).toString()]);
+	const [TMIS, setTMIS] = useState(drawParameters.serialCode.slice(0, 5));
+	const [machineNo, setMachineNo] = useState(drawParameters.serialCode.slice(5, 10));
+	const [purchaseDate, setPurchaseDate] = useState(drawParameters.serialCode.slice(10, 14));
+	const [purchaseCertType, setPurchaseCertType] = useState(drawParameters.serialCode.split(' ').length > 1 ? drawParameters.serialCode.split(' ')[1] : 'JM');
+	const [purchasePassportCode, setPurchasePassportCode] = useState(drawParameters.serialCode.split(' ').length > 2 ? drawParameters.serialCode.split(' ')[2] : '');
 
 	useEffect(() => {
 		setDrawParameters((prev) => ({
@@ -109,6 +116,15 @@ export default function CRWideTicket() {
 			offsetY: 0 - Number(offsetContent[1]),
 		}));
 	}, [offsetContent]);
+
+	useEffect(() => {
+		setDrawParameters((prev) => ({
+			...prev,
+			serialCode:
+				`${TMIS}${machineNo}${purchaseDate}${drawParameters.ticketNo}` +
+				(purchaseCertType.length > 0 ? ` ${purchaseCertType}` + (purchasePassportCode.length > 0 ? ` ${purchasePassportCode}` : '') : ''),
+		}));
+	}, [TMIS, machineNo, purchaseDate, drawParameters.ticketNo, purchaseCertType, purchasePassportCode]);
 
 	useEffect(() => {
 		if (copyEditingTicketDataToDrawParameters) {
@@ -274,6 +290,22 @@ export default function CRWideTicket() {
 											d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.6 9.6 0 0 0 7.556 8a9.6 9.6 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.6 10.6 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.6 9.6 0 0 0 6.444 8a9.6 9.6 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5"
 										/>
 										<path d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192" />
+									</svg>
+								</button>
+							</div>
+						</label>
+						<label className="ticket-form-label">
+							{t('editor.common.ticketNoInfo.ticketNo')}
+							<div className="flex">
+								<input className="text-red-500 w-full" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />
+								<button
+									onClick={() => {
+										setDrawParameters((prev) => ({ ...prev, ticketNo: getRandomCRTicketNo() }));
+									}}
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+										<path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+										<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
 									</svg>
 								</button>
 							</div>
@@ -530,20 +562,26 @@ export default function CRWideTicket() {
 							<input value={drawParameters.carriage} onChange={(e) => setDrawParameters((prev) => ({ ...prev, carriage: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
-							<div className="flex gap-2">
-								{t('editor.common.trainInfo.seatNo')}
-								<label className="flex items-center text-[12px]">
-									<input
-										type="checkbox"
-										checked={drawParameters.noSeat}
-										onChange={(e) => {
-											setDrawParameters((prev) => ({ ...prev, noSeat: e.target.checked }));
-										}}
-									/>
-									<span>{t('editor.common.trainInfo.noSeatNo')}</span>
-								</label>
+							{t('editor.common.trainInfo.seatNo')}
+
+							<div>
+								<input className="w-full" value={drawParameters.seat1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, seat1: e.target.value }))} />
+
+								<PrettyInputRadioGroup
+									list={[
+										{ value: '无座', title: '无座' },
+										{ value: '无号', title: '无号' },
+										{ value: '准乘', title: '准乘' },
+										{ value: '不对号入座', title: '不对号入座' },
+										{ value: '', title: '正常' },
+									]}
+									value={drawParameters.seatStatus}
+									onChange={(value: string) => {
+										setDrawParameters((prev) => ({ ...prev, seatStatus: value }));
+									}}
+									showInputBox={false}
+								/>
 							</div>
-							<input value={drawParameters.seat1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, seat1: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
 							{t('editor.common.trainInfo.seat2')}
@@ -563,17 +601,43 @@ export default function CRWideTicket() {
 							/>
 						</label>
 						<label className="ticket-form-label">
-							{t('editor.common.trainInfo.seat3')}
+							{t('editor.cr.jisuanjikepiao2010.trainInfo.seat3')}
 							<div className="flex gap-3 flex-wrap">
 								<PrettyInputRadioGroup
 									list={[
 										{ value: '上铺', title: '上铺' },
 										{ value: '中铺', title: '中铺' },
 										{ value: '下铺', title: '下铺' },
+										{ value: '上层', title: '上层' },
+										{ value: '下层', title: '下层' },
 									]}
 									value={drawParameters.seat3}
 									onChange={(value: string) => {
 										setDrawParameters((prev) => ({ ...prev, seat3: value }));
+									}}
+								/>
+							</div>
+						</label>
+						<label className="ticket-form-label">
+							{t('editor.cr.jisuanjikepiao2010.trainInfo.coolerType')}
+							<div className="flex gap-3 flex-wrap">
+								<PrettyInputRadioGroup
+									list={[
+										{ value: '新空调', title: '新空调' },
+										{ value: '空调', title: '空调' },
+										{ value: '', title: '空' },
+									]}
+									value={drawParameters.seatClass.startsWith('空调') ? '空调' : drawParameters.seatClass.startsWith('新空调') ? '新空调' : ''}
+									onChange={(value: string) => {
+										let seatClassMain = '';
+										if (drawParameters.seatClass.startsWith('空调')) {
+											seatClassMain = drawParameters.seatClass.replace('空调', '').trim();
+										} else if (drawParameters.seatClass.startsWith('新空调')) {
+											seatClassMain = drawParameters.seatClass.replace('新空调', '').trim();
+										} else {
+											seatClassMain = drawParameters.seatClass;
+										}
+										setDrawParameters((prev) => ({ ...prev, seatClass: value + seatClassMain }));
 									}}
 								/>
 							</div>
@@ -584,7 +648,13 @@ export default function CRWideTicket() {
 								list={seatType.map((seatTypeItem) => {
 									return { value: seatTypeItem, title: seatTypeItem };
 								})}
-								value={drawParameters.seatClass}
+								value={
+									drawParameters.seatClass.startsWith('空调')
+										? drawParameters.seatClass.replace('空调', '').trim()
+										: drawParameters.seatClass.startsWith('新空调')
+										? drawParameters.seatClass.replace('新空调', '').trim()
+										: drawParameters.seatClass
+								}
 								onChange={(value: string) => {
 									if (sleepingCarSeatType.includes(value)) {
 										setDrawParameters((prev) => ({ ...prev, seat2: '', seat3: '下铺' }));
@@ -638,6 +708,28 @@ export default function CRWideTicket() {
 									<span>{t('editor.cr.jisuanjikepiao2010.purchaseInfo.showSoldPlaceDown')}</span>
 								</label>
 							</div>
+						</label>
+						<label className="ticket-form-label">
+							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
+							<PrettyInputRadioGroup
+								list={purchaseCertTypeList}
+								value={purchaseCertType}
+								onChange={(value: string) => {
+									setPurchaseCertType(value);
+								}}
+								placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
+							/>
+						</label>
+						<label className="ticket-form-label">
+							{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
+							<PrettyInputRadioGroup
+								list={purchasePassportNationList}
+								value={purchasePassportCode}
+								onChange={(value: string) => {
+									setPurchasePassportCode(value);
+								}}
+								placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
+							/>
 						</label>
 
 						<label className="ticket-form-label">
@@ -859,7 +951,80 @@ export default function CRWideTicket() {
 						</label>
 						<label className="ticket-form-label">
 							{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketSerialCode')}
-							<input value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
+							<div>
+								<input className="w-full" value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
+								<div className="flex flex-col">
+									<div className="flex">
+										<label className="flex flex-col">
+											TMIS
+											<input className="w-[80px]" value={TMIS} onChange={(e) => setTMIS(e.target.value)} />
+										</label>
+										<label className="flex flex-col">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.machineNo')}
+											<input className="w-[80px]" value={machineNo} onChange={(e) => setMachineNo(e.target.value)} />
+										</label>
+										<label className="flex flex-col">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseDate')}
+											<input className="w-[80px]" value={purchaseDate} onChange={(e) => setPurchaseDate(e.target.value)} />
+										</label>
+										<label className="flex flex-col">
+											<div className="flex items-center">
+												{t('editor.common.ticketNoInfo.ticketNo')}
+												<button
+													className="m-0"
+													onClick={() => {
+														setDrawParameters((prev) => ({ ...prev, ticketNo: getRandomCRTicketNo() }));
+													}}
+												>
+													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+														<path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+														<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+													</svg>
+												</button>
+											</div>
+											<div className="flex">
+												<input
+													className="text-red-500 w-[130px]"
+													value={drawParameters.ticketNo}
+													onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))}
+												/>
+											</div>
+										</label>
+										<label className="flex flex-col">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
+											<input className="w-[120px]" value={purchaseCertType} onChange={(e) => setPurchaseCertType(e.target.value)} />
+										</label>
+										<label className="flex flex-col">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
+											<input className="w-[80px]" value={purchasePassportCode} onChange={(e) => setPurchasePassportCode(e.target.value)} />
+										</label>
+									</div>
+									<div>
+										<label className="">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
+											<PrettyInputRadioGroup
+												list={purchaseCertTypeList}
+												value={purchaseCertType}
+												onChange={(value: string) => {
+													setPurchaseCertType(value);
+												}}
+												placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
+											/>
+										</label>
+										<label className="">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
+											<PrettyInputRadioGroup
+												list={purchasePassportNationList}
+												value={purchasePassportCode}
+												onChange={(value: string) => {
+													setPurchasePassportCode(value);
+												}}
+												placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
+											/>
+										</label>
+									</div>
+								</div>
+							</div>
 						</label>
 						<label className="ticket-form-label">
 							<div>
@@ -889,6 +1054,16 @@ export default function CRWideTicket() {
 							</div>
 							<div>
 								<textarea className="w-full h-[100px]" value={drawParameters.message} onChange={(e) => setDrawParameters((prev) => ({ ...prev, message: e.target.value }))} />
+
+								<label>
+									<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.showMessageBorder')}</span>
+									<Toggle
+										value={drawParameters.showMessageBorder}
+										onChange={(value) => {
+											setDrawParameters((prev) => ({ ...prev, showMessageBorder: value }));
+										}}
+									/>
+								</label>
 								<PrettyInputRadioGroup
 									list={[
 										{ value: TextAlign.Left.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.left') },
@@ -908,11 +1083,11 @@ export default function CRWideTicket() {
 								<p>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.presetText')}</p>
 								<PrettyInputRadioGroup
 									list={messageList.map((messageListItem) => {
-										return { value: messageListItem, title: messageListItem };
+										return { value: messageListItem, title: messageListItem.text };
 									})}
-									value={drawParameters.message}
-									onChange={(value: string) => {
-										setDrawParameters((prev) => ({ ...prev, message: value }));
+									value={messageList.find((item) => item.text === drawParameters.message)}
+									onChange={(value: (typeof messageList)[0]) => {
+										setDrawParameters((prev) => ({ ...prev, message: value.text, messageAlign: value.align, showMessageBorder: value.showBorder }));
 									}}
 									placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 									showInputBox={false}

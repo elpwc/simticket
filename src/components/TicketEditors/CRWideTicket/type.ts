@@ -65,6 +65,8 @@ export type CRWideTicketDrawParameters = {
 	info1TrainType: string;
 	info1from: string;
 	info1to: string;
+	showMessageBorder: boolean;
+	seatStatus: string;
 };
 
 export interface PurchaseMethod {
