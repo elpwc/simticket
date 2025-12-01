@@ -41,10 +41,19 @@ export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
 });
 export const SongTi = localFonts({
-	src: '../../../assets/fonts/NotoSerifSC-VF.woff2',
+	src: '../../../assets/fonts/LXGWNeoZhiSong.woff2',
+});
+export const SongTiEn = localFonts({
+	src: '../../../assets/fonts/NimbusRomNo9L-Regu.woff2',
 });
 export const HeiTi = localFonts({
 	src: '../../../assets/fonts/simhei.woff2',
+});
+export const TicketNoFont = localFonts({
+	src: '../../../assets/fonts/cr_ticketNo.woff2',
+});
+export const TrainCodeFont = localFonts({
+	src: '../../../assets/fonts/traincode.woff2',
 });
 
 export default function CRWideTicket() {
@@ -137,8 +146,11 @@ export default function CRWideTicket() {
 		fontsLoader(
 			[
 				{ name: 'HuawenXinwei', file: '../../../assets/fonts/STXINWEI.woff2' },
-				{ name: 'SongTi', file: '../../../assets/fonts/simsun.woff2' },
+				{ name: 'SongTi', file: '../../../assets/fonts/LXGWNeoZhiSong.woff2' },
+				{ name: 'SongTiEn', file: '../../../assets/fonts/NimbusRomNo9L-Regu.woff2' },
 				{ name: 'HeiTi', file: '../../../assets/fonts/simhei.woff2' },
+				{ name: 'TicketNoFont', file: '../../../assets/fonts/cr_ticketNo.woff2' },
+				{ name: 'TrainCodeFont', file: '../../../assets/fonts/traincode.woff2' },
 			],
 			() => {
 				setIsFontLoading(true);
