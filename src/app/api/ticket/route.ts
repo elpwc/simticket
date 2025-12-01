@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 			deleted: false,
 			...(ip ? { ip } : {}),
 			...(publicStatus !== null ? { publicStatus: Number(publicStatus) as PublicStatus } : {}),
-			...(ticketId ? { ticketId: Number(ticketId) } : {}),
+			...(ticketId ? { id: Number(ticketId) } : {}),
 			...(companyId ? { companyId: Number(companyId) } : {}),
 			...(from ? { from: from } : {}),
 			...(to ? { to: to } : {}),

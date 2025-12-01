@@ -62,15 +62,17 @@ export const getUploadedTickets = async (
 };
 
 export const getUploadedTicketById = async (id: number) => {
-	return await request('/api/ticket?ticketId=' + id.toString())
-		.then((response) => response.json())
-		.then((data) => {
-			console.log(data);
-			return data.ip;
-		})
-		.catch((e) => {
-			console.error(e);
-		});
+	try {
+		const response = await request('/api/ticket?ticketId=' + id);
+		const data = await response.json();
+
+		//console.log(data);
+
+		return data ?? null;
+	} catch (e) {
+		console.error('getUploadedTicketById error:', e);
+		return null;
+	}
 };
 
 export const addLikeUploadedTicket = async (id: number) => {

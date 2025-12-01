@@ -15,9 +15,10 @@ interface Props {
 	ticketTypeId: number;
 	ticketData?: any;
 	showLoadingStatus?: boolean;
+	isFlip?: boolean;
 }
 
-export const TicketViewer = ({ width, height, className, style, borderRadius, companyId, ticketTypeId, ticketData = {}, showLoadingStatus = true }: Props) => {
+export const TicketViewer = ({ width, height, className, style, borderRadius, companyId, ticketTypeId, ticketData = {}, showLoadingStatus = true, isFlip = false }: Props) => {
 	const { t } = useLocale();
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -53,7 +54,7 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 			(newValue: number) => {
 				setCanvasHeight(newValue);
 			},
-			undefined,
+			isFlip,
 			/*onDone*/ () => {
 				setLoadingFontHintText('');
 				setLoadingBgHintText('');
@@ -71,7 +72,7 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 				setLoadingFontHintText('');
 			}
 		);
-	}, [canvasWidth, canvasHeight, canvasRef.current?.width, canvasRef.current?.height, canvasRef.current]);
+	}, [canvasWidth, canvasHeight, canvasRef.current?.width, canvasRef.current?.height, canvasRef.current, isFlip, ticketData, ticketTypeId, companyId]);
 
 	return (
 		<div className="relative">

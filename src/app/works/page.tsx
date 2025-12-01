@@ -1,7 +1,7 @@
 'use client';
 
 import { UploadedWorkItem } from '@/components/InfrastructureCompo/UploadedWorkItem';
-import { getUploadedTickets, OrderType } from '@/utils/api';
+import { getUploadedTicketById, getUploadedTickets, OrderType } from '@/utils/api';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { UploadedTicketInfo } from '@/utils/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -12,10 +12,13 @@ import Image from 'next/image';
 import InfiniteScroll from 'react-infinite-scroller';
 import { TicketListView } from '@/components/InfrastructureCompo/ticketListView';
 import { useIsMobile } from '@/utils/hooks';
+import { useSearchParams } from 'next/navigation';
+import { TicketViewerModal } from '@/components/Modals/TicketViewerModal';
 
 export default function Works() {
 	const { t, locale } = useLocale();
 	const isMobile = useIsMobile();
+	const searchParams = useSearchParams();
 
 	const infiniteScrollRef = useRef(null);
 
@@ -40,6 +43,8 @@ export default function Works() {
 	const [latestWorks, setLatestWorks] = useState<UploadedTicketInfo[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [hasMore, setHasMore] = useState<boolean>(true);
+	const [showTicketViewerModal, setShowTicketViewerModal] = useState<boolean>(false);
+	const [urlParamTicketInfo, setUrlParamTicketInfo] = useState<UploadedTicketInfo | null>(null);
 
 	const pageSize = 10;
 
@@ -77,6 +82,25 @@ export default function Works() {
 			setIsLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		const ticketId = searchParams.get('ticketId');
+		if (ticketId !== null && !isNaN(Number(ticketId))) {
+			const id = Number(ticketId);
+			if (id >= 0) {
+				const fetchData = async () => {
+					const res = await getUploadedTicketById(id);
+					console.log(1145141919, res);
+					if (res && res.length === 1) {
+						setUrlParamTicketInfo(res[0]);
+						setShowTicketViewerModal(true);
+					}
+				};
+				console.log(114514)
+				fetchData();
+			}
+		}
+	}, [searchParams, locale]);
 
 	useEffect(() => {
 		load();
@@ -273,6 +297,8 @@ export default function Works() {
 			<footer className="">
 				<TicketListView showAddButton={false} />
 			</footer>
+			{/* 只用来打开 URL params 的ticket */}
+			<TicketViewerModal show={showTicketViewerModal} ticketInfo={urlParamTicketInfo} onClose={() => setShowTicketViewerModal(false)} />
 		</div>
 	);
 }

@@ -656,6 +656,10 @@ export const getTicketURL = (companyId: number, ticketTypeId: number, ticketData
 	return `${window.location.origin}${window.location.pathname}?com=${companyId}&ticket=${ticketTypeId}&data=${encodeTicket(companyId, ticketTypeId, ticketData)}`;
 };
 
+export const getUploadedTicketURL = (ticketId: number) => {
+	return `${window.location.origin}${window.location.pathname}?ticketId=${ticketId}`;
+};
+
 export enum PublicStatus {
 	WaitForChecking,
 	NotPassed,
