@@ -6,6 +6,7 @@ import { UploadedWorkItemToolbar } from './UploadedWorkItemToolbar';
 import { TicketViewerModal } from '../Modals/TicketViewerModal';
 import { useState } from 'react';
 import { addViewsUploadedTicket } from '@/utils/api';
+import { CopyLinkModal } from '../Modals/CopyLinkModal';
 
 interface Props {
 	uploadedTicketInfo: UploadedTicketInfo;
@@ -16,6 +17,7 @@ interface Props {
 
 export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked, onClick }: Props) => {
 	const [showTicketViewerModal, setShowTicketViewerModal] = useState<boolean>(false);
+	const [showCopyLinkModal, setShowCopyLinkModal] = useState<boolean>(false);
 
 	const handleAddViews = () => {
 		addViewsUploadedTicket(uploadedTicketInfo.id);
@@ -50,7 +52,20 @@ export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked, onC
 
 				<UploadedWorkItemToolbar uploadedTicketInfo={uploadedTicketInfo} onLiked={onLiked} onUndoLiked={onUndoLiked} onClick={onClick} />
 			</div>
-			<TicketViewerModal show={showTicketViewerModal} ticketInfo={uploadedTicketInfo} onClose={() => setShowTicketViewerModal(false)} />
+			<TicketViewerModal show={showTicketViewerModal} ticketInfo={uploadedTicketInfo} onClose={() => setShowTicketViewerModal(false)} onShare={() => setShowCopyLinkModal(true)} />
+			<CopyLinkModal
+				show={showCopyLinkModal}
+				ticketInfo={{
+					companyId: uploadedTicketInfo.companyId,
+					ticketTypeId: uploadedTicketInfo.ticketId,
+					ticketData: uploadedTicketInfo.data,
+					id: '',
+				}}
+				onClose={() => {
+					setShowCopyLinkModal(false);
+				}}
+				ticketId={uploadedTicketInfo.id}
+			/>
 		</>
 	);
 };

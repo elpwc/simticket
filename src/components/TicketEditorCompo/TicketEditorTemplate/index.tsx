@@ -2,7 +2,6 @@
 
 import { JSX, useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
-import { getTicketURL } from '@/utils/utils';
 import TiltCanvas from '../TiltCanvas';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import { useIsMobile } from '@/utils/hooks';
@@ -12,6 +11,7 @@ import { useLocale } from '@/utils/hooks/useLocale';
 import { AppContext } from '@/app/app';
 import { useHint } from '@/components/InfrastructureCompo/HintProvider';
 import { UploadTicketModal } from '@/components/Modals/UploadTicketModal';
+import { CopyLinkModal } from '@/components/Modals/CopyLinkModal';
 
 export const getInitialMethods = (w: number, h: number, scaleXWidth: number, scaleYWidth: number, currentSizeScale: number = 1) => {
 	const scaleX = (x: number) => (x / (scaleXWidth * currentSizeScale)) * w;
@@ -72,6 +72,7 @@ export default ({
 	const [currentSizeScale, setCurrentSizeScale] = useState(isMobile ? 1 : 1.4);
 	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
 	const [showUploadTicketModal, setShowUploadTicketModal] = useState(false);
+	const [showCopyLinkModal, setShowCopyLinkModal] = useState(false);
 	const [isFlipSide, setIsFlipSide] = useState(false);
 
 	const { selectedCompanyId, setSelectedCompanyId } = useContext(AppContext);
@@ -183,10 +184,7 @@ export default ({
 					<button
 						title={'copy URL'}
 						onClick={() => {
-							navigator.clipboard
-								.writeText(getTicketURL(selectedCompanyId, selectedTicketId, ticketData))
-								.then(() => hint('top', t('TicketListViewItem.copyLink.hint.success')))
-								.catch((err) => hint('top', t('TicketListViewItem.copyLink.hint.fail'), 'red', 2000));
+							setShowCopyLinkModal(true);
 						}}
 						className="text-xs rounded-md px-1 py-1 shadow-sm transition"
 					>
@@ -269,6 +267,19 @@ export default ({
 				onClose={() => {
 					setShowUploadTicketModal(false);
 				}}
+			/>
+			<CopyLinkModal
+				show={showCopyLinkModal}
+				ticketInfo={{
+					companyId: selectedCompanyId,
+					ticketTypeId: selectedTicketId,
+					ticketData: ticketData,
+					id: '',
+				}}
+				onClose={() => {
+					setShowCopyLinkModal(false);
+				}}
+				onSubmitButtonClick={() => setShowUploadTicketModal(true)}
 			/>
 		</div>
 	);

@@ -14,6 +14,7 @@ import { TicketListView } from '@/components/InfrastructureCompo/ticketListView'
 import { useIsMobile } from '@/utils/hooks';
 import { useSearchParams } from 'next/navigation';
 import { TicketViewerModal } from '@/components/Modals/TicketViewerModal';
+import { CopyLinkModal } from '@/components/Modals/CopyLinkModal';
 
 export default function Works() {
 	const { t, locale } = useLocale();
@@ -45,6 +46,7 @@ export default function Works() {
 	const [hasMore, setHasMore] = useState<boolean>(true);
 	const [showTicketViewerModal, setShowTicketViewerModal] = useState<boolean>(false);
 	const [urlParamTicketInfo, setUrlParamTicketInfo] = useState<UploadedTicketInfo | null>(null);
+	const [showCopyLinkModal, setShowCopyLinkModal] = useState<boolean>(false);
 
 	const pageSize = 10;
 
@@ -96,7 +98,7 @@ export default function Works() {
 						setShowTicketViewerModal(true);
 					}
 				};
-				console.log(114514)
+				console.log(114514);
 				fetchData();
 			}
 		}
@@ -298,7 +300,27 @@ export default function Works() {
 				<TicketListView showAddButton={false} />
 			</footer>
 			{/* 只用来打开 URL params 的ticket */}
-			<TicketViewerModal show={showTicketViewerModal} ticketInfo={urlParamTicketInfo} onClose={() => setShowTicketViewerModal(false)} />
+			<TicketViewerModal
+				show={showTicketViewerModal}
+				ticketInfo={urlParamTicketInfo}
+				onClose={() => setShowTicketViewerModal(false)}
+				onShare={() => {
+					setShowCopyLinkModal(true);
+				}}
+			/>
+			<CopyLinkModal
+				show={showCopyLinkModal}
+				ticketInfo={{
+					companyId: urlParamTicketInfo ? urlParamTicketInfo.companyId : 0,
+					ticketTypeId: urlParamTicketInfo ? urlParamTicketInfo.ticketId : 0,
+					ticketData: urlParamTicketInfo ? urlParamTicketInfo.data : {},
+					id: '',
+				}}
+				onClose={() => {
+					setShowCopyLinkModal(false);
+				}}
+				ticketId={urlParamTicketInfo ? urlParamTicketInfo.id : -1}
+			/>
 		</div>
 	);
 }

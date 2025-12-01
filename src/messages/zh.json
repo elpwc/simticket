@@ -280,5 +280,16 @@
   "TicketViewer": {
     "loadingBackgroundImage": "加载背景中",
     "loadingFont": "加载字体中"
+  },
+  "CopyLinkModal": {
+    "copy": "复制",
+    "title": "分享链接",
+    "editorLink": "到编辑器的链接",
+    "viewerLink": "可以直接预览的链接",
+    "noViewerLink": "只有投稿後才能生成预览链接或者分享到推特...",
+    "submit": "投稿",
+    "noViewerLinkDescription": "编辑链接中存放了票面的所有数据，长度有数百到1000Byte，难以在限制文字数的SNS上分享。",
+    "whyDontUseViewerLink": "那为什么不用id做编辑链接？",
+    "whyDontUseViewerLinkDescription": "因为编辑链接指向的可以是还未投稿的，制作中的票面。"
   }
 }

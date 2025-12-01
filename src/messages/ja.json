@@ -280,5 +280,16 @@
   "TicketViewer": {
     "loadingBackgroundImage": "背景読み込み中",
     "loadingFont": "フォント読み込み中"
+  },
+  "CopyLinkModal": {
+    "copy": "コピー",
+    "editorLink": "編集ページへのリンク",
+    "noViewerLink": "閲覧用リンクを作るか、あるいはツイッターへ共有するにはまず投稿してから「みんなの作品」ページで共有して下さい",
+    "submit": "投稿",
+    "title": "リンクを共有",
+    "viewerLink": "閲覧用リンク",
+    "noViewerLinkDescription": "編集用リンクにきっぷの全部情報を保存しており、非常に長くなっているため（数百～千バイト）、ツイッターなどのSNSでの共有はできません",
+    "whyDontUseViewerLink": "じゃなんできっぷ id で編集リンク作らないの？",
+    "whyDontUseViewerLinkDescription": "編集リンクは、まだ未投稿・制作中のきっぷへの訪問もできるように設定しているからです"
   }
 }
