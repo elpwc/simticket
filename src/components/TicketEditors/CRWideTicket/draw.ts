@@ -559,7 +559,7 @@ export const drawCRWideTicket = (
 
 		if (!isMag) {
 			ctx.strokeStyle = 'black';
-			ctx.fillRect(offsetScaleX(0), offsetScaleY(1016), resizedScaleX(1700), resizedScaleY(1098 - 1016));
+			ctx.fillRect(offsetScaleX(0, false), offsetScaleY(1016, false), resizedScaleX(1700), resizedScaleY(1098 - 1016));
 		}
 
 		onDone?.();

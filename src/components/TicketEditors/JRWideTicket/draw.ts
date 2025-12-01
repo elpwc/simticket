@@ -447,7 +447,7 @@ export const drawJRWideTicket = (
 			drawJRBackText(i * 750 + startOffset);
 		}
 		ctx.fillStyle = '#555555';
-		ctx.fillRect(offsetScaleX(0), offsetScaleY(920), resizedScaleX(1700), resizedScaleY(30));
+		ctx.fillRect(offsetScaleX(0, false), offsetScaleY(920, false), resizedScaleX(1700), resizedScaleY(30));
 
 		onDone?.();
 	};
