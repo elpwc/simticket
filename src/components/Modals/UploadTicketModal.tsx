@@ -79,7 +79,7 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 			<div>
 				<Formik
 					enableReinitialize
-					initialValues={initialValues}
+					initialValues={{ name: '', editorName: localStorageEditorName }}
 					onSubmit={async (values, { resetForm }) => {
 						if (!buttonAvailable) {
 							return;
@@ -138,11 +138,11 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 							</label>
 
 							<label className="login-form-item-container">
-								<Field id="name" name="name" className="login-input" placeholder={t('UploadTicketModal.name')} />
+								<Field id="text" name="name" className="login-input" placeholder={t('UploadTicketModal.name')} />
 							</label>
 
 							<label className="login-form-item-container">
-								<Field type="editorName" id="editorName" name="editorName" className="login-input" placeholder={t('UploadTicketModal.editorName')} />
+								<Field type="text" id="editorName" name="editorName" className="login-input" placeholder={t('UploadTicketModal.editorName')} />
 							</label>
 
 							<div className="login-form-item-container">
