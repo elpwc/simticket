@@ -105,7 +105,7 @@
         },
         "stationInfo": {
           "useWeibeiti": {
-            "desc1": "　曾经CR上海局发行的车票中，当里程在400km以内时，两方车站名使用魏碑体",
+            "desc1": "　曾经由TMIS（Transportation Management Information System）发行的车票中，当里程在400km以内时，两方车站名使用魏碑体",
             "desc2": "　但仍存在不少一方是黑体一方是魏碑体的车票，故在此对两车站分别设置字体而不是统一设置",
             "weibeitiText": "魏碑体",
             "useText": "使用"

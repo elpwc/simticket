@@ -146,7 +146,7 @@
         },
         "stationInfo": {
           "useWeibeiti": {
-            "desc1": "　昔CR上海局が発行する乗車券は、走行距離が400km以内の場合、両駅名が魏碑体を使用していました。",
+            "desc1": "　昔TMIS（Transportation Management Information System）によって発行される乗車券は、走行距離が400km以内の場合、両駅名が魏碑体を使用していました。",
             "desc2": "　しかし、片方がゴシック体、片方が魏碑体となっている乗車券もしばしば見られた故、ここで別々に対処します。",
             "useText": "表示フォント：",
             "weibeitiText": "魏碑体"
