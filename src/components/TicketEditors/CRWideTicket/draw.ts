@@ -6,6 +6,26 @@ import cr_blue from '../../../assets/tickets/cr_blue.png';
 import cr_mag_blue from '../../../assets/tickets/cr_mag_blue.png';
 import cr_mag_red from '../../../assets/tickets/cr_mag_red.png';
 import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTemplate';
+import localFonts from 'next/font/local';
+
+export const HuawenXinwei = localFonts({
+	src: '../../../assets/fonts/STXINWEI.woff2',
+});
+export const SongTi = localFonts({
+	src: '../../../assets/fonts/LXGWNeoZhiSong.woff2',
+});
+export const SongTiEn = localFonts({
+	src: '../../../assets/fonts/NimbusRomNo9L-Regu.woff2',
+});
+export const HeiTi = localFonts({
+	src: '../../../assets/fonts/simhei.woff2',
+});
+export const TicketNoFont = localFonts({
+	src: '../../../assets/fonts/cr_ticketNo.woff2',
+});
+export const TrainCodeFont = localFonts({
+	src: '../../../assets/fonts/traincode.woff2',
+});
 
 export const drawCRWideTicket = (
 	canvas: HTMLCanvasElement | null,

@@ -9,6 +9,13 @@ import jr_c from '../../../assets/tickets/jr_c.jpg';
 import jr_w from '../../../assets/tickets/jr_w.jpg';
 import jr_s from '../../../assets/tickets/jr_s.jpg';
 import jr_k from '../../../assets/tickets/jr_k.jpg';
+import localFonts from 'next/font/local';
+
+export const DotFont = localFonts({
+	//src: '../../assets/fonts/simsun.woff2',
+	src: '../../../assets/fonts/JF-Dot-Izumi16.woff2',
+	//src: '../../../assets/fonts/JF-Dot-Ayu20.woff2',
+});
 
 export const drawJRWideTicket = (
 	canvas: HTMLCanvasElement | null,
