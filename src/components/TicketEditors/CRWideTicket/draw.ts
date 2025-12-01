@@ -1,4 +1,4 @@
-import { drawQRCode, drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
+import { drawQRCode, drawText, DrawTextMethod, fontsLoader, TextAlign } from '@/utils/utils';
 import { CRTicketBackGround, CRWideTicketDrawParameters, RightUpContentType } from './type';
 import { CRTicketFlipSideText, CRWideTicketDrawParametersInitialValues, MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from './value';
 import cr_red from '../../../assets/tickets/cr_red.png';
@@ -42,9 +42,32 @@ export const drawCRWideTicket = (
 		| undefined = undefined,
 	isFlip?: boolean,
 	onDone?: () => void,
-	onBgImageLoaded?: () => void
+	onBgImageLoadStart?: () => void,
+	onBgImageLoaded?: () => void,
+	onFontLoadStart?: () => void,
+	onFontLoaded?: () => void
 ) => {
 	if (!ctx || !canvas) return;
+
+	fontsLoader(
+		[
+			{ name: 'HuawenXinwei', file: '../../../assets/fonts/STXINWEI.woff2' },
+			{ name: 'SongTi', file: '../../../assets/fonts/LXGWNeoZhiSong.woff2' },
+			{ name: 'SongTiEn', file: '../../../assets/fonts/NimbusRomNo9L-Regu.woff2' },
+			{ name: 'HeiTi', file: '../../../assets/fonts/simhei.woff2' },
+			{ name: 'TicketNoFont', file: '../../../assets/fonts/cr_ticketNo.woff2' },
+			{ name: 'TrainCodeFont', file: '../../../assets/fonts/traincode.woff2' },
+		],
+		() => {
+			onFontLoadStart?.();
+		},
+		() => {
+			onFontLoaded?.();
+		},
+		() => {
+			onFontLoaded?.();
+		}
+	);
 
 	const drawParameters: CRWideTicketDrawParameters = {
 		...CRWideTicketDrawParametersInitialValues,
@@ -543,8 +566,11 @@ export const drawCRWideTicket = (
 	};
 
 	if (isFlip) {
+		onBgImageLoadStart?.();
 		drawFlip();
+		onBgImageLoaded?.();
 	} else {
+		onBgImageLoadStart?.();
 		switch (drawParameters.background) {
 			case CRTicketBackGround.SoftRed:
 			case CRTicketBackGround.SoftBlue:

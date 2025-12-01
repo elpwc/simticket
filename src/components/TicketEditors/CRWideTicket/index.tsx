@@ -142,28 +142,6 @@ export default function CRWideTicket() {
 		}
 	}, [copyEditingTicketDataToDrawParameters]);
 
-	useEffect(() => {
-		fontsLoader(
-			[
-				{ name: 'HuawenXinwei', file: '../../../assets/fonts/STXINWEI.woff2' },
-				{ name: 'SongTi', file: '../../../assets/fonts/LXGWNeoZhiSong.woff2' },
-				{ name: 'SongTiEn', file: '../../../assets/fonts/NimbusRomNo9L-Regu.woff2' },
-				{ name: 'HeiTi', file: '../../../assets/fonts/simhei.woff2' },
-				{ name: 'TicketNoFont', file: '../../../assets/fonts/cr_ticketNo.woff2' },
-				{ name: 'TrainCodeFont', file: '../../../assets/fonts/traincode.woff2' },
-			],
-			() => {
-				setIsFontLoading(true);
-			},
-			() => {
-				setIsFontLoading(false);
-			},
-			() => {
-				setIsFontLoading(false);
-			}
-		);
-	}, []);
-
 	const drawTicket = () => {
 		drawCRWideTicket(
 			canvasRef.current,

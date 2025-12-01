@@ -113,20 +113,7 @@ export default function JRWideTicket() {
 		}
 	}, [copyEditingTicketDataToDrawParameters]);
 
-	useEffect(() => {
-		fontsLoader(
-			[{ name: 'DotFont', file: '../../../assets/fonts/JF-Dot-Izumi16.woff2' }],
-			() => {
-				setIsFontLoading(true);
-			},
-			() => {
-				setIsFontLoading(false);
-			},
-			() => {
-				setIsFontLoading(false);
-			}
-		);
-	}, []);
+	useEffect(() => {}, []);
 
 	const drawTicket = () => {
 		drawJRWideTicket(

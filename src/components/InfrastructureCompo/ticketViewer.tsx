@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { drawTicket } from '@/utils/drawTicket';
+import { s } from 'motion/react-client';
+import { useLocale } from '@/utils/hooks/useLocale';
 
 interface Props {
 	width: number;
@@ -12,13 +14,18 @@ interface Props {
 	companyId: number;
 	ticketTypeId: number;
 	ticketData?: any;
+	showLoadingStatus?: boolean;
 }
 
-export const TicketViewer = ({ width, height, className, style, borderRadius, companyId, ticketTypeId, ticketData = {} }: Props) => {
+export const TicketViewer = ({ width, height, className, style, borderRadius, companyId, ticketTypeId, ticketData = {}, showLoadingStatus = true }: Props) => {
+	const { t } = useLocale();
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
 	const [canvasWidth, setCanvasWidth] = useState(width);
 	const [canvasHeight, setCanvasHeight] = useState(height);
+
+	const [loadingFontHintText, setLoadingFontHintText] = useState<string>('');
+	const [loadingBgHintText, setLoadingBgHintText] = useState<string>('');
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -38,14 +45,41 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 			ticketData,
 			width,
 			height,
+			/*onWidthChanged*/
 			(newValue: number) => {
 				setCanvasWidth(newValue);
 			},
+			/*onHeightChanged*/
 			(newValue: number) => {
 				setCanvasHeight(newValue);
+			},
+			undefined,
+			/*onDone*/ () => {
+				setLoadingFontHintText('');
+				setLoadingBgHintText('');
+			},
+			/* onBgImageLoadStart */ () => {
+				setLoadingBgHintText(showLoadingStatus ? '>' + t('TicketViewer.loadingBackgroundImage') + '...' : '');
+			},
+			/* onBgImageLoaded */ () => {
+				setLoadingBgHintText('');
+			},
+			/* onFontLoadStart */ () => {
+				setLoadingFontHintText(showLoadingStatus ? '>' + t('TicketViewer.loadingFont') + '...' : '');
+			},
+			/* onFontLoaded */ () => {
+				setLoadingFontHintText('');
 			}
 		);
 	}, [canvasWidth, canvasHeight, canvasRef.current?.width, canvasRef.current?.height, canvasRef.current]);
 
-	return <canvas className={className} style={style} ref={canvasRef} width={canvasWidth} height={canvasHeight} />;
+	return (
+		<div className="relative">
+			<canvas className={className} style={style} ref={canvasRef} width={canvasWidth} height={canvasHeight} />
+			<div className="absolute top-0 left-0 text-[gray] text-[12px]">
+				<p>{loadingFontHintText}</p>
+				<p>{loadingBgHintText}</p>
+			</div>
+		</div>
+	);
 };

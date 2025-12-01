@@ -276,5 +276,9 @@
     "latest": {
       "title": "最新投稿"
     }
+  },
+  "TicketViewer": {
+    "loadingBackgroundImage": "加载背景中",
+    "loadingFont": "加载字体中"
   }
 }

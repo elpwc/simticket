@@ -2,7 +2,7 @@ import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTe
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
 import { JRStationNameType, JRWideTicketDrawParameters } from './type';
 import { JRPaymentMethod, JRTicketFlipSideText, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE } from './value';
-import { drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
+import { drawText, DrawTextMethod, fontsLoader, TextAlign } from '@/utils/utils';
 import jr_h from '../../../assets/tickets/jr_h.jpg';
 import jr_e from '../../../assets/tickets/jr_e.jpg';
 import jr_c from '../../../assets/tickets/jr_c.jpg';
@@ -32,12 +32,26 @@ export const drawJRWideTicket = (
 		| undefined = undefined,
 	isFlip?: boolean,
 	onDone?: () => void,
-	onBgImageLoaded?: () => void
+	onBgImageLoadStart?: () => void,
+	onBgImageLoaded?: () => void,
+	onFontLoadStart?: () => void,
+	onFontLoaded?: () => void
 ) => {
 	if (!ctx || !canvas) {
 		return;
 	}
-
+	fontsLoader(
+		[{ name: 'DotFont', file: '../../../assets/fonts/JF-Dot-Izumi16.woff2' }],
+		() => {
+			onFontLoadStart?.();
+		},
+		() => {
+			onFontLoaded?.();
+		},
+		() => {
+			onFontLoaded?.();
+		}
+	);
 	const w = canvas.width > width ? canvas.width : width;
 	const h = canvas.height > height ? canvas.height : height;
 
@@ -439,8 +453,11 @@ export const drawJRWideTicket = (
 	};
 
 	if (isFlip) {
+		onBgImageLoadStart?.();
 		drawFlip();
+		onBgImageLoaded?.();
 	} else {
+		onBgImageLoadStart?.();
 		switch (drawParameters.background) {
 			case JRTicketBackGround.JR_H:
 			case JRTicketBackGround.JR_E:
