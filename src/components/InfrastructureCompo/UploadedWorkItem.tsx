@@ -32,8 +32,7 @@ export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked, onC
 			hover:-translate-y-[2px] 
 			p-2 
 			pb-0
-			w-fit 
-			md:w-fit 
+			w-[300px] 
 			h-[initial]
 			m-1 
 			border border-gray-200

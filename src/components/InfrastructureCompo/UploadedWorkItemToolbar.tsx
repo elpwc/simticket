@@ -51,7 +51,7 @@ export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLik
 	return (
 		<>
 			<div className="flex justify-between items-center">
-				<p className="font-semibold text-sm truncate">{uploadedTicketInfo.name}</p>
+				<p className="font-semibold text-sm truncate flex-1 min-w-0">{uploadedTicketInfo.name}</p>
 
 				<div className="flex">
 					<button
