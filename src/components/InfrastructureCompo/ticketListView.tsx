@@ -10,6 +10,7 @@ import { SaveImageModal } from '../Modals/SaveImageModal';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/utils/hooks';
 import { UploadTicketModal } from '../Modals/UploadTicketModal';
+import { TicketListViewerModal } from '../Modals/TicketListViewerModal';
 
 interface Props {
 	showAddButton?: boolean;
@@ -25,6 +26,8 @@ export const TicketListView = ({ showAddButton = true }: Props) => {
 	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
 	const [showUploadTicketModal, setShowUploadTicketModal] = useState(false);
 	const [collapsed, setCollapsed] = useState(false);
+	const [showTicketListViewerModal, setShowTicketListViewerModal] = useState(false);
+	const [selectedTicketForViewer, setSelectedTicketForViewer] = useState<TicketListItemProperty | null>(null);
 
 	const {
 		ticketListItems,
@@ -85,6 +88,10 @@ export const TicketListView = ({ showAddButton = true }: Props) => {
 											onUpload={() => {
 												currentOperatingTicketItemRef.current = item;
 												setShowUploadTicketModal(true);
+											}}
+											onClick={() => {
+												setSelectedTicketForViewer(item);
+												setShowTicketListViewerModal(true);
 											}}
 										/>
 									</motion.div>
@@ -178,6 +185,7 @@ export const TicketListView = ({ showAddButton = true }: Props) => {
 					setShowUploadTicketModal(false);
 				}}
 			/>
+			<TicketListViewerModal show={showTicketListViewerModal} ticketInfo={selectedTicketForViewer!} onClose={() => setShowTicketListViewerModal(false)} />
 		</div>
 	);
 };
