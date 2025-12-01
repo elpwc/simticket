@@ -56,10 +56,10 @@ export const drawJRWideTicket = (
 		return initialMethods.scaleY(value);
 	};
 	const offsetScaleX = (value: number, addOffsetValue: boolean = true) => {
-		return initialMethods.scaleX(value) + (addOffsetValue ? drawParameters.offsetX : 0);
+		return initialMethods.scaleX(value + (addOffsetValue ? drawParameters.offsetX : 0));
 	};
 	const offsetScaleY = (value: number, addOffsetValue: boolean = true) => {
-		return initialMethods.scaleY(value) + (addOffsetValue ? drawParameters.offsetY : 0);
+		return initialMethods.scaleY(value + (addOffsetValue ? drawParameters.offsetY : 0));
 	};
 	const resizedFont = (size: number, fontName: string, isBold?: boolean) => {
 		return initialMethods.font(size, fontName, isBold);

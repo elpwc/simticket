@@ -273,11 +273,11 @@ export default function CRWideTicket() {
 							<div className="flex grid-cols-3 gap-2">
 								<label className="flex gap-1 items-center">
 									X
-									<input className="max-w-[50px]" type="number" value={offsetContent[0]} onChange={(e) => setOffsetContent([e.target.value, offsetContent[1]])} />
+									<input className="max-w-[70px]" type="number" value={offsetContent[0]} onChange={(e) => setOffsetContent([e.target.value, offsetContent[1]])} />
 								</label>
 								<label className="flex gap-1 items-center">
 									Y
-									<input className="max-w-[50px]" type="number" value={offsetContent[1]} onChange={(e) => setOffsetContent([offsetContent[0], e.target.value])} />
+									<input className="max-w-[70px]" type="number" value={offsetContent[1]} onChange={(e) => setOffsetContent([offsetContent[0], e.target.value])} />
 								</label>
 								<button
 									className="w-[max-content] text-[12px]"
@@ -293,7 +293,7 @@ export default function CRWideTicket() {
 								<button
 									className="w-[max-content] text-[12px]"
 									onClick={() => {
-										setOffsetContent([(Math.random() * 10 - 5).toFixed(1), (Math.random() * 10 - 5).toFixed(1)]);
+										setOffsetContent([(Math.random() * 100 - 50).toFixed(0), (Math.random() * 80 - 40).toFixed(0)]);
 									}}
 								>
 									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">

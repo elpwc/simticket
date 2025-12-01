@@ -116,12 +116,12 @@ export const drawCRWideTicket = (
 			case CRTicketBackGround.MagRed:
 			case CRTicketBackGround.MagBlue:
 			case CRTicketBackGround.MagNoneBackground:
-				return initialMethods.scaleX(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeHori) / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]) + (addOffsetValue ? drawParameters.offsetX : 0);
+				return initialMethods.scaleX(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeHori) / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0] + (addOffsetValue ? drawParameters.offsetX : 0));
 			case CRTicketBackGround.SoftRed:
 			case CRTicketBackGround.SoftBlue:
 			case CRTicketBackGround.SoftNoneBackground:
 			default:
-				return initialMethods.scaleX(value) + (addOffsetValue ? drawParameters.offsetX : 0);
+				return initialMethods.scaleX(value + (addOffsetValue ? drawParameters.offsetX : 0));
 		}
 	};
 	const offsetScaleY = (value: number, addOffsetValue: boolean = true) => {
@@ -129,12 +129,12 @@ export const drawCRWideTicket = (
 			case CRTicketBackGround.MagRed:
 			case CRTicketBackGround.MagBlue:
 			case CRTicketBackGround.MagNoneBackground:
-				return initialMethods.scaleY(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeVert) / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]) + (addOffsetValue ? drawParameters.offsetY : 0);
+				return initialMethods.scaleY(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeVert) / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1] + (addOffsetValue ? drawParameters.offsetY : 0));
 			case CRTicketBackGround.SoftRed:
 			case CRTicketBackGround.SoftBlue:
 			case CRTicketBackGround.SoftNoneBackground:
 			default:
-				return initialMethods.scaleY(value) + (addOffsetValue ? drawParameters.offsetY : 0);
+				return initialMethods.scaleY(value + (addOffsetValue ? drawParameters.offsetY : 0));
 		}
 	};
 	const resizedFont = (size: number, fontName: string, isBold?: boolean) => {
