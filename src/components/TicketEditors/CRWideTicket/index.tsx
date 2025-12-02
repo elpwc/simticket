@@ -248,17 +248,18 @@ export default function CRWideTicket() {
 						</label>
 						<label className="ticket-form-label">
 							{t('editor.common.ticketFace.offset')}
-							<div className="flex grid-cols-3 gap-2">
-								<label className="flex gap-1 items-center">
+							<div className="flex grid-cols-3">
+								<label className="flex items-center">
 									X
-									<input className="max-w-[70px]" type="number" value={offsetContent[0]} onChange={(e) => setOffsetContent([e.target.value, offsetContent[1]])} />
+									<input className="max-w-[60px]" type="number" value={offsetContent[0]} onChange={(e) => setOffsetContent([e.target.value, offsetContent[1]])} />
 								</label>
-								<label className="flex gap-1 items-center">
+								<label className="flex items-center">
 									Y
-									<input className="max-w-[70px]" type="number" value={offsetContent[1]} onChange={(e) => setOffsetContent([offsetContent[0], e.target.value])} />
+									<input className="max-w-[60px]" type="number" value={offsetContent[1]} onChange={(e) => setOffsetContent([offsetContent[0], e.target.value])} />
 								</label>
 								<button
 									className="w-[max-content] text-[12px]"
+									style={{ borderRadius: '4px 0 0 4px', padding: '4px 4px', marginRight: 0 }}
 									onClick={() => {
 										setOffsetContent(['0', '0']);
 									}}
@@ -270,6 +271,7 @@ export default function CRWideTicket() {
 								</button>
 								<button
 									className="w-[max-content] text-[12px]"
+									style={{ borderRadius: '0 4px 4px 0', padding: '4px 4px', marginLeft: 0, borderLeft: 'none' }}
 									onClick={() => {
 										setOffsetContent([(Math.random() * 100 - 50).toFixed(0), (Math.random() * 80 - 40).toFixed(0)]);
 									}}
@@ -944,7 +946,7 @@ export default function CRWideTicket() {
 							<div>
 								<input className="w-full" value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 								<div className="flex flex-col">
-									<div className="flex">
+									<div className="flex flex-wrap">
 										<label className="flex flex-col">
 											TMIS
 											<input className="w-[80px]" value={TMIS} onChange={(e) => setTMIS(e.target.value)} />

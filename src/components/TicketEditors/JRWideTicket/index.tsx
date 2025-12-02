@@ -197,17 +197,18 @@ export default function JRWideTicket() {
 						</label>
 						<label className="ticket-form-label">
 							印刷ズレ
-							<div className="flex grid-cols-3 gap-2">
-								<label className="flex gap-1 items-center">
+							<div className="flex grid-cols-3">
+								<label className="flex items-center">
 									X
-									<input className="max-w-[70px]" type="number" value={offsetContent[0]} onChange={(e) => setOffsetContent([e.target.value, offsetContent[1]])} />
+									<input className="max-w-[60px]" type="number" value={offsetContent[0]} onChange={(e) => setOffsetContent([e.target.value, offsetContent[1]])} />
 								</label>
-								<label className="flex gap-1 items-center">
+								<label className="flex items-center">
 									Y
-									<input className="max-w-[70px]" type="number" value={offsetContent[1]} onChange={(e) => setOffsetContent([offsetContent[0], e.target.value])} />
+									<input className="max-w-[60px]" type="number" value={offsetContent[1]} onChange={(e) => setOffsetContent([offsetContent[0], e.target.value])} />
 								</label>
 								<button
 									className="w-[max-content] text-[12px]"
+									style={{ borderRadius: '4px 0 0 4px', padding: '4px 4px', marginRight: 0 }}
 									onClick={() => {
 										setOffsetContent(['0', '0']);
 									}}
@@ -219,6 +220,7 @@ export default function JRWideTicket() {
 								</button>
 								<button
 									className="w-[max-content] text-[12px]"
+									style={{ borderRadius: '0 4px 4px 0', padding: '4px 4px', marginLeft: 0, borderLeft: 'none' }}
 									onClick={() => {
 										setOffsetContent([(Math.random() * 30 - 15).toFixed(0), (Math.random() * 16 - 8).toFixed(0)]);
 									}}
