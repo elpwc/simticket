@@ -2,20 +2,13 @@ import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTe
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
 import { JRStationNameType, JRWideTicketDrawParameters } from './type';
 import { JRPaymentMethod, JRTicketFlipSideText, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE } from './value';
-import { drawText, DrawTextMethod, fontsLoader, TextAlign } from '@/utils/utils';
+import { drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
 import jr_h from '../../../assets/tickets/jr_h.jpg';
 import jr_e from '../../../assets/tickets/jr_e.jpg';
 import jr_c from '../../../assets/tickets/jr_c.jpg';
 import jr_w from '../../../assets/tickets/jr_w.jpg';
 import jr_s from '../../../assets/tickets/jr_s.jpg';
 import jr_k from '../../../assets/tickets/jr_k.jpg';
-import localFonts from 'next/font/local';
-
-export const DotFont = localFonts({
-	//src: '../../assets/fonts/simsun.woff2',
-	src: '../../../assets/fonts/JF-Dot-Izumi16.woff2',
-	//src: '../../../assets/fonts/JF-Dot-Ayu20.woff2',
-});
 
 export const drawJRWideTicket = (
 	canvas: HTMLCanvasElement | null,
@@ -33,25 +26,12 @@ export const drawJRWideTicket = (
 	isFlip?: boolean,
 	onDone?: () => void,
 	onBgImageLoadStart?: () => void,
-	onBgImageLoaded?: () => void,
-	onFontLoadStart?: () => void,
-	onFontLoaded?: () => void
+	onBgImageLoaded?: () => void
 ) => {
 	if (!ctx || !canvas) {
 		return;
 	}
-	fontsLoader(
-		[{ name: 'DotFont', file: '../../../assets/fonts/JF-Dot-Izumi16.woff2' }],
-		() => {
-			onFontLoadStart?.();
-		},
-		() => {
-			onFontLoaded?.();
-		},
-		() => {
-			onFontLoaded?.();
-		}
-	);
+
 	const w = canvas.width > width ? canvas.width : width;
 	const h = canvas.height > height ? canvas.height : height;
 

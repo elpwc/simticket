@@ -410,7 +410,7 @@ export const drawTextNew = (
 };
 
 /**
- * 簡単にフォントリストをロード
+ * 簡単にフォントリストをロード  unused
  * @param fontList
  * @param onLoadStart
  * @param onLoadEnd

@@ -17,9 +17,7 @@ export const drawTicket = (
 	isFlip?: boolean,
 	onDone?: () => void,
 	onBgImageLoadStart?: () => void,
-	onBgImageLoaded?: () => void,
-	onFontLoadStart?: () => void,
-	onFontLoaded?: () => void
+	onBgImageLoaded?: () => void
 ) => {
 	if (!ticketData) {
 		return;
@@ -58,7 +56,7 @@ export const drawTicket = (
 							height = (canvasWidth / MAG_TICKET_SIZE[0]) * MAG_TICKET_SIZE[1];
 						}
 					}
-					drawCRWideTicket(canvas, width, height, ctx, ticketData, undefined, isFlip, onDone, onBgImageLoadStart, onBgImageLoaded, onFontLoadStart, onFontLoaded);
+					drawCRWideTicket(canvas, width, height, ctx, ticketData, undefined, isFlip, onDone, onBgImageLoadStart, onBgImageLoaded);
 					break;
 				default:
 					break;
@@ -76,7 +74,7 @@ export const drawTicket = (
 						onHeightChanged?.((canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1]);
 						height = (canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1];
 					}
-					drawJRWideTicket(canvas, width, height, ctx, ticketData, undefined, isFlip, onDone, onBgImageLoadStart, onBgImageLoaded, onFontLoadStart, onFontLoaded);
+					drawJRWideTicket(canvas, width, height, ctx, ticketData, undefined, isFlip, onDone, onBgImageLoadStart, onBgImageLoaded);
 					break;
 				case 2:
 				default:

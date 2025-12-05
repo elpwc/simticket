@@ -25,7 +25,6 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 	const [canvasWidth, setCanvasWidth] = useState(width);
 	const [canvasHeight, setCanvasHeight] = useState(height);
 
-	const [loadingFontHintText, setLoadingFontHintText] = useState<string>('');
 	const [loadingBgHintText, setLoadingBgHintText] = useState<string>('');
 
 	useEffect(() => {
@@ -56,7 +55,6 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 			},
 			isFlip,
 			/*onDone*/ () => {
-				setLoadingFontHintText('');
 				setLoadingBgHintText('');
 			},
 			/* onBgImageLoadStart */ () => {
@@ -64,12 +62,6 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 			},
 			/* onBgImageLoaded */ () => {
 				setLoadingBgHintText('');
-			},
-			/* onFontLoadStart */ () => {
-				setLoadingFontHintText(showLoadingStatus ? '>' + t('TicketViewer.loadingFont') + '...' : '');
-			},
-			/* onFontLoaded */ () => {
-				setLoadingFontHintText('');
 			}
 		);
 	}, [canvasWidth, canvasHeight, canvasRef.current?.width, canvasRef.current?.height, canvasRef.current, isFlip, ticketData, ticketTypeId, companyId]);
@@ -78,7 +70,6 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 		<div className="relative">
 			<canvas className={className} style={style} ref={canvasRef} width={canvasWidth} height={canvasHeight} />
 			<div className="absolute top-0 left-0 text-[gray] text-[12px]">
-				<p>{loadingFontHintText}</p>
 				<p>{loadingBgHintText}</p>
 			</div>
 		</div>
