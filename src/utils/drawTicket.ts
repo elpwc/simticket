@@ -2,7 +2,7 @@ import { drawCRWideTicket } from '@/components/TicketEditors/CRWideTicket/draw';
 import { CRTicketBackGround } from '@/components/TicketEditors/CRWideTicket/type';
 import { MAG_TICKET_SIZE, PAPER_TICKET_SIZE } from '@/components/TicketEditors/CRWideTicket/value';
 import { drawJRWideTicket } from '@/components/TicketEditors/JRWideTicket/draw';
-import { JR_MARS_PAPER_TICKET_SIZE } from '@/components/TicketEditors/JRWideTicket/value';
+import { JR_MARS_120_PAPER_TICKET_SIZE, JR_MARS_PAPER_TICKET_SIZE } from '@/components/TicketEditors/JRWideTicket/value';
 
 export const drawTicket = (
 	canvas: HTMLCanvasElement,
@@ -67,12 +67,22 @@ export const drawTicket = (
 					break;
 				case 1:
 					if (width < 0) {
-						onWidthChanged?.((canvasHeight / JR_MARS_PAPER_TICKET_SIZE[1]) * JR_MARS_PAPER_TICKET_SIZE[0]);
-						width = (canvasHeight / JR_MARS_PAPER_TICKET_SIZE[1]) * JR_MARS_PAPER_TICKET_SIZE[0];
+						if (ticketData.is120mm) {
+							onWidthChanged?.((canvasHeight / JR_MARS_120_PAPER_TICKET_SIZE[1]) * JR_MARS_120_PAPER_TICKET_SIZE[0]);
+							width = (canvasHeight / JR_MARS_120_PAPER_TICKET_SIZE[1]) * JR_MARS_120_PAPER_TICKET_SIZE[0];
+						} else {
+							onWidthChanged?.((canvasHeight / JR_MARS_PAPER_TICKET_SIZE[1]) * JR_MARS_PAPER_TICKET_SIZE[0]);
+							width = (canvasHeight / JR_MARS_PAPER_TICKET_SIZE[1]) * JR_MARS_PAPER_TICKET_SIZE[0];
+						}
 					}
 					if (height < 0) {
-						onHeightChanged?.((canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1]);
-						height = (canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1];
+						if (ticketData.is120mm) {
+							onHeightChanged?.((canvasWidth / JR_MARS_120_PAPER_TICKET_SIZE[0]) * JR_MARS_120_PAPER_TICKET_SIZE[1]);
+							height = (canvasWidth / JR_MARS_120_PAPER_TICKET_SIZE[0]) * JR_MARS_120_PAPER_TICKET_SIZE[1];
+						} else {
+							onHeightChanged?.((canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1]);
+							height = (canvasWidth / JR_MARS_PAPER_TICKET_SIZE[0]) * JR_MARS_PAPER_TICKET_SIZE[1];
+						}
 					}
 					drawJRWideTicket(canvas, width, height, ctx, ticketData, undefined, isFlip, onDone, onBgImageLoadStart, onBgImageLoaded);
 					break;

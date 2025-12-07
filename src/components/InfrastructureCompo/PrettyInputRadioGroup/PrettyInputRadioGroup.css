@@ -1,15 +1,13 @@
 .radio-group {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 2px;
 }
 
 .radio-btn {
-	margin: 1px;
 	min-width: 3rem;
 	padding: 0 0.7rem;
 	border-radius: 2px;
-	border: 1px solid #5c5c5c;
+	border: 1px solid #aaa;
 	background: #ffffff;
 	color: #333;
 	font-size: 0.85rem;
@@ -31,7 +29,7 @@
 
 .radio-diy-input {
 	flex-shrink: 0;
-	border: 1px solid #5c5c5c;
+	border: 1px solid #aaa;
 	padding: 0;
 	border-radius: 2px;
 	font-size: 0.85rem;

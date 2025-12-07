@@ -3,9 +3,9 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
-import { decodeTicket, fontsLoader } from '@/utils/utils';
+import { decodeTicket } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
-import TabBox from '../../InfrastructureCompo/TabBox';
+import TitleContainer from '../../InfrastructureCompo/TitleContainer';
 import { Divider } from '../../InfrastructureCompo/Divider';
 import localFonts from 'next/font/local';
 import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGroup/PrettyInputRadioGroup';
@@ -22,8 +22,9 @@ import {
 	JRPAYMENT_METHOD_LIST,
 	JRPaymentMethod,
 	JR_info1List,
+	JR_MARS_120_PAPER_TICKET_CANVAS_SIZE,
 } from './value';
-import { JRStationNameType, JRWideTicketDrawParameters } from './type';
+import { JRStationNameType, JRTicketTypeList, JRWideTicketDrawParameters } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
 import { useSearchParams } from 'next/navigation';
@@ -31,6 +32,9 @@ import clsx from 'clsx';
 import { JRStationNameText } from '@/components/InfrastructureCompo/JRStationNameText';
 import { JRPresetStationsModal } from '@/components/Modals/JRPresetStationsModal';
 import { useLocale } from '@/utils/hooks/useLocale';
+import { Tab } from '@/components/InfrastructureCompo/Tab/Tab';
+import { ExpressForm, RegularForm, ReservedForm } from './JRTicketTypeComponents';
+import { getJRPrintingTicketTitleByTicketType } from './utils';
 
 export const DotFont = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
@@ -133,8 +137,8 @@ export default function JRWideTicket() {
 
 	useEffect(() => {
 		setIsBgImageLoading(true);
-		setCanvasSize(JR_MARS_PAPER_TICKET_CANVAS_SIZE);
-	}, [drawParameters.background]);
+		setCanvasSize(drawParameters.is120mm ? JR_MARS_120_PAPER_TICKET_CANVAS_SIZE : JR_MARS_PAPER_TICKET_CANVAS_SIZE);
+	}, [drawParameters.background, drawParameters.is120mm]);
 
 	useEffect(() => {
 		drawTicket();
@@ -176,23 +180,25 @@ export default function JRWideTicket() {
 				setIsFlipSide(isFlip);
 			}}
 			form={
-				<div className="flex flex-col gap-4 m-4">
+				<div className="flex flex-col m-4">
 					<UnderConstruction size="small" />
-					<TabBox title="券面" className="flex flex-wrap gap-1">
+					<TitleContainer title="券面" className="flex flex-wrap gap-1">
 						<label className="ticket-form-label">
 							券面
-							<JRWideTicketBgSelector value={drawParameters.background} onChange={(e) => setDrawParameters((prev) => ({ ...prev, background: e }))} />
+							<JRWideTicketBgSelector is120mm={drawParameters.is120mm} value={drawParameters.background} onChange={(e) => setDrawParameters((prev) => ({ ...prev, background: e }))} />
 						</label>
 						<label className="ticket-form-label">
-							券幅（仮）
+							券幅
 							<PrettyInputRadioGroup
-								value={'0'}
-								onChange={(value) => {}}
+								value={drawParameters.is120mm}
+								onChange={(value) => {
+									setDrawParameters((prev) => ({ ...prev, is120mm: value }));
+								}}
 								list={[
-									{ value: '0', title: '85ミリ券' },
-									{ value: '1', title: '120ミリ券' },
+									{ value: false, title: '85ミリ券' },
+									{ value: true, title: '120ミリ券' },
 								]}
-								showInputBox={false}
+								doNotShowInputBox
 							/>
 						</label>
 						<label className="ticket-form-label">
@@ -247,9 +253,32 @@ export default function JRWideTicket() {
 							</div>
 							<input className="" style={{ color: '#AF0508' }} value={drawParameters.watermark} onChange={(e) => setDrawParameters((prev) => ({ ...prev, watermark: e.target.value }))} />
 						</label>
-						<label className="ticket-form-label">
+						<label className="w-full">
 							乗車券種類（仮）
-							<PrettyInputRadioGroup
+							<div>
+								<Tab
+									menuPosition="top"
+									menu={JRTicketTypeList.map((JRTicketType) => ({ title: JRTicketType.name }))}
+									pages={[
+										<RegularForm
+											onChange={(title) => {
+												setDrawParameters((prev) => ({ ...prev, ticketType: getJRPrintingTicketTitleByTicketType(title).printingName }));
+											}}
+											key="1"
+										/>,
+										<ExpressForm
+											onChange={(title) => {
+												setDrawParameters((prev) => ({ ...prev, ticketType: getJRPrintingTicketTitleByTicketType(title).printingName }));
+											}}
+											key="2"
+										/>,
+										<ReservedForm onChange={(title) => {}} key="3" />,
+									]}
+									defaultSelectedIndex={0}
+									menuItemStyle={{ width: 'auto' }}
+								/>
+							</div>
+							{/* <PrettyInputRadioGroup
 								list={JR_TICKET_TYPE.map((jrTicketTypeItem) => {
 									return { value: jrTicketTypeItem.name, title: jrTicketTypeItem.name };
 								})}
@@ -257,7 +286,7 @@ export default function JRWideTicket() {
 								onChange={(value: string) => {
 									setDrawParameters((prev) => ({ ...prev, ticketType: value }));
 								}}
-							/>
+							/> */}
 						</label>
 						<label className="ticket-form-label">
 							&nbsp;
@@ -266,8 +295,8 @@ export default function JRWideTicket() {
 								英文付き券面（仮）
 							</div>
 						</label>
-					</TabBox>
-					<TabBox title="駅情報" className="flex flex-wrap gap-1">
+					</TitleContainer>
+					<TitleContainer title="駅情報" className="flex flex-wrap gap-1">
 						<div className="flex flex-col gap-[2px]">
 							<label className="ticket-form-label">
 								出発駅特定都区市内
@@ -360,7 +389,7 @@ export default function JRWideTicket() {
 										};
 									})}
 									itemStyle={{ padding: 0, minWidth: 0, display: 'flex', alignItems: 'flex-end', backgroundColor: '#DDF6EE' }}
-									showInputBox={false}
+									doNotShowInputBox
 								/>
 							</label>
 
@@ -455,7 +484,7 @@ export default function JRWideTicket() {
 										};
 									})}
 									itemStyle={{ padding: 0, minWidth: 0, display: 'flex', alignItems: 'flex-end', backgroundColor: '#DDF6EE' }}
-									showInputBox={false}
+									doNotShowInputBox
 								/>
 							</label>
 							<label className="ticket-form-label">
@@ -499,12 +528,12 @@ export default function JRWideTicket() {
 									{ value: '0', title: '→（一般）' },
 									{ value: '1', title: '↔（回数券）' },
 								]}
-								showInputBox={false}
+								doNotShowInputBox
 							/>
 						</label>
-					</TabBox>
+					</TitleContainer>
 
-					<TabBox title="運行情報（仮）" className="flex flex-wrap gap-2">
+					<TitleContainer title="運行情報（仮）" className="flex flex-wrap gap-2">
 						<label className="ticket-form-label">
 							{t('editor.common.trainInfo.departureDate')}
 							<input
@@ -590,9 +619,9 @@ export default function JRWideTicket() {
 								/>
 							</div>
 						</label>
-					</TabBox>
+					</TitleContainer>
 
-					<TabBox title="購入情報（仮）" className="flex flex-wrap">
+					<TitleContainer title="購入情報（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
 							購入手段（仮）
 							<PrettyInputRadioGroup
@@ -616,8 +645,8 @@ export default function JRWideTicket() {
 						</label>
 
 						<Divider />
-					</TabBox>
-					<TabBox title="番号（仮）" className="flex flex-wrap">
+					</TitleContainer>
+					<TitleContainer title="番号（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
 							発券番号
 							<input className="text-red-500" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />
@@ -626,7 +655,7 @@ export default function JRWideTicket() {
 							番号
 							<input value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
-					</TabBox>
+					</TitleContainer>
 					<JRPresetStationsModal
 						show={showJRPresetStationsModal > 0}
 						onClose={() => {

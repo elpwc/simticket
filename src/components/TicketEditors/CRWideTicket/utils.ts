@@ -1,5 +1,8 @@
 import { CRWideTicketDrawParameters } from './type';
 
+// このファイルにあるパラメーターの順序は※絶対※に変更してはいけません
+// 新しいパラメーターを追加する場合は、必ず末尾に追加してください
+
 export function encodeCRWideTicketParams(p: CRWideTicketDrawParameters): string {
 	const arr: any[] = [
 		p.background,

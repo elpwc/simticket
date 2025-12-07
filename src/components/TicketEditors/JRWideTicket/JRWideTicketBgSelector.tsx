@@ -4,6 +4,8 @@ import jr_c from '../../../assets/tickets_preview/jr_c.jpg';
 import jr_w from '../../../assets/tickets_preview/jr_w.jpg';
 import jr_s from '../../../assets/tickets_preview/jr_s.jpg';
 import jr_k from '../../../assets/tickets_preview/jr_k.jpg';
+import jr_e_120 from '../../../assets/tickets_preview/jr_e_120.jpg';
+
 import './index.css';
 
 export enum JRTicketBackGround {
@@ -17,6 +19,7 @@ export enum JRTicketBackGround {
 }
 
 interface Props {
+	is120mm?: boolean;
 	value: JRTicketBackGround;
 	onChange: (value: JRTicketBackGround) => void;
 }
@@ -26,6 +29,7 @@ const bgInfos = [
 		id: 'jr_h',
 		title: 'ＪＲ北海道',
 		img: jr_h.src,
+		img120: jr_e_120.src,
 		value: JRTicketBackGround.JR_H,
 		disabled: false,
 	},
@@ -33,41 +37,47 @@ const bgInfos = [
 		id: 'jr_e',
 		title: 'ＪＲ東日本',
 		img: jr_e.src,
+		img120: jr_e_120.src,
 		value: JRTicketBackGround.JR_E,
 	},
 	{
 		id: 'jr_c',
 		title: 'ＪＲ東海',
 		img: jr_c.src,
+		img120: jr_e_120.src,
 		value: JRTicketBackGround.JR_C,
 	},
 	{
 		id: 'jr_w',
 		title: 'ＪＲ西日本',
 		img: jr_w.src,
+		img120: jr_e_120.src,
 		value: JRTicketBackGround.JR_W,
 	},
 	{
 		id: 'jr_s',
 		title: 'ＪＲ四国',
 		img: jr_s.src,
+		img120: jr_e_120.src,
 		value: JRTicketBackGround.JR_S,
 	},
 	{
 		id: 'jr_k',
 		title: 'ＪＲ九州',
 		img: jr_k.src,
+		img120: jr_e_120.src,
 		value: JRTicketBackGround.JR_K,
 	},
 	{
 		id: 'jr_empty',
 		title: '背景無し',
 		img: jr_k.src,
+		img120: jr_e_120.src,
 		value: JRTicketBackGround.JR_Empty,
 	},
 ];
 
-export const JRWideTicketBgSelector = ({ value, onChange }: Props) => {
+export const JRWideTicketBgSelector = ({ is120mm, value, onChange }: Props) => {
 	return (
 		<div className="flex flex-row gap-4 flex-wrap">
 			{bgInfos.map((bgInfo) => {
@@ -82,7 +92,7 @@ export const JRWideTicketBgSelector = ({ value, onChange }: Props) => {
 						}}
 					>
 						<div className="flex flex-col items-center">
-							<img src={bgInfo.img} alt={bgInfo.id} className="w-16 h-auto border border-[lab(88_0_-0.01)]" />
+							<img src={is120mm ? bgInfo.img120 : bgInfo.img} alt={bgInfo.id} className="w-16 h-auto border border-[lab(88_0_-0.01)]" />
 							{bgInfo.title}
 						</div>
 					</label>

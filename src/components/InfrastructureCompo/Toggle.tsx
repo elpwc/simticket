@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import './Toggle.css';
 
 type ToggleSwitchProps = {
@@ -11,13 +11,17 @@ type ToggleSwitchProps = {
 	size?: number;
 	style?: React.CSSProperties;
 	bgColor?: string;
+	children?: string | ReactNode | null;
+	isTitleOnLeftSide?: boolean;
 };
 
 const WIDTH = 18;
 const BACKGROUND_COLOR = '#4a9bde';
 
-const Toggle: React.FC<ToggleSwitchProps> = ({ value, onChange, disabled = false, className = '', size = 1, style = {}, bgColor = BACKGROUND_COLOR }) => {
-	return (
+const Toggle: React.FC<ToggleSwitchProps> = ({ value, onChange, disabled = false, className = '', size = 1, style = {}, bgColor = BACKGROUND_COLOR, children, isTitleOnLeftSide = false }) => {
+	const hasTitle = !(children === undefined || children === null || children === '' || children === <></>);
+	const titleNode = <>{children}</>;
+	const toggleBox = (
 		<label
 			className={`toggle-switch ${disabled ? 'disabled' : ''} ${className}`}
 			style={{
@@ -50,6 +54,16 @@ const Toggle: React.FC<ToggleSwitchProps> = ({ value, onChange, disabled = false
 			/>
 			<span className="slider" />
 		</label>
+	);
+
+	return hasTitle ? (
+		<label className={'flex items-center select-none'}>
+			{isTitleOnLeftSide && titleNode}
+			{toggleBox}
+			{!isTitleOnLeftSide && titleNode}
+		</label>
+	) : (
+		toggleBox
 	);
 };
 

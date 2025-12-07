@@ -4,6 +4,9 @@ import { JRStationNameType, JRWideTicketDrawParameters } from './type';
 export const JR_MARS_PAPER_TICKET_SIZE: [number, number] = [1477, 1000];
 export const JR_MARS_PAPER_TICKET_CANVAS_SIZE: [number, number] = [310, 210];
 export const JR_MARS_PAPER_TICKET_A4_SIZE: [number, number] = [85 / 210, 57 / 297];
+export const JR_MARS_120_PAPER_TICKET_SIZE: [number, number] = [2085, 1000];
+export const JR_MARS_120_PAPER_TICKET_CANVAS_SIZE: [number, number] = [438, 210];
+export const JR_MARS_120_PAPER_TICKET_A4_SIZE: [number, number] = [120 / 210, 57 / 297];
 
 export const JR_TICKET_TYPE = [
 	{ name: '乗車券', title: '' },
@@ -267,6 +270,7 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	noSeat: false,
 	noCarriage: false,
 	info1: '下車前途無効',
+	is120mm: false,
 };
 
 export const TokuteiTokuShinai = [

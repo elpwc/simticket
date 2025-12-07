@@ -3,7 +3,15 @@ import { decodeCRWideTicketParams, encodeCRWideTicketParams } from '@/components
 import { MAG_TICKET_A4_SIZE, MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_A4_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from '@/components/TicketEditors/CRWideTicket/value';
 import { JRWideTicketDrawParameters } from '@/components/TicketEditors/JRWideTicket/type';
 import { decodeJRWideTicketParams, encodeJRWideTicketParams } from '@/components/TicketEditors/JRWideTicket/utils';
-import { JR_MARS_PAPER_TICKET_A4_SIZE, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE, JRWideTicketDrawParametersInitialValues } from '@/components/TicketEditors/JRWideTicket/value';
+import {
+	JR_MARS_120_PAPER_TICKET_A4_SIZE,
+	JR_MARS_120_PAPER_TICKET_CANVAS_SIZE,
+	JR_MARS_120_PAPER_TICKET_SIZE,
+	JR_MARS_PAPER_TICKET_A4_SIZE,
+	JR_MARS_PAPER_TICKET_CANVAS_SIZE,
+	JR_MARS_PAPER_TICKET_SIZE,
+	JRWideTicketDrawParametersInitialValues,
+} from '@/components/TicketEditors/JRWideTicket/value';
 import QRCode from 'qrcode';
 import { API_PREFIX } from './api';
 
@@ -480,7 +488,13 @@ export const get_CanvasOrImageSize_Of_Ticket_By_TicketType = (
 	companyId: number,
 	ticketTypeId: number,
 	sizeType: TicketSizeType = TicketSizeType.CanvasSize,
-	crTicketType: CRTicketBackGround = CRTicketBackGround.SoftRed
+	ticketType: {
+		crTicketType?: CRTicketBackGround;
+		jrTicketIs120mm?: boolean;
+	} = {
+		crTicketType: CRTicketBackGround.SoftRed,
+		jrTicketIs120mm: false,
+	}
 ): [number, number] => {
 	switch (companyId) {
 		case 0: //CR
@@ -491,7 +505,7 @@ export const get_CanvasOrImageSize_Of_Ticket_By_TicketType = (
 				case 3:
 					break;
 				case 4:
-					if ([CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground].includes(crTicketType || CRTicketBackGround.SoftRed)) {
+					if ([CRTicketBackGround.SoftBlue, CRTicketBackGround.SoftRed, CRTicketBackGround.SoftNoneBackground].includes(ticketType.crTicketType || CRTicketBackGround.SoftRed)) {
 						switch (sizeType) {
 							case TicketSizeType.CanvasSize:
 								return PAPER_TICKET_CANVAS_SIZE;
@@ -519,13 +533,24 @@ export const get_CanvasOrImageSize_Of_Ticket_By_TicketType = (
 				case 0:
 					break;
 				case 1:
-					switch (sizeType) {
-						case TicketSizeType.CanvasSize:
-							return JR_MARS_PAPER_TICKET_CANVAS_SIZE;
-						case TicketSizeType.ImageSize:
-							return JR_MARS_PAPER_TICKET_SIZE;
-						case TicketSizeType.A4Size:
-							return JR_MARS_PAPER_TICKET_A4_SIZE;
+					if (ticketType.jrTicketIs120mm) {
+						switch (sizeType) {
+							case TicketSizeType.CanvasSize:
+								return JR_MARS_120_PAPER_TICKET_CANVAS_SIZE;
+							case TicketSizeType.ImageSize:
+								return JR_MARS_120_PAPER_TICKET_SIZE;
+							case TicketSizeType.A4Size:
+								return JR_MARS_120_PAPER_TICKET_A4_SIZE;
+						}
+					} else {
+						switch (sizeType) {
+							case TicketSizeType.CanvasSize:
+								return JR_MARS_PAPER_TICKET_CANVAS_SIZE;
+							case TicketSizeType.ImageSize:
+								return JR_MARS_PAPER_TICKET_SIZE;
+							case TicketSizeType.A4Size:
+								return JR_MARS_PAPER_TICKET_A4_SIZE;
+						}
 					}
 
 				case 2:

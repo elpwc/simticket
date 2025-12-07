@@ -69,12 +69,10 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 					continue;
 				}
 
-				const canvasSize = get_CanvasOrImageSize_Of_Ticket_By_TicketType(
-					currentTicketListItem.companyId || 0,
-					currentTicketListItem.ticketTypeId,
-					TicketSizeType.CanvasSize,
-					currentTicketListItem.ticketData.background as CRTicketBackGround
-				);
+				const canvasSize = get_CanvasOrImageSize_Of_Ticket_By_TicketType(currentTicketListItem.companyId || 0, currentTicketListItem.ticketTypeId, TicketSizeType.CanvasSize, {
+					crTicketType: currentTicketListItem.ticketData.background as CRTicketBackGround,
+					jrTicketIs120mm: (currentTicketListItem.ticketData as any).is120mm ?? false,
+				});
 
 				const tmpCanvas = document.createElement('canvas');
 				tmpCanvas.width = canvasSize[0] * scale;
@@ -96,12 +94,10 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 					() => {
 						const ticketAreaWidth = w / 2;
 						const ticketAreaHeight = h / 4;
-						const ticketA4SizeScale = get_CanvasOrImageSize_Of_Ticket_By_TicketType(
-							currentTicketListItem.companyId || 0,
-							currentTicketListItem.ticketTypeId,
-							TicketSizeType.A4Size,
-							currentTicketListItem.ticketData.background as CRTicketBackGround
-						);
+						const ticketA4SizeScale = get_CanvasOrImageSize_Of_Ticket_By_TicketType(currentTicketListItem.companyId || 0, currentTicketListItem.ticketTypeId, TicketSizeType.A4Size, {
+							crTicketType: currentTicketListItem.ticketData.background as CRTicketBackGround,
+							jrTicketIs120mm: (currentTicketListItem.ticketData as any).is120mm ?? false,
+						});
 						if (isFlip) {
 							ctx.drawImage(
 								tmpCanvas,
@@ -165,7 +161,7 @@ export const SaveListModal = ({ show, onClose }: Props) => {
 										selectedTicketListItems.includes(ticket.id) ? 'border-blue-500 bg-blue-100' : 'border-transparent'
 									)}
 								>
-									<TicketViewer width={100} height={70} companyId={ticket.companyId} ticketTypeId={ticket.ticketTypeId} ticketData={ticket.ticketData} />
+									<TicketViewer width={-1} height={70} companyId={ticket.companyId} ticketTypeId={ticket.ticketTypeId} ticketData={ticket.ticketData} />
 								</div>
 							))
 						)}

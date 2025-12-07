@@ -5,7 +5,7 @@ import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
 import { decodeTicket, fontsLoader, TextAlign } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
-import TabBox from '../../InfrastructureCompo/TabBox';
+import TitleContainer from '../../InfrastructureCompo/TitleContainer';
 import { Divider } from '../../InfrastructureCompo/Divider';
 import localFonts from 'next/font/local';
 import { CRWideTicketBgSelector } from './CRWideTicketBgSelector';
@@ -240,8 +240,8 @@ export default function CRWideTicket() {
 				setIsFlipSide(isFlip);
 			}}
 			form={
-				<div className="flex flex-col gap-4 m-4">
-					<TabBox title={t('editor.common.ticketFace.title')} className="flex flex-wrap gap-1">
+				<div className="flex flex-col m-4">
+					<TitleContainer title={t('editor.common.ticketFace.title')} className="flex flex-wrap gap-1">
 						<label className="ticket-form-label">
 							{t('editor.common.ticketFace.paper')}
 							<CRWideTicketBgSelector value={drawParameters.background} onChange={(value: CRTicketBackGround) => setDrawParameters((prev) => ({ ...prev, background: value }))} />
@@ -349,8 +349,8 @@ export default function CRWideTicket() {
 								</label>
 							</div>
 						</div>
-					</TabBox>
-					<TabBox title={t('editor.common.stationInfo.title')} className="flex flex-wrap gap-1">
+					</TitleContainer>
+					<TitleContainer title={t('editor.common.stationInfo.title')} className="flex flex-wrap gap-1">
 						<div className="flex flex-col gap-[2px]">
 							<label className="ticket-form-label">
 								{t('editor.common.stationInfo.departure')}
@@ -448,9 +448,9 @@ export default function CRWideTicket() {
 								<span>{t('editor.common.stationInfo.showForeignLanguageStationName')}</span>
 							</label>
 						</div>
-					</TabBox>
+					</TitleContainer>
 
-					<TabBox title={t('editor.common.trainInfo.title')} className="flex flex-wrap gap-2">
+					<TitleContainer title={t('editor.common.trainInfo.title')} className="flex flex-wrap gap-2">
 						<label className="ticket-form-label">
 							{t('editor.cr.jisuanjikepiao2010.trainInfo.routeIdentifier')}
 							<div className="flex gap-4 items-center flex-wrap">
@@ -571,7 +571,7 @@ export default function CRWideTicket() {
 									onChange={(value: string) => {
 										setDrawParameters((prev) => ({ ...prev, seatStatus: value }));
 									}}
-									showInputBox={false}
+									doNotShowInputBox
 								/>
 							</div>
 						</label>
@@ -658,9 +658,9 @@ export default function CRWideTicket() {
 								}}
 							/>
 						</label>
-					</TabBox>
+					</TitleContainer>
 
-					<TabBox title={t('editor.common.purchaseInfo.title')} className="flex flex-wrap">
+					<TitleContainer title={t('editor.common.purchaseInfo.title')} className="flex flex-wrap">
 						<label className="ticket-form-label">
 							{t('editor.common.purchaseInfo.price')} {drawParameters.isHKWestKowloonStyle ? 'HK＄' : '￥'}
 							<input value={drawParameters.price} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price: e.target.value }))} />
@@ -923,8 +923,8 @@ export default function CRWideTicket() {
 								/>
 							</div>
 						</label>
-					</TabBox>
-					<TabBox title={t('editor.cr.jisuanjikepiao2010.ticketNoInfo.title')} className="flex flex-wrap">
+					</TitleContainer>
+					<TitleContainer title={t('editor.cr.jisuanjikepiao2010.ticketNoInfo.title')} className="flex flex-wrap">
 						<label className="ticket-form-label">
 							{t('editor.common.ticketNoInfo.ticketNo')}
 							<div className="flex">
@@ -1070,7 +1070,7 @@ export default function CRWideTicket() {
 										setDrawParameters((prev) => ({ ...prev, messageAlign: Number(value) as TextAlign }));
 									}}
 									placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-									showInputBox={false}
+									doNotShowInputBox
 								/>
 								<p>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.presetText')}</p>
 								<PrettyInputRadioGroup
@@ -1082,11 +1082,11 @@ export default function CRWideTicket() {
 										setDrawParameters((prev) => ({ ...prev, message: value.text, messageAlign: value.align, showMessageBorder: value.showBorder }));
 									}}
 									placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-									showInputBox={false}
+									doNotShowInputBox
 								/>
 							</div>
 						</label>
-					</TabBox>
+					</TitleContainer>
 				</div>
 			}
 		/>

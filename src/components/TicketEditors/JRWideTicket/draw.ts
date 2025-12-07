@@ -1,7 +1,15 @@
 import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTemplate';
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
 import { JRStationNameType, JRWideTicketDrawParameters } from './type';
-import { JRPaymentMethod, JRTicketFlipSideText, JRWideTicketDrawParametersInitialValues, JR_MARS_PAPER_TICKET_CANVAS_SIZE, JR_MARS_PAPER_TICKET_SIZE } from './value';
+import {
+	JRPaymentMethod,
+	JRTicketFlipSideText,
+	JRWideTicketDrawParametersInitialValues,
+	JR_MARS_120_PAPER_TICKET_CANVAS_SIZE,
+	JR_MARS_120_PAPER_TICKET_SIZE,
+	JR_MARS_PAPER_TICKET_CANVAS_SIZE,
+	JR_MARS_PAPER_TICKET_SIZE,
+} from './value';
 import { drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
 import jr_h from '../../../assets/tickets/jr_h.jpg';
 import jr_e from '../../../assets/tickets/jr_e.jpg';
@@ -9,6 +17,7 @@ import jr_c from '../../../assets/tickets/jr_c.jpg';
 import jr_w from '../../../assets/tickets/jr_w.jpg';
 import jr_s from '../../../assets/tickets/jr_s.jpg';
 import jr_k from '../../../assets/tickets/jr_k.jpg';
+import jr_e_120 from '../../../assets/tickets/jr_e_120.jpg';
 
 export const drawJRWideTicket = (
 	canvas: HTMLCanvasElement | null,
@@ -32,6 +41,8 @@ export const drawJRWideTicket = (
 		return;
 	}
 
+	const is120mm = partialDrawParameters.is120mm === true;
+
 	const w = canvas.width > width ? canvas.width : width;
 	const h = canvas.height > height ? canvas.height : height;
 
@@ -40,7 +51,23 @@ export const drawJRWideTicket = (
 		...partialDrawParameters,
 	};
 	if (initialMethods === undefined) {
-		initialMethods = getInitialMethods(width || JR_MARS_PAPER_TICKET_CANVAS_SIZE[0], height || JR_MARS_PAPER_TICKET_CANVAS_SIZE[1], JR_MARS_PAPER_TICKET_SIZE[0], JR_MARS_PAPER_TICKET_SIZE[1], 1);
+		if (is120mm) {
+			initialMethods = getInitialMethods(
+				width || JR_MARS_120_PAPER_TICKET_CANVAS_SIZE[0],
+				height || JR_MARS_120_PAPER_TICKET_CANVAS_SIZE[1],
+				JR_MARS_120_PAPER_TICKET_SIZE[0],
+				JR_MARS_120_PAPER_TICKET_SIZE[1],
+				1
+			);
+		} else {
+			initialMethods = getInitialMethods(
+				width || JR_MARS_PAPER_TICKET_CANVAS_SIZE[0],
+				height || JR_MARS_PAPER_TICKET_CANVAS_SIZE[1],
+				JR_MARS_PAPER_TICKET_SIZE[0],
+				JR_MARS_PAPER_TICKET_SIZE[1],
+				1
+			);
+		}
 	}
 
 	const resizedScaleX = (value: number) => {
@@ -60,27 +87,52 @@ export const drawJRWideTicket = (
 	};
 
 	const bg = new Image();
-	switch (drawParameters.background) {
-		case JRTicketBackGround.JR_H:
-			bg.src = jr_h.src;
-			break;
-		case JRTicketBackGround.JR_E:
-			bg.src = jr_e.src;
-			break;
-		case JRTicketBackGround.JR_C:
-			bg.src = jr_c.src;
-			break;
-		case JRTicketBackGround.JR_W:
-			bg.src = jr_w.src;
-			break;
-		case JRTicketBackGround.JR_S:
-			bg.src = jr_s.src;
-			break;
-		case JRTicketBackGround.JR_K:
-			bg.src = jr_k.src;
-			break;
-		case JRTicketBackGround.JR_Empty:
-			break;
+	if (is120mm) {
+		switch (drawParameters.background) {
+			case JRTicketBackGround.JR_H:
+				bg.src = jr_h.src;
+				break;
+			case JRTicketBackGround.JR_E:
+				bg.src = jr_e_120.src;
+				break;
+			case JRTicketBackGround.JR_C:
+				bg.src = jr_c.src;
+				break;
+			case JRTicketBackGround.JR_W:
+				bg.src = jr_w.src;
+				break;
+			case JRTicketBackGround.JR_S:
+				bg.src = jr_s.src;
+				break;
+			case JRTicketBackGround.JR_K:
+				bg.src = jr_k.src;
+				break;
+			case JRTicketBackGround.JR_Empty:
+				break;
+		}
+	} else {
+		switch (drawParameters.background) {
+			case JRTicketBackGround.JR_H:
+				bg.src = jr_h.src;
+				break;
+			case JRTicketBackGround.JR_E:
+				bg.src = jr_e.src;
+				break;
+			case JRTicketBackGround.JR_C:
+				bg.src = jr_c.src;
+				break;
+			case JRTicketBackGround.JR_W:
+				bg.src = jr_w.src;
+				break;
+			case JRTicketBackGround.JR_S:
+				bg.src = jr_s.src;
+				break;
+			case JRTicketBackGround.JR_K:
+				bg.src = jr_k.src;
+				break;
+			case JRTicketBackGround.JR_Empty:
+				break;
+		}
 	}
 
 	const draw = () => {
@@ -147,9 +199,10 @@ export const drawJRWideTicket = (
 		}
 
 		// ticket type
+		let JR120TicketOffsetX = is120mm ? 443 : 0;
 		ctx.fillStyle = 'black';
-		ctx.font = `${resizedFont(8, 'DotFont')}`;
-		drawText(ctx, drawParameters.ticketType, offsetScaleX(313), offsetScaleY(163), resizedScaleX(400), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 0.6);
+		ctx.font = `${resizedFont(7.4, 'DotFont')}`;
+		drawText(ctx, drawParameters.ticketType, offsetScaleX(347 + JR120TicketOffsetX), offsetScaleY(166), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 1.6, 0, 0.5);
 
 		// station
 		const drawJRStation = (isRight: boolean, stationName: string, stationAreaChar: string, stationType: JRStationNameType, x: number, y: number = 370) => {
@@ -336,8 +389,8 @@ export const drawJRWideTicket = (
 			}
 		};
 
-		drawJRStation(false, drawParameters.station1, drawParameters.station1AreaChar, drawParameters.station1Type, 116);
-		drawJRStation(true, drawParameters.station2, drawParameters.station2AreaChar, drawParameters.station2Type, 838);
+		drawJRStation(false, drawParameters.station1, drawParameters.station1AreaChar, drawParameters.station1Type, 116 + (is120mm ? 261 : 0));
+		drawJRStation(true, drawParameters.station2, drawParameters.station2AreaChar, drawParameters.station2Type, 838 + (is120mm ? 261 : 0));
 
 		// 英文站名
 		if (drawParameters.doShowEnglish) {
@@ -347,28 +400,29 @@ export const drawJRWideTicket = (
 		}
 
 		// 箭头
+		JR120TicketOffsetX = is120mm ? 293 : 0;
 		ctx.beginPath();
 		ctx.strokeStyle = 'black';
 		ctx.lineWidth = resizedScaleY(16);
-		ctx.moveTo(offsetScaleX(712), offsetScaleY(337));
-		ctx.lineTo(offsetScaleX(751), offsetScaleY(337));
+		ctx.moveTo(offsetScaleX(712 + JR120TicketOffsetX), offsetScaleY(337));
+		ctx.lineTo(offsetScaleX(751 + JR120TicketOffsetX), offsetScaleY(337));
 		ctx.stroke();
 		ctx.closePath();
 
 		ctx.beginPath();
 		ctx.lineWidth = resizedScaleY(1);
-		ctx.moveTo(offsetScaleX(743), offsetScaleY(360));
-		ctx.lineTo(offsetScaleX(766), offsetScaleY(337));
-		ctx.lineTo(offsetScaleX(743), offsetScaleY(317));
+		ctx.moveTo(offsetScaleX(743 + JR120TicketOffsetX), offsetScaleY(360));
+		ctx.lineTo(offsetScaleX(766 + JR120TicketOffsetX), offsetScaleY(337));
+		ctx.lineTo(offsetScaleX(743 + JR120TicketOffsetX), offsetScaleY(317));
 		ctx.fill();
 		ctx.closePath();
 
 		if (drawParameters.isKaisukenArrow) {
 			ctx.beginPath();
 			ctx.lineWidth = resizedScaleY(1);
-			ctx.moveTo(offsetScaleX(725), offsetScaleY(360));
-			ctx.lineTo(offsetScaleX(725 - 23), offsetScaleY(337));
-			ctx.lineTo(offsetScaleX(725), offsetScaleY(317));
+			ctx.moveTo(offsetScaleX(725 + JR120TicketOffsetX), offsetScaleY(360));
+			ctx.lineTo(offsetScaleX(725 - 23 + JR120TicketOffsetX), offsetScaleY(337));
+			ctx.lineTo(offsetScaleX(725 + JR120TicketOffsetX), offsetScaleY(317));
 			ctx.fill();
 			ctx.closePath();
 		}

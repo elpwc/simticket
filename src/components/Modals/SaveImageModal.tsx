@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Modal } from '../InfrastructureCompo/Modal';
-import TabBox from '../InfrastructureCompo/TabBox';
+import TitleContainer from '../InfrastructureCompo/TitleContainer';
 import clsx from 'clsx';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { get_CanvasOrImageSize_Of_Ticket_By_TicketType, saveCanvasToLocal, TicketListItemProperty, TicketSizeType } from '@/utils/utils';
@@ -33,12 +33,10 @@ export const SaveImageModal = ({ show, ticketInfo, saveFilename, defaultCanvasSi
 	const handleSave = (scale: number, title: string) => {
 		const tmpCanvas = document.createElement('canvas');
 
-		const canvasSize = get_CanvasOrImageSize_Of_Ticket_By_TicketType(
-			ticketInfo.companyId || 0,
-			ticketInfo.ticketTypeId,
-			TicketSizeType.CanvasSize,
-			ticketInfo.ticketData.background as CRTicketBackGround
-		);
+		const canvasSize = get_CanvasOrImageSize_Of_Ticket_By_TicketType(ticketInfo.companyId || 0, ticketInfo.ticketTypeId, TicketSizeType.CanvasSize, {
+			crTicketType: ticketInfo.ticketData.background as CRTicketBackGround,
+			jrTicketIs120mm: (ticketInfo.ticketData as any).is120mm ?? false,
+		});
 		tmpCanvas.width = canvasSize[0] * scale;
 		tmpCanvas.height = canvasSize[1] * scale;
 		const tmpCtx = tmpCanvas.getContext('2d')!;
@@ -82,7 +80,7 @@ export const SaveImageModal = ({ show, ticketInfo, saveFilename, defaultCanvasSi
 					);
 				})}
 			</div>
-			<TabBox styleOuter={{ marginTop: '20px' }} title={t('SaveImageModal.customizeSizeTab.title')}>
+			<TitleContainer styleOuter={{ marginTop: '20px' }} title={t('SaveImageModal.customizeSizeTab.title')}>
 				<div className="flex gap-2">
 					<span>
 						{t('SaveImageModal.customizeSizeTab.widthText')}
@@ -129,7 +127,7 @@ export const SaveImageModal = ({ show, ticketInfo, saveFilename, defaultCanvasSi
 					<span>{`${width} × ${height}`}</span>
 					<span>{}</span>
 				</button>
-			</TabBox>
+			</TitleContainer>
 		</Modal>
 	);
 };

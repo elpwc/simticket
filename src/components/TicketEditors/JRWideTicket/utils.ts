@@ -1,4 +1,7 @@
-import { JRWideTicketDrawParameters } from './type';
+import { JRTicketTitles, JRTicketTypesettingtype, JRWideTicketDrawParameters } from './type';
+
+// このファイルにあるパラメーターの順序は※絶対※に変更してはいけません
+// このファイルにあるパラメーターの順序は※絶対※に変更してはいけません
 
 export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string {
 	const arr: any[] = [
@@ -34,6 +37,7 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 		p.info1,
 		p.railways,
 		p.paymentMethod,
+		+p.is120mm,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -84,6 +88,7 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		info1,
 		railways,
 		paymentMethod,
+		is120mm,
 	] = arr;
 
 	return {
@@ -119,5 +124,23 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		info1,
 		railways,
 		paymentMethod,
+		is120mm: !!is120mm,
 	} as JRWideTicketDrawParameters;
 }
+
+export const getJRPrintingTicketTitleByTicketType = (ticketType: string) => {
+	const index = JRTicketTitles.findIndex((title) => {
+		return title.name === ticketType;
+	});
+	if (index !== -1) {
+		return JRTicketTitles[index];
+	} else {
+		return {
+			name: ticketType,
+			printingName: ticketType,
+			desc: '',
+			typeset: JRTicketTypesettingtype.Fare,
+			typeset120: JRTicketTypesettingtype.Fare,
+		};
+	}
+};
