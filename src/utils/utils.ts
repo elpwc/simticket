@@ -72,9 +72,13 @@ export const drawText = (
 	/** 文字水平压缩（每个字符独立缩放） */
 	charHorizonalScale: number = 1,
 	/** 文字垂直压缩（每个字符独立缩放） */
-	charVerticalScale: number = 1
+	charVerticalScale: number = 1,
+	/** 水平压缩是否只作用于全角字符 */
+	doesCharHorizonalScaleOnlyWorkOnFullWidthChar: boolean = true
 ) => {
 	if (!text) return;
+
+	const ignoreChars = '（）・ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ，．／＜＞？；：＋＊＠［］‘｛｝－＾＝～！。，、';
 
 	const lines = text.split('\n');
 	const fontSize = parseFloat(ctx.font.match(/\d+(\.\d+)?/g)?.[0] || '16');
@@ -83,10 +87,15 @@ export const drawText = (
 	ctx.save();
 	ctx.translate(x, y);
 
+	const getRealCharHorizonalScale = (ch: string) => {
+		console.log(ch, isHalfWidth(ch), isFullWidth(ch));
+		return doesCharHorizonalScaleOnlyWorkOnFullWidthChar ? (isHalfWidth(ch) || ignoreChars.includes(ch) ? 1 : charHorizonalScale) : charHorizonalScale;
+	};
+
 	for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 		const line = lines[lineIndex];
 		const chars = [...line];
-		const charWidths = chars.map((ch) => ctx.measureText(ch).width * charHorizonalScale);
+		const charWidths = chars.map((ch) => ctx.measureText(ch).width * getRealCharHorizonalScale(ch));
 		const textWidth = charWidths.reduce((a, b) => a + b, 0) + letterSpacing * (chars.length - 1);
 
 		let scaleX = 1;
@@ -131,7 +140,7 @@ export const drawText = (
 					const ch = chars[i];
 					ctx.save();
 					ctx.translate(cursorX, 0);
-					ctx.scale(charHorizonalScale, charVerticalScale);
+					ctx.scale(getRealCharHorizonalScale(ch), charVerticalScale);
 					method === DrawTextMethod.fillText ? ctx.fillText(ch, 0, 0) : ctx.strokeText(ch, 0, 0);
 					ctx.restore();
 					cursorX += charWidths[i] + gap;
@@ -162,7 +171,7 @@ export const drawText = (
 			const ch = chars[i];
 			ctx.save();
 			ctx.translate(cursorX, 0);
-			ctx.scale(charHorizonalScale, charVerticalScale);
+			ctx.scale(getRealCharHorizonalScale(ch), charVerticalScale);
 			method === DrawTextMethod.fillText ? ctx.fillText(ch, 0, 0) : ctx.strokeText(ch, 0, 0);
 			ctx.restore();
 
@@ -701,4 +710,28 @@ export interface UploadedTicketInfo {
 	like: number;
 	views: number;
 	createdAt: Date;
+}
+
+function isFullWidth(char: string) {
+	const code = char.charCodeAt(0);
+	// 全角 ASCII 与符号
+	if (code >= 0xff01 && code <= 0xff5e) return true;
+	// 全角空格
+	if (code === 0x3000) return true;
+	// 中文、日文汉字等（CJK Unified Ideographs）
+	if (code >= 0x4e00 && code <= 0x9faf) return true;
+	// 日文平假名、片假名（通常也算宽字符）
+	if (code >= 0x3040 && code <= 0x30ff) return true;
+
+	return false;
+}
+
+function isHalfWidth(char: string) {
+	const code = char.charCodeAt(0);
+	// 基本 ASCII
+	if (code >= 0x20 && code <= 0x7e) return true;
+	// 半角片假名
+	if (code >= 0xff61 && code <= 0xff9f) return true;
+
+	return false;
 }
