@@ -24,7 +24,7 @@ import {
 	JR_info1List,
 	JR_MARS_120_PAPER_TICKET_CANVAS_SIZE,
 } from './value';
-import { JRStationNameType, JRTicketTypeList, JRWideTicketDrawParameters } from './type';
+import { JRStationNameType, JRTicketTypeList, JRTitleUnderlineStyle, JRTitleUnderlineStyleTitles, JRWideTicketDrawParameters, ShinkansenRangeTitles } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
 import { useSearchParams } from 'next/navigation';
@@ -278,21 +278,72 @@ export default function JRWideTicket() {
 									menuItemStyle={{ width: 'auto' }}
 								/>
 							</div>
-							{/* <PrettyInputRadioGroup
-								list={JR_TICKET_TYPE.map((jrTicketTypeItem) => {
-									return { value: jrTicketTypeItem.name, title: jrTicketTypeItem.name };
-								})}
-								value={drawParameters.ticketType}
-								onChange={(value: string) => {
-									setDrawParameters((prev) => ({ ...prev, ticketType: value }));
-								}}
-							/> */}
 						</label>
 						<label className="ticket-form-label">
 							&nbsp;
 							<div>
+								<Toggle
+									value={drawParameters.hasSinkansen}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, hasSinkansen: value }));
+									}}
+								>
+									新幹線区間あり→（幹）
+								</Toggle>
 								<Toggle value={true} onChange={(value) => {}} />
 								英文付き券面（仮）
+							</div>
+						</label>
+						<label className="ticket-form-label">
+							タイトル下線様式
+							<PrettyInputRadioGroup
+								value={drawParameters.titleUnderlineStyle}
+								onChange={(value) => {
+									setDrawParameters((prev) => ({ ...prev, titleUnderlineStyle: value }));
+								}}
+								list={JRTitleUnderlineStyleTitles}
+								doNotShowInputBox
+							/>
+						</label>
+						<label className="ticket-form-label">
+							幹在別線区間
+							<div className="flex">
+								<div>
+									<p className="text-[12px] text-[green]">◎東京～熱海</p>
+									<PrettyInputRadioGroup
+										style={{ flexDirection: 'column' }}
+										value={drawParameters.sinkansenRange1}
+										onChange={(value) => {
+											setDrawParameters((prev) => ({ ...prev, sinkansenRange1: value }));
+										}}
+										list={ShinkansenRangeTitles}
+										doNotShowInputBox
+									/>
+								</div>
+								<div>
+									<p className="text-[12px] text-[blue]">◎米原～新大阪</p>
+									<PrettyInputRadioGroup
+										style={{ flexDirection: 'column' }}
+										value={drawParameters.sinkansenRange2}
+										onChange={(value) => {
+											setDrawParameters((prev) => ({ ...prev, sinkansenRange2: value }));
+										}}
+										list={ShinkansenRangeTitles}
+										doNotShowInputBox
+									/>
+								</div>
+								<div>
+									<p className="text-[12px] text-[red]">◎新下関～博多</p>
+									<PrettyInputRadioGroup
+										style={{ flexDirection: 'column' }}
+										value={drawParameters.sinkansenRange3}
+										onChange={(value) => {
+											setDrawParameters((prev) => ({ ...prev, sinkansenRange3: value }));
+										}}
+										list={ShinkansenRangeTitles}
+										doNotShowInputBox
+									/>
+								</div>
 							</div>
 						</label>
 					</TitleContainer>

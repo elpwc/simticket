@@ -1,5 +1,5 @@
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
-import { JRStationNameType, JRWideTicketDrawParameters } from './type';
+import { JRStationNameType, JRTitleUnderlineStyle, JRWideTicketDrawParameters, ShinkansenRange } from './type';
 
 export const JR_MARS_PAPER_TICKET_SIZE: [number, number] = [1477, 1000];
 export const JR_MARS_PAPER_TICKET_CANVAS_SIZE: [number, number] = [310, 210];
@@ -271,6 +271,11 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	noCarriage: false,
 	info1: '下車前途無効',
 	is120mm: false,
+	hasSinkansen: false,
+	titleUnderlineStyle: JRTitleUnderlineStyle.StraightLine,
+	sinkansenRange1: ShinkansenRange.NotPass,
+	sinkansenRange2: ShinkansenRange.NotPass,
+	sinkansenRange3: ShinkansenRange.NotPass,
 };
 
 export const TokuteiTokuShinai = [

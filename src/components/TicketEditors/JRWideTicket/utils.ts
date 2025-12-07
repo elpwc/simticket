@@ -38,6 +38,11 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 		p.railways,
 		p.paymentMethod,
 		+p.is120mm,
+		+p.hasSinkansen,
+		p.titleUnderlineStyle,
+		p.sinkansenRange1,
+		p.sinkansenRange2,
+		p.sinkansenRange3,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -89,6 +94,11 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		railways,
 		paymentMethod,
 		is120mm,
+		hasSinkansen,
+		titleUnderlineStyle,
+		sinkansenRange1,
+		sinkansenRange2,
+		sinkansenRange3,
 	] = arr;
 
 	return {
@@ -125,6 +135,11 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		railways,
 		paymentMethod,
 		is120mm: !!is120mm,
+		hasSinkansen: !!hasSinkansen,
+		titleUnderlineStyle,
+		sinkansenRange1,
+		sinkansenRange2,
+		sinkansenRange3,
 	} as JRWideTicketDrawParameters;
 }
 
@@ -135,12 +150,33 @@ export const getJRPrintingTicketTitleByTicketType = (ticketType: string) => {
 	if (index !== -1) {
 		return JRTicketTitles[index];
 	} else {
+		let res = '';
+		const splited = ticketType.split('(');
+		if (splited[0].length <= 6) {
+			res += [...splited[0]].join('　') + ' (' + splited[1];
+		} else {
+			res = ticketType;
+		}
 		return {
 			name: ticketType,
-			printingName: ticketType,
+			printingName: res,
 			desc: '',
 			typeset: JRTicketTypesettingtype.Fare,
 			typeset120: JRTicketTypesettingtype.Fare,
 		};
 	}
+};
+
+export const getJRPrintingTicketTitleUnchinkasanAsteriskNum = (title: string) => {
+	if (title.replaceAll('　', '').includes('乗車券') && (title.replaceAll('　', '').includes('特急券') || title.replaceAll('　', '').includes('急行券'))) {
+		const len = title.length;
+		if (len <= 17) {
+			if (['乗　車　券　・　特　急　券', '乗　車　券　・　急　行　券'].includes(title)) {
+				return 5;
+			} else {
+				return 17 - len;
+			}
+		}
+	}
+	return 0;
 };

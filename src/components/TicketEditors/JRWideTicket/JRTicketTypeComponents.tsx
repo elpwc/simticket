@@ -44,7 +44,7 @@ export const RegularForm = ({ onChange }: TypeComponentCommonProps) => {
 				break;
 		}
 
-		onChange(title);
+		onChange(title.replaceAll('（', '(').replaceAll('）', ')'));
 	}, [hasKan, expressFormTitle, expressFormAvailable, seatType, isOufukuKaeri, renzokuNumber]);
 	return (
 		<div>
@@ -102,9 +102,6 @@ export const RegularForm = ({ onChange }: TypeComponentCommonProps) => {
 					setSeatType(value);
 				}}
 			/>
-			<Toggle size={0.8} value={hasKan} onChange={setHasKan}>
-				新幹線区間あり→（幹）
-			</Toggle>
 
 			<TitleContainer addCheckbox disabled={!expressFormAvailable} title={'特急券・急行券付き'} onCheckboxChange={setexpressFormAvailable}>
 				<ExpressForm
@@ -209,7 +206,7 @@ export const ExpressForm = ({ onChange, isInRegularForm = false }: TypeComponent
 					break;
 			}
 		}
-		onChange(title);
+		onChange(title.replaceAll('（', '(').replaceAll('）', ')'));
 	}, [expressType, isTokutei, isBTokyuuRyoukin, seatType, sleepingSeatType, sleepingSeatTypeFormAvailable]);
 	return (
 		<div>
@@ -325,7 +322,7 @@ export const ReservedForm = ({ onChange }: TypeComponentCommonProps) => {
 			default:
 				break;
 		}
-		onChange(title);
+		onChange(title.replaceAll('（', '(').replaceAll('）', ')'));
 	}, [seatType]);
 	return (
 		<div>
