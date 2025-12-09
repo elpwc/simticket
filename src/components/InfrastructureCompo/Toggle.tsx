@@ -23,7 +23,7 @@ const Toggle: React.FC<ToggleSwitchProps> = ({ value, onChange, disabled = false
 	const titleNode = <>{children}</>;
 	const toggleBox = (
 		<label
-			className={`toggle-switch ${disabled ? 'disabled' : ''} ${className}`}
+			className={`toggle-switch ${className}`}
 			style={{
 				...style,
 				['--width' as string]: `${WIDTH * 2 * size}px`,
@@ -57,7 +57,7 @@ const Toggle: React.FC<ToggleSwitchProps> = ({ value, onChange, disabled = false
 	);
 
 	return hasTitle ? (
-		<label className={'flex items-center select-none'}>
+		<label className={'flex items-center select-none ' + (disabled ? 'toggle-disabled' : '')}>
 			{isTitleOnLeftSide && titleNode}
 			{toggleBox}
 			{!isTitleOnLeftSide && titleNode}

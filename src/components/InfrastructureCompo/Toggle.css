@@ -42,7 +42,8 @@
 	transform: translateX(var(--translateX, 18px));
 }
 
-.toggle-switch.disabled {
+.toggle-disabled {
 	opacity: 0.5;
-	cursor: not-allowed;
+	user-select: none;
+	pointer-events: none;
 }

@@ -24,6 +24,7 @@ type Props = {
 	/** ボタンじゃなくて、丸で表示  */
 	showAsRadioButton?: boolean;
 	showAsButtonGroup?: boolean;
+	disabled?: boolean;
 };
 
 const PrettyInputRadioGroup: React.FC<Props> = ({
@@ -39,6 +40,7 @@ const PrettyInputRadioGroup: React.FC<Props> = ({
 	inputStyle,
 	showAsRadioButton = false,
 	showAsButtonGroup = false,
+	disabled = false,
 }) => {
 	const { t } = useLocale();
 	const [diyValue, setDiyValue] = useState('');
@@ -74,7 +76,10 @@ const PrettyInputRadioGroup: React.FC<Props> = ({
 	);
 
 	return (
-		<div className={clsx('radio-group', className)} style={{ gap: showAsRadioButton ? '6px' : showAsButtonGroup ? '0' : '2px', ...style }}>
+		<div
+			className={clsx('radio-group', className)}
+			style={{ gap: showAsRadioButton ? '6px' : showAsButtonGroup ? '0' : '2px', opacity: disabled ? 0.5 : 1, pointerEvents: disabled ? 'none' : 'auto', ...style }}
+		>
 			{showAsRadioButton ? (
 				<>
 					{list.map((item, idx) => {
