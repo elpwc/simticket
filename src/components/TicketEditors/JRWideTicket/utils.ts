@@ -43,6 +43,26 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 		p.sinkansenRange1,
 		p.sinkansenRange2,
 		p.sinkansenRange3,
+		p.trainNo,
+		p.date2,
+		p.time2,
+		p.price1,
+		p.price2,
+		p.price3,
+		p.discount,
+		p.paymentPlace,
+		p.paymentDate,
+		p.paymentNo,
+		p.issuingPlace,
+		p.issuingDate,
+		p.issuingNo,
+		p.issuingAreaNo,
+		+p.hasOtherCompanyLines,
+		p.RCode,
+		p.CCode,
+		p.expressExpireDate,
+		p.fareTicketExpireDate,
+		+p.isPaymentIssuingTheSamePlace,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -99,6 +119,27 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		sinkansenRange1,
 		sinkansenRange2,
 		sinkansenRange3,
+		trainName,
+		trainNo,
+		date2,
+		time2,
+		price1,
+		price2,
+		price3,
+		discount,
+		paymentPlace,
+		paymentDate,
+		paymentNo,
+		issuingPlace,
+		issuingDate,
+		issuingNo,
+		issuingAreaNo,
+		hasOtherCompanyLines,
+		RCode,
+		CCode,
+		expressExpireDate,
+		fareTicketExpireDate,
+		isPaymentIssuingTheSamePlace,
 	] = arr;
 
 	return {
@@ -119,7 +160,7 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		station2Type,
 		doShowEnglish: !!doShowEnglish,
 		isKaisukenArrow: !!isKaisukenArrow,
-		date: date,
+		date,
 		time,
 		carriage,
 		seat1,
@@ -140,6 +181,27 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		sinkansenRange1,
 		sinkansenRange2,
 		sinkansenRange3,
+		trainName,
+		trainNo,
+		date2,
+		time2,
+		price1,
+		price2,
+		price3,
+		discount,
+		paymentPlace,
+		paymentDate,
+		paymentNo,
+		issuingPlace,
+		issuingDate,
+		issuingNo,
+		issuingAreaNo,
+		hasOtherCompanyLines: !!hasOtherCompanyLines,
+		RCode,
+		CCode,
+		expressExpireDate,
+		fareTicketExpireDate,
+		isPaymentIssuingTheSamePlace: !!isPaymentIssuingTheSamePlace,
 	} as JRWideTicketDrawParameters;
 }
 
@@ -179,7 +241,7 @@ export const getJRPrintingTicketTitleUnchinkasanAsteriskNum = (title: string) =>
 	if (title.replaceAll('　', '').includes('乗車券') && (title.replaceAll('　', '').includes('特急券') || title.replaceAll('　', '').includes('急行券'))) {
 		const len = title.length;
 		if (len <= 17) {
-			if (['乗　車　券　・　特　急　券', '乗　車　券　・　急　行　券'].includes(title)) {
+			if (['乗車券・特急券', '乗車券・急行券'].includes(title)) {
 				return 5;
 			} else {
 				return 17 - len;

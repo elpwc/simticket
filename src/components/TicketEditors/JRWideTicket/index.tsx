@@ -12,7 +12,6 @@ import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGro
 import { JRWideTicketBgSelector } from './JRWideTicketBgSelector';
 import { UnderConstruction } from '@/components/TicketEditorCompo/UnderConstruction';
 import {
-	JR_TICKET_TYPE,
 	JRWideTicketDrawParametersInitialValues,
 	JR_MARS_PAPER_TICKET_CANVAS_SIZE,
 	JR_MARS_PAPER_TICKET_SIZE,
@@ -23,17 +22,21 @@ import {
 	JRPaymentMethod,
 	JR_info1List,
 	JR_MARS_120_PAPER_TICKET_CANVAS_SIZE,
+	JR_hakken_area,
+	JR_discount_list,
 } from './value';
 import { JRStationNameType, JRTicketTypeList, JRTitleUnderlineStyleTitles, JRWideTicketDrawParameters, ShinkansenRangeTitles } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
 import { useSearchParams } from 'next/navigation';
 import clsx from 'clsx';
-import { JRStationNameText } from '@/components/InfrastructureCompo/JRStationNameText';
+import { JRStationNameText } from '@/components/InfrastructureCompo/JRComponents/JRStationNameText';
 import { JRPresetStationsModal } from '@/components/Modals/JRPresetStationsModal';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { Tab } from '@/components/InfrastructureCompo/Tab/Tab';
 import { AdmissionForm, CustomForm, ExpressForm, RegularForm, ReservedForm } from './JRTicketTypeComponents';
+import { JRPaymentSerialNumberInput } from '@/components/InfrastructureCompo/JRComponents/JRPaymentSerialNumberInput';
+import { JRDiscountNameText } from '@/components/InfrastructureCompo/JRComponents/JRDiscountNameText';
 
 export const DotFont = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
@@ -253,7 +256,7 @@ export default function JRWideTicket() {
 							<input className="" style={{ color: '#AF0508' }} value={drawParameters.watermark} onChange={(e) => setDrawParameters((prev) => ({ ...prev, watermark: e.target.value }))} />
 						</label>
 						<div className="w-full">
-							乗車券種類（仮）
+							券種
 							<div>
 								<Tab
 									menuPosition="top"
@@ -603,22 +606,105 @@ export default function JRWideTicket() {
 
 					<TitleContainer title="運行情報（仮）" className="flex flex-wrap gap-2">
 						<label className="ticket-form-label">
-							{t('editor.common.trainInfo.departureDate')}
-							<input
-								type="date"
-								value={drawParameters.date}
-								onChange={(e) => {
-									const value = e.target.value;
-									setDrawParameters((prev) => ({
-										...prev,
-										date: value,
-									}));
-								}}
-							/>
+							列車名
+							<input value={drawParameters.trainName} onChange={(e) => setDrawParameters((prev) => ({ ...prev, trainName: e.target.value }))} />
 						</label>
 						<label className="ticket-form-label">
+							列車番
+							<div>
+								<input value={drawParameters.trainNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, trainNo: e.target.value }))} />号
+							</div>
+						</label>
+						<Divider />
+						<label className="ticket-form-label">
 							発車時間
-							<input type="time" value={drawParameters.time} onChange={(e) => setDrawParameters((prev) => ({ ...prev, time: e.target.value }))} />
+							<div className="flex">
+								<input
+									type="date"
+									value={drawParameters.date}
+									onChange={(e) => {
+										const value = e.target.value;
+										setDrawParameters((prev) => ({
+											...prev,
+											date: value,
+										}));
+									}}
+								/>
+								<input type="time" value={drawParameters.time} onChange={(e) => setDrawParameters((prev) => ({ ...prev, time: e.target.value }))} />
+							</div>
+						</label>
+						<label className="ticket-form-label">
+							到着時間
+							<div className="flex">
+								<input
+									type="date"
+									value={drawParameters.date2}
+									onChange={(e) => {
+										const value = e.target.value;
+										setDrawParameters((prev) => ({
+											...prev,
+											date2: value,
+										}));
+									}}
+								/>
+								<input type="time" value={drawParameters.time2} onChange={(e) => setDrawParameters((prev) => ({ ...prev, time2: e.target.value }))} />
+							</div>
+						</label>
+						<label className="ticket-form-label">
+							特急券有効期間
+							<div className="flex flex-wrap">
+								<input
+									type="date"
+									value={drawParameters.date2}
+									onChange={(e) => {
+										const value = e.target.value;
+										setDrawParameters((prev) => ({
+											...prev,
+											date2: value,
+										}));
+									}}
+								/>
+								～
+								<input
+									type="date"
+									value={drawParameters.expressExpireDate}
+									onChange={(e) => {
+										const value = e.target.value;
+										setDrawParameters((prev) => ({
+											...prev,
+											expressExpireDate: value,
+										}));
+									}}
+								/>
+							</div>
+						</label>
+						<label className="ticket-form-label">
+							乗車券有効期間
+							<div className="flex flex-wrap">
+								<input
+									type="date"
+									value={drawParameters.date}
+									onChange={(e) => {
+										const value = e.target.value;
+										setDrawParameters((prev) => ({
+											...prev,
+											date: value,
+										}));
+									}}
+								/>
+								～
+								<input
+									type="date"
+									value={drawParameters.fareTicketExpireDate}
+									onChange={(e) => {
+										const value = e.target.value;
+										setDrawParameters((prev) => ({
+											...prev,
+											fareTicketExpireDate: value,
+										}));
+									}}
+								/>
+							</div>
 						</label>
 						<Divider />
 						<label className="ticket-form-label">
@@ -705,23 +791,122 @@ export default function JRWideTicket() {
 						</label>
 						<label className="ticket-form-label">
 							値段 ￥
-							<input value={drawParameters.price} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price: e.target.value }))} />
+							<div className="flex flex-col">
+								<input value={drawParameters.price} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price: e.target.value }))} />
+								<label className="">
+									内訳＝値段1 ￥
+									<input value={drawParameters.price1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price1: e.target.value }))} />
+								</label>
+								<label className="">
+									　　＋値段2 ￥
+									<input value={drawParameters.price2} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price2: e.target.value }))} />
+								</label>
+								<label className="">
+									　　＋値段3 ￥
+									<input value={drawParameters.price3} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price3: e.target.value }))} />
+								</label>
+							</div>
 						</label>
+						<Divider />
 						<label className="ticket-form-label">
-							購入場所
-							<input className="" value={drawParameters.soldplace} onChange={(e) => setDrawParameters((prev) => ({ ...prev, soldplace: e.target.value }))} />
+							割引
+							<PrettyInputRadioGroup
+								value={drawParameters.discount}
+								onChange={(e) => setDrawParameters((prev) => ({ ...prev, discount: e }))}
+								list={JR_discount_list.map((discount) => {
+									return {
+										title: <JRDiscountNameText name={discount.value} />,
+										value: discount.value,
+									};
+								})}
+							/>
 						</label>
 
+						<Divider />
+						<Toggle
+							value={drawParameters.isPaymentIssuingTheSamePlace}
+							onChange={(value) => {
+								setDrawParameters((prev) => ({ ...prev, isPaymentIssuingTheSamePlace: value }));
+							}}
+						>
+							発行発券場所は同じ
+						</Toggle>
+						<label className="ticket-form-label">
+							発行場所
+							<input className="" value={drawParameters.paymentPlace} onChange={(e) => setDrawParameters((prev) => ({ ...prev, paymentPlace: e.target.value }))} />
+						</label>
+						<label className="ticket-form-label">
+							発行日付
+							<input
+								type="date"
+								value={drawParameters.paymentDate}
+								onChange={(e) => {
+									const value = e.target.value;
+									setDrawParameters((prev) => ({
+										...prev,
+										paymentDate: value,
+									}));
+								}}
+							/>
+						</label>
+						<label className="ticket-form-label">
+							発行番号
+							<JRPaymentSerialNumberInput value={drawParameters.paymentNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, paymentNo: e }))} />
+						</label>
+						<Divider />
+						<label className="ticket-form-label">
+							発券場所
+							<input className="" value={drawParameters.issuingPlace} onChange={(e) => setDrawParameters((prev) => ({ ...prev, issuingPlace: e.target.value }))} />
+						</label>
+						<label className="ticket-form-label">
+							発券日付
+							<input
+								type="date"
+								value={drawParameters.issuingDate}
+								onChange={(e) => {
+									const value = e.target.value;
+									setDrawParameters((prev) => ({
+										...prev,
+										issuingDate: value,
+									}));
+								}}
+							/>
+						</label>
+						<label className="ticket-form-label">
+							発券番号
+							<JRPaymentSerialNumberInput value={drawParameters.issuingNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, issuingNo: e }))} />
+						</label>
+
+						<Divider />
+						<label className="ticket-form-label">
+							発券エリア番号
+							<div>
+								<PrettyInputRadioGroup value={drawParameters.issuingAreaNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, issuingAreaNo: e }))} list={JR_hakken_area} />
+
+								<Toggle
+									value={drawParameters.hasOtherCompanyLines}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, hasOtherCompanyLines: value }));
+									}}
+								>
+									他社路線有り
+								</Toggle>
+							</div>
+						</label>
+						<label className="ticket-form-label">
+							R通番
+							<input value={drawParameters.RCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, RCode: e.target.value }))} />
+						</label>
+						<label className="ticket-form-label">
+							誤取消防止符号（C通番）
+							<input value={drawParameters.CCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, CCode: e.target.value }))} />
+						</label>
 						<Divider />
 					</TitleContainer>
 					<TitleContainer title="番号（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
-							発券番号
-							<input className="text-red-500" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />
-						</label>
-						<label className="ticket-form-label">
-							番号
-							<input value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
+							旅行会社向けプリカット通番
+							<input className="text-[#A942C3]" value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
 					</TitleContainer>
 					<JRPresetStationsModal

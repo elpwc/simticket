@@ -3,11 +3,11 @@
 import { Modal } from '../InfrastructureCompo/Modal';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { JRStationNameType } from '../TicketEditors/JRWideTicket/type';
-import { JRStationNameText } from '../InfrastructureCompo/JRStationNameText';
-import { JRCompanies, JRStationNameTypeRadioboxItemData } from '../TicketEditors/JRWideTicket/value';
 import Toggle from '../InfrastructureCompo/Toggle';
 import { useState } from 'react';
 import { useIsMobile } from '@/utils/hooks';
+import { JRStationNameText } from '../InfrastructureCompo/JRComponents/JRStationNameText';
+import { JRCompanies, JRStationNameTypeRadioboxItemData } from '../TicketEditors/JRWideTicket/value';
 
 interface Props {
 	show: boolean;

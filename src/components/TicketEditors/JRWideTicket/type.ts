@@ -9,6 +9,7 @@ export type JRWideTicketDrawParameters = {
 	showWatermark: boolean;
 	watermark: string;
 	ticketType: string;
+	/** unused */
 	ticketNo: string;
 	station1: string;
 	station2: string;
@@ -21,6 +22,7 @@ export type JRWideTicketDrawParameters = {
 	doShowEnglish: boolean;
 	isKaisukenArrow: boolean;
 	railways: string[];
+	/** unused */
 	paymentMethod: JRPaymentMethod;
 	date: string;
 	time: string;
@@ -30,7 +32,9 @@ export type JRWideTicketDrawParameters = {
 	seat3: string;
 	seatClass: string;
 	price: string;
+	/** unused */
 	soldplace: string;
+	/** 旅行会社向けプリカット通番 */
 	serialCode: string;
 	noSeat: boolean;
 	noCarriage: boolean;
@@ -41,6 +45,27 @@ export type JRWideTicketDrawParameters = {
 	sinkansenRange1: ShinkansenRange;
 	sinkansenRange2: ShinkansenRange;
 	sinkansenRange3: ShinkansenRange;
+	trainName: string;
+	trainNo: string;
+	date2: string;
+	time2: string;
+	price1: string;
+	price2: string;
+	price3: string;
+	discount: string;
+	paymentPlace: string;
+	paymentDate: string;
+	paymentNo: string;
+	issuingPlace: string;
+	issuingDate: string;
+	issuingNo: string;
+	issuingAreaNo: string;
+	hasOtherCompanyLines: boolean;
+	RCode: string;
+	CCode: string;
+	expressExpireDate: string;
+	fareTicketExpireDate: string;
+	isPaymentIssuingTheSamePlace: boolean;
 };
 
 export enum JRStationNameType {

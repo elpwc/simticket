@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react';
-import { JRStationNameType } from '../TicketEditors/JRWideTicket/type';
+import { JRStationNameType } from '../../TicketEditors/JRWideTicket/type';
 import clsx from 'clsx';
 
 interface Props {
