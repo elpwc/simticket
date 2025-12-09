@@ -149,22 +149,30 @@ export const getJRPrintingTicketTitleByTicketType = (ticketType: string) => {
 	});
 	if (index !== -1) {
 		return JRTicketTitles[index];
-	} else {
-		let res = '';
+	}
+	let res = '';
+	if (ticketType.includes('(')) {
 		const splited = ticketType.split('(');
 		if (splited[0].length <= 6) {
 			res += [...splited[0]].join('　') + ' (' + splited[1];
 		} else {
 			res = ticketType;
 		}
-		return {
-			name: ticketType,
-			printingName: res,
-			desc: '',
-			typeset: JRTicketTypesettingtype.Fare,
-			typeset120: JRTicketTypesettingtype.Fare,
-		};
+	} else {
+		if (ticketType.length <= 6) {
+			res += [...ticketType].join('　');
+		} else {
+			res = ticketType;
+		}
 	}
+
+	return {
+		name: ticketType,
+		printingName: res,
+		desc: '',
+		typeset: JRTicketTypesettingtype.Fare,
+		typeset120: JRTicketTypesettingtype.Fare,
+	};
 };
 
 export const getJRPrintingTicketTitleUnchinkasanAsteriskNum = (title: string) => {

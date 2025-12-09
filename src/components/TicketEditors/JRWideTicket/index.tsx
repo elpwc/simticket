@@ -24,7 +24,7 @@ import {
 	JR_info1List,
 	JR_MARS_120_PAPER_TICKET_CANVAS_SIZE,
 } from './value';
-import { JRStationNameType, JRTicketTypeList, JRTitleUnderlineStyle, JRTitleUnderlineStyleTitles, JRWideTicketDrawParameters, ShinkansenRangeTitles } from './type';
+import { JRStationNameType, JRTicketTypeList, JRTitleUnderlineStyleTitles, JRWideTicketDrawParameters, ShinkansenRangeTitles } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
 import { useSearchParams } from 'next/navigation';
@@ -33,8 +33,7 @@ import { JRStationNameText } from '@/components/InfrastructureCompo/JRStationNam
 import { JRPresetStationsModal } from '@/components/Modals/JRPresetStationsModal';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { Tab } from '@/components/InfrastructureCompo/Tab/Tab';
-import { ExpressForm, RegularForm, ReservedForm } from './JRTicketTypeComponents';
-import { getJRPrintingTicketTitleByTicketType } from './utils';
+import { AdmissionForm, CustomForm, ExpressForm, RegularForm, ReservedForm } from './JRTicketTypeComponents';
 
 export const DotFont = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
@@ -253,7 +252,7 @@ export default function JRWideTicket() {
 							</div>
 							<input className="" style={{ color: '#AF0508' }} value={drawParameters.watermark} onChange={(e) => setDrawParameters((prev) => ({ ...prev, watermark: e.target.value }))} />
 						</label>
-						<label className="w-full">
+						<div className="w-full">
 							乗車券種類（仮）
 							<div>
 								<Tab
@@ -262,23 +261,41 @@ export default function JRWideTicket() {
 									pages={[
 										<RegularForm
 											onChange={(title) => {
-												setDrawParameters((prev) => ({ ...prev, ticketType: getJRPrintingTicketTitleByTicketType(title).printingName }));
+												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
 											}}
 											key="1"
 										/>,
 										<ExpressForm
 											onChange={(title) => {
-												setDrawParameters((prev) => ({ ...prev, ticketType: getJRPrintingTicketTitleByTicketType(title).printingName }));
+												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
 											}}
 											key="2"
 										/>,
-										<ReservedForm onChange={(title) => {}} key="3" />,
+										<ReservedForm
+											onChange={(title) => {
+												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
+											}}
+											key="3"
+										/>,
+										<AdmissionForm
+											onChange={(title) => {
+												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
+											}}
+											key="4"
+										/>,
+										<CustomForm
+											ticketTitle={drawParameters.ticketType}
+											onChange={(title) => {
+												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
+											}}
+											key="5"
+										/>,
 									]}
 									defaultSelectedIndex={0}
 									menuItemStyle={{ width: 'auto' }}
 								/>
 							</div>
-						</label>
+						</div>
 						<label className="ticket-form-label">
 							&nbsp;
 							<div>

@@ -11,7 +11,7 @@ import {
 	JR_MARS_PAPER_TICKET_SIZE,
 } from './value';
 import { drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
-import { getJRPrintingTicketTitleUnchinkasanAsteriskNum } from './utils';
+import { getJRPrintingTicketTitleByTicketType, getJRPrintingTicketTitleUnchinkasanAsteriskNum } from './utils';
 import jr_h from '../../../assets/tickets/jr_h.jpg';
 import jr_e from '../../../assets/tickets/jr_e.jpg';
 import jr_c from '../../../assets/tickets/jr_c.jpg';
@@ -203,7 +203,8 @@ export const drawJRWideTicket = (
 		let JR120TicketOffsetX = is120mm ? 443 : 0;
 		ctx.fillStyle = 'black';
 		ctx.font = `${resizedFont(7.4, 'DotFont')}`;
-		const ticketTitleText = drawParameters.ticketType + '　' + '*'.repeat(getJRPrintingTicketTitleUnchinkasanAsteriskNum(drawParameters.ticketType));
+		const ticketTitleText =
+			getJRPrintingTicketTitleByTicketType(drawParameters.ticketType).printingName + '　' + '*'.repeat(getJRPrintingTicketTitleUnchinkasanAsteriskNum(drawParameters.ticketType));
 		drawText(ctx, ticketTitleText, offsetScaleX(347 + JR120TicketOffsetX), offsetScaleY(166), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 1.6, 0, 0.5);
 
 		// shinkansen

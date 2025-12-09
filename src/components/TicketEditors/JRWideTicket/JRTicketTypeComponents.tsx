@@ -220,17 +220,9 @@ export const ExpressForm = ({ onChange, isInRegularForm = false }: TypeComponent
 					setExpressType(value);
 				}}
 			/>
-			<div className="flex flex-wrap">
-				<Toggle size={0.8} value={isTokutei} onChange={setIsTokutei}>
-					特定特急券<DescriptionButton title={'なんですか？'}>あ</DescriptionButton>
-				</Toggle>
-				<Toggle size={0.8} value={isBTokyuuRyoukin} onChange={setIsBTokyuuRyoukini}>
-					B特急料金<DescriptionButton title={'なんですか？'}>あ</DescriptionButton>
-				</Toggle>
-			</div>
-			<Divider />
 
 			<PrettyInputRadioGroup
+				disabled={expressType === '普通列車用グリーン券' || expressType === '寝台料金券'}
 				showAsRadioButton
 				doNotShowInputBox
 				list={[
@@ -268,18 +260,54 @@ export const ExpressForm = ({ onChange, isInRegularForm = false }: TypeComponent
 					setSeatType(value);
 				}}
 			/>
+
+			<Divider />
+			<div className="flex flex-wrap">
+				<Toggle
+					size={0.8}
+					value={isTokutei}
+					onChange={setIsTokutei}
+					disabled={expressType === '普通列車用グリーン券' || expressType === '寝台料金券' || (seatType !== '自由席' && seatType !== '新幹線自由席')}
+				>
+					特定特急券<DescriptionButton title={'なんですか？'}>あ</DescriptionButton>
+				</Toggle>
+				<Toggle
+					size={0.8}
+					value={isBTokyuuRyoukin}
+					onChange={setIsBTokyuuRyoukini}
+					disabled={expressType === '普通列車用グリーン券' || expressType === '寝台料金券' || (seatType !== '自由席' && seatType !== '指定席')}
+				>
+					B特急料金<DescriptionButton title={'なんですか？'}>あ</DescriptionButton>
+				</Toggle>
+			</div>
+
 			{!isInRegularForm && (
-				<TitleContainer addCheckbox disabled={!sleepingSeatTypeFormAvailable} onCheckboxChange={setsleepingSeatTypeFormAvailable} title="寝台券・グリーン券付き">
-					<PrettyInputRadioGroup
-						showAsRadioButton
-						doNotShowInputBox
-						list={[{ value: 'A寝台開放式' }, { value: 'B寝台開放式' }, { value: 'A寝台個室' }, { value: 'B寝台個室' }, { value: 'グリーン券' }]}
-						value={sleepingSeatType}
-						onChange={(value) => {
-							setSleepingSeatType(value);
-						}}
-					/>
-				</TitleContainer>
+				<>
+					<Divider />
+					<TitleContainer
+						addCheckbox={expressType !== '寝台料金券'}
+						allDisabled={expressType === '普通列車用グリーン券'}
+						disabled={!(expressType === '寝台料金券' || sleepingSeatTypeFormAvailable)}
+						onCheckboxChange={setsleepingSeatTypeFormAvailable}
+						title={expressType === '寝台料金券' ? '寝台席タイプ' : '寝台券・グリーン券付き特急券'}
+					>
+						<PrettyInputRadioGroup
+							showAsRadioButton
+							doNotShowInputBox
+							list={[
+								{ value: 'A寝台開放式' },
+								{ value: 'B寝台開放式' },
+								{ value: 'A寝台個室' },
+								{ value: 'B寝台個室' },
+								...(expressType === '寝台料金券' ? [] : [{ value: 'グリーン券' }]),
+							]}
+							value={sleepingSeatType}
+							onChange={(value) => {
+								setSleepingSeatType(value);
+							}}
+						/>
+					</TitleContainer>
+				</>
 			)}
 		</div>
 	);
@@ -287,43 +315,43 @@ export const ExpressForm = ({ onChange, isInRegularForm = false }: TypeComponent
 
 export const ReservedForm = ({ onChange }: TypeComponentCommonProps) => {
 	const [seatType, setSeatType] = useState('指定券');
-	const [sleepingSeatType, setSleepingSeatType] = useState('B寝台開放式');
+	const [isGreen, setIsGreen] = useState(false);
+	const [sleepingSeatType, setSleepingSeatType] = useState('(B寝台)');
 
 	useEffect(() => {
 		let title = '';
-		let type = JRTicketTypesettingtype.Fare;
-		title += '';
 		switch (seatType) {
 			case '指定券':
-				title += '・特急券';
-				type = JRTicketTypesettingtype.Express;
+				title += '指定券';
+				if (isGreen) {
+					title += '(グリーン)';
+				}
 
 				break;
 			case '指定席券':
-				title += '・急行券';
-				type = JRTicketTypesettingtype.Express;
+				title += '指定席券';
 
 				break;
 			case '新幹線指定券':
-				title += '・急行券';
-				type = JRTicketTypesettingtype.Express;
+				title += '新幹線指定券';
+				if (isGreen) {
+					title += '(グリーン)';
+				}
 
 				break;
 			case '寝台指定券':
-				title += '・急行券';
-				type = JRTicketTypesettingtype.Express;
+				title += '寝台指定券' + sleepingSeatType;
 
 				break;
 			case 'バス指定券':
-				title += '・急行券';
-				type = JRTicketTypesettingtype.Express;
+				title += 'バス指定券';
 
 				break;
 			default:
 				break;
 		}
 		onChange(title.replaceAll('（', '(').replaceAll('）', ')'));
-	}, [seatType]);
+	}, [seatType, sleepingSeatType, isGreen]);
 	return (
 		<div>
 			<PrettyInputRadioGroup
@@ -337,17 +365,46 @@ export const ReservedForm = ({ onChange }: TypeComponentCommonProps) => {
 				}}
 			/>
 			<Divider />
-			<TitleContainer disabled={seatType !== '寝台指定券'} title="寝台指定券">
+			<Toggle size={0.8} value={isGreen} onChange={setIsGreen} disabled={seatType !== '指定券' && seatType !== '新幹線指定券'}>
+				グリーン
+			</Toggle>
+			<TitleContainer allDisabled={seatType !== '寝台指定券'} title="寝台指定券">
 				<PrettyInputRadioGroup
 					showAsRadioButton
 					doNotShowInputBox
-					list={[{ value: 'A寝台開放式' }, { value: 'B寝台開放式' }, { value: 'A寝台個室' }, { value: 'B寝台個室' }]}
+					list={[
+						{ value: '(A寝台)', title: 'A寝台開放式' },
+						{ value: '(B寝台)', title: 'B寝台開放式' },
+						{ value: '(A個)', title: 'A寝台個室' },
+						{ value: '(B個)', title: 'B寝台個室' },
+					]}
 					value={sleepingSeatType}
 					onChange={(value) => {
 						setSleepingSeatType(value);
 					}}
 				/>
 			</TitleContainer>
+		</div>
+	);
+};
+
+export const AdmissionForm = ({ onChange }: TypeComponentCommonProps) => {
+	useEffect(() => {
+		onChange('普通入場券');
+	}, []);
+	return <div></div>;
+};
+
+export const CustomForm = ({ onChange, ticketTitle }: TypeComponentCommonProps & { ticketTitle: string }) => {
+	return (
+		<div>
+			券名
+			<input
+				value={ticketTitle}
+				onChange={(e) => {
+					onChange(e.target.value);
+				}}
+			/>
 		</div>
 	);
 };

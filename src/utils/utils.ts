@@ -88,7 +88,7 @@ export const drawText = (
 	ctx.translate(x, y);
 
 	const getRealCharHorizonalScale = (ch: string) => {
-		console.log(ch, isHalfWidth(ch), isFullWidth(ch));
+		//console.log(ch, isHalfWidth(ch), isFullWidth(ch));
 		return doesCharHorizonalScaleOnlyWorkOnFullWidthChar ? (isHalfWidth(ch) || ignoreChars.includes(ch) ? 1 : charHorizonalScale) : charHorizonalScale;
 	};
 
