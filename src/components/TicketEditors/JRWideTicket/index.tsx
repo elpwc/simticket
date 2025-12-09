@@ -551,7 +551,7 @@ export default function JRWideTicket() {
 							<input
 								value={drawParameters.railways.join(',')}
 								placeholder="半角「,」で分けて下さい（例：東海道,御殿場）"
-								onChange={(e) => setDrawParameters((prev) => ({ ...prev, railways: e.target.value.split(',') }))}
+								onChange={(e) => setDrawParameters((prev) => ({ ...prev, railways: e.target.value.split(/[,;|，、・·]/) }))}
 							/>
 						</label>
 
