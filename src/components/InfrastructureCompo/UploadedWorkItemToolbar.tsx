@@ -49,7 +49,7 @@ export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLik
 	};
 
 	return (
-		<>
+		<div>
 			<div className="flex justify-between items-center">
 				<p className="font-semibold text-sm truncate flex-1 min-w-0">{uploadedTicketInfo.name}</p>
 
@@ -123,6 +123,6 @@ export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLik
 				<p className="truncate max-w-[120px]">{uploadedTicketInfo.editorName}</p>
 				<p>view {uploadedTicketInfo.views}</p>
 			</div>
-		</>
+		</div>
 	);
 };
