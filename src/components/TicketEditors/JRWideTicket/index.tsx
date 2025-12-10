@@ -25,7 +25,7 @@ import {
 	JR_hakken_area,
 	JR_discount_list,
 } from './value';
-import { JRStationNameType, JRTicketTypeList, JRTitleUnderlineStyleTitles, JRWideTicketDrawParameters, ShinkansenRangeTitles } from './type';
+import { JRStationNameType, JRTicketTypeList, JRTicketTypesettingtype, JRTitleUnderlineStyleTitles, JRWideTicketDrawParameters, ShinkansenRangeTitles } from './type';
 import { AppContext } from '@/app/app';
 import { drawJRWideTicket } from './draw';
 import { useSearchParams } from 'next/navigation';
@@ -37,6 +37,7 @@ import { Tab } from '@/components/InfrastructureCompo/Tab/Tab';
 import { AdmissionForm, CustomForm, ExpressForm, RegularForm, ReservedForm } from './JRTicketTypeComponents';
 import { JRPaymentSerialNumberInput } from '@/components/InfrastructureCompo/JRComponents/JRPaymentSerialNumberInput';
 import { JRDiscountNameText } from '@/components/InfrastructureCompo/JRComponents/JRDiscountNameText';
+import { getJRPrintingTicketTitleByTicketType } from './utils';
 
 export const DotFont = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
@@ -63,6 +64,8 @@ export default function JRWideTicket() {
 	const [isFlipSide, setIsFlipSide] = useState(false);
 	/** 0: close, 1: station1, 2: station2 */
 	const [showJRPresetStationsModal, setShowJRPresetStationsModal] = useState(0);
+
+	const [ticketTypeset, setTicketTypeset] = useState(JRTicketTypesettingtype.Fare);
 
 	const { editingTicketData, setEditingTicketData } = useContext(AppContext);
 	const { copyEditingTicketDataToDrawParameters, setCopyEditingTicketDataToDrawParameters } = useContext(AppContext);
@@ -265,24 +268,28 @@ export default function JRWideTicket() {
 										<RegularForm
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
+												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
 											}}
 											key="1"
 										/>,
 										<ExpressForm
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
+												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
 											}}
 											key="2"
 										/>,
 										<ReservedForm
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
+												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
 											}}
 											key="3"
 										/>,
 										<AdmissionForm
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
+												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
 											}}
 											key="4"
 										/>,
@@ -290,6 +297,7 @@ export default function JRWideTicket() {
 											ticketTitle={drawParameters.ticketType}
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
+												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
 											}}
 											key="5"
 										/>,
@@ -616,6 +624,7 @@ export default function JRWideTicket() {
 							</div>
 						</label>
 						<Divider />
+
 						<label className="ticket-form-label">
 							発車時間
 							<div className="flex">
@@ -833,7 +842,10 @@ export default function JRWideTicket() {
 						</Toggle>
 						<label className="ticket-form-label">
 							発行場所
-							<input className="" value={drawParameters.paymentPlace} onChange={(e) => setDrawParameters((prev) => ({ ...prev, paymentPlace: e.target.value }))} />
+							<div>
+								<input className="w-full" value={drawParameters.paymentPlace} onChange={(e) => setDrawParameters((prev) => ({ ...prev, paymentPlace: e.target.value }))} />
+								<div>※えきねっと発行発券の場合自動的に左下に「えきねっと発券」付けます</div>
+							</div>
 						</label>
 						<label className="ticket-form-label">
 							発行日付
@@ -851,7 +863,11 @@ export default function JRWideTicket() {
 						</label>
 						<label className="ticket-form-label">
 							発行番号
-							<JRPaymentSerialNumberInput value={drawParameters.paymentNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, paymentNo: e }))} />
+							<JRPaymentSerialNumberInput
+								defaultvalue={drawParameters.paymentNo}
+								value={drawParameters.paymentNo}
+								onChange={(e) => setDrawParameters((prev) => ({ ...prev, paymentNo: e }))}
+							/>
 						</label>
 						<Divider />
 						<label className="ticket-form-label">
@@ -874,7 +890,11 @@ export default function JRWideTicket() {
 						</label>
 						<label className="ticket-form-label">
 							発券番号
-							<JRPaymentSerialNumberInput value={drawParameters.issuingNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, issuingNo: e }))} />
+							<JRPaymentSerialNumberInput
+								defaultvalue={drawParameters.paymentNo}
+								value={drawParameters.issuingNo}
+								onChange={(e) => setDrawParameters((prev) => ({ ...prev, issuingNo: e }))}
+							/>
 						</label>
 
 						<Divider />
@@ -906,6 +926,12 @@ export default function JRWideTicket() {
 					<TitleContainer title="番号（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
 							旅行会社向けプリカット通番
+							<input className="text-[#A942C3]" value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
+						</label>
+					</TitleContainer>
+					<TitleContainer title="印字" className="flex flex-wrap">
+						<label className="ticket-form-label">
+							入出場記録
 							<input className="text-[#A942C3]" value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
 					</TitleContainer>

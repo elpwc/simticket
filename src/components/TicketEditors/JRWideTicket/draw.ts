@@ -165,6 +165,7 @@ export const drawJRWideTicket = (
 			ctx.setLineDash([]);
 		}
 
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// payment method
 		ctx.fillStyle = 'black';
 		ctx.font = `${resizedFont(9, 'DotFont')}`;
@@ -266,6 +267,8 @@ export const drawJRWideTicket = (
 			default:
 				break;
 		}
+
+		//////////////////////////////////////////////////// STATION ////////////////////////////////////////////////////////////////////
 
 		// station
 		const drawJRStation = (isRight: boolean, stationName: string, stationAreaChar: string, stationType: JRStationNameType, x: number, y: number = 370) => {
@@ -490,38 +493,156 @@ export const drawJRWideTicket = (
 			ctx.closePath();
 		}
 
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		const lineHeight = 74;
+		const lineLeft = 113;
+		/** 空一格 */
+		const lineLeft2 = 155;
+		const lineHeights = [0, 1, 2, 3, 4, 5, 6, 7].map((value) => value * lineHeight + 458);
+
 		// 経由
-		ctx.font = resizedFont(5.5, 'DotFont');
-		drawText(ctx, '経由:' + drawParameters.railways.join('･'), offsetScaleX(113), offsetScaleY(458), resizedScaleX(1244 + JR120TicketOffsetX), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+		const drawRailways = () => {
+			ctx.font = resizedFont(5.5, 'DotFont');
+			drawText(
+				ctx,
+				'経由:' + drawParameters.railways.join('･'),
+				offsetScaleX(113),
+				offsetScaleY(lineHeights[0]),
+				resizedScaleX(1244 + JR120TicketOffsetX),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				2,
+				0,
+				0.7
+			);
+		};
 
 		// 日期时间
-		ctx.font = resizedFont(5.5, 'DotFont');
-		drawText(ctx, `月  日${'当日限り有効'}`, offsetScaleX(212), offsetScaleY(534), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+		const drawFareTicketAvailableDate = (line: number, left: number = lineLeft2) => {
+			ctx.font = resizedFont(5.5, 'DotFont');
+			if (
+				new Date(drawParameters.date).getMonth() === new Date(drawParameters.fareTicketExpireDate).getMonth() &&
+				new Date(drawParameters.date).getDate() === new Date(drawParameters.fareTicketExpireDate).getDate()
+			) {
+				// 当日
+				drawText(ctx, `月  日当日限り有効`, offsetScaleX(left + 57), offsetScaleY(lineHeights[1]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+				ctx.font = resizedFont(7, 'DotFont');
+				drawText(
+					ctx,
+					`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
+					offsetScaleX(left),
+					offsetScaleY(lineHeights[line]),
+					resizedScaleX(225),
+					TextAlign.Left,
+					DrawTextMethod.fillText,
+					0,
+					0,
+					1.25
+				);
+			} else {
+				// 後日
+				drawText(ctx, `月  日から   月  日まで有効`, offsetScaleX(left + 57), offsetScaleY(lineHeights[1]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 
-		ctx.font = resizedFont(7, 'DotFont');
-		drawText(
-			ctx,
-			`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
-			offsetScaleX(100),
-			offsetScaleY(538),
-			resizedScaleX(225),
-			TextAlign.Right,
-			DrawTextMethod.fillText,
-			0,
-			0,
-			1.25
-		);
+				ctx.font = resizedFont(7, 'DotFont');
+				drawText(
+					ctx,
+					`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}    ${(
+						new Date(drawParameters.fareTicketExpireDate).getMonth() + 1
+					)
+						.toString()
+						.padStart(2, ' ')} ${new Date(drawParameters.fareTicketExpireDate).getDate().toString().padStart(2, ' ')}`,
+					offsetScaleX(left),
+					offsetScaleY(lineHeights[line]),
+					resizedScaleX(1000),
+					TextAlign.Left,
+					DrawTextMethod.fillText,
+					0,
+					0,
+					1.25
+				);
+			}
+		};
+		drawRailways();
+		drawFareTicketAvailableDate(1);
 
 		// 价格
 		ctx.font = resizedFont(5.5, 'DotFont');
-		ctx.fillText(`￥`, offsetScaleX(1080 + JR120TicketOffsetX), offsetScaleY(534), resizedScaleX(100));
+		ctx.fillText(`￥`, offsetScaleX(1080 + JR120TicketOffsetX), offsetScaleY(lineHeights[1]), resizedScaleX(100));
 		ctx.font = resizedFont(7, 'DotFont');
 		drawText(ctx, `${drawParameters.price}`, offsetScaleX(1133 + JR120TicketOffsetX), offsetScaleY(534), resizedScaleX(300), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 1.25);
 
 		// 信息1
 		ctx.font = resizedFont(5.5, 'DotFont');
-		drawText(ctx, `${drawParameters.info1}`, offsetScaleX(155), offsetScaleY(606), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+		drawText(ctx, `${drawParameters.info1}`, offsetScaleX(lineLeft2), offsetScaleY(lineHeights[2]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 
+		// 最下部
+		const drawFareTicketBelow = () => {
+			ctx.font = resizedFont(5.5, 'DotFont');
+			drawText(
+				ctx,
+				`${new Date(drawParameters.paymentDate).getFullYear().toString()}.${(new Date(drawParameters.paymentDate).getMonth() + 1).toString().padStart(2, '-')}.${new Date(
+					drawParameters.paymentDate
+				)
+					.getDate()
+					.toString()
+					.padStart(2, '-')}`,
+				offsetScaleX(lineLeft),
+				offsetScaleY(lineHeights[5]),
+				resizedScaleX(1000),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				0,
+				0,
+				0.8,
+				1,
+				false
+			);
+			drawText(ctx, drawParameters.paymentPlace + '発行', offsetScaleX(525), offsetScaleY(lineHeights[5]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+			drawText(ctx, drawParameters.paymentNo, offsetScaleX(lineLeft), offsetScaleY(lineHeights[6]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 1.4, 0, 1.4, 1, false);
+			drawText(
+				ctx,
+				`(${drawParameters.issuingAreaNo}-${drawParameters.hasOtherCompanyLines ? 'ﾀ' : ' '})R${drawParameters.RCode}C${drawParameters.CCode}`,
+				offsetScaleX(525),
+				offsetScaleY(lineHeights[6]),
+				resizedScaleX(1000),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				1.4,
+				0,
+				1.4,
+				1,
+				false
+			);
+			if (!drawParameters.isPaymentIssuingTheSamePlace) {
+				if (drawParameters.paymentPlace.includes('えきねっと')) {
+					drawText(ctx, `えきねっと発券`, offsetScaleX(lineLeft), offsetScaleY(lineHeights[7]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+				}
+				drawText(
+					ctx,
+					`${new Date(drawParameters.issuingDate).getFullYear().toString()}.${(new Date(drawParameters.issuingDate).getMonth() + 1).toString().padStart(2, '-')}.${new Date(
+						drawParameters.issuingDate
+					)
+						.getDate()
+						.toString()
+						.padStart(2, '-')}`,
+					offsetScaleX(500),
+					offsetScaleY(lineHeights[7]),
+					resizedScaleX(1000),
+					TextAlign.Left,
+					DrawTextMethod.fillText,
+					0,
+					0,
+					0.8,
+					1,
+					false
+				);
+
+				drawText(ctx, `${drawParameters.issuingPlace}`, offsetScaleX(720), offsetScaleY(lineHeights[7]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+
+				drawText(ctx, drawParameters.issuingNo, offsetScaleX(1130), offsetScaleY(lineHeights[7]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 0.8, 1, false);
+			}
+		};
+		drawFareTicketBelow();
 		onDone?.();
 	};
 
