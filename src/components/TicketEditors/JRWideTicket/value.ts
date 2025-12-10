@@ -259,9 +259,9 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	paymentMethod: JRPaymentMethod.CreditCard,
 	date: new Date().toISOString().slice(0, 10),
 	time: '11:55',
-	carriage: '04',
-	seat1: '012',
-	seat2: '',
+	carriage: '6',
+	seat1: '14',
+	seat2: 'A',
 	seat3: '上段',
 	seatClass: '',
 	price: '1,540',
@@ -297,6 +297,7 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	expressExpireDate: new Date().toISOString().slice(0, 10),
 	fareTicketExpireDate: new Date().toISOString().slice(0, 10),
 	isPaymentIssuingTheSamePlace: true,
+	doShowSerialCode: false
 };
 
 export const TokuteiTokuShinai = [

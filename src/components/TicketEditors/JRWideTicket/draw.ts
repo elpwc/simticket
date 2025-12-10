@@ -1,6 +1,6 @@
 import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTemplate';
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
-import { JRStationNameType, JRTitleUnderlineStyle, JRWideTicketDrawParameters, ShinkansenRange } from './type';
+import { JRStationNameType, JRTicketTypesettingtype, JRTitleUnderlineStyle, JRWideTicketDrawParameters, ShinkansenRange } from './type';
 import {
 	JRPaymentMethod,
 	JRTicketFlipSideText,
@@ -139,6 +139,7 @@ export const drawJRWideTicket = (
 	const draw = () => {
 		// 清空
 		ctx.clearRect(0, 0, w, h);
+		const printTypeInfo = getJRPrintingTicketTitleByTicketType(drawParameters.ticketType);
 		// 底图
 		switch (drawParameters.background) {
 			case JRTicketBackGround.JR_H:
@@ -168,7 +169,7 @@ export const drawJRWideTicket = (
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// payment method
 		ctx.fillStyle = 'black';
-		ctx.font = `${resizedFont(9, 'DotFont')}`;
+		ctx.font = `${resizedFont(printTypeInfo.typeset === JRTicketTypesettingtype.Fare || printTypeInfo.typeset === JRTicketTypesettingtype.Fare120 ? 9 : 6, 'DotFont')}`;
 		if (drawParameters.paymentMethod !== JRPaymentMethod.Cash) {
 			let paymentText = '';
 			switch (drawParameters.paymentMethod) {
@@ -193,19 +194,28 @@ export const drawJRWideTicket = (
 				default:
 					break;
 			}
-			drawText(ctx, paymentText, offsetScaleX(120), offsetScaleY(220), resizedScaleX(183), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1);
-			ctx.strokeStyle = 'black';
-			ctx.lineWidth = resizedScaleX(5);
-			ctx.strokeRect(offsetScaleX(120), offsetScaleY(139), resizedScaleX(183), resizedScaleY(91));
-			ctx.setLineDash([]);
+			if (printTypeInfo.typeset === JRTicketTypesettingtype.Fare || printTypeInfo.typeset === JRTicketTypesettingtype.Fare120) {
+				// large
+				drawText(ctx, paymentText, offsetScaleX(120), offsetScaleY(220), resizedScaleX(183), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 1);
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = resizedScaleX(5);
+				ctx.strokeRect(offsetScaleX(120), offsetScaleY(139), resizedScaleX(183), resizedScaleY(91));
+				ctx.setLineDash([]);
+			} else {
+				//tiny
+				drawText(ctx, paymentText, offsetScaleX(150), offsetScaleY(157), resizedScaleX(100), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.9, false);
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = resizedScaleX(5);
+				ctx.strokeRect(offsetScaleX(135), offsetScaleY(105), resizedScaleX(120), resizedScaleY(62));
+				ctx.setLineDash([]);
+			}
 		}
 
 		// ticket type
 		let JR120TicketOffsetX = is120mm ? 443 : 0;
 		ctx.fillStyle = 'black';
 		ctx.font = `${resizedFont(7.4, 'DotFont')}`;
-		const ticketTitleText =
-			getJRPrintingTicketTitleByTicketType(drawParameters.ticketType).printingName + '　' + '*'.repeat(getJRPrintingTicketTitleUnchinkasanAsteriskNum(drawParameters.ticketType));
+		const ticketTitleText = printTypeInfo.printingName + '　' + '*'.repeat(getJRPrintingTicketTitleUnchinkasanAsteriskNum(drawParameters.ticketType));
 		drawText(ctx, ticketTitleText, offsetScaleX(347 + JR120TicketOffsetX), offsetScaleY(166), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 1.6, 0, 0.5);
 
 		// shinkansen
@@ -525,23 +535,25 @@ export const drawJRWideTicket = (
 				new Date(drawParameters.date).getDate() === new Date(drawParameters.fareTicketExpireDate).getDate()
 			) {
 				// 当日
-				drawText(ctx, `月  日当日限り有効`, offsetScaleX(left + 57), offsetScaleY(lineHeights[1]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+				drawText(ctx, `月   日当日限り有効`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 				ctx.font = resizedFont(7, 'DotFont');
 				drawText(
 					ctx,
 					`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
-					offsetScaleX(left),
+					offsetScaleX(left - 40),
 					offsetScaleY(lineHeights[line]),
 					resizedScaleX(225),
 					TextAlign.Left,
 					DrawTextMethod.fillText,
 					0,
 					0,
-					1.25
+					1.25,
+					1,
+					false
 				);
 			} else {
 				// 後日
-				drawText(ctx, `月  日から   月  日まで有効`, offsetScaleX(left + 57), offsetScaleY(lineHeights[1]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+				drawText(ctx, `月   日から    月   日まで有効`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 
 				ctx.font = resizedFont(7, 'DotFont');
 				drawText(
@@ -551,29 +563,43 @@ export const drawJRWideTicket = (
 					)
 						.toString()
 						.padStart(2, ' ')} ${new Date(drawParameters.fareTicketExpireDate).getDate().toString().padStart(2, ' ')}`,
-					offsetScaleX(left),
-					offsetScaleY(lineHeights[line]),
+					offsetScaleX(left - 40),
+					offsetScaleY(lineHeights[line] + 3),
 					resizedScaleX(1000),
 					TextAlign.Left,
 					DrawTextMethod.fillText,
 					0,
 					0,
-					1.25
+					1.25,
+					1,
+					false
 				);
 			}
 		};
-		drawRailways();
-		drawFareTicketAvailableDate(1);
 
 		// 价格
-		ctx.font = resizedFont(5.5, 'DotFont');
-		ctx.fillText(`￥`, offsetScaleX(1080 + JR120TicketOffsetX), offsetScaleY(lineHeights[1]), resizedScaleX(100));
-		ctx.font = resizedFont(7, 'DotFont');
-		drawText(ctx, `${drawParameters.price}`, offsetScaleX(1133 + JR120TicketOffsetX), offsetScaleY(534), resizedScaleX(300), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 1.25);
-
+		const drawPrice = (line: number, left: number = lineLeft) => {
+			ctx.font = resizedFont(5.5, 'DotFont');
+			ctx.fillText(`￥`, offsetScaleX(left + JR120TicketOffsetX), offsetScaleY(lineHeights[line]), resizedScaleX(100));
+			ctx.font = resizedFont(7, 'DotFont');
+			drawText(
+				ctx,
+				`${drawParameters.price}`,
+				offsetScaleX(left + 63 + JR120TicketOffsetX),
+				offsetScaleY(lineHeights[line]),
+				resizedScaleX(300),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				0,
+				0,
+				1.25
+			);
+		};
 		// 信息1
-		ctx.font = resizedFont(5.5, 'DotFont');
-		drawText(ctx, `${drawParameters.info1}`, offsetScaleX(lineLeft2), offsetScaleY(lineHeights[2]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+		const drawInfo = (line: number, left: number = lineLeft2) => {
+			ctx.font = resizedFont(5.5, 'DotFont');
+			drawText(ctx, `${drawParameters.info1}`, offsetScaleX(left), offsetScaleY(lineHeights[line]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+		};
 
 		// discount
 		if (drawParameters.discount !== '') {
@@ -683,7 +709,177 @@ export const drawJRWideTicket = (
 				drawText(ctx, drawParameters.issuingNo, offsetScaleX(1130), offsetScaleY(lineHeights[7]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 0.8, 1, false);
 			}
 		};
-		drawFareTicketBelow();
+
+		const drawExpressDateTime = (line: number, left: number = lineLeft2) => {
+			ctx.font = resizedFont(5.5, 'DotFont');
+			drawText(ctx, `月   日`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+			ctx.font = resizedFont(7, 'DotFont');
+			drawText(
+				ctx,
+				`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
+				offsetScaleX(left - 40),
+				offsetScaleY(lineHeights[line]),
+				resizedScaleX(225),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				0,
+				0,
+				1.25,
+				1,
+				false
+			);
+			//time
+			ctx.font = resizedFont(5.5, 'DotFont');
+			drawText(ctx, `（   :   発）`, offsetScaleX(left + 260), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+
+			ctx.font = resizedFont(6.2, 'DotFont');
+			drawText(
+				ctx,
+				`${drawParameters.time.split(':')[0].padStart(2, '0')}  ${drawParameters.time.split(':')[1].padStart(2, '0')}`,
+				offsetScaleX(left + 345),
+				offsetScaleY(lineHeights[line] + 3),
+				resizedScaleX(225),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				0,
+				0,
+				1.25
+			);
+
+			ctx.font = resizedFont(5.5, 'DotFont');
+			drawText(
+				ctx,
+				`(${drawParameters.time2.split(':')[0].padStart(2, '0')}:${drawParameters.time2.split(':')[1].padStart(2, '0')}着)`,
+				offsetScaleX(left + 700),
+				offsetScaleY(lineHeights[line]),
+				resizedScaleX(1244),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				0,
+				0,
+				0.7
+			);
+
+			// C code
+			ctx.font = resizedFont(6.2, 'DotFont');
+			drawText(ctx, `C${drawParameters.CCode}`, offsetScaleX(left + 1100), offsetScaleY(lineHeights[line] + 3), resizedScaleX(225), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 1.25);
+		};
+
+		const drawExpressTrainNameSeatInfo = (line: number, left: number = lineLeft) => {
+			ctx.font = resizedFont(6.2, 'DotFont');
+			drawText(
+				ctx,
+				`${drawParameters.trainName}` + (drawParameters.trainNo.length === 0 ? '' : `　${drawParameters.trainNo}号`),
+				offsetScaleX(left),
+				offsetScaleY(lineHeights[line] + 3),
+				resizedScaleX(700),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				0,
+				0,
+				0.7
+			);
+			drawText(
+				ctx,
+				`${drawParameters.carriage}　　 ${drawParameters.seat1}　 ${drawParameters.seat2}`,
+				offsetScaleX(left + 740),
+				offsetScaleY(lineHeights[line]),
+				resizedScaleX(700),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				0,
+				0,
+				0.7
+			);
+
+			ctx.font = resizedFont(5.5, 'DotFont');
+			drawText(ctx, `号車　　 番　 席`, offsetScaleX(left + 775), offsetScaleY(lineHeights[line]), resizedScaleX(700), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 0.7);
+
+			// no smoking
+			ctx.beginPath();
+			ctx.strokeStyle = 'black';
+			ctx.lineWidth = resizedScaleX(5);
+			ctx.ellipse(offsetScaleX(left + 1180), offsetScaleY(lineHeights[line] - 25), resizedScaleX(40), resizedScaleX(30), 0, 0, 2 * Math.PI);
+
+			ctx.strokeStyle = 'black';
+			ctx.lineWidth = resizedScaleY(6);
+			ctx.moveTo(offsetScaleX(left + 1160), offsetScaleY(lineHeights[line] - 50));
+			ctx.lineTo(offsetScaleX(left + 1200), offsetScaleY(lineHeights[line] + 0));
+			ctx.stroke();
+
+			ctx.lineWidth = resizedScaleY(5);
+			ctx.moveTo(offsetScaleX(left + 1150), offsetScaleY(lineHeights[line] - 20));
+			ctx.lineTo(offsetScaleX(left + 1200), offsetScaleY(lineHeights[line] - 20));
+			ctx.stroke();
+
+			ctx.moveTo(offsetScaleX(left + 1203), offsetScaleY(lineHeights[line] - 20));
+			ctx.lineTo(offsetScaleX(left + 1205), offsetScaleY(lineHeights[line] - 20));
+			ctx.stroke();
+
+			ctx.moveTo(offsetScaleX(left + 1207), offsetScaleY(lineHeights[line] - 20));
+			ctx.lineTo(offsetScaleX(left + 1209), offsetScaleY(lineHeights[line] - 20));
+			ctx.stroke();
+
+			ctx.lineWidth = resizedScaleY(2);
+			ctx.moveTo(offsetScaleX(left + 1209), offsetScaleY(lineHeights[line] - 25));
+			ctx.lineTo(offsetScaleX(left + 1209), offsetScaleY(lineHeights[line] - 30));
+			ctx.lineTo(offsetScaleX(left + 1200), offsetScaleY(lineHeights[line] - 35));
+			ctx.lineTo(offsetScaleX(left + 1201), offsetScaleY(lineHeights[line] - 42));
+			ctx.lineTo(offsetScaleX(left + 1195), offsetScaleY(lineHeights[line] - 45));
+			ctx.stroke();
+
+			ctx.moveTo(offsetScaleX(left + 1205), offsetScaleY(lineHeights[line] - 25));
+			ctx.lineTo(offsetScaleX(left + 1205), offsetScaleY(lineHeights[line] - 27));
+			ctx.lineTo(offsetScaleX(left + 1195), offsetScaleY(lineHeights[line] - 31));
+			ctx.lineTo(offsetScaleX(left + 1192), offsetScaleY(lineHeights[line] - 35));
+			ctx.lineTo(offsetScaleX(left + 1185), offsetScaleY(lineHeights[line] - 35));
+			ctx.lineTo(offsetScaleX(left + 1185), offsetScaleY(lineHeights[line] - 42));
+			ctx.stroke();
+
+			ctx.stroke();
+		};
+
+		switch (printTypeInfo.typeset) {
+			case JRTicketTypesettingtype.Fare:
+				drawRailways();
+				drawPrice(1, 967);
+				drawInfo(2);
+				drawFareTicketAvailableDate(1);
+				drawFareTicketBelow();
+				break;
+			case JRTicketTypesettingtype.Express:
+				drawPrice(2);
+				drawInfo(3);
+				drawExpressDateTime(0);
+				drawExpressTrainNameSeatInfo(1);
+				drawFareTicketBelow();
+
+				break;
+
+			default:
+				drawRailways();
+				drawPrice(1, 967);
+				drawInfo(2);
+				drawFareTicketAvailableDate(1);
+				drawFareTicketBelow();
+				break;
+		}
+
+		// serialCode
+		if (drawParameters.doShowSerialCode) {
+			ctx.translate(offsetScaleX(700), offsetScaleY(500));
+			ctx.rotate((Math.PI / 2) * 3);
+			ctx.fillStyle = '#A942C3';
+			ctx.font = resizedFont(9, 'DotFont');
+			drawText(ctx, drawParameters.serialCode, offsetScaleX(-220), offsetScaleY(720), resizedScaleX(700), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 1, 0.9);
+
+			ctx.translate(offsetScaleX(700), offsetScaleY(500));
+			ctx.rotate(-Math.PI / 2);
+
+			ctx.translate(offsetScaleX(0), offsetScaleY(0));
+			ctx.fillStyle = 'black';
+		}
+
 		onDone?.();
 	};
 

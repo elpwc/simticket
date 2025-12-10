@@ -66,6 +66,7 @@ export type JRWideTicketDrawParameters = {
 	expressExpireDate: string;
 	fareTicketExpireDate: string;
 	isPaymentIssuingTheSamePlace: boolean;
+	doShowSerialCode: boolean;
 };
 
 export enum JRStationNameType {

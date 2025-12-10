@@ -259,7 +259,7 @@ export default function JRWideTicket() {
 							<input className="" style={{ color: '#AF0508' }} value={drawParameters.watermark} onChange={(e) => setDrawParameters((prev) => ({ ...prev, watermark: e.target.value }))} />
 						</label>
 						<div className="w-full">
-							券種
+							券種　※現在（2025.12）は乗車券、特急券、指定席券だけ対応（未完成の箇所があります）
 							<div>
 								<Tab
 									menuPosition="top"
@@ -688,9 +688,10 @@ export default function JRWideTicket() {
 							</div>
 						</label>
 						<label className="ticket-form-label">
-							乗車券有効期間
+							乗車券有効期間（仮）
 							<div className="flex flex-wrap">
 								<input
+									disabled
 									type="date"
 									value={drawParameters.date}
 									onChange={(e) => {
@@ -703,6 +704,7 @@ export default function JRWideTicket() {
 								/>
 								～
 								<input
+									disabled
 									type="date"
 									value={drawParameters.fareTicketExpireDate}
 									onChange={(e) => {
@@ -766,14 +768,15 @@ export default function JRWideTicket() {
 							/>
 						</label>
 						<label className="ticket-form-label">
-							寝台席位置
+							寝台席位置（仮）
 							<div className="flex gap-3 flex-wrap">
 								<PrettyInputRadioGroup
+									disabled
 									list={[
-										{ value: 'up', title: '上段' },
-										{ value: 'center', title: '中段' },
-										{ value: 'down', title: '下段' },
-										{ value: 'room', title: '個室' },
+										{ value: '上段', title: '上段' },
+										{ value: '中段', title: '中段' },
+										{ value: '下段', title: '下段' },
+										{ value: '個室', title: '個室' },
 									]}
 									value={drawParameters.seat3}
 									onChange={(value: string) => {
@@ -799,26 +802,26 @@ export default function JRWideTicket() {
 							/>
 						</label>
 						<label className="ticket-form-label">
-							値段 ￥
+							値段 ￥（仮）
 							<div className="flex flex-col">
 								<input value={drawParameters.price} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price: e.target.value }))} />
 								<label className="">
 									内訳＝値段1 ￥
-									<input value={drawParameters.price1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price1: e.target.value }))} />
+									<input disabled value={drawParameters.price1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price1: e.target.value }))} />
 								</label>
 								<label className="">
 									　　＋値段2 ￥
-									<input value={drawParameters.price2} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price2: e.target.value }))} />
+									<input disabled value={drawParameters.price2} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price2: e.target.value }))} />
 								</label>
 								<label className="">
 									　　＋値段3 ￥
-									<input value={drawParameters.price3} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price3: e.target.value }))} />
+									<input disabled value={drawParameters.price3} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price3: e.target.value }))} />
 								</label>
 							</div>
 						</label>
 						<Divider />
 						<label className="ticket-form-label">
-							割引
+							割引（仮）
 							<div>
 								<PrettyInputRadioGroup
 									value={drawParameters.discount}
@@ -933,14 +936,22 @@ export default function JRWideTicket() {
 					</TitleContainer>
 					<TitleContainer title="番号（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
-							旅行会社向けプリカット通番
+							<label>
+								<span>旅行会社向けプリカット通番</span>
+								<Toggle
+									value={drawParameters.doShowSerialCode}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, doShowSerialCode: value }));
+									}}
+								/>
+							</label>
 							<input className="text-[#A942C3]" value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
 					</TitleContainer>
-					<TitleContainer title="印字" className="flex flex-wrap">
+					<TitleContainer title="印字（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
-							入出場記録
-							<input className="text-[#A942C3]" value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
+							入出場記録（仮）
+							<input disabled className="" value={'開発中'} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
 					</TitleContainer>
 					<JRPresetStationsModal
