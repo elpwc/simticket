@@ -213,7 +213,11 @@ export const drawCRWideTicket = (
 		// 水印
 		if (drawParameters.showWatermark) {
 			ctx.beginPath();
-			ctx.strokeStyle = '#ffbbbb';
+			if ([CRTicketBackGround.SoftBlue, CRTicketBackGround.MagBlue].includes(drawParameters.background)) {
+				ctx.strokeStyle = '#9bcfdf';
+			} else {
+				ctx.strokeStyle = '#ffbbbb';
+			}
 			ctx.lineWidth = 1;
 			ctx.font = `bold ${resizedFont(26, 'HeiTi')}`;
 			drawText(ctx, drawParameters.watermark, offsetScaleX(350, false), offsetScaleY(670, false), resizedScaleX(1000), TextAlign.JustifyAround, DrawTextMethod.strokeText);
