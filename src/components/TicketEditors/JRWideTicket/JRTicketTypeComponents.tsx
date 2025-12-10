@@ -5,6 +5,7 @@ import Toggle from '@/components/InfrastructureCompo/Toggle';
 import { useEffect, useState } from 'react';
 import { JRTicketTypesettingtype } from './type';
 import { DescriptionButton } from '@/components/InfrastructureCompo/DescriptionButton';
+import OuterLink from '@/components/InfrastructureCompo/OuterLink';
 
 interface TypeComponentCommonProps {
 	onChange: (title: string) => void;
@@ -248,11 +249,7 @@ export const ExpressForm = ({ onChange, isInRegularForm = false }: TypeComponent
 					},
 					{
 						value: '座席未指定券',
-						title: (
-							<span>
-								座席未指定券<DescriptionButton title={'←なんですか？'}>あ</DescriptionButton>
-							</span>
-						),
+						title: <span>座席未指定券{/* <DescriptionButton title={'←なんですか？'}>あ</DescriptionButton> */}</span>,
 					},
 				]}
 				value={seatType}
@@ -269,7 +266,10 @@ export const ExpressForm = ({ onChange, isInRegularForm = false }: TypeComponent
 					onChange={setIsTokutei}
 					disabled={expressType === '普通列車用グリーン券' || expressType === '寝台料金券' || (seatType !== '自由席' && seatType !== '新幹線自由席')}
 				>
-					特定特急券<DescriptionButton title={'なんですか？'}>あ</DescriptionButton>
+					特定特急券
+					<DescriptionButton title={'なんですか？'} modalTitle="特定特急券の解説">
+						特定区間の自由席特急列車に乗ると、やや安くなる特急券
+					</DescriptionButton>
 				</Toggle>
 				<Toggle
 					size={0.8}
@@ -277,7 +277,21 @@ export const ExpressForm = ({ onChange, isInRegularForm = false }: TypeComponent
 					onChange={setIsBTokyuuRyoukini}
 					disabled={expressType === '普通列車用グリーン券' || expressType === '寝台料金券' || (seatType !== '自由席' && seatType !== '指定席')}
 				>
-					B特急料金<DescriptionButton title={'なんですか？'}>あ</DescriptionButton>
+					B特急料金
+					<DescriptionButton title={'なんですか？'} modalTitle="B特急料金の解説">
+						<div>
+							<img src="https://railway.jr-central.co.jp/ticket-rule/_img/r34_01.gif" />
+							<p>
+								B特急料金は、上図区間内の特急列車に適用する特急料金。
+								<br />
+								普段の特急料金（A特急料金）よりはやや安く設定しています。
+								<br />
+								また、B特急料金は最繁忙期400円増し、繁忙期200円増し、閑散期（JR九以外）200円引きとなっています。
+								<br />
+							</p>
+							<OuterLink link="https://railway.jr-central.co.jp/ticket-rule/rule34.html">https://railway.jr-central.co.jp/ticket-rule/rule34.html</OuterLink>
+						</div>
+					</DescriptionButton>
 				</Toggle>
 			</div>
 
