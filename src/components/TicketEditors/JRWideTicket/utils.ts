@@ -65,6 +65,7 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 		+p.isPaymentIssuingTheSamePlace,
 		+p.doShowSerialCode,
 		p.ticketType,
+		p.trainName,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -121,7 +122,6 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		sinkansenRange1,
 		sinkansenRange2,
 		sinkansenRange3,
-		trainName,
 		trainNo,
 		date2,
 		time2,
@@ -144,6 +144,7 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		isPaymentIssuingTheSamePlace,
 		doShowSerialCode,
 		ticketType,
+		trainName,
 	] = arr;
 
 	return {
@@ -185,7 +186,6 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		sinkansenRange1,
 		sinkansenRange2,
 		sinkansenRange3,
-		trainName,
 		trainNo,
 		date2,
 		time2,
@@ -208,6 +208,7 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		isPaymentIssuingTheSamePlace: !!isPaymentIssuingTheSamePlace,
 		doShowSerialCode: !!doShowSerialCode,
 		ticketType,
+		trainName,
 	} as JRWideTicketDrawParameters;
 }
 
