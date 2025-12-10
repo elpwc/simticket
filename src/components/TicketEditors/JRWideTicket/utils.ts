@@ -64,6 +64,7 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 		p.fareTicketExpireDate,
 		+p.isPaymentIssuingTheSamePlace,
 		+p.doShowSerialCode,
+		p.ticketType,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -142,6 +143,7 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		fareTicketExpireDate,
 		isPaymentIssuingTheSamePlace,
 		doShowSerialCode,
+		ticketType,
 	] = arr;
 
 	return {
@@ -205,6 +207,7 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		fareTicketExpireDate,
 		isPaymentIssuingTheSamePlace: !!isPaymentIssuingTheSamePlace,
 		doShowSerialCode: !!doShowSerialCode,
+		ticketType,
 	} as JRWideTicketDrawParameters;
 }
 
