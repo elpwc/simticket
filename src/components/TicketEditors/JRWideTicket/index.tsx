@@ -318,8 +318,15 @@ export default function JRWideTicket() {
 								>
 									新幹線区間あり→（幹）
 								</Toggle>
-								<Toggle value={true} onChange={(value) => {}} />
-								英文付き券面（仮）
+								<Toggle disabled value={false} onChange={(value) => {}}>
+									英文付き券面（仮）
+								</Toggle>
+								<Toggle disabled value={false} onChange={(value) => {}}>
+									改札利用不可マーク
+								</Toggle>
+								<Toggle disabled value={false} onChange={(value) => {}}>
+									こども料金
+								</Toggle>
 							</div>
 						</label>
 						<label className="ticket-form-label">
@@ -805,15 +812,15 @@ export default function JRWideTicket() {
 								<input value={drawParameters.price} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price: e.target.value }))} />
 								<label className="">
 									内訳＝値段1 ￥
-									<input disabled value={drawParameters.price1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price1: e.target.value }))} />
+									<input value={drawParameters.price1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price1: e.target.value }))} />
 								</label>
 								<label className="">
 									　　＋値段2 ￥
-									<input disabled value={drawParameters.price2} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price2: e.target.value }))} />
+									<input value={drawParameters.price2} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price2: e.target.value }))} />
 								</label>
 								<label className="">
 									　　＋値段3 ￥
-									<input disabled value={drawParameters.price3} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price3: e.target.value }))} />
+									<input value={drawParameters.price3} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price3: e.target.value }))} />
 								</label>
 							</div>
 						</label>

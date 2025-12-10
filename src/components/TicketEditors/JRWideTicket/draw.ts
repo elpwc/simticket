@@ -616,7 +616,24 @@ export const drawJRWideTicket = (
 				0,
 				1.25
 			);
+
+			if (printTypeInfo.typeset === JRTicketTypesettingtype.Express) {
+				ctx.font = resizedFont(5.5, 'DotFont');
+				drawText(
+					ctx,
+					`内訳：乗${drawParameters.price1}・特${drawParameters.price2}`,
+					offsetScaleX(left + 360 + JR120TicketOffsetX),
+					offsetScaleY(lineHeights[line]),
+					resizedScaleX(700),
+					TextAlign.Left,
+					DrawTextMethod.fillText,
+					2,
+					0,
+					0.7
+				);
+			}
 		};
+
 		// 信息1
 		const drawInfo = (line: number, left: number = lineLeft2) => {
 			ctx.font = resizedFont(5.5, 'DotFont');
