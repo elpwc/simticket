@@ -43,22 +43,25 @@ export const DevProgressModal = ({ show, onClose }: Props) => {
 						<ul>
 							<li className="text-green-700">・CR 計算機客票対応 ・・・◎完成</li>
 							<li className="text-blue-700">・JR MARS券対応 ・・・△開発中</li>
-							<li className="text-green-700">　・駅名編集器・レンダラー ・・・◎完成（2025-11-08）</li>
-							<li className="text-blue-700">　・きっぷ種タイトル ・・・△開発中</li>
-							<li className="">　・特急券、急行券、寝台券など対応 ・・・</li>
-							<li className="">　・入場券 ・・・</li>
-							<li className="">　・１２０ｍｍ券 ・・・</li>
+							<li className="text-green-700">　・駅名編集・レンダラー ・・・◎完成（2025-11-08）</li>
+							<li className="text-green-700">　・券種タイトル ・・・◎完成（2025-12-8）</li>
+							<li className="text-blue-700">　・特急券、急行券、寝台券など対応 ・・・△対応中</li>
+							<li className="text-blue-700">　・入場券 ・・・△対応中</li>
+							<li className="text-blue-700">　・１２０ｍｍ券 ・・・△対応中</li>
 							<li className="text-green-700">・多言語対応 ・・・◎完成（2025-11-05）</li>
 							<li className="text-green-700">・生成結果の共有ページ（他ユーザーが作成したチケットを閲覧できるギャラリー機能） ・・・◎完成（2025-11-28）</li>
+							<li className="text-blue-700">・JR近距離きっぷ ・・・△対応中</li>
 							<li className="">・JNR ・・・</li>
-							<li className="">・JR近距離きっぷ ・・・</li>
+							<li className="">・TR直票 ・・・</li>
+							<li className="">・THSRきっぷ ・・・</li>
+							<li className="">・CR计算机客票旧バージョン ・・・</li>
 							<li className="">・看板っこを描く ・・・（絶賛草稿中）</li>
 						</ul>
 						<br />
 
 						<p>開発に際してご協力・助言をくださったすべての方に心より感謝いたします。</p>
 						<br />
-						<div className="border my-1 p-2 pb-10 bg-white text-[14px]">
+						<div className="border my-4 p-8 pb-16 bg-white text-[14px] flex flex-col gap-2">
 							<p className="w-full text-center text-[18px]">免責事項</p>
 							<p>　SimTicket は開発者自身の鉄道趣味で制作した娯楽および学習目的のための簡易ツールです。</p>
 							<p>　本サイトは個人で楽しむ範囲の非営利仕様に限ってください。生成された画像やデータを商用利用や不正な目的での使用は固くお断りいたします。</p>
@@ -117,22 +120,25 @@ export const DevProgressModal = ({ show, onClose }: Props) => {
 							<li className="text-green-700">・CR 計算機客票対応 ・・・◎完成</li>
 							<li className="text-blue-700">・JR MARS券対応 ・・・△開発中</li>
 							<li className="text-green-700">　・駅名編集器・渲染 ・・・◎完成（2025-11-08）</li>
-							<li className="text-blue-700">　・券種标题 ・・・△開発中</li>
-							<li className="">　・特急券、急行券、寝台券等 ・・・</li>
-							<li className="">　・入場券 ・・・</li>
-							<li className="">　・１２０ｍｍ券 ・・・</li>
-							<li className="text-green-700">・多言語対応 ・・・◎完成（2025-11-05）</li>
+							<li className="text-green-700">　・券種标题 ・・・◎完成（2025-12-8）</li>
+							<li className="text-blue-700">　・特急券、急行券、寝台券等 ・・・△対応中</li>
+							<li className="text-blue-700">　・入場券 ・・・△対応中</li>
+							<li className="text-blue-700">　・１２０ｍｍ券 ・・・△対応中</li>
+							<li className="text-green-700">・多語言 ・・・◎完成（2025-11-05）</li>
 							<li className="text-green-700">・生成结果共享页，可以鉴赏其他人发布的自制车票 ・・・◎完成（2025-11-28）</li>
+							<li className="text-blue-700">・JR近距離きっぷ ・・・△対応中</li>
 							<li className="">・JNR ・・・</li>
-							<li className="">・JR近距離きっぷ ・・・</li>
-							<li className="">・看板娘 ・・・（絶賛草稿中）</li>
+							<li className="">・TR直票 ・・・</li>
+							<li className="">・THSR车票 ・・・</li>
+							<li className="">・CR计算机客票旧版 ・・・</li>
+							<li className="">・画看板娘 ・・・（絶賛草稿中）</li>
 						</ul>
 						<br />
 
 						<p>在此感谢在开發过程中所有对我提供过帮助的人。</p>
 						<br />
 
-						<div className="border my-1 p-2 pb-10 bg-white text-[14px]">
+						<div className="border my-4 p-8 pb-16 bg-white text-[14px] flex flex-col gap-2">
 							<p className="w-full text-center text-[18px]">免责声明</p>
 							<p>　SimTicket 是由开發者个人基于铁道兴趣制作的娱乐及学习用途的简易工具。</p>
 							<p>　本服务仅限个人非营利用途。严禁将生成的图片或数据用于任何商业目的或非法用途。</p>
@@ -163,6 +169,7 @@ export const DevProgressModal = ({ show, onClose }: Props) => {
 				<p className="text-right w-full">2025年 10月 23日 うに</p>
 				<p className="text-right w-full">（更新）2025年 11月 28日 うに</p>
 				<p className="text-right w-full">（更新）2025年 12月 02日 うに</p>
+				<p className="text-right w-full">（更新）2025年 12月 10日 うに</p>
 				<div className="text-[12px] text-[gray]">
 					<div>
 						Fonts made by<OuterLink link="http://www.webfontfree.com">Web Free Fonts</OuterLink>

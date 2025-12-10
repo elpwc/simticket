@@ -37,15 +37,18 @@ export default function About() {
 						<ul>
 							<li className="text-green-700">・CR 計算機客票対応 ・・・◎完成</li>
 							<li className="text-blue-700">・JR MARS券対応 ・・・△開発中</li>
-							<li className="text-green-700">　・駅名編集器・レンダラー ・・・◎完成（2025-11-08）</li>
-							<li className="text-blue-700">　・きっぷ種タイトル ・・・△開発中</li>
-							<li className="">　・特急券、急行券、寝台券など対応 ・・・</li>
-							<li className="">　・入場券 ・・・</li>
-							<li className="">　・１２０ｍｍ券 ・・・</li>
+							<li className="text-green-700">　・駅名編集・レンダラー ・・・◎完成（2025-11-08）</li>
+							<li className="text-green-700">　・券種タイトル ・・・◎完成（2025-12-8）</li>
+							<li className="text-blue-700">　・特急券、急行券、寝台券など対応 ・・・△対応中</li>
+							<li className="text-blue-700">　・入場券 ・・・△対応中</li>
+							<li className="text-blue-700">　・１２０ｍｍ券 ・・・△対応中</li>
 							<li className="text-green-700">・多言語対応 ・・・◎完成（2025-11-05）</li>
 							<li className="text-green-700">・生成結果の共有ページ（他ユーザーが作成したチケットを閲覧できるギャラリー機能） ・・・◎完成（2025-11-28）</li>
+							<li className="text-blue-700">・JR近距離きっぷ ・・・△対応中</li>
 							<li className="">・JNR ・・・</li>
-							<li className="">・JR近距離きっぷ ・・・</li>
+							<li className="">・TR直票 ・・・</li>
+							<li className="">・THSRきっぷ ・・・</li>
+							<li className="">・CR计算机客票旧バージョン ・・・</li>
 							<li className="">・看板っこを描く ・・・（絶賛草稿中）</li>
 						</ul>
 						<br />
@@ -111,15 +114,18 @@ export default function About() {
 							<li className="text-green-700">・CR 計算機客票対応 ・・・◎完成</li>
 							<li className="text-blue-700">・JR MARS券対応 ・・・△開発中</li>
 							<li className="text-green-700">　・駅名編集器・渲染 ・・・◎完成（2025-11-08）</li>
-							<li className="text-blue-700">　・券種标题 ・・・△開発中</li>
-							<li className="">　・特急券、急行券、寝台券等 ・・・</li>
-							<li className="">　・入場券 ・・・</li>
-							<li className="">　・１２０ｍｍ券 ・・・</li>
-							<li className="text-green-700">・多言語対応 ・・・◎完成（2025-11-05）</li>
+							<li className="text-green-700">　・券種标题 ・・・◎完成（2025-12-8）</li>
+							<li className="text-blue-700">　・特急券、急行券、寝台券等 ・・・△対応中</li>
+							<li className="text-blue-700">　・入場券 ・・・△対応中</li>
+							<li className="text-blue-700">　・１２０ｍｍ券 ・・・△対応中</li>
+							<li className="text-green-700">・多語言 ・・・◎完成（2025-11-05）</li>
 							<li className="text-green-700">・生成结果共享页，可以鉴赏其他人发布的自制车票 ・・・◎完成（2025-11-28）</li>
+							<li className="text-blue-700">・JR近距離きっぷ ・・・△対応中</li>
 							<li className="">・JNR ・・・</li>
-							<li className="">・JR近距離きっぷ ・・・</li>
-							<li className="">・看板娘 ・・・（絶賛草稿中）</li>
+							<li className="">・TR直票 ・・・</li>
+							<li className="">・THSR车票 ・・・</li>
+							<li className="">・CR计算机客票旧版 ・・・</li>
+							<li className="">・画看板娘 ・・・（絶賛草稿中）</li>
 						</ul>
 						<br />
 
@@ -157,6 +163,7 @@ export default function About() {
 				<p className="text-right w-full">2025年 10月 23日 うに</p>
 				<p className="text-right w-full">（更新）2025年 11月 28日 うに</p>
 				<p className="text-right w-full">（更新）2025年 12月 02日 うに</p>
+				<p className="text-right w-full">（更新）2025年 12月 10日 うに</p>
 				<div className="text-[12px] text-[gray]">
 					<div>
 						Fonts made by<OuterLink link="http://www.webfontfree.com">Web Free Fonts</OuterLink>
