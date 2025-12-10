@@ -842,7 +842,7 @@ export const drawJRWideTicket = (
 		switch (printTypeInfo.typeset) {
 			case JRTicketTypesettingtype.Fare:
 				drawRailways();
-				drawPrice(1, 967);
+				drawPrice(1, 1080);
 				drawInfo(2);
 				drawFareTicketAvailableDate(1);
 				drawFareTicketBelow();
@@ -858,7 +858,7 @@ export const drawJRWideTicket = (
 
 			default:
 				drawRailways();
-				drawPrice(1, 967);
+				drawPrice(1, 1080);
 				drawInfo(2);
 				drawFareTicketAvailableDate(1);
 				drawFareTicketBelow();
