@@ -1,4 +1,4 @@
-import { drawQRCode, drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
+import { drawQRCode, drawText, DrawTextMethod, fontsLoader, TextAlign } from '@/utils/utils';
 import { CRTicketBackGround, CRWideTicketDrawParameters, RightUpContentType } from './type';
 import { CRTicketFlipSideText, CRWideTicketDrawParametersInitialValues, MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from './value';
 import cr_red from '../../../assets/tickets/cr_red.png';
@@ -6,6 +6,26 @@ import cr_blue from '../../../assets/tickets/cr_blue.png';
 import cr_mag_blue from '../../../assets/tickets/cr_mag_blue.png';
 import cr_mag_red from '../../../assets/tickets/cr_mag_red.png';
 import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTemplate';
+import localFonts from 'next/font/local';
+
+export const HuawenXinwei = localFonts({
+	src: '../../../assets/fonts/STXINWEI.woff2',
+});
+export const SongTi = localFonts({
+	src: '../../../assets/fonts/LXGWNeoZhiSong.woff2',
+});
+export const SongTiEn = localFonts({
+	src: '../../../assets/fonts/NimbusRomNo9L-Regu.woff2',
+});
+export const HeiTi = localFonts({
+	src: '../../../assets/fonts/simhei.woff2',
+});
+export const TicketNoFont = localFonts({
+	src: '../../../assets/fonts/cr_ticketNo.woff2',
+});
+export const TrainCodeFont = localFonts({
+	src: '../../../assets/fonts/traincode.woff2',
+});
 
 export const drawCRWideTicket = (
 	canvas: HTMLCanvasElement | null,
@@ -23,9 +43,31 @@ export const drawCRWideTicket = (
 	isFlip?: boolean,
 	onDone?: () => void,
 	onBgImageLoadStart?: () => void,
-	onBgImageLoaded?: () => void
+	onBgImageLoaded?: () => void,
+	onFontLoadStart?: () => void,
+	onFontLoaded?: () => void
 ) => {
 	if (!ctx || !canvas) return;
+
+	fontsLoader(
+		[
+			{ name: 'HuawenXinwei', file: '../../../assets/fonts/STXINWEI.woff2' },
+			{ name: 'SongTi', file: '../../../assets/fonts/LXGWNeoZhiSong.woff2' },
+			{ name: 'SongTiEn', file: '../../../assets/fonts/NimbusRomNo9L-Regu.woff2' },
+			{ name: 'HeiTi', file: '../../../assets/fonts/simhei.woff2' },
+			{ name: 'TicketNoFont', file: '../../../assets/fonts/cr_ticketNo.woff2' },
+			{ name: 'TrainCodeFont', file: '../../../assets/fonts/traincode.woff2' },
+		],
+		() => {
+			onFontLoadStart?.();
+		},
+		() => {
+			onFontLoaded?.();
+		},
+		() => {
+			onFontLoaded?.();
+		}
+	);
 
 	const drawParameters: CRWideTicketDrawParameters = {
 		...CRWideTicketDrawParametersInitialValues,

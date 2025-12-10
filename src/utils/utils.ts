@@ -427,7 +427,7 @@ export const drawTextNew = (
 };
 
 /**
- * 簡単にフォントリストをロード  unused
+ * 簡単にフォントリストをロード
  * @param fontList
  * @param onLoadStart
  * @param onLoadEnd
