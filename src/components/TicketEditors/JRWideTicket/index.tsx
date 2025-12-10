@@ -660,7 +660,7 @@ export default function JRWideTicket() {
 							</div>
 						</label>
 						<label className="ticket-form-label">
-							特急券有効期間
+							特急券有効期間（仮）
 							<div className="flex flex-wrap">
 								<input
 									type="date"
@@ -691,7 +691,6 @@ export default function JRWideTicket() {
 							乗車券有効期間（仮）
 							<div className="flex flex-wrap">
 								<input
-									disabled
 									type="date"
 									value={drawParameters.date}
 									onChange={(e) => {
@@ -704,7 +703,6 @@ export default function JRWideTicket() {
 								/>
 								～
 								<input
-									disabled
 									type="date"
 									value={drawParameters.fareTicketExpireDate}
 									onChange={(e) => {
