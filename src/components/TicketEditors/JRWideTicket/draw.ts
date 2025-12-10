@@ -575,6 +575,47 @@ export const drawJRWideTicket = (
 		ctx.font = resizedFont(5.5, 'DotFont');
 		drawText(ctx, `${drawParameters.info1}`, offsetScaleX(lineLeft2), offsetScaleY(lineHeights[2]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 
+		// discount
+		if (drawParameters.discount !== '') {
+			if (drawParameters.discount.includes('/')) {
+				const discountTexts = drawParameters.discount.split('/');
+				if (discountTexts.length === 2) {
+					// 2
+					ctx.font = `${resizedFont(6, 'DotFont')}`;
+					drawText(ctx, discountTexts[0], offsetScaleX(1050), offsetScaleY(744), resizedScaleX(275), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.9);
+
+					ctx.font = `${resizedFont(6, 'DotFont')}`;
+					drawText(ctx, discountTexts[1], offsetScaleX(1050), offsetScaleY(797), resizedScaleX(275), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.9);
+
+					ctx.strokeStyle = 'black';
+					ctx.lineWidth = resizedScaleX(6);
+					ctx.strokeRect(offsetScaleX(1047), offsetScaleY(690), resizedScaleX(280), resizedScaleY(120));
+				} else {
+					// 3
+					ctx.fillStyle = 'black';
+					ctx.font = `${resizedFont(6, 'DotFont')}`;
+					drawText(ctx, discountTexts[0], offsetScaleX(1050), offsetScaleY(735), resizedScaleX(140), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1);
+
+					ctx.font = `${resizedFont(6, 'DotFont')}`;
+					drawText(ctx, discountTexts[1], offsetScaleX(1050), offsetScaleY(795), resizedScaleX(280), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1);
+
+					ctx.font = `${resizedFont(5, 'DotFont')}`;
+					drawText(ctx, discountTexts[2], offsetScaleX(1211), offsetScaleY(731), resizedScaleX(100), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.9);
+					ctx.strokeStyle = 'black';
+					ctx.lineWidth = resizedScaleX(4);
+					ctx.strokeRect(offsetScaleX(1210), offsetScaleY(687), resizedScaleX(105), resizedScaleY(52));
+				}
+			} else {
+				// 1
+				ctx.fillStyle = 'black';
+				ctx.font = `${resizedFont(12, 'DotFont')}`;
+				drawText(ctx, drawParameters.discount, offsetScaleX(1050), offsetScaleY(790), resizedScaleX(275), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.85);
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = resizedScaleX(6);
+				ctx.strokeRect(offsetScaleX(1047), offsetScaleY(690), resizedScaleX(280), resizedScaleY(120));
+			}
+		}
+
 		// 最下部
 		const drawFareTicketBelow = () => {
 			ctx.font = resizedFont(5.5, 'DotFont');

@@ -819,16 +819,24 @@ export default function JRWideTicket() {
 						<Divider />
 						<label className="ticket-form-label">
 							割引
-							<PrettyInputRadioGroup
-								value={drawParameters.discount}
-								onChange={(e) => setDrawParameters((prev) => ({ ...prev, discount: e }))}
-								list={JR_discount_list.map((discount) => {
-									return {
-										title: <JRDiscountNameText name={discount.value} />,
-										value: discount.value,
-									};
-								})}
-							/>
+							<div>
+								<PrettyInputRadioGroup
+									value={drawParameters.discount}
+									onChange={(e) => setDrawParameters((prev) => ({ ...prev, discount: e }))}
+									list={JR_discount_list.map((discount) => {
+										return {
+											title: <JRDiscountNameText name={discount.value} />,
+											value: discount.value,
+										};
+									})}
+								/>
+								<p>※カスタマイズ説明：</p>
+								<p className="flex flex-wrap">
+									「鉄印帳/を携帯して下さい/乗り鉄割」と入力して→
+									<JRDiscountNameText name="鉄印帳/を携帯して下さい/乗り鉄割" />
+									のような割引様式になるよ
+								</p>
+							</div>
 						</label>
 
 						<Divider />

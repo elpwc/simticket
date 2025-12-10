@@ -430,7 +430,7 @@ export const JR_discount_list = [
 	{ title: 'ジパング倶楽部3割引', value: '会員証/-手巾長の携帯必要/ジ３割', desc: '' },
 	{ title: '鉄社割', value: '鉄社割', desc: '' },
 	{ title: '職務乗車用', value: '社用', desc: '' },
-	{ title: '国会議員', value: '乗車症/を携帯して下さい/国会', desc: '' },
+	{ title: '国会議員', value: '乗車証/を携帯して下さい/国会', desc: '' },
 	{ title: '通学用割引普通回数乗車券(放送大学)', value: '放送大学', desc: '' },
 	{ title: '戦傷病者後払', value: '戦後', desc: '' },
 ];

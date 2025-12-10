@@ -9,7 +9,7 @@ interface Props {
 
 export const JRDiscountNameText = ({ className, style, name }: Props) => {
 	let type = 1; // 1 普通，2 上下段，3 上 四角 下
-	let stationName1 = name === '' ? '割引無し' : name,
+	let stationName1 = name,
 		stationName2 = '',
 		stationName3 = '';
 	if (name.includes('/')) {
@@ -31,7 +31,7 @@ export const JRDiscountNameText = ({ className, style, name }: Props) => {
 	return (
 		<div className={clsx(className)} style={{ ...style, fontFamily: 'DotFont', fontWeight: 'bold' }}>
 			{type === 1 ? (
-				<span className={'text-[16px] border-2 p-[2px]'}>{stationName1}</span>
+				<span className={clsx('text-[16px] p-[2px]', stationName1 === '' ? 'border-0' : 'border-2')}>{stationName1 === '' ? '割引無し' : stationName1}</span>
 			) : (
 				<div className={clsx('flex flex-col p-[2px]', type === 2 ? 'border-2' : '')}>
 					{type === 2 ? (
