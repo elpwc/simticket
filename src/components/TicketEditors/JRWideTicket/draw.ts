@@ -666,7 +666,7 @@ export const drawJRWideTicket = (
 
 		// 最下部
 		const drawFareTicketBelow = () => {
-			ctx.font = resizedFont(5.5, 'DotFont');
+			ctx.font = resizedFont(5.5, 'DotFont', true);
 			drawText(
 				ctx,
 				`${new Date(drawParameters.paymentDate).getFullYear().toString()}.${(new Date(drawParameters.paymentDate).getMonth() + 1).toString().padStart(2, '-')}.${new Date(
@@ -686,6 +686,7 @@ export const drawJRWideTicket = (
 				1,
 				false
 			);
+			ctx.font = resizedFont(5.5, 'DotFont');
 			drawText(ctx, drawParameters.paymentPlace + '発行', offsetScaleX(525), offsetScaleY(lineHeights[5]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 			drawText(ctx, drawParameters.paymentNo, offsetScaleX(lineLeft), offsetScaleY(lineHeights[6]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 1.4, 0, 1.4, 1, false);
 			drawText(
@@ -706,6 +707,7 @@ export const drawJRWideTicket = (
 				if (drawParameters.paymentPlace.includes('えきねっと')) {
 					drawText(ctx, `えきねっと発券`, offsetScaleX(lineLeft), offsetScaleY(lineHeights[7]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 				}
+				ctx.font = resizedFont(5.5, 'DotFont', true);
 				drawText(
 					ctx,
 					`${new Date(drawParameters.issuingDate).getFullYear().toString()}.${(new Date(drawParameters.issuingDate).getMonth() + 1).toString().padStart(2, '-')}.${new Date(
@@ -726,8 +728,10 @@ export const drawJRWideTicket = (
 					false
 				);
 
+				ctx.font = resizedFont(5.5, 'DotFont');
 				drawText(ctx, `${drawParameters.issuingPlace}`, offsetScaleX(720), offsetScaleY(lineHeights[7]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 
+				ctx.font = resizedFont(5.5, 'DotFont', true);
 				drawText(ctx, drawParameters.issuingNo, offsetScaleX(1130), offsetScaleY(lineHeights[7]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 0.8, 1, false);
 			}
 		};
@@ -785,6 +789,11 @@ export const drawJRWideTicket = (
 			// C code
 			ctx.font = resizedFont(6.2, 'DotFont');
 			drawText(ctx, `C${drawParameters.CCode}`, offsetScaleX(left + 1100), offsetScaleY(lineHeights[line] + 3), resizedScaleX(225), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 1.25);
+		};
+
+		const drawNonReservedInfo = () => {
+			ctx.font = resizedFont(5.5, 'DotFont');
+			drawText(ctx, `途中出場できません。`, offsetScaleX(850), offsetScaleY(lineHeights[1]), resizedScaleX(600), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 		};
 
 		const drawExpressTrainNameSeatInfo = (line: number, left: number = lineLeft) => {
@@ -867,6 +876,7 @@ export const drawJRWideTicket = (
 				drawPrice(1, 1080);
 				drawInfo(2);
 				drawFareTicketAvailableDate(1);
+
 				drawFareTicketBelow();
 				break;
 			case JRTicketTypesettingtype.Express:
@@ -874,8 +884,16 @@ export const drawJRWideTicket = (
 				drawInfo(3);
 				drawExpressDateTime(0);
 				drawExpressTrainNameSeatInfo(1);
+
 				drawFareTicketBelow();
 
+				break;
+			case JRTicketTypesettingtype.NonReserved:
+				drawPrice(2);
+				drawFareTicketAvailableDate(1);
+				drawNonReservedInfo();
+
+				drawFareTicketBelow();
 				break;
 
 			default:
