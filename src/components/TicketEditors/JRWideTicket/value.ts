@@ -297,7 +297,7 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	expressExpireDate: new Date().toISOString().slice(0, 10),
 	fareTicketExpireDate: new Date().toISOString().slice(0, 10),
 	isPaymentIssuingTheSamePlace: true,
-	doShowSerialCode: false
+	doShowSerialCode: false,
 };
 
 export const TokuteiTokuShinai = [
@@ -429,9 +429,17 @@ export const JR_discount_list = [
 	{ title: '被救護者割引本人', value: '救割', desc: '' },
 	{ title: '被救護者割引付添人', value: '添割', desc: '' },
 	{ title: 'ジパング倶楽部3割引', value: '会員証/-手巾長の携帯必要/ジ３割', desc: '' },
+	{ title: '大人の休日倶楽部0.5割', value: '大休０５', desc: '' },
+	{ title: '大人の休日倶楽部3割', value: '大休３０', desc: '' },
+	{ title: '株主優待割引', value: '東-優2割52', desc: '' },
+	{ title: '株主優待割引', value: '海 優2割76', desc: '' },
+	{ title: '株主優待割引', value: '西 優2割53', desc: '' },
 	{ title: '鉄社割', value: '鉄社割', desc: '' },
 	{ title: '職務乗車用', value: '社用', desc: '' },
 	{ title: '国会議員', value: '乗車証/を携帯して下さい/国会', desc: '' },
-	{ title: '通学用割引普通回数乗車券(放送大学)', value: '放送大学', desc: '' },
+	{ title: '通学用割引普通回数乗車券(放送大学)', value: '放送大', desc: '' },
 	{ title: '戦傷病者後払', value: '戦後', desc: '' },
+	{ title: '勤労青少年割引', value: '勤割', desc: '' },
+	{ title: '自衛隊後払', value: '後衛', desc: '' },
+	{ title: '在日米軍後払', value: '後免', desc: '' },
 ];

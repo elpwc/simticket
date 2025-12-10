@@ -826,11 +826,13 @@ export default function JRWideTicket() {
 									onChange={(e) => setDrawParameters((prev) => ({ ...prev, discount: e }))}
 									list={JR_discount_list.map((discount) => {
 										return {
-											title: <JRDiscountNameText name={discount.value} />,
+											title: <JRDiscountNameText name={discount.value} desc={discount.title} />,
 											value: discount.value,
 										};
 									})}
+									itemStyle={{ padding: '3px 0' }}
 								/>
+								{/* <button>他の割引</button> */}
 								<p>※カスタマイズ説明：</p>
 								<p className="flex flex-wrap">
 									「鉄印帳/を携帯して下さい/乗り鉄割」と入力して→

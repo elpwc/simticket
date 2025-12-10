@@ -5,9 +5,10 @@ interface Props {
 	className?: string;
 	style?: CSSProperties;
 	name: string;
+	desc?: string;
 }
 
-export const JRDiscountNameText = ({ className, style, name }: Props) => {
+export const JRDiscountNameText = ({ className, style, name, desc = '' }: Props) => {
 	let type = 1; // 1 普通，2 上下段，3 上 四角 下
 	let stationName1 = name,
 		stationName2 = '',
@@ -29,7 +30,7 @@ export const JRDiscountNameText = ({ className, style, name }: Props) => {
 	}
 
 	return (
-		<div className={clsx(className)} style={{ ...style, fontFamily: 'DotFont', fontWeight: 'bold' }}>
+		<div title={desc} className={clsx(className)} style={{ ...style, fontFamily: 'DotFont', fontWeight: 'bold' }}>
 			{type === 1 ? (
 				<span className={clsx('text-[16px] p-[2px]', stationName1 === '' ? 'border-0' : 'border-2')}>{stationName1 === '' ? '割引無し' : stationName1}</span>
 			) : (
