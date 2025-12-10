@@ -248,7 +248,7 @@ export default function JRWideTicket() {
 						</label>
 						<label className="ticket-form-label">
 							<div>
-								ウォーターマーク
+								透かし
 								<Toggle
 									value={drawParameters.showWatermark}
 									onChange={(value) => {

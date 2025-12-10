@@ -102,7 +102,7 @@
         "title": "券面",
         "paper": "券面用紙",
         "offset": "印刷ズレ",
-        "watermark": "ウォーターマーク"
+        "watermark": "透かし"
       },
       "stationInfo": {
         "arrival": "到着",
