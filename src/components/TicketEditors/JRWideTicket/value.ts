@@ -298,6 +298,9 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	fareTicketExpireDate: new Date().toISOString().slice(0, 10),
 	isPaymentIssuingTheSamePlace: true,
 	doShowSerialCode: false,
+	isChild: false,
+	hasCannotPassAutoPasiAreaMark: false,
+	hasJouhenMark: false,
 };
 
 export const TokuteiTokuShinai = [

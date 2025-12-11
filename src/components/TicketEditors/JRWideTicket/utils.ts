@@ -66,6 +66,9 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 		+p.doShowSerialCode,
 		p.ticketType,
 		p.trainName,
+		+p.isChild,
+		+p.hasCannotPassAutoPasiAreaMark,
+		+p.hasJouhenMark,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -145,6 +148,9 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		doShowSerialCode,
 		ticketType,
 		trainName,
+		isChild,
+		hasCannotPassAutoPasiAreaMark,
+		hasJouhenMark,
 	] = arr;
 
 	return {
@@ -209,6 +215,9 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		doShowSerialCode: !!doShowSerialCode,
 		ticketType,
 		trainName,
+		isChild: !!isChild,
+		hasCannotPassAutoPasiAreaMark: !!hasCannotPassAutoPasiAreaMark,
+		hasJouhenMark: !!hasJouhenMark,
 	} as JRWideTicketDrawParameters;
 }
 

@@ -161,6 +161,13 @@ export const drawJRWideTicket = (
 	const draw = () => {
 		// 清空
 		ctx.clearRect(0, 0, w, h);
+
+		const lineHeight = 74;
+		const lineLeft = 113;
+		/** 空一格 */
+		const lineLeft2 = 155;
+		const lineHeights = [0, 1, 2, 3, 4, 5, 6, 7].map((value) => value * lineHeight + 458);
+
 		const printTypeInfo = getJRPrintingTicketTitleByTicketType(drawParameters.ticketType);
 		// 底图
 		switch (drawParameters.background) {
@@ -300,6 +307,69 @@ export const drawJRWideTicket = (
 				break;
 		}
 
+		// 小
+		if (drawParameters.isChild) {
+			const tmpCanvas = document.createElement('canvas');
+			const tmpCtx = tmpCanvas.getContext('2d');
+			if (tmpCtx) {
+				tmpCtx.fillStyle = 'black';
+				tmpCtx.fillRect(0, 0, resizedScaleX(130), resizedScaleY(140));
+				tmpCtx.globalCompositeOperation = 'destination-out';
+				//ctx.fillStyle = 'white';
+				tmpCtx.font = resizedFont(12, 'DotFont', true);
+				drawText(tmpCtx, '小', resizedScaleX(3), resizedScaleY(120), resizedScaleX(130));
+				tmpCtx.globalCompositeOperation = 'source-over';
+			}
+			ctx.drawImage(tmpCanvas, offsetScaleX(1036), offsetScaleY(106));
+		}
+
+		// 自動改札通過不可マーク
+		if (drawParameters.hasCannotPassAutoPasiAreaMark) {
+			ctx.beginPath();
+			ctx.strokeStyle = 'black';
+			ctx.lineWidth = resizedScaleY(3);
+			// o
+			ctx.moveTo(offsetScaleX(1090), offsetScaleY(lineHeights[6] - 50));
+			ctx.lineTo(offsetScaleX(1100), offsetScaleY(lineHeights[6] - 46));
+			ctx.lineTo(offsetScaleX(1105), offsetScaleY(lineHeights[6] - 40));
+			ctx.lineTo(offsetScaleX(1105), offsetScaleY(lineHeights[6] - 5));
+			ctx.lineTo(offsetScaleX(1100), offsetScaleY(lineHeights[6] + 1));
+			ctx.lineTo(offsetScaleX(1090), offsetScaleY(lineHeights[6] + 5));
+			ctx.lineTo(offsetScaleX(1080), offsetScaleY(lineHeights[6] + 1));
+			ctx.lineTo(offsetScaleX(1075), offsetScaleY(lineHeights[6] - 5));
+			ctx.lineTo(offsetScaleX(1075), offsetScaleY(lineHeights[6] - 40));
+			ctx.lineTo(offsetScaleX(1080), offsetScaleY(lineHeights[6] - 46));
+			ctx.lineTo(offsetScaleX(1090), offsetScaleY(lineHeights[6] - 50));
+			// x
+			ctx.moveTo(offsetScaleX(1080), offsetScaleY(lineHeights[6] - 40));
+			ctx.lineTo(offsetScaleX(1100), offsetScaleY(lineHeights[6] - 3));
+			ctx.moveTo(offsetScaleX(1100), offsetScaleY(lineHeights[6] - 40));
+			ctx.lineTo(offsetScaleX(1080), offsetScaleY(lineHeights[6] - 3));
+
+			ctx.stroke();
+		}
+
+		//乘变
+		ctx.fillStyle = 'black';
+		ctx.font = `${resizedFont(printTypeInfo.typeset === JRTicketTypesettingtype.Fare || printTypeInfo.typeset === JRTicketTypesettingtype.Fare120 ? 9 : 6, 'DotFont')}`;
+		if (drawParameters.hasJouhenMark) {
+			if (printTypeInfo.typeset === JRTicketTypesettingtype.Fare || printTypeInfo.typeset === JRTicketTypesettingtype.Fare120) {
+				// large
+				drawText(ctx, '乗変', offsetScaleX(1200), offsetScaleY(220), resizedScaleX(183), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 1);
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = resizedScaleX(5);
+				ctx.strokeRect(offsetScaleX(1200), offsetScaleY(139), resizedScaleX(183), resizedScaleY(91));
+				ctx.setLineDash([]);
+			} else {
+				//tiny
+				drawText(ctx, '乗変', offsetScaleX(1230), offsetScaleY(157), resizedScaleX(110), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.9, false);
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = resizedScaleX(5);
+				ctx.strokeRect(offsetScaleX(1230), offsetScaleY(105), resizedScaleX(120), resizedScaleY(62));
+				ctx.setLineDash([]);
+			}
+		}
+
 		//////////////////////////////////////////////////// STATION ////////////////////////////////////////////////////////////////////
 
 		// station
@@ -313,7 +383,7 @@ export const drawJRWideTicket = (
 				  [[3], [1, 4], [0, 2, 4], [1, 2, 3, 4], [1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5]];
 			const Y = y;
 
-			// 近郊区间
+			// 特定区间
 			if (stationAreaChar.length > 0) {
 				const tmpCanvas = document.createElement('canvas');
 				const tmpCtx = tmpCanvas.getContext('2d');
@@ -526,11 +596,6 @@ export const drawJRWideTicket = (
 		}
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		const lineHeight = 74;
-		const lineLeft = 113;
-		/** 空一格 */
-		const lineLeft2 = 155;
-		const lineHeights = [0, 1, 2, 3, 4, 5, 6, 7].map((value) => value * lineHeight + 458);
 
 		// 経由
 		const drawRailways = () => {

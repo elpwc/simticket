@@ -321,11 +321,35 @@ export default function JRWideTicket() {
 								<Toggle disabled value={false} onChange={(value) => {}}>
 									英文付き券面（仮）
 								</Toggle>
-								<Toggle disabled value={false} onChange={(value) => {}}>
+								<Toggle
+									value={drawParameters.hasCannotPassAutoPasiAreaMark}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, hasCannotPassAutoPasiAreaMark: value }));
+									}}
+								>
 									改札利用不可マーク
 								</Toggle>
-								<Toggle disabled value={false} onChange={(value) => {}}>
+								<Toggle
+									value={drawParameters.isChild}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, isChild: value }));
+									}}
+								>
+									<span className="text-[white] bg-black px-1" style={{ fontFamily: 'DotFont', fontWeight: 'bold' }}>
+										小
+									</span>
 									こども料金
+								</Toggle>
+								<Toggle
+									value={drawParameters.hasJouhenMark}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, hasJouhenMark: value }));
+									}}
+								>
+									<span className="text-[black] border-2 text-[14px] bg-white px-[2px]" style={{ fontFamily: 'DotFont', fontWeight: 'bold' }}>
+										乗変
+									</span>
+									マーク
 								</Toggle>
 							</div>
 						</label>
