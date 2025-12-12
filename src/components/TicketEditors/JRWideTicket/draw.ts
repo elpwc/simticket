@@ -602,12 +602,12 @@ export const drawJRWideTicket = (
 
 		// 日期时间
 		const drawFareTicketAvailableDate = (line: number, left: number = lineLeft2) => {
-			ctx.font = resizedFont(5.5, 'DotFont');
 			if (
 				new Date(drawParameters.date).getMonth() === new Date(drawParameters.fareTicketExpireDate).getMonth() &&
 				new Date(drawParameters.date).getDate() === new Date(drawParameters.fareTicketExpireDate).getDate()
 			) {
 				// 当日
+				ctx.font = resizedFont(5.5, 'DotFont');
 				drawText(ctx, `月   日当日限り有効`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 				ctx.font = resizedFont(7, 'DotFont');
 				drawText(
@@ -626,17 +626,32 @@ export const drawJRWideTicket = (
 				);
 			} else {
 				// 後日
-				drawText(ctx, `月   日から    月   日まで有効`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
-
+				drawText(ctx, `月　　日から`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
 				ctx.font = resizedFont(7, 'DotFont');
 				drawText(
 					ctx,
-					`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}    ${(
-						new Date(drawParameters.fareTicketExpireDate).getMonth() + 1
-					)
-						.toString()
-						.padStart(2, ' ')} ${new Date(drawParameters.fareTicketExpireDate).getDate().toString().padStart(2, ' ')}`,
+					`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
 					offsetScaleX(left - 40),
+					offsetScaleY(lineHeights[line] + 3),
+					resizedScaleX(1000),
+					TextAlign.Left,
+					DrawTextMethod.fillText,
+					0,
+					0,
+					1.25,
+					1,
+					false
+				);
+				ctx.font = resizedFont(5.5, 'DotFont');
+				drawText(ctx, `月　　日まで有効`, offsetScaleX(left + 390), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+				ctx.font = resizedFont(7, 'DotFont');
+				drawText(
+					ctx,
+					`${(new Date(drawParameters.fareTicketExpireDate).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.fareTicketExpireDate)
+						.getDate()
+						.toString()
+						.padStart(2, ' ')}`,
+					offsetScaleX(left + 300),
 					offsetScaleY(lineHeights[line] + 3),
 					resizedScaleX(1000),
 					TextAlign.Left,
@@ -651,21 +666,28 @@ export const drawJRWideTicket = (
 		};
 
 		// 价格
-		const drawPrice = (line: number, left: number = lineLeft) => {
+		const drawPrice = (line: number, left: number = lineLeft, alignRight: boolean = false) => {
 			ctx.font = resizedFont(5.5, 'DotFont');
-			ctx.fillText(`￥`, offsetScaleX(left + JR120TicketOffsetX), offsetScaleY(lineHeights[line]), resizedScaleX(100));
+			ctx.fillText(
+				`￥`,
+				offsetScaleX(left + JR120TicketOffsetX + (alignRight ? (6 - (drawParameters.price.length >= 6 ? 6 : drawParameters.price.length)) * 45 + 30 : 0)),
+				offsetScaleY(lineHeights[line]),
+				resizedScaleX(100)
+			);
 			ctx.font = resizedFont(7, 'DotFont');
 			drawText(
 				ctx,
 				`${drawParameters.price}`,
-				offsetScaleX(left + 63 + JR120TicketOffsetX),
+				offsetScaleX(left + 63 + JR120TicketOffsetX + (alignRight ? 30 : 0)),
 				offsetScaleY(lineHeights[line]),
-				resizedScaleX(300),
-				TextAlign.Left,
+				resizedScaleX(300 + (alignRight ? -30 : 0)),
+				alignRight ? TextAlign.Right : TextAlign.Left,
 				DrawTextMethod.fillText,
 				0,
 				0,
-				1.25
+				1.25,
+				1,
+				false
 			);
 
 			if (printTypeInfo.typeset === JRTicketTypesettingtype.Express) {
@@ -941,7 +963,7 @@ export const drawJRWideTicket = (
 		switch (printTypeInfo.typeset) {
 			case JRTicketTypesettingtype.Fare:
 				drawRailways();
-				drawPrice(1, 1080);
+				drawPrice(1, 1030, true);
 				drawInfo(2);
 				drawFareTicketAvailableDate(1);
 
