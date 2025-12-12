@@ -14,6 +14,7 @@ interface Props {
 	companyId: number;
 	ticketTypeId: number;
 	ticketData?: any;
+	borderRadius?: string;
 	showLoadingStatus?: boolean;
 	isFlip?: boolean;
 	useTilt?: boolean;
@@ -28,6 +29,7 @@ export const TicketViewer = ({
 	companyId,
 	ticketTypeId,
 	ticketData = {},
+	borderRadius,
 	showLoadingStatus = true,
 	isFlip = false,
 	useTilt = false,
