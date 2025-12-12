@@ -119,10 +119,8 @@ export default ({
 	return (
 		<div className={clsx(isMobile ? 'flex-col' : 'flex-row', 'w-[100%] flex items-start justify-start')}>
 			<div
-				className={clsx(
-					isMobile ? 'w-[100%] border-b border-solid border-gray-300' : 'w-[40%]',
-					'flex flex-col items-center h-[100%] sticky top-[56px] z-[50] bg-[#ffffff9e] backdrop-blur-[8px] '
-				)}
+				className={clsx(isMobile ? 'w-[100%] border-b border-solid border-gray-300' : 'w-[40%]', 'flex flex-col items-center h-[100%] sticky z-[50] bg-[#ffffff9e] backdrop-blur-[8px] ')}
+				style={{ top: isMobile ? '46px' : '56px' }}
 			>
 				<div className="flex justify-center items-center flex-wrap">
 					<div className="ticketEditorTemplateToolBarItem flex items-center">
@@ -223,7 +221,7 @@ export default ({
 					ref={canvasRef}
 					width={canvasWidth * currentSizeScale}
 					height={canvasHeight * currentSizeScale}
-					className={`m-10 ${canvasShowShandow ? 'shadow-[0_0_16px_0px_#d1d1d1]' : ''}`}
+					className={`${isMobile ? 'mt-1 mb-0' : 'm-10'} ${canvasShowShandow ? 'shadow-[0_0_16px_0px_#d1d1d1]' : ''}`}
 					borderRadius={`${canvasBorderRadius}px`}
 					onWheel={(isZoomIn: boolean) => {
 						if (isZoomIn) {

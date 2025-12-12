@@ -54,7 +54,7 @@ export default function App({
 			}}
 		>
 			<HintProvider>
-				<header className="sticky top-0 h-[50px] z-[100]">
+				<header className="sticky top-0 z-[100]" style={{ height: isMobile ? '46px' : '50px' }}>
 					<nav className="bg-[#007fd4] text-white flex items-center justify-between">
 						<section className="px-2 py-1 flex gap-1 max-h-[56px] items-center">
 							<Link href="/">
