@@ -48,7 +48,7 @@ export default function Works() {
 	const [urlParamTicketInfo, setUrlParamTicketInfo] = useState<UploadedTicketInfo | null>(null);
 	const [showCopyLinkModal, setShowCopyLinkModal] = useState<boolean>(false);
 
-	const pageSize = 10;
+	const pageSize = 15;
 
 	const load = useCallback(async () => {
 		if (typeof window !== 'undefined') {
@@ -232,18 +232,18 @@ export default function Works() {
 				</div>
 
 				<div className="flex flex-wrap gap-2">
-					<div className="flex flex-row w-full md:w-auto items-center gap-1">
+					<div className="flex flex-row w-full md:w-[150px] items-center gap-1">
 						<p className="break-keep">{t('worksPage.filter.search.from')}</p>
-						<input value={startStation} onChange={(e) => setStartStation(e.target.value)} className="menu-input w-full" placeholder="from" />
+						<input value={startStation} onChange={(e) => setStartStation(e.target.value)} className="menu-input" style={{ borderColor: '#ccc' }} placeholder="from" />
 					</div>
 
-					<div className="flex flex-row w-full md:w-auto items-center gap-1">
+					<div className="flex flex-row w-full md:w-[150px] items-center gap-1">
 						<p className="break-keep">{t('worksPage.filter.search.to')}</p>
-						<input value={endStation} onChange={(e) => setEndStation(e.target.value)} className="menu-input" placeholder="to" />
+						<input value={endStation} onChange={(e) => setEndStation(e.target.value)} className="menu-input" style={{ borderColor: '#ccc' }} placeholder="to" />
 					</div>
-					<div className="flex flex-row w-full md:w-auto items-center gap-1">
+					<div className="flex flex-row w-full md:w-[150px] items-center gap-1">
 						<p className="break-keep">{t('worksPage.filter.search.searchText')}</p>
-						<input value={anyText} onChange={(e) => setAnyText(e.target.value)} className="menu-input" placeholder="any text" />
+						<input value={anyText} onChange={(e) => setAnyText(e.target.value)} className="menu-input" style={{ borderColor: '#ccc' }} placeholder="any text" />
 					</div>
 					<button onClick={load} className="primary px-4">
 						{t('worksPage.filter.search.search')}
