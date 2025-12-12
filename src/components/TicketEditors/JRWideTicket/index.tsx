@@ -820,6 +820,7 @@ export default function JRWideTicket() {
 						<label className="ticket-form-label">
 							購入手段（仮）
 							<PrettyInputRadioGroup
+								doNotShowInputBox
 								value={drawParameters.paymentMethod.toString()}
 								onChange={(e) => setDrawParameters((prev) => ({ ...prev, paymentMethod: Number(e) as JRPaymentMethod }))}
 								list={JRPAYMENT_METHOD_LIST.map((JRPAYMENTHOD) => {

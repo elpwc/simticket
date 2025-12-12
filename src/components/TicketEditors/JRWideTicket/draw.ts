@@ -2,6 +2,7 @@ import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTe
 import { JRTicketBackGround } from './JRWideTicketBgSelector';
 import { JRStationNameType, JRTicketTypesettingtype, JRTitleUnderlineStyle, JRWideTicketDrawParameters, ShinkansenRange } from './type';
 import {
+	JRPAYMENT_METHOD_LIST,
 	JRPaymentMethod,
 	JRTicketFlipSideText,
 	JRWideTicketDrawParametersInitialValues,
@@ -201,28 +202,13 @@ export const drawJRWideTicket = (
 		ctx.font = `${resizedFont(printTypeInfo.typeset === JRTicketTypesettingtype.Fare || printTypeInfo.typeset === JRTicketTypesettingtype.Fare120 ? 9 : 6, 'DotFont')}`;
 		if (drawParameters.paymentMethod !== JRPaymentMethod.Cash) {
 			let paymentText = '';
-			switch (drawParameters.paymentMethod) {
-				case JRPaymentMethod.ICCard:
-					paymentText = 'IC';
-					break;
-				case JRPaymentMethod.CreditCard:
-					paymentText = 'C制';
-					break;
-				case JRPaymentMethod.JRE:
-					paymentText = '東C';
-					break;
-				case JRPaymentMethod.JRC:
-					paymentText = '海C';
-					break;
-				case JRPaymentMethod.JRW:
-					paymentText = '西C';
-					break;
-				case JRPaymentMethod.JRCreditCard:
-					paymentText = 'クレジツト';
-					break;
-				default:
-					break;
+			const index = JRPAYMENT_METHOD_LIST.findIndex((JRPAYMENT_METHOD) => {
+				return JRPAYMENT_METHOD.value === drawParameters.paymentMethod;
+			});
+			if (index !== -1) {
+				paymentText = JRPAYMENT_METHOD_LIST[index].title;
 			}
+
 			if (printTypeInfo.typeset === JRTicketTypesettingtype.Fare || printTypeInfo.typeset === JRTicketTypesettingtype.Fare120) {
 				// large
 				drawText(ctx, paymentText, offsetScaleX(120), offsetScaleY(220), resizedScaleX(183), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 1);

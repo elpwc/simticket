@@ -37,6 +37,8 @@ export enum JRPaymentMethod {
 	JRC,
 	JRW,
 	JRCreditCard,
+	Training,
+	Test,
 }
 
 export const JRPAYMENT_METHOD_LIST = [
@@ -74,6 +76,16 @@ export const JRPAYMENT_METHOD_LIST = [
 		value: JRPaymentMethod.JRCreditCard,
 		title: 'JRカード',
 		text: 'クレジット',
+	},
+	{
+		value: JRPaymentMethod.Training,
+		title: '訓練',
+		text: '訓練',
+	},
+	{
+		value: JRPaymentMethod.Test,
+		title: '試験',
+		text: '試験',
 	},
 ];
 
