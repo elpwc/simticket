@@ -74,7 +74,7 @@ export const SaveImageModal = ({ show, ticketInfo, saveFilename, defaultCanvasSi
 							}}
 						>
 							<span>{t(SAVE_IMAGE_SIZE.title)}</span>
-							<span>{`${SAVE_IMAGE_SIZE.scale * defaultCanvasSize[0]} × ${SAVE_IMAGE_SIZE.scale * defaultCanvasSize[1]}`}</span>
+							<span>{`${Math.round(SAVE_IMAGE_SIZE.scale * defaultCanvasSize[0])} × ${Math.round(SAVE_IMAGE_SIZE.scale * defaultCanvasSize[1])}`}</span>
 							<span>{SAVE_IMAGE_SIZE.desc}</span>
 						</button>
 					);

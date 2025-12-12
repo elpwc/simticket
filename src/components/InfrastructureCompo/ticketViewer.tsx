@@ -2,23 +2,37 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { drawTicket } from '@/utils/drawTicket';
-import { s } from 'motion/react-client';
 import { useLocale } from '@/utils/hooks/useLocale';
+import TiltCanvas from '../TicketEditorCompo/TiltCanvas';
+import { CRTicketBackGround } from '../TicketEditors/CRWideTicket/type';
 
 interface Props {
 	width: number;
 	height: number;
 	className?: string;
 	style?: React.CSSProperties;
-	borderRadius?: string;
 	companyId: number;
 	ticketTypeId: number;
 	ticketData?: any;
 	showLoadingStatus?: boolean;
 	isFlip?: boolean;
+	useTilt?: boolean;
+	onCanvasSizeChanged?: (w: number, h: number) => void;
 }
 
-export const TicketViewer = ({ width, height, className, style, borderRadius, companyId, ticketTypeId, ticketData = {}, showLoadingStatus = true, isFlip = false }: Props) => {
+export const TicketViewer = ({
+	width,
+	height,
+	className,
+	style,
+	companyId,
+	ticketTypeId,
+	ticketData = {},
+	showLoadingStatus = true,
+	isFlip = false,
+	useTilt = false,
+	onCanvasSizeChanged = (w: number, h: number) => {},
+}: Props) => {
 	const { t } = useLocale();
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -49,10 +63,12 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 			/*onWidthChanged*/
 			(newValue: number) => {
 				setCanvasWidth(newValue);
+				onCanvasSizeChanged?.(newValue, height);
 			},
 			/*onHeightChanged*/
 			(newValue: number) => {
 				setCanvasHeight(newValue);
+				onCanvasSizeChanged?.(width, newValue);
 			},
 			isFlip,
 			/*onDone*/ () => {
@@ -72,11 +88,26 @@ export const TicketViewer = ({ width, height, className, style, borderRadius, co
 				setLoadingFontHintText('');
 			}
 		);
-	}, [canvasWidth, canvasHeight, canvasRef.current?.width, canvasRef.current?.height, canvasRef.current, isFlip, ticketData, ticketTypeId, companyId]);
+	}, [canvasRef.current?.width, canvasRef.current?.height, canvasRef.current, isFlip, ticketData, ticketTypeId, companyId]);
+
+	const canvasBorderRadius = ticketData.background === CRTicketBackGround.MagBlue || ticketData.background === CRTicketBackGround.MagRed ? 16 : 0;
+	const canvasShowShandow = ticketData.background !== CRTicketBackGround.MagBlue && ticketData.background !== CRTicketBackGround.MagRed;
 
 	return (
-		<div className="relative">
-			<canvas className={className} style={style} ref={canvasRef} width={canvasWidth} height={canvasHeight} />
+		<div className="relative flex justify-center items-center">
+			{useTilt ? (
+				<TiltCanvas
+					doTilt={true}
+					ref={canvasRef}
+					width={canvasWidth}
+					height={canvasHeight}
+					className={`m-10 ${canvasShowShandow ? 'shadow-[0_0_16px_0px_#d1d1d1]' : ''}`}
+					borderRadius={`${canvasBorderRadius}px`}
+					onWheel={(isZoomIn: boolean) => {}}
+				/>
+			) : (
+				<canvas className={className} style={style} ref={canvasRef} width={canvasWidth} height={canvasHeight} />
+			)}
 			<div className="absolute top-0 left-0 text-[gray] text-[12px]">
 				<p>{loadingFontHintText}</p>
 				<p>{loadingBgHintText}</p>

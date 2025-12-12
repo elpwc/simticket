@@ -35,7 +35,7 @@ export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked, onC
 			p-2 
 			pb-0
 			w-[300px] 
-			h-[initial]
+			h-[-webkit-fill-available]
 			m-1 
 			border border-gray-200
 			flex flex-col justify-between
