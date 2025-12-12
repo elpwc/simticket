@@ -77,7 +77,7 @@ const JRPresetStationNames = [
 	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'H', name: '北海道/医療大学', areaChar: '' },
 	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'E', name: '東　京/（都区内）', areaChar: '' },
 	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'E', name: '新　宿/（都区内）', areaChar: '' },
-	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'E', name: '新大阪/（市内）', areaChar: '' },
+	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'W', name: '新大阪/（市内）', areaChar: '' },
 	{ type: JRStationNameType.LeftLargeAndRightVertical, company: 'E', name: 'かみのやま/温泉', areaChar: '' },
 	{ type: JRStationNameType.LeftSmallAndRightLarge, company: 'S', name: '（讃）/高　松', areaChar: '' },
 	{ type: JRStationNameType.LeftSmallAndRightLarge, company: 'E', name: '（信）/横　川', areaChar: '' },
