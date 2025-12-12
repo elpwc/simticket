@@ -163,7 +163,7 @@ export const drawJRWideTicket = (
 		// 清空
 		ctx.clearRect(0, 0, w, h);
 
-		const lineHeight = 74;
+		const lineHeight = 70;
 		const lineLeft = 113;
 		/** 空一格 */
 		const lineLeft2 = 155;
@@ -206,7 +206,7 @@ export const drawJRWideTicket = (
 				return JRPAYMENT_METHOD.value === drawParameters.paymentMethod;
 			});
 			if (index !== -1) {
-				paymentText = JRPAYMENT_METHOD_LIST[index].title;
+				paymentText = JRPAYMENT_METHOD_LIST[index].text;
 			}
 
 			if (printTypeInfo.typeset === JRTicketTypesettingtype.Fare || printTypeInfo.typeset === JRTicketTypesettingtype.Fare120) {
@@ -709,17 +709,17 @@ export const drawJRWideTicket = (
 				} else {
 					// 3
 					ctx.fillStyle = 'black';
-					ctx.font = `${resizedFont(6, 'DotFont')}`;
-					drawText(ctx, discountTexts[0], offsetScaleX(1050), offsetScaleY(735), resizedScaleX(140), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1);
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, discountTexts[0], offsetScaleX(1050), offsetScaleY(735), resizedScaleX(150), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1);
 
-					ctx.font = `${resizedFont(6, 'DotFont')}`;
-					drawText(ctx, discountTexts[1], offsetScaleX(1050), offsetScaleY(795), resizedScaleX(280), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1);
+					ctx.font = `${resizedFont(7, 'DotFont')}`;
+					drawText(ctx, discountTexts[1], offsetScaleX(1050), offsetScaleY(805), resizedScaleX(310), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1);
 
 					ctx.font = `${resizedFont(5, 'DotFont')}`;
-					drawText(ctx, discountTexts[2], offsetScaleX(1211), offsetScaleY(731), resizedScaleX(100), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.9);
+					drawText(ctx, discountTexts[2], offsetScaleX(1220), offsetScaleY(730), resizedScaleX(121), TextAlign.Center, DrawTextMethod.fillText, 0, 0, 1.1);
 					ctx.strokeStyle = 'black';
 					ctx.lineWidth = resizedScaleX(4);
-					ctx.strokeRect(offsetScaleX(1210), offsetScaleY(687), resizedScaleX(105), resizedScaleY(52));
+					ctx.strokeRect(offsetScaleX(1220), offsetScaleY(680), resizedScaleX(125), resizedScaleY(60));
 				}
 			} else {
 				// 1
