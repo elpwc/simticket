@@ -29,6 +29,7 @@ const JRPresetStationNames = [
 	{ type: JRStationNameType.Normal, company: 'K', name: '北九州市内', areaChar: '九' },
 	{ type: JRStationNameType.Normal, company: 'K', name: '福岡市内', areaChar: '福' },
 	{ type: JRStationNameType.Normal, company: 'E', name: '東京・品川', areaChar: '' },
+	{ type: JRStationNameType.Normal, company: 'W', name: '大阪・新大阪', areaChar: '' },
 	{ type: JRStationNameType.Small, company: 'K', name: '小波瀬西工大前', areaChar: '' },
 	{ type: JRStationNameType.Small, company: 'K', name: '歓遊舎ひこさん', areaChar: '' },
 	{ type: JRStationNameType.Small, company: 'K', name: 'スペースワールド', areaChar: '' },
@@ -74,9 +75,12 @@ const JRPresetStationNames = [
 	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'O', name: '京王多摩/センター', areaChar: '' },
 	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'E', name: '高輪/ゲートウェイ', areaChar: '' },
 	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'H', name: '北海道/医療大学', areaChar: '' },
-	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'E', name: '新宿/（都区内）', areaChar: '' },
+	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'E', name: '東　京/（都区内）', areaChar: '' },
+	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'E', name: '新　宿/（都区内）', areaChar: '' },
+	{ type: JRStationNameType.LeftLargeAndRightSmall, company: 'E', name: '新大阪/（市内）', areaChar: '' },
 	{ type: JRStationNameType.LeftLargeAndRightVertical, company: 'E', name: 'かみのやま/温泉', areaChar: '' },
-	{ type: JRStationNameType.LeftSmallAndRightLarge, company: 'E', name: '（信）/横川', areaChar: '' },
+	{ type: JRStationNameType.LeftSmallAndRightLarge, company: 'S', name: '（讃）/高　松', areaChar: '' },
+	{ type: JRStationNameType.LeftSmallAndRightLarge, company: 'E', name: '（信）/横　川', areaChar: '' },
 	{ type: JRStationNameType.LeftSmallAndRightLarge, company: 'E', name: 'ＢＲＴ/祝原', areaChar: '' },
 	{ type: JRStationNameType.LeftLargeRightUpAndDown, company: 'E', name: '鹿島/サッカー/スタジアム', areaChar: '' },
 	{ type: JRStationNameType.LeftUpAndDownRightLarge, company: 'O', name: '運転/免許/試験場', areaChar: '' },
@@ -90,7 +94,7 @@ export const JRPresetStationsModal = ({ show, onClose, onSelect }: Props) => {
 	const [showAsCompany, setShowAsCompany] = useState(true);
 
 	return (
-		<Modal title={t('JRPresetStationsModal.title')} isOpen={show} onClose={onClose} style={{ maxWidth: isMobile ? '100%' : '60%' }}>
+		<Modal title={t('JRPresetStationsModal.title')} isOpen={show} onClose={onClose} style={{ maxWidth: isMobile ? '100%' : '70%' }}>
 			<p className="ml-10">※{t('JRPresetStationsModal.tip')}</p>
 			<div className="flex flex-row flex-wrap mb-10">
 				{Object.entries(
