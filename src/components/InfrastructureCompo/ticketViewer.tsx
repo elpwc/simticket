@@ -90,8 +90,8 @@ export const TicketViewer = ({
 		);
 	}, [canvasRef.current?.width, canvasRef.current?.height, canvasRef.current, isFlip, ticketData, ticketTypeId, companyId]);
 
-	const canvasBorderRadius = ticketData.background === CRTicketBackGround.MagBlue || ticketData.background === CRTicketBackGround.MagRed ? 16 : 0;
-	const canvasShowShandow = ticketData.background !== CRTicketBackGround.MagBlue && ticketData.background !== CRTicketBackGround.MagRed;
+	const canvasBorderRadius = companyId === 0 && ticketTypeId === 4 && (ticketData.background === CRTicketBackGround.MagBlue || ticketData.background === CRTicketBackGround.MagRed) ? 16 : 0;
+	const canvasShowShandow = companyId === 0 && ticketTypeId === 4 && ticketData.background !== CRTicketBackGround.MagBlue && ticketData.background !== CRTicketBackGround.MagRed;
 
 	return (
 		<div className="relative flex justify-center items-center">
