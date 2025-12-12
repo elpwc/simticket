@@ -51,7 +51,8 @@ export const TicketViewerModal = ({ show, ticketInfo, onClose, onShare }: Props)
 					ticketTypeId={ticketInfo === null ? 4 : ticketInfo.ticketId}
 					ticketData={ticketInfo === null ? CRWideTicketDrawParametersInitialValues : ticketInfo.data}
 					isFlip={isFlipSide}
-					//useTilt
+					isTiltable
+					doPreventRenderError
 					onCanvasSizeChanged={(w: number, h: number) => {
 						setSaveModalDefaultSize([w, h]);
 					}}

@@ -17,7 +17,8 @@ interface Props {
 	borderRadius?: string;
 	showLoadingStatus?: boolean;
 	isFlip?: boolean;
-	useTilt?: boolean;
+	isTiltable?: boolean;
+	doPreventRenderError?: boolean;
 	onCanvasSizeChanged?: (w: number, h: number) => void;
 }
 
@@ -29,10 +30,13 @@ export const TicketViewer = ({
 	companyId,
 	ticketTypeId,
 	ticketData = {},
+	/** unused */
 	borderRadius,
 	showLoadingStatus = true,
 	isFlip = false,
-	useTilt = false,
+	isTiltable = false,
+	/** Render another time after normal render, とにかくdon't use it unless errorが出た */
+	doPreventRenderError = false,
 	onCanvasSizeChanged = (w: number, h: number) => {},
 }: Props) => {
 	const { t } = useLocale();
@@ -53,43 +57,51 @@ export const TicketViewer = ({
 		if (!ticketData || !canvas || !ctx) {
 			return;
 		}
+		const draw = () => {
+			drawTicket(
+				canvas,
+				ctx,
+				companyId,
+				ticketTypeId,
+				ticketData,
+				width,
+				height,
+				/*onWidthChanged*/
+				(newValue: number) => {
+					setCanvasWidth(newValue);
+					onCanvasSizeChanged?.(newValue, height);
+				},
+				/*onHeightChanged*/
+				(newValue: number) => {
+					setCanvasHeight(newValue);
+					onCanvasSizeChanged?.(width, newValue);
+				},
+				isFlip,
+				/*onDone*/ () => {
+					setLoadingFontHintText('');
+					setLoadingBgHintText('');
+				},
+				/* onBgImageLoadStart */ () => {
+					setLoadingBgHintText(showLoadingStatus ? '>' + t('TicketViewer.loadingBackgroundImage') + '...' : '');
+				},
+				/* onBgImageLoaded */ () => {
+					setLoadingBgHintText('');
+				},
+				/* onFontLoadStart */ () => {
+					setLoadingFontHintText(showLoadingStatus ? '>' + t('TicketViewer.loadingFont') + '...' : '');
+				},
+				/* onFontLoaded */ () => {
+					setLoadingFontHintText('');
+				}
+			);
+		};
 
-		drawTicket(
-			canvas,
-			ctx,
-			companyId,
-			ticketTypeId,
-			ticketData,
-			width,
-			height,
-			/*onWidthChanged*/
-			(newValue: number) => {
-				setCanvasWidth(newValue);
-				onCanvasSizeChanged?.(newValue, height);
-			},
-			/*onHeightChanged*/
-			(newValue: number) => {
-				setCanvasHeight(newValue);
-				onCanvasSizeChanged?.(width, newValue);
-			},
-			isFlip,
-			/*onDone*/ () => {
-				setLoadingFontHintText('');
-				setLoadingBgHintText('');
-			},
-			/* onBgImageLoadStart */ () => {
-				setLoadingBgHintText(showLoadingStatus ? '>' + t('TicketViewer.loadingBackgroundImage') + '...' : '');
-			},
-			/* onBgImageLoaded */ () => {
-				setLoadingBgHintText('');
-			},
-			/* onFontLoadStart */ () => {
-				setLoadingFontHintText(showLoadingStatus ? '>' + t('TicketViewer.loadingFont') + '...' : '');
-			},
-			/* onFontLoaded */ () => {
-				setLoadingFontHintText('');
-			}
-		);
+		draw();
+		if (doPreventRenderError) {
+			setTimeout(() => {
+				draw();
+			}, 500);
+		}
 	}, [canvasRef.current?.width, canvasRef.current?.height, canvasRef.current, isFlip, ticketData, ticketTypeId, companyId]);
 
 	const canvasBorderRadius = companyId === 0 && ticketTypeId === 4 && (ticketData.background === CRTicketBackGround.MagBlue || ticketData.background === CRTicketBackGround.MagRed) ? 16 : 0;
@@ -97,7 +109,7 @@ export const TicketViewer = ({
 
 	return (
 		<div className="relative flex justify-center items-center">
-			{useTilt ? (
+			{isTiltable ? (
 				<TiltCanvas
 					doTilt={true}
 					ref={canvasRef}
