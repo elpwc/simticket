@@ -561,7 +561,7 @@ export const drawJRWideTicket = (
 				for (let i = 0; i < smallStationName.length; i++) {
 					const char = smallStationName.substring(i, i + 1);
 					const X = horizPositionX[horizPositions[smallStationName.length - 1][i]];
-					drawText(ctx, char, offsetScaleX(X), offsetScaleY(Y - 70), resizedScaleX(75));
+					drawText(ctx, char, offsetScaleX(X), offsetScaleY(Y - 70), resizedScaleX(75), TextAlign.Center);
 				}
 			}
 			if (stationEnName.length > 12) {
