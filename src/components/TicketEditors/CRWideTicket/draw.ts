@@ -298,8 +298,8 @@ export const drawCRWideTicket = (
 		// 英文站名
 		if (drawParameters.doShowEnglish) {
 			ctx.font = resizedFont(5, 'SongTiEn');
-			drawText(ctx, drawParameters.station1en, offsetScaleX(183), offsetScaleY(397), resizedScaleX(452), TextAlign.Center, DrawTextMethod.fillText, 0.7, 1, 0.92, 1.1);
-			drawText(ctx, drawParameters.station2en, offsetScaleX(1072), offsetScaleY(397), resizedScaleX(452), TextAlign.Center, DrawTextMethod.fillText, 0.7, 1, 0.92, 1.1);
+			drawText(ctx, drawParameters.station1en, offsetScaleX(183), offsetScaleY(397), resizedScaleX(452), TextAlign.Center, DrawTextMethod.fillText, 1.9, 1, 0.75, 1.1, false);
+			drawText(ctx, drawParameters.station2en, offsetScaleX(1072), offsetScaleY(397), resizedScaleX(452), TextAlign.Center, DrawTextMethod.fillText, 1.9, 1, 0.75, 1.1, false);
 		}
 
 		// 车次
