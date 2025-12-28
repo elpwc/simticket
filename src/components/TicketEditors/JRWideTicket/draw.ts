@@ -11,7 +11,7 @@ import {
 	JR_MARS_PAPER_TICKET_CANVAS_SIZE,
 	JR_MARS_PAPER_TICKET_SIZE,
 } from './value';
-import { drawText, DrawTextMethod, fontsLoader, TextAlign } from '@/utils/utils';
+import { daysDiff, drawText, DrawTextMethod, fontsLoader, TextAlign } from '@/utils/utils';
 import { getJRPrintingTicketTitleUnchinkasanAsteriskNum, getJRTicketTypeInfoByTicketType } from './utils';
 import jr_h from '../../../assets/tickets/jr_h.jpg';
 import jr_e from '../../../assets/tickets/jr_e.jpg';
@@ -639,20 +639,15 @@ export const drawJRWideTicket = (
 
 		// 日期时间
 		const drawFareTicketAvailableDate = (line: number, left: number = lineLeft2) => {
-			if (
-				new Date(drawParameters.date).getMonth() === new Date(drawParameters.fareTicketExpireDate).getMonth() &&
-				new Date(drawParameters.date).getDate() === new Date(drawParameters.fareTicketExpireDate).getDate()
-			) {
-				// 当日
-				ctx.font = resizedFont(5.5, 'DotFont');
-				drawText(ctx, `月   日当日限り有効`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+			if (drawParameters.doShowEnglish) {
+				const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 				ctx.font = resizedFont(7, 'DotFont');
 				drawText(
 					ctx,
-					`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
+					`${monthNames[new Date(drawParameters.date).getMonth()].toString().padStart(2, ' ')}.${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
 					offsetScaleX(left - 40),
 					offsetScaleY(lineHeights[line]),
-					resizedScaleX(225),
+					resizedScaleX(300),
 					TextAlign.Left,
 					DrawTextMethod.fillText,
 					0,
@@ -661,44 +656,73 @@ export const drawJRWideTicket = (
 					1,
 					false
 				);
+
+				const days = 1 + daysDiff(new Date(drawParameters.date), new Date(drawParameters.fareTicketExpireDate));
+
+				ctx.font = `${resizedFont(5, 'DotFont', true)}`;
+				drawText(ctx, `(VALID  ${days} DAYS)`, offsetScaleX(left + 250), offsetScaleY(lineHeights[line]), resizedScaleX(400), TextAlign.Left, DrawTextMethod.fillText, 0.2, 0, 0.85, 1, false);
 			} else {
-				// 後日
-				drawText(ctx, `月　　日から`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
-				ctx.font = resizedFont(7, 'DotFont');
-				drawText(
-					ctx,
-					`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
-					offsetScaleX(left - 40),
-					offsetScaleY(lineHeights[line] + 3),
-					resizedScaleX(1000),
-					TextAlign.Left,
-					DrawTextMethod.fillText,
-					0,
-					0,
-					1.25,
-					1,
-					false
-				);
-				ctx.font = resizedFont(5.5, 'DotFont');
-				drawText(ctx, `月　　日まで有効`, offsetScaleX(left + 390), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
-				ctx.font = resizedFont(7, 'DotFont');
-				drawText(
-					ctx,
-					`${(new Date(drawParameters.fareTicketExpireDate).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.fareTicketExpireDate)
-						.getDate()
-						.toString()
-						.padStart(2, ' ')}`,
-					offsetScaleX(left + 300),
-					offsetScaleY(lineHeights[line] + 3),
-					resizedScaleX(1000),
-					TextAlign.Left,
-					DrawTextMethod.fillText,
-					0,
-					0,
-					1.25,
-					1,
-					false
-				);
+				if (
+					new Date(drawParameters.date).getMonth() === new Date(drawParameters.fareTicketExpireDate).getMonth() &&
+					new Date(drawParameters.date).getDate() === new Date(drawParameters.fareTicketExpireDate).getDate()
+				) {
+					// 当日のみ
+					ctx.font = resizedFont(5.5, 'DotFont');
+					drawText(ctx, `月   日当日限り有効`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+					ctx.font = resizedFont(7, 'DotFont');
+					drawText(
+						ctx,
+						`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
+						offsetScaleX(left - 40),
+						offsetScaleY(lineHeights[line]),
+						resizedScaleX(225),
+						TextAlign.Left,
+						DrawTextMethod.fillText,
+						0,
+						0,
+						1.25,
+						1,
+						false
+					);
+				} else {
+					// 複数日有効
+					drawText(ctx, `月　　日から`, offsetScaleX(left + 50), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+					ctx.font = resizedFont(7, 'DotFont');
+					drawText(
+						ctx,
+						`${(new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.date).getDate().toString().padStart(2, ' ')}`,
+						offsetScaleX(left - 40),
+						offsetScaleY(lineHeights[line] + 3),
+						resizedScaleX(1000),
+						TextAlign.Left,
+						DrawTextMethod.fillText,
+						0,
+						0,
+						1.25,
+						1,
+						false
+					);
+					ctx.font = resizedFont(5.5, 'DotFont');
+					drawText(ctx, `月　　日まで有効`, offsetScaleX(left + 390), offsetScaleY(lineHeights[line]), resizedScaleX(1244), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+					ctx.font = resizedFont(7, 'DotFont');
+					drawText(
+						ctx,
+						`${(new Date(drawParameters.fareTicketExpireDate).getMonth() + 1).toString().padStart(2, ' ')} ${new Date(drawParameters.fareTicketExpireDate)
+							.getDate()
+							.toString()
+							.padStart(2, ' ')}`,
+						offsetScaleX(left + 300),
+						offsetScaleY(lineHeights[line] + 3),
+						resizedScaleX(1000),
+						TextAlign.Left,
+						DrawTextMethod.fillText,
+						0,
+						0,
+						1.25,
+						1,
+						false
+					);
+				}
 			}
 		};
 
@@ -747,7 +771,18 @@ export const drawJRWideTicket = (
 		// 信息1
 		const drawInfo = (line: number, left: number = lineLeft2) => {
 			ctx.font = resizedFont(5.5, 'DotFont');
-			drawText(ctx, `${drawParameters.info1}`, offsetScaleX(left), offsetScaleY(lineHeights[line]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 2, 0, 0.7);
+			drawText(
+				ctx,
+				`${drawParameters.info1}`,
+				offsetScaleX(left + (drawParameters.doShowEnglish ? -39 : 0)),
+				offsetScaleY(lineHeights[line]),
+				resizedScaleX(1200),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				2,
+				0,
+				0.7
+			);
 		};
 
 		// discount

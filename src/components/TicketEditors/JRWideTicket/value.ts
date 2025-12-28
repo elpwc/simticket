@@ -311,7 +311,7 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	isChild: false,
 	hasCannotPassAutoPasiAreaMark: false,
 	hasJouhenMark: false,
-	ticketTypeEn: 'FARE TICKET'
+	ticketTypeEn: 'FARE TICKET',
 };
 
 export const TokuteiTokuShinai = [
@@ -410,6 +410,7 @@ export const JRTicketFlipSideText = `●このきっぶに関するお取扱い�
 　詳しくは係員にお尋ね下さい。`;
 
 export const JR_info1List = ['下車前途無効', '山手線内各駅下車前途無効', '券面表示の都区市内各駅下車前途無効'];
+export const JR_info1List_en = ['No stopover permitted', 'No stopover on or inside the Tokyo Yamanote Line', 'No stopover permitted in the City Zone shown above'];
 
 export const JR_hakken_area = [
 	{ title: '(1)JR北海道', value: 1 },

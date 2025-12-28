@@ -712,7 +712,7 @@ export interface UploadedTicketInfo {
 	createdAt: Date;
 }
 
-function isFullWidth(char: string) {
+export function isFullWidth(char: string) {
 	const code = char.charCodeAt(0);
 	// 全角 ASCII 与符号
 	if (code >= 0xff01 && code <= 0xff5e) return true;
@@ -726,7 +726,7 @@ function isFullWidth(char: string) {
 	return false;
 }
 
-function isHalfWidth(char: string) {
+export function isHalfWidth(char: string) {
 	const code = char.charCodeAt(0);
 	// 基本 ASCII
 	if (code >= 0x20 && code <= 0x7e) return true;
@@ -734,4 +734,12 @@ function isHalfWidth(char: string) {
 	if (code >= 0xff61 && code <= 0xff9f) return true;
 
 	return false;
+}
+
+export function daysDiff(date1: Date, date2: Date) {
+	const d1 = new Date(date1);
+	const d2 = new Date(date2);
+	d1.setHours(0, 0, 0, 0);
+	d2.setHours(0, 0, 0, 0);
+	return (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24);
 }

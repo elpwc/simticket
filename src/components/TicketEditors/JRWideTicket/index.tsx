@@ -24,6 +24,7 @@ import {
 	JR_MARS_120_PAPER_TICKET_CANVAS_SIZE,
 	JR_hakken_area,
 	JR_discount_list,
+	JR_info1List_en,
 } from './value';
 import { JRStationNameType, JRTicketTypeList, JRTicketTypesettingtype, JRTitleUnderlineStyleTitles, JRWideTicketDrawParameters, ShinkansenRangeTitles } from './type';
 import { AppContext } from '@/app/app';
@@ -625,7 +626,7 @@ export default function JRWideTicket() {
 							<div className="flex gap-3 flex-wrap">
 								<PrettyInputRadioGroup
 									name="info1"
-									list={JR_info1List.map((item) => ({ title: item, value: item }))}
+									list={(drawParameters.doShowEnglish ? JR_info1List_en : JR_info1List).map((item) => ({ title: item, value: item }))}
 									value={drawParameters.info1}
 									onChange={(value: string) => {
 										setDrawParameters((prev) => ({ ...prev, info1: value }));
