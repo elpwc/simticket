@@ -12,7 +12,7 @@ import {
 	JR_MARS_PAPER_TICKET_SIZE,
 } from './value';
 import { drawText, DrawTextMethod, fontsLoader, TextAlign } from '@/utils/utils';
-import { getJRPrintingTicketTitleByTicketType, getJRPrintingTicketTitleUnchinkasanAsteriskNum } from './utils';
+import { getJRPrintingTicketTitleUnchinkasanAsteriskNum, getJRTicketTypeInfoByTicketType } from './utils';
 import jr_h from '../../../assets/tickets/jr_h.jpg';
 import jr_e from '../../../assets/tickets/jr_e.jpg';
 import jr_c from '../../../assets/tickets/jr_c.jpg';
@@ -169,7 +169,7 @@ export const drawJRWideTicket = (
 		const lineLeft2 = 155;
 		const lineHeights = [0, 1, 2, 3, 4, 5, 6, 7].map((value) => value * lineHeight + 458);
 
-		const printTypeInfo = getJRPrintingTicketTitleByTicketType(drawParameters.ticketType);
+		const printTypeInfo = getJRTicketTypeInfoByTicketType(drawParameters.ticketType);
 		// 底图
 		switch (drawParameters.background) {
 			case JRTicketBackGround.JR_H:
@@ -231,7 +231,14 @@ export const drawJRWideTicket = (
 		ctx.fillStyle = 'black';
 		ctx.font = `${resizedFont(7.4, 'DotFont')}`;
 		const ticketTitleText = printTypeInfo.printingName + '　' + '*'.repeat(getJRPrintingTicketTitleUnchinkasanAsteriskNum(drawParameters.ticketType));
-		drawText(ctx, ticketTitleText, offsetScaleX(347 + JR120TicketOffsetX), offsetScaleY(166), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 1.6, 0, 0.5);
+		const ticketTitleTextEn = printTypeInfo.nameen;
+		const ticketTitleLeft = printTypeInfo.typeset === JRTicketTypesettingtype.Fare ? 460 + JR120TicketOffsetX : 347 + JR120TicketOffsetX + 300 - ticketTitleText.length * 10;
+		drawText(ctx, ticketTitleText, offsetScaleX(ticketTitleLeft), offsetScaleY(166), resizedScaleX(900), TextAlign.Left, DrawTextMethod.fillText, 1.6, 0, 0.5);
+		if (drawParameters.doShowEnglish) {
+			ctx.fillStyle = 'black';
+			ctx.font = `${resizedFont(5, 'DotFont', true)}`;
+			drawText(ctx, ticketTitleTextEn, offsetScaleX(ticketTitleLeft), offsetScaleY(166 + lineHeight), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 0.2, 0, 0.85, 1, false);
+		}
 
 		// shinkansen
 		if (drawParameters.hasSinkansen) {
@@ -271,13 +278,15 @@ export const drawJRWideTicket = (
 
 		switch (drawParameters.titleUnderlineStyle) {
 			case JRTitleUnderlineStyle.StraightLine:
-				ctx.beginPath();
-				ctx.strokeStyle = 'black';
-				ctx.lineWidth = resizedScaleY(6);
-				ctx.moveTo(offsetScaleX(347 + JR120TicketOffsetX), offsetScaleY(190));
-				ctx.lineTo(offsetScaleX(347 + JR120TicketOffsetX + ticketTitleText.length * 38), offsetScaleY(190));
-				ctx.stroke();
-				ctx.closePath();
+				if (!drawParameters.doShowEnglish) {
+					ctx.beginPath();
+					ctx.strokeStyle = 'black';
+					ctx.lineWidth = resizedScaleY(6);
+					ctx.moveTo(offsetScaleX(ticketTitleLeft), offsetScaleY(190));
+					ctx.lineTo(offsetScaleX(ticketTitleLeft + ticketTitleText.length * 38), offsetScaleY(190));
+					ctx.stroke();
+					ctx.closePath();
+				}
 				break;
 			case JRTitleUnderlineStyle.Shinkansen4Blocks:
 				drawShinkansenRangeBlocks(drawParameters.sinkansenRange1, drawParameters.sinkansenRange2, drawParameters.sinkansenRange3, 4, 310);

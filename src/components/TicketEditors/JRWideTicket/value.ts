@@ -311,6 +311,7 @@ export const JRWideTicketDrawParametersInitialValues: JRWideTicketDrawParameters
 	isChild: false,
 	hasCannotPassAutoPasiAreaMark: false,
 	hasJouhenMark: false,
+	ticketTypeEn: 'FARE TICKET'
 };
 
 export const TokuteiTokuShinai = [

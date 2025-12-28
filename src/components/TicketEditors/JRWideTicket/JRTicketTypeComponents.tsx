@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 import { JRTicketTypesettingtype } from './type';
 import { DescriptionButton } from '@/components/InfrastructureCompo/DescriptionButton';
 import OuterLink from '@/components/InfrastructureCompo/OuterLink';
+import { getJRTicketTypeInfoByTicketType, getJRPrintingTicketTitleUnchinkasanAsteriskNum } from './utils';
 
 interface TypeComponentCommonProps {
-	onChange: (title: string) => void;
+	onChange: (title: string, titleEn: string) => void;
 }
 
 export const RegularForm = ({ onChange }: TypeComponentCommonProps) => {
@@ -45,7 +46,8 @@ export const RegularForm = ({ onChange }: TypeComponentCommonProps) => {
 				break;
 		}
 
-		onChange(title.replaceAll('（', '(').replaceAll('）', ')'));
+		const resTitle = title.replaceAll('（', '(').replaceAll('）', ')');
+		onChange(resTitle, getJRTicketTypeInfoByTicketType(resTitle).nameen);
 	}, [hasKan, expressFormTitle, expressFormAvailable, seatType, isOufukuKaeri, renzokuNumber]);
 	return (
 		<div>
@@ -207,7 +209,8 @@ export const ExpressForm = ({ onChange, isInRegularForm = false }: TypeComponent
 					break;
 			}
 		}
-		onChange(title.replaceAll('（', '(').replaceAll('）', ')'));
+		const resTitle = title.replaceAll('（', '(').replaceAll('）', ')');
+		onChange(resTitle, getJRTicketTypeInfoByTicketType(resTitle).nameen);
 	}, [expressType, isTokutei, isBTokyuuRyoukin, seatType, sleepingSeatType, sleepingSeatTypeFormAvailable]);
 	return (
 		<div>
@@ -364,7 +367,8 @@ export const ReservedForm = ({ onChange }: TypeComponentCommonProps) => {
 			default:
 				break;
 		}
-		onChange(title.replaceAll('（', '(').replaceAll('）', ')'));
+		const resTitle = title.replaceAll('（', '(').replaceAll('）', ')');
+		onChange(resTitle, getJRTicketTypeInfoByTicketType(resTitle).nameen);
 	}, [seatType, sleepingSeatType, isGreen]);
 	return (
 		<div>
@@ -404,21 +408,36 @@ export const ReservedForm = ({ onChange }: TypeComponentCommonProps) => {
 
 export const AdmissionForm = ({ onChange }: TypeComponentCommonProps) => {
 	useEffect(() => {
-		onChange('普通入場券');
+		onChange('普通入場券', '');
 	}, []);
 	return <div></div>;
 };
 
-export const CustomForm = ({ onChange, ticketTitle }: TypeComponentCommonProps & { ticketTitle: string }) => {
+export const CustomForm = ({ onChange, ticketTitle, ticketTitleEn }: TypeComponentCommonProps & { ticketTitle: string; ticketTitleEn: string }) => {
+	const [ticketNameTextboxText, setTicketNameTextboxText] = useState(ticketTitle);
+	const [ticketNameEnTextboxText, setTicketNameEnTextboxText] = useState(ticketTitleEn);
 	return (
-		<div>
-			券名
-			<input
-				value={ticketTitle}
-				onChange={(e) => {
-					onChange(e.target.value);
-				}}
-			/>
+		<div className="flex gap-2 flex-wrap">
+			<label>
+				券名
+				<input
+					value={ticketTitle}
+					onChange={(e) => {
+						setTicketNameTextboxText(e.target.value);
+						onChange(e.target.value, ticketNameEnTextboxText);
+					}}
+				/>
+			</label>
+			<label>
+				外国語券名
+				<input
+					value={ticketTitleEn}
+					onChange={(e) => {
+						setTicketNameEnTextboxText(e.target.value);
+						onChange(ticketNameTextboxText, e.target.value);
+					}}
+				/>
+			</label>
 		</div>
 	);
 };

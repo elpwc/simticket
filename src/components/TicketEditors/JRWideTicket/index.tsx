@@ -37,7 +37,7 @@ import { Tab } from '@/components/InfrastructureCompo/Tab/Tab';
 import { AdmissionForm, CustomForm, ExpressForm, RegularForm, ReservedForm } from './JRTicketTypeComponents';
 import { JRPaymentSerialNumberInput } from '@/components/InfrastructureCompo/JRComponents/JRPaymentSerialNumberInput';
 import { JRDiscountNameText } from '@/components/InfrastructureCompo/JRComponents/JRDiscountNameText';
-import { getJRPrintingTicketTitleByTicketType } from './utils';
+import { getJRTicketTypeInfoByTicketType } from './utils';
 
 export const DotFont = localFonts({
 	//src: '../../assets/fonts/simsun.woff2',
@@ -268,36 +268,37 @@ export default function JRWideTicket() {
 										<RegularForm
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
-												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
+												setTicketTypeset(drawParameters.is120mm ? getJRTicketTypeInfoByTicketType(title).typeset120 : getJRTicketTypeInfoByTicketType(title).typeset);
 											}}
 											key="1"
 										/>,
 										<ExpressForm
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
-												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
+												setTicketTypeset(drawParameters.is120mm ? getJRTicketTypeInfoByTicketType(title).typeset120 : getJRTicketTypeInfoByTicketType(title).typeset);
 											}}
 											key="2"
 										/>,
 										<ReservedForm
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
-												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
+												setTicketTypeset(drawParameters.is120mm ? getJRTicketTypeInfoByTicketType(title).typeset120 : getJRTicketTypeInfoByTicketType(title).typeset);
 											}}
 											key="3"
 										/>,
 										<AdmissionForm
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
-												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
+												setTicketTypeset(drawParameters.is120mm ? getJRTicketTypeInfoByTicketType(title).typeset120 : getJRTicketTypeInfoByTicketType(title).typeset);
 											}}
 											key="4"
 										/>,
 										<CustomForm
 											ticketTitle={drawParameters.ticketType}
+											ticketTitleEn={drawParameters.ticketTypeEn}
 											onChange={(title) => {
 												setDrawParameters((prev) => ({ ...prev, ticketType: title }));
-												setTicketTypeset(drawParameters.is120mm ? getJRPrintingTicketTitleByTicketType(title).typeset120 : getJRPrintingTicketTitleByTicketType(title).typeset);
+												setTicketTypeset(drawParameters.is120mm ? getJRTicketTypeInfoByTicketType(title).typeset120 : getJRTicketTypeInfoByTicketType(title).typeset);
 											}}
 											key="5"
 										/>,

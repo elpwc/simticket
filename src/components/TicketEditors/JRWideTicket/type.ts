@@ -70,6 +70,7 @@ export type JRWideTicketDrawParameters = {
 	isChild: boolean;
 	hasCannotPassAutoPasiAreaMark: boolean;
 	hasJouhenMark: boolean;
+	ticketTypeEn: string;
 };
 
 export enum JRStationNameType {
@@ -149,6 +150,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Admission,
 		typeset120: JRTicketTypesettingtype.Admission,
+		nameen: '',
 	},
 	////////////////////////////////////////////////////////////////////////
 	{
@@ -157,6 +159,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'FARE TICKET (GREEN CAR)',
 	},
 	////////////////////////////////////////////////////////////////////////
 	{
@@ -165,6 +168,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'RESEARVED SEAT TICKET',
 	},
 	{
 		name: '指定券',
@@ -172,6 +176,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'RESEARVED SEAT TICKET',
 	},
 	{
 		name: '指定券(グリーン)',
@@ -179,6 +184,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'RESEARVED SEAT TICKET (GREEN CAR)',
 	},
 	{
 		name: '新幹線指定券',
@@ -186,6 +192,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'RESEARVED SEAT TICKET',
 	},
 	{
 		name: '新幹線指定券(グリーン)',
@@ -193,6 +200,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'RESEARVED SEAT TICKET(GREEN CAR)',
 	},
 	{
 		name: 'バス指定券',
@@ -200,6 +208,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'RESEARVED SEAT TICKET',
 	},
 	{
 		name: '寝台指定券(A個)',
@@ -207,6 +216,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.SleepingCar120,
+		nameen: 'BERTH TICKET',
 	},
 	{
 		name: '寝台指定券(A寝台)',
@@ -214,6 +224,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.SleepingCar120,
+		nameen: 'BERTH TICKET',
 	},
 	{
 		name: '寝台指定券(B個)',
@@ -221,6 +232,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.SleepingCar120,
+		nameen: 'BERTH TICKET',
 	},
 	{
 		name: '寝台指定券(B寝台)',
@@ -228,6 +240,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.SleepingCar120,
+		nameen: 'BERTH TICKET',
 	},
 	////////////////////////////////////////////////////////////////////////
 	{
@@ -236,6 +249,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.SleepingCarCash,
 		typeset120: JRTicketTypesettingtype.SleepingCarCash,
+		nameen: 'BERTH TICKET',
 	},
 	{
 		name: '寝台料金券(B寝台)',
@@ -243,6 +257,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.SleepingCarCash,
 		typeset120: JRTicketTypesettingtype.SleepingCarCash,
+		nameen: 'BERTH TICKET',
 	},
 	{
 		name: '寝台料金券(A個)',
@@ -250,6 +265,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.SleepingCarCash,
 		typeset120: JRTicketTypesettingtype.SleepingCarCash,
+		nameen: 'BERTH TICKET',
 	},
 	{
 		name: '寝台料金券(B個)',
@@ -257,6 +273,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.SleepingCarCash,
 		typeset120: JRTicketTypesettingtype.SleepingCarCash,
+		nameen: 'BERTH TICKET',
 	},
 	////////////////////////////////////////////////////////////////////////
 
@@ -266,6 +283,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Fare,
 		typeset120: JRTicketTypesettingtype.Fare120,
+		nameen: 'FARE TICKET',
 	},
 	{
 		name: '乗車券(ゆき)',
@@ -273,6 +291,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Fare,
 		typeset120: JRTicketTypesettingtype.Fare120,
+		nameen: 'FARE TICKET',
 	},
 	{
 		name: '乗車券(かえり)',
@@ -280,6 +299,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Fare,
 		typeset120: JRTicketTypesettingtype.Fare120,
+		nameen: 'FARE TICKET',
 	},
 	{
 		name: '乗車券(連続1)',
@@ -287,6 +307,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Fare,
 		typeset120: JRTicketTypesettingtype.Fare120,
+		nameen: 'FARE TICKET',
 	},
 	{
 		name: '乗車券(連続2)',
@@ -294,6 +315,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Fare,
 		typeset120: JRTicketTypesettingtype.Fare120,
+		nameen: 'FARE TICKET',
 	},
 	////////////////////////////////////////////////////////////////////////
 	{
@@ -302,6 +324,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: '乗車券・B特急券',
@@ -309,6 +332,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: '乗車券・立席特急券',
@@ -316,6 +340,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: '乗車券・新幹線特急券',
@@ -323,6 +348,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: '乗車券・新幹線特定特急券(立席)',
@@ -330,6 +356,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 
 	{
@@ -338,6 +365,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.FareAndNonReserved,
 		typeset120: JRTicketTypesettingtype.FareAndNonReserved,
+		nameen: '',
 	},
 	{
 		name: '乗車券・新幹線自由席特急券／特定特急券',
@@ -345,6 +373,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.FareAndNonReserved,
 		typeset120: JRTicketTypesettingtype.FareAndNonReserved,
+		nameen: '',
 	},
 	{
 		name: '乗車券・特定特急券',
@@ -352,6 +381,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.FareAndNonReserved,
 		typeset120: JRTicketTypesettingtype.FareAndNonReserved,
+		nameen: '',
 	},
 	{
 		name: '乗車券・自由席特急券',
@@ -359,6 +389,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.FareAndNonReserved,
 		typeset120: JRTicketTypesettingtype.FareAndNonReserved,
+		nameen: '',
 	},
 	{
 		name: '乗車券・B自由席特急券',
@@ -366,6 +397,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.FareAndNonReserved,
 		typeset120: JRTicketTypesettingtype.FareAndNonReserved,
+		nameen: '',
 	},
 	{
 		name: '乗車券・新幹線特定特急券',
@@ -373,6 +405,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.FareAndNonReserved,
 		typeset120: JRTicketTypesettingtype.FareAndNonReserved,
+		nameen: '',
 	},
 	{
 		name: '乗車券・特急券(座席未指定)',
@@ -380,6 +413,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Unreserved,
 		typeset120: JRTicketTypesettingtype.Unreserved,
+		nameen: '',
 	},
 
 	////////////////////////////////////////////////////////////////////////
@@ -389,6 +423,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: '乗車券・B急行券',
@@ -396,6 +431,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: '乗車券・立席急行券',
@@ -403,6 +439,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: '乗車券・特定急行券',
@@ -410,6 +447,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.FareAndNonReserved,
 		typeset120: JRTicketTypesettingtype.FareAndNonReserved,
+		nameen: '',
 	},
 	{
 		name: '乗車券・自由席急行券',
@@ -417,6 +455,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.FareAndNonReserved,
 		typeset120: JRTicketTypesettingtype.FareAndNonReserved,
+		nameen: '',
 	},
 	{
 		name: '乗車券・B自由席急行券',
@@ -424,6 +463,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.FareAndNonReserved,
 		typeset120: JRTicketTypesettingtype.FareAndNonReserved,
+		nameen: '',
 	},
 	{
 		name: '乗車券・急行券(座席未指定)',
@@ -431,6 +471,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Unreserved,
 		typeset120: JRTicketTypesettingtype.Unreserved,
+		nameen: '',
 	},
 
 	////////////////////////////////////////////////////////////////////////
@@ -440,6 +481,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'LTD.EXP. (RESERVED)',
 	},
 	{
 		name: 'B特急券',
@@ -447,6 +489,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'LTD.EXP. (RESERVED)',
 	},
 	{
 		name: '立席特急券',
@@ -454,6 +497,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'LTD.EXP. (VACANT SEAT ONLY)',
 	},
 	{
 		name: '新幹線特急券',
@@ -461,6 +505,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'SUPER EXP. (RESERVED)',
 	},
 	{
 		name: '新幹線特定特急券(立席)',
@@ -468,6 +513,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'SUPER EXP. (VACANT SEAT ONLY)',
 	},
 	{
 		name: '新幹線自由席特急券',
@@ -475,6 +521,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'SUPER EXP.(NON-RESERVED)',
 	},
 	{
 		name: '新幹線自由席特急券／特定特急券',
@@ -482,6 +529,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'SUPER EXP.(NON-RESERVED)',
 	},
 	{
 		name: '特定特急券',
@@ -489,6 +537,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'LTD.EXP. (NON-RESERVED)',
 	},
 	{
 		name: '自由席特急券',
@@ -496,6 +545,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'LTD.EXP. (NON-RESERVED)',
 	},
 	{
 		name: 'B自由席特急券',
@@ -503,6 +553,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'LTD.EXP. (NON-RESERVED)',
 	},
 	{
 		name: '新幹線特定特急券',
@@ -510,6 +561,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'SUPER EXP.(NON-RESERVED)',
 	},
 	{
 		name: '特急券(座席未指定)',
@@ -517,6 +569,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Unreserved,
 		typeset120: JRTicketTypesettingtype.Unreserved,
+		nameen: 'LTD.EXP. (VACANT SEAT ONLY)',
 	},
 	////////////////////////////////////////////////////////////////////////
 	{
@@ -525,6 +578,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'EXP. (RESERVED)',
 	},
 	{
 		name: 'B急行券',
@@ -532,6 +586,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'EXP. (RESERVED)',
 	},
 	{
 		name: '立席急行券',
@@ -539,6 +594,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'EXP. (VACANT SEAT ONLY)',
 	},
 	{
 		name: '特定急行券',
@@ -546,6 +602,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'EXP. (NON-RESERVED)',
 	},
 	{
 		name: '自由席急行券',
@@ -553,6 +610,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'EXP. (NON-RESERVED)',
 	},
 	{
 		name: 'B自由席急行券',
@@ -560,6 +618,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'EXP. (NON-RESERVED)',
 	},
 	{
 		name: '急行券(座席未指定)',
@@ -567,6 +626,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Unreserved,
 		typeset120: JRTicketTypesettingtype.Unreserved,
+		nameen: 'EXP. (VACANT SEAT ONLY)',
 	},
 
 	////////////////////////////////////////////////////////////////////////
@@ -576,6 +636,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: '特急券・A寝台券(個)',
@@ -583,6 +644,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: '特急券・B寝台券',
@@ -590,6 +652,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: '特急券・B寝台券(個)',
@@ -597,6 +660,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: 'B特急券・A寝台券',
@@ -604,6 +668,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: 'B特急券・A寝台券(個)',
@@ -611,6 +676,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: 'B特急券・B寝台券',
@@ -618,6 +684,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: 'B特急券・B寝台券(個)',
@@ -625,6 +692,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 
 	{
@@ -633,6 +701,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: '新幹線特急券・グリーン券',
@@ -640,6 +709,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: 'B特急券・グリーン券',
@@ -647,6 +717,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 
 	////////////////////////////////////////////////////////////////////////
@@ -656,6 +727,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: '急行券・A寝台券(個)',
@@ -663,6 +735,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: '急行券・B寝台券',
@@ -670,6 +743,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: '急行券・B寝台券(個)',
@@ -677,6 +751,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: 'B急行券・A寝台券',
@@ -684,6 +759,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: 'B急行券・A寝台券(個)',
@@ -691,6 +767,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: 'B急行券・B寝台券',
@@ -698,6 +775,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 	{
 		name: 'B急行券・B寝台券(個)',
@@ -705,6 +783,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.NonReserved,
 		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: '',
 	},
 
 	{
@@ -713,6 +792,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 	{
 		name: 'B急行券・グリーン券',
@@ -720,6 +800,7 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Express,
 		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
 	},
 ];
 

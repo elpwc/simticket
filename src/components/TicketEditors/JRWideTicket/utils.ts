@@ -69,6 +69,7 @@ export function encodeJRWideTicketParams(p: JRWideTicketDrawParameters): string 
 		+p.isChild,
 		+p.hasCannotPassAutoPasiAreaMark,
 		+p.hasJouhenMark,
+		p.ticketTypeEn,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -151,6 +152,7 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		isChild,
 		hasCannotPassAutoPasiAreaMark,
 		hasJouhenMark,
+		ticketTypeEn,
 	] = arr;
 
 	return {
@@ -218,10 +220,11 @@ export function decodeJRWideTicketParams(str: string): JRWideTicketDrawParameter
 		isChild: !!isChild,
 		hasCannotPassAutoPasiAreaMark: !!hasCannotPassAutoPasiAreaMark,
 		hasJouhenMark: !!hasJouhenMark,
+		ticketTypeEn,
 	} as JRWideTicketDrawParameters;
 }
 
-export const getJRPrintingTicketTitleByTicketType = (ticketType: string) => {
+export const getJRTicketTypeInfoByTicketType = (ticketType: string, ticketTypeEn?: string) => {
 	const index = JRTicketTitles.findIndex((title) => {
 		return title.name === ticketType;
 	});
@@ -250,6 +253,40 @@ export const getJRPrintingTicketTitleByTicketType = (ticketType: string) => {
 		desc: '',
 		typeset: JRTicketTypesettingtype.Fare,
 		typeset120: JRTicketTypesettingtype.Fare,
+		nameen: ticketTypeEn ?? '',
+	};
+};
+
+export const getJRTicketTypeInfoByTicketTitle = (ticketType: string, ticketTypeEn?: string) => {
+	const index = JRTicketTitles.findIndex((title) => {
+		return title.name === ticketType;
+	});
+	if (index !== -1) {
+		return JRTicketTitles[index];
+	}
+	let res = '';
+	if (ticketType.includes('(')) {
+		const splited = ticketType.split('(');
+		if (splited[0].length <= 6) {
+			res += [...splited[0]].join('　') + ' (' + splited[1];
+		} else {
+			res = ticketType;
+		}
+	} else {
+		if (ticketType.length <= 6) {
+			res += [...ticketType].join('　');
+		} else {
+			res = ticketType;
+		}
+	}
+
+	return {
+		name: ticketType,
+		printingName: res,
+		desc: '',
+		typeset: JRTicketTypesettingtype.Fare,
+		typeset120: JRTicketTypesettingtype.Fare,
+		nameen: ticketTypeEn ?? '',
 	};
 };
 
