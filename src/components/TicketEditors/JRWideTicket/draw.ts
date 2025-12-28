@@ -853,7 +853,9 @@ export const drawJRWideTicket = (
 			drawText(ctx, drawParameters.paymentNo, offsetScaleX(lineLeft), offsetScaleY(lineHeights[6]), resizedScaleX(1000), TextAlign.Left, DrawTextMethod.fillText, 1.4, 0, 1.4, 1, false);
 			drawText(
 				ctx,
-				`(${drawParameters.issuingAreaNo}-${drawParameters.hasOtherCompanyLines ? 'ﾀ' : ' '})R${drawParameters.RCode}C${drawParameters.CCode}`,
+				`(${drawParameters.issuingAreaNo}-${drawParameters.hasOtherCompanyLines ? 'ﾀ' : ' '})${drawParameters.RCode.length === 0 ? '    ' : 'R' + drawParameters.RCode}C${
+					drawParameters.CCode
+				}`,
 				offsetScaleX(525),
 				offsetScaleY(lineHeights[6]),
 				resizedScaleX(1000),
