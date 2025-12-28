@@ -211,14 +211,14 @@ export const drawJRWideTicket = (
 
 			if (printTypeInfo.typeset === JRTicketTypesettingtype.Fare || printTypeInfo.typeset === JRTicketTypesettingtype.Fare120) {
 				// large
-				drawText(ctx, paymentText, offsetScaleX(120), offsetScaleY(220), resizedScaleX(183), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 1);
+				drawText(ctx, paymentText, offsetScaleX(123), offsetScaleY(219), resizedScaleX(175), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.95);
 				ctx.strokeStyle = 'black';
 				ctx.lineWidth = resizedScaleX(5);
 				ctx.strokeRect(offsetScaleX(120), offsetScaleY(139), resizedScaleX(183), resizedScaleY(91));
 				ctx.setLineDash([]);
 			} else {
 				//tiny
-				drawText(ctx, paymentText, offsetScaleX(150), offsetScaleY(157), resizedScaleX(100), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.9, false);
+				drawText(ctx, paymentText, offsetScaleX(142), offsetScaleY(157), resizedScaleX(100), TextAlign.JustifyAround, DrawTextMethod.fillText, 0, 0, 1, 0.9, false);
 				ctx.strokeStyle = 'black';
 				ctx.lineWidth = resizedScaleX(5);
 				ctx.strokeRect(offsetScaleX(135), offsetScaleY(105), resizedScaleX(120), resizedScaleY(62));
