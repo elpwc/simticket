@@ -543,14 +543,42 @@ export const drawJRWideTicket = (
 			}
 		};
 
-		drawJRStation(false, drawParameters.station1, drawParameters.station1AreaChar, drawParameters.station1Type, 116 + (is120mm ? 261 : 0));
-		drawJRStation(true, drawParameters.station2, drawParameters.station2AreaChar, drawParameters.station2Type, 838 + (is120mm ? 261 : 0));
+		const drawEnglishJRStation = (stationName: string, stationEnName: string, stationType: JRStationNameType, x: number, y: number = 370) => {
+			ctx.fillStyle = 'black';
+			const horizPositionX = [x, x + 70, x + 140, x + 210, x + 280, x + 350, x + 420];
+			const horizPositions = [[3], [2, 5], [0, 3, 6], [0, 2, 4, 6], [1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5], [0, 1, 2, 3, 4, 5, 6]];
+			const Y = y;
 
-		// 英文站名
+			ctx.fillStyle = 'black';
+
+			const smallStationName = stationName.replaceAll('/', '');
+
+			if (smallStationName.length > 7) {
+				ctx.font = `${resizedFont(7, 'DotFont')}`;
+				drawText(ctx, smallStationName, offsetScaleX(x), offsetScaleY(Y - 70), resizedScaleX(540), TextAlign.Left, DrawTextMethod.fillText, 0, 0, 1.85);
+			} else {
+				ctx.font = `${resizedFont(7, 'DotFont')}`;
+				for (let i = 0; i < smallStationName.length; i++) {
+					const char = smallStationName.substring(i, i + 1);
+					const X = horizPositionX[horizPositions[smallStationName.length - 1][i]];
+					drawText(ctx, char, offsetScaleX(X), offsetScaleY(Y - 70), resizedScaleX(75));
+				}
+			}
+			if (stationEnName.length > 12) {
+				ctx.font = `${resizedFont(5, 'DotFont', true)}`;
+				drawText(ctx, stationEnName, offsetScaleX(x), offsetScaleY(Y), resizedScaleX(540), TextAlign.Center, DrawTextMethod.fillText, 0.2, 0, 0.85, 1, false);
+			} else {
+				ctx.font = `${resizedFont(5, 'DotFont')}`;
+				drawText(ctx, stationEnName, offsetScaleX(x), offsetScaleY(Y), resizedScaleX(540), TextAlign.Center, DrawTextMethod.fillText, 3, 0, 1.2, 1, false);
+			}
+		};
+
 		if (drawParameters.doShowEnglish) {
-			ctx.font = resizedFont(4.5, 'DotFont');
-			drawText(ctx, drawParameters.station1en, offsetScaleX(183), offsetScaleY(397), resizedScaleX(452), TextAlign.Center);
-			drawText(ctx, drawParameters.station2en, offsetScaleX(1072), offsetScaleY(397), resizedScaleX(452), TextAlign.Center);
+			drawEnglishJRStation(drawParameters.station1, drawParameters.station1en, drawParameters.station1Type, 116 + (is120mm ? 261 : 0));
+			drawEnglishJRStation(drawParameters.station2, drawParameters.station2en, drawParameters.station2Type, 838 + (is120mm ? 261 : 0));
+		} else {
+			drawJRStation(false, drawParameters.station1, drawParameters.station1AreaChar, drawParameters.station1Type, 116 + (is120mm ? 261 : 0));
+			drawJRStation(true, drawParameters.station2, drawParameters.station2AreaChar, drawParameters.station2Type, 838 + (is120mm ? 261 : 0));
 		}
 
 		// 箭头

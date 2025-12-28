@@ -318,7 +318,12 @@ export default function JRWideTicket() {
 								>
 									新幹線区間あり→（幹）
 								</Toggle>
-								<Toggle disabled value={false} onChange={(value) => {}}>
+								<Toggle
+									value={drawParameters.doShowEnglish}
+									onChange={(value) => {
+										setDrawParameters((prev) => ({ ...prev, doShowEnglish: value }));
+									}}
+								>
 									英文付き券面（仮）
 								</Toggle>
 								<Toggle
