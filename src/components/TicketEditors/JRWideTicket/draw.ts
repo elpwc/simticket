@@ -660,7 +660,20 @@ export const drawJRWideTicket = (
 				const days = 1 + daysDiff(new Date(drawParameters.date), new Date(drawParameters.fareTicketExpireDate));
 
 				ctx.font = `${resizedFont(5, 'DotFont', true)}`;
-				drawText(ctx, `(VALID  ${days} DAYS)`, offsetScaleX(left + 250), offsetScaleY(lineHeights[line]), resizedScaleX(400), TextAlign.Left, DrawTextMethod.fillText, 0.2, 0, 0.85, 1, false);
+				drawText(
+					ctx,
+					`(VALID ${days.toString().padStart(2, ' ')} DAY${days > 1 ? 'S' : ''})`,
+					offsetScaleX(left + 250),
+					offsetScaleY(lineHeights[line]),
+					resizedScaleX(400),
+					TextAlign.Left,
+					DrawTextMethod.fillText,
+					0.2,
+					0,
+					0.85,
+					1,
+					false
+				);
 			} else {
 				if (
 					new Date(drawParameters.date).getMonth() === new Date(drawParameters.fareTicketExpireDate).getMonth() &&
