@@ -155,11 +155,11 @@ export const JRTicketTitles = [
 	////////////////////////////////////////////////////////////////////////
 	{
 		name: '普通列車用グリーン券',
-		printingName: '普　通　列　車　用　グリーン券',
+		printingName: '普通列車用　グリーン券',
 		desc: '',
-		typeset: JRTicketTypesettingtype.Express,
-		typeset120: JRTicketTypesettingtype.Express,
-		nameen: 'FARE TICKET (GREEN CAR)',
+		typeset: JRTicketTypesettingtype.NonReserved,
+		typeset120: JRTicketTypesettingtype.NonReserved,
+		nameen: 'GREEN CAR',
 	},
 	////////////////////////////////////////////////////////////////////////
 	{
@@ -415,6 +415,14 @@ export const JRTicketTitles = [
 		typeset120: JRTicketTypesettingtype.Unreserved,
 		nameen: '',
 	},
+	{
+		name: '乗車券・特定特急券(立席)',
+		printingName: '乗車券・特定特急券(立席)',
+		desc: '',
+		typeset: JRTicketTypesettingtype.Express,
+		typeset120: JRTicketTypesettingtype.Express,
+		nameen: '',
+	},
 
 	////////////////////////////////////////////////////////////////////////
 	{
@@ -471,6 +479,14 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Unreserved,
 		typeset120: JRTicketTypesettingtype.Unreserved,
+		nameen: '',
+	},
+	{
+		name: '乗車券・特定急行券(立席)',
+		printingName: '乗車券・特定急行券(立席)',
+		desc: '',
+		typeset: JRTicketTypesettingtype.Express,
+		typeset120: JRTicketTypesettingtype.Express,
 		nameen: '',
 	},
 
@@ -571,6 +587,14 @@ export const JRTicketTitles = [
 		typeset120: JRTicketTypesettingtype.Unreserved,
 		nameen: 'LTD.EXP. (VACANT SEAT ONLY)',
 	},
+	{
+		name: '特定特急券(立席)',
+		printingName: '特　定　特　急　券　(立　席)',
+		desc: '',
+		typeset: JRTicketTypesettingtype.Express,
+		typeset120: JRTicketTypesettingtype.Express,
+		nameen: 'LTD.EXP. (VACANT SEAT ONLY)',
+	},
 	////////////////////////////////////////////////////////////////////////
 	{
 		name: '急行券',
@@ -626,6 +650,14 @@ export const JRTicketTitles = [
 		desc: '',
 		typeset: JRTicketTypesettingtype.Unreserved,
 		typeset120: JRTicketTypesettingtype.Unreserved,
+		nameen: 'EXP. (VACANT SEAT ONLY)',
+	},
+	{
+		name: '特定急行券(立席)',
+		printingName: '特　定　急　行　券　(立　席)',
+		desc: '',
+		typeset: JRTicketTypesettingtype.Express,
+		typeset120: JRTicketTypesettingtype.Express,
 		nameen: 'EXP. (VACANT SEAT ONLY)',
 	},
 
