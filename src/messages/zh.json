@@ -1,295 +1,296 @@
 {
-  "InputRadioGroup": {
-    "placeholder": "空 (自定义)"
-  },
-  "DevProgressModal": {
-    "text1": "欢迎使用 simTicket 内部测试版本 \n simTicket 是在2025年10月 CR（中国国铁）彻底废止纸质报销凭证之际，由我（うに@elpwc）推出的在线票面生成工具&nbsp; <br /> \r\n目前 simTicket 还在未完成的开發阶段。但是由于测试网址在10月22日突然被泄露和广泛传播，于是我决定以半成品的形式先行向大家以内部测试的形式公开网页。\n在 CR 车票样式以外，我也计划提供 JR，TR, VNR, THSR 等我坐过的铁道公司的车票制作器。\n我会尽可能考虑、覆盖到票面上所有可能出现的情况，努力坐到最完美的车票制作器。\n\n注意，绝对不要将此工具用于不合法规的地方。\n\n可以前往我的推特实时关注开發进度：",
-    "text2": ""
-  },
-  "app": {
-    "menu": {
-      "about": "关于",
-      "post": "大家的作品"
-    }
-  },
-  "value": {
-    "purchaseMethod": {
-      "type": {
-        "TicketType": "票种",
-        "PurchaseMethod": "售票方式",
-        "POSPrint": "窗口POS支付打印字",
-        "WebPurchase": "网上购买车票窗口改签打印字",
-        "Other": "其他"
-      },
-      "list": {
-        "hai": "儿童票",
-        "xue": "学生票",
-        "jun": "残疾军人票",
-        "tan": "探亲乘车证签证票",
-        "ban": "省部级领导车票",
-        "bing": "军人票",
-        "hong": "红色旅游学生团体硬座20%优惠",
-        "xuefan": "学生返程票",
-        "tuan": "全价票团体票",
-        "tuanyou": "0票价团优票",
-        "fan": "农民工返程票",
-        "wang": "互联网售票",
-        "gong": "工行POS刷卡支付车票打印字",
-        "nong": "农行POS刷卡支付车票打印字",
-        "zhong": "中行POS刷卡支付车票打印字",
-        "zhao": "招行POS刷卡支付车票打印字",
-        "jian": "网上建行购票窗口改签打印",
-        "zhi": "网上支付宝购票窗口改签打印",
-        "yin": "网上银通卡购票窗口改签打印",
-        "wei": "网上微信购票窗口改签打印",
-        "jing": "网上京东购票窗口改签打印",
-        "xian": "现购票窗口打印",
-        "zeng": "网上积分购票换票时打印",
-        "zhe": "折扣票",
-        "bu": "进站补票打印",
-        "zhuan": "残疾人专用票额车票打印",
-        "xing": "行李票",
-        "che": "",
-        "can": "",
-        "ruan": "",
-        "ying": "",
-        "jinian": "纪念票",
-        "guashi": "挂失补票"
-      }
-    }
-  },
-  "text": {
-    "construction": "正在开發中"
-  },
-  "TicketEditorTemplate": {
-    "flipEffectButton": "翻转效果",
-    "loadingFontText": "加载字体文件中...",
-    "updateButton": "刷新图像",
-    "saveButton": "保存图像",
-    "reverse": "背面",
-    "reverse2": "正面",
-    "loadingImage": "加载背景图像中..."
-  },
-  "SaveImageModal": {
-    "title": "选择保存尺寸",
-    "customizeSizeTab": {
-      "buttonTitle": "自定义",
-      "heightText": "高",
-      "title": "自定义尺寸",
-      "widthText": "宽"
-    },
-    "SAVE_IMAGE_SIZES": {
-      "small": "小",
-      "normal": "普通",
-      "HD": "高清",
-      "UHD": "超高清"
-    }
-  },
-  "ticketListView": {
-    "exportList": "导出为A4",
-    "addResultToListButton": "添加当前编辑结果到列表中",
-    "clearListButton": "清空列表",
-    "emptyList": "空列表",
-    "listSummary": "列表中的车票数：",
-    "addResultToListButtonShort": "添加到列表",
-    "exportListShort": "导出为A4",
-    "openListButtonText": "展开",
-    "hideListButtonText": "收起"
-  },
-  "editor": {
-    "cr": {
-      "jisuanjikepiao2010": {
-        "ticketFace": {
-          "showBorderForNonBorder": "为软纸票和无背景显示边框",
-          "useHKWestKowloonStyle": "使用香港西九龍站發售樣式"
-        },
-        "stationInfo": {
-          "useWeibeiti": {
-            "desc1": "　曾经由TMIS（Transportation Management Information System）发行的车票中，当里程在400km以内时，两方车站名使用魏碑体",
-            "desc2": "　但仍存在不少一方是黑体一方是魏碑体的车票，故在此对两车站分别设置字体而不是统一设置",
-            "weibeitiText": "魏碑体",
-            "useText": "使用"
-          }
-        },
-        "trainInfo": {
-          "pukepukuaiOrCustom": "普客普快 / 自定义",
-          "routeIdentifier": "车次",
-          "seat3": "铺位/层",
-          "coolerType": "空调类型"
-        },
-        "purchaseInfo": {
-          "rightUpContentText": "右上角显示",
-          "rightUpContentTextNotShow": "不显示",
-          "showSoldPlaceDown": "下方显示购票处",
-          "passengerIdNumber": "乘车人证件号",
-          "passengerName": "乘车人",
-          "showPassengerInfo": "显示乘车人信息",
-          "addCircleToPurchaseMethod": "购票方式添加圆环",
-          "info1": {
-            "text": "信息1",
-            "inputBox1": "列车类型",
-            "inputBox2": "经由",
-            "inputBox3": "终到站"
-          },
-          "info2": "信息2",
-          "info3": "信息3",
-          "purchaseCertType": "乘车人购票证件",
-          "purchasePassportCode": "护照国家码",
-          "machineNo": "售票机号",
-          "purchaseDate": "结账日期"
-        },
-        "ticketNoInfo": {
-          "title": "票号数据",
-          "ticketSerialCode": "车票标识码",
-          "qrCodeText": "二维码数据",
-          "message": "虚线框内文字",
-          "presetText": "预设文字：",
-          "align": {
-            "left": "左对齐",
-            "center": "居中",
-            "right": "右对齐",
-            "justifyBetween": "靠边铺开",
-            "justifyEvenly": "等距铺开",
-            "justifyAround": "最优铺开"
-          },
-          "showMessageBorder": "显示边框"
-        }
-      }
-    },
-    "common": {
-      "ticketFace": {
-        "watermark": "水印",
-        "offset": "印刷偏移",
-        "paper": "票面用纸",
-        "title": "票面"
-      },
-      "stationInfo": {
-        "title": "车站信息",
-        "showForeignLanguageStationName": "显示外文",
-        "showTheTextOfStation": "显示「站」",
-        "arrivalForeign": "到达外文",
-        "arrival": "到达",
-        "departureForeign": "出发外文",
-        "departure": "出发"
-      },
-      "trainInfo": {
-        "routeIdentifier": "车次",
-        "title": "运行信息",
-        "returnTrain": "回送车次",
-        "departureDate": "發车日期",
-        "departureTime": "發车时间",
-        "carriage": "车厢",
-        "noCarriage": "无指定车厢",
-        "seatNo": "座位号",
-        "noSeatNo": "无座",
-        "seat2": "座位",
-        "seat3": "铺位",
-        "seatClass": "席别"
-      },
-      "purchaseInfo": {
-        "title": "购票信息",
-        "soldPlace": "购票处",
-        "price": "价格",
-        "turnstile": "检票",
-        "purchaseMethod": "购票方式"
-      },
-      "ticketNoInfo": {
-        "ticketNo": "票号"
-      }
-    },
-    "jr": {
-      "mars": {
-        "stationInfo": {
-          "specialStationNamePresetButton": "特殊站名预设",
-          "specialStationNameTip": "2/3段式站名请用半角/分割开各部分"
-        }
-      }
-    }
-  },
-  "DescriptionButton": {
-    "text": "※说明"
-  },
-  "SaveListModal": {
-    "title": "保存列表到A4纸",
-    "printPreview": "正面预览",
-    "selectTicketToSave": "请选择保存在A4纸上的票：",
-    "printPreviewFlip": "背面预览",
-    "saveFront": "保存正面",
-    "saveFlipside": "保存背面",
-    "close": "关闭"
-  },
-  "TicketListViewItem": {
-    "copyLink": {
-      "hint": {
-        "success": "此车票的链接已拷贝进剪切板中！",
-        "fail": "链接复制到剪切板失败了.."
-      }
-    },
-    "editConfirmDialog": {
-      "cancel": "取消",
-      "cancel2": "否，覆盖",
-      "ok": "是",
-      "text": "是否保存当前编辑到列表？"
-    }
-  },
-  "JRPresetStationsModal": {
-    "showAsCompanyButton": "按照公司分类",
-    "title": "特殊站名预设",
-    "tip": "这里沒有的站名也可以在「车站信息」中手动生成"
-  },
-  "UploadTicketModal": {
-    "name": "标题(可空)",
-    "editorName": "作者(可空)",
-    "title": "投稿作品",
-    "agreeCheckbox": "我同意上述规约",
-    "tips": {
-      "tip1": "※请不要投稿对特定地域・人物・团体的仇恨・侮辱發言、容易引起对立・争议的内容和政治相关的内容！",
-      "tip2": "※为了可持续的网站运营，运营方有权利删除判断为符合上述描述的投稿。",
-      "tip3": "※当数据量过大时，会有不能投稿的情况。请谅解。",
-      "why": "为什么？",
-      "whyText": "　本网站搭建在小型服务器上，为了保证数据库的读取速度和总大小，每个投稿数据长度的上限被设置在2048byte。通常一个投稿的数据长度在500-1000byte之间，所以不用过于担心大小问题。带来的不便请谅解。"
-    },
-    "tooLong": "投稿的数据长度过长，请适当减少内容",
-    "done": "投稿成功~"
-  },
-  "worksPage": {
-    "filter": {
-      "allTicketType": "全部票种",
-      "allCompany": "全部公司",
-      "order": {
-        "label": "排序",
-        "none": "不排序",
-        "createTime": "时间",
-        "like": "like",
-        "views": "浏览量",
-        "asc": "升序",
-        "desc": "降序"
-      },
-      "search": {
-        "from": "出發",
-        "to": "到达",
-        "searchText": "搜索",
-        "search": "搜索"
-      },
-      "reset": "重置"
-    },
-    "latest": {
-      "title": "最新投稿"
-    }
-  },
-  "TicketViewer": {
-    "loadingBackgroundImage": "加载背景中",
-    "loadingFont": "加载字体中"
-  },
-  "CopyLinkModal": {
-    "copy": "复制",
-    "title": "分享链接",
-    "editorLink": "到编辑器的链接",
-    "viewerLink": "可以直接预览的链接",
-    "noViewerLink": "只有投稿後才能生成预览链接或者分享到推特...",
-    "submit": "投稿",
-    "noViewerLinkDescription": "编辑链接中存放了票面的所有数据，长度有数百到1000Byte，难以在限制文字数的SNS上分享。",
-    "whyDontUseViewerLink": "那为什么不用id做编辑链接？",
-    "whyDontUseViewerLinkDescription": "因为编辑链接指向的可以是还未投稿的，制作中的票面。"
-  }
+	"InputRadioGroup": {
+		"placeholder": "空 (自定义)"
+	},
+	"DevProgressModal": {
+		"text1": "欢迎使用 simTicket 内部测试版本 \n simTicket 是在2025年10月 CR（中国国铁）彻底废止纸质报销凭证之际，由我（うに@elpwc）推出的在线票面生成工具&nbsp; <br /> \r\n目前 simTicket 还在未完成的开發阶段。但是由于测试网址在10月22日突然被泄露和广泛传播，于是我决定以半成品的形式先行向大家以内部测试的形式公开网页。\n在 CR 车票样式以外，我也计划提供 JR，TR, VNR, THSR 等我坐过的铁道公司的车票制作器。\n我会尽可能考虑、覆盖到票面上所有可能出现的情况，努力坐到最完美的车票制作器。\n\n注意，绝对不要将此工具用于不合法规的地方。\n\n可以前往我的推特实时关注开發进度：",
+		"text2": ""
+	},
+	"app": {
+		"menu": {
+			"about": "关于",
+			"post": "大家的作品"
+		}
+	},
+	"value": {
+		"purchaseMethod": {
+			"type": {
+				"TicketType": "票种",
+				"PurchaseMethod": "售票方式",
+				"POSPrint": "窗口POS支付打印字",
+				"WebPurchase": "网上购买车票窗口改签打印字",
+				"Other": "其他"
+			},
+			"list": {
+				"hai": "儿童票",
+				"xue": "学生票",
+				"jun": "残疾军人票",
+				"tan": "探亲乘车证签证票",
+				"ban": "省部级领导车票",
+				"bing": "军人票",
+				"hong": "红色旅游学生团体硬座20%优惠",
+				"xuefan": "学生返程票",
+				"tuan": "全价票团体票",
+				"tuanyou": "0票价团优票",
+				"fan": "农民工返程票",
+				"wang": "互联网售票",
+				"gong": "工行POS刷卡支付车票打印字",
+				"nong": "农行POS刷卡支付车票打印字",
+				"zhong": "中行POS刷卡支付车票打印字",
+				"zhao": "招行POS刷卡支付车票打印字",
+				"jian": "网上建行购票窗口改签打印",
+				"zhi": "网上支付宝购票窗口改签打印",
+				"yin": "网上银通卡购票窗口改签打印",
+				"wei": "网上微信购票窗口改签打印",
+				"jing": "网上京东购票窗口改签打印",
+				"xian": "现购票窗口打印",
+				"zeng": "网上积分购票换票时打印",
+				"zhe": "折扣票",
+				"hui": "优惠票",
+				"bu": "进站补票打印",
+				"zhuan": "残疾人专用票额车票打印",
+				"xing": "行李票",
+				"che": "",
+				"can": "",
+				"ruan": "",
+				"ying": "",
+				"jinian": "纪念票",
+				"guashi": "挂失补票"
+			}
+		}
+	},
+	"text": {
+		"construction": "正在开發中"
+	},
+	"TicketEditorTemplate": {
+		"flipEffectButton": "翻转效果",
+		"loadingFontText": "加载字体文件中...",
+		"updateButton": "刷新图像",
+		"saveButton": "保存图像",
+		"reverse": "背面",
+		"reverse2": "正面",
+		"loadingImage": "加载背景图像中..."
+	},
+	"SaveImageModal": {
+		"title": "选择保存尺寸",
+		"customizeSizeTab": {
+			"buttonTitle": "自定义",
+			"heightText": "高",
+			"title": "自定义尺寸",
+			"widthText": "宽"
+		},
+		"SAVE_IMAGE_SIZES": {
+			"small": "小",
+			"normal": "普通",
+			"HD": "高清",
+			"UHD": "超高清"
+		}
+	},
+	"ticketListView": {
+		"exportList": "导出为A4",
+		"addResultToListButton": "添加当前编辑结果到列表中",
+		"clearListButton": "清空列表",
+		"emptyList": "空列表",
+		"listSummary": "列表中的车票数：",
+		"addResultToListButtonShort": "添加到列表",
+		"exportListShort": "导出为A4",
+		"openListButtonText": "展开",
+		"hideListButtonText": "收起"
+	},
+	"editor": {
+		"cr": {
+			"jisuanjikepiao2010": {
+				"ticketFace": {
+					"showBorderForNonBorder": "为软纸票和无背景显示边框",
+					"useHKWestKowloonStyle": "使用香港西九龍站發售樣式"
+				},
+				"stationInfo": {
+					"useWeibeiti": {
+						"desc1": "　曾经由TMIS（Transportation Management Information System）发行的车票中，当里程在400km以内时，两方车站名使用魏碑体",
+						"desc2": "　但仍存在不少一方是黑体一方是魏碑体的车票，故在此对两车站分别设置字体而不是统一设置",
+						"weibeitiText": "魏碑体",
+						"useText": "使用"
+					}
+				},
+				"trainInfo": {
+					"pukepukuaiOrCustom": "普客普快 / 自定义",
+					"routeIdentifier": "车次",
+					"seat3": "铺位/层",
+					"coolerType": "空调类型"
+				},
+				"purchaseInfo": {
+					"rightUpContentText": "右上角显示",
+					"rightUpContentTextNotShow": "不显示",
+					"showSoldPlaceDown": "下方显示购票处",
+					"passengerIdNumber": "乘车人证件号",
+					"passengerName": "乘车人",
+					"showPassengerInfo": "显示乘车人信息",
+					"addCircleToPurchaseMethod": "购票方式添加圆环",
+					"info1": {
+						"text": "信息1",
+						"inputBox1": "列车类型",
+						"inputBox2": "经由",
+						"inputBox3": "终到站"
+					},
+					"info2": "信息2",
+					"info3": "信息3",
+					"purchaseCertType": "乘车人购票证件",
+					"purchasePassportCode": "护照国家码",
+					"machineNo": "售票机号",
+					"purchaseDate": "结账日期"
+				},
+				"ticketNoInfo": {
+					"title": "票号数据",
+					"ticketSerialCode": "车票标识码",
+					"qrCodeText": "二维码数据",
+					"message": "虚线框内文字",
+					"presetText": "预设文字：",
+					"align": {
+						"left": "左对齐",
+						"center": "居中",
+						"right": "右对齐",
+						"justifyBetween": "靠边铺开",
+						"justifyEvenly": "等距铺开",
+						"justifyAround": "最优铺开"
+					},
+					"showMessageBorder": "显示边框"
+				}
+			}
+		},
+		"common": {
+			"ticketFace": {
+				"watermark": "水印",
+				"offset": "印刷偏移",
+				"paper": "票面用纸",
+				"title": "票面"
+			},
+			"stationInfo": {
+				"title": "车站信息",
+				"showForeignLanguageStationName": "显示外文",
+				"showTheTextOfStation": "显示「站」",
+				"arrivalForeign": "到达外文",
+				"arrival": "到达",
+				"departureForeign": "出发外文",
+				"departure": "出发"
+			},
+			"trainInfo": {
+				"routeIdentifier": "车次",
+				"title": "运行信息",
+				"returnTrain": "回送车次",
+				"departureDate": "發车日期",
+				"departureTime": "發车时间",
+				"carriage": "车厢",
+				"noCarriage": "无指定车厢",
+				"seatNo": "座位号",
+				"noSeatNo": "无座",
+				"seat2": "座位",
+				"seat3": "铺位",
+				"seatClass": "席别"
+			},
+			"purchaseInfo": {
+				"title": "购票信息",
+				"soldPlace": "购票处",
+				"price": "价格",
+				"turnstile": "检票",
+				"purchaseMethod": "购票方式"
+			},
+			"ticketNoInfo": {
+				"ticketNo": "票号"
+			}
+		},
+		"jr": {
+			"mars": {
+				"stationInfo": {
+					"specialStationNamePresetButton": "特殊站名预设",
+					"specialStationNameTip": "2/3段式站名请用半角/分割开各部分"
+				}
+			}
+		}
+	},
+	"DescriptionButton": {
+		"text": "※说明"
+	},
+	"SaveListModal": {
+		"title": "保存列表到A4纸",
+		"printPreview": "正面预览",
+		"selectTicketToSave": "请选择保存在A4纸上的票：",
+		"printPreviewFlip": "背面预览",
+		"saveFront": "保存正面",
+		"saveFlipside": "保存背面",
+		"close": "关闭"
+	},
+	"TicketListViewItem": {
+		"copyLink": {
+			"hint": {
+				"success": "此车票的链接已拷贝进剪切板中！",
+				"fail": "链接复制到剪切板失败了.."
+			}
+		},
+		"editConfirmDialog": {
+			"cancel": "取消",
+			"cancel2": "否，覆盖",
+			"ok": "是",
+			"text": "是否保存当前编辑到列表？"
+		}
+	},
+	"JRPresetStationsModal": {
+		"showAsCompanyButton": "按照公司分类",
+		"title": "特殊站名预设",
+		"tip": "这里沒有的站名也可以在「车站信息」中手动生成"
+	},
+	"UploadTicketModal": {
+		"name": "标题(可空)",
+		"editorName": "作者(可空)",
+		"title": "投稿作品",
+		"agreeCheckbox": "我同意上述规约",
+		"tips": {
+			"tip1": "※请不要投稿对特定地域・人物・团体的仇恨・侮辱發言、容易引起对立・争议的内容和政治相关的内容！",
+			"tip2": "※为了可持续的网站运营，运营方有权利删除判断为符合上述描述的投稿。",
+			"tip3": "※当数据量过大时，会有不能投稿的情况。请谅解。",
+			"why": "为什么？",
+			"whyText": "　本网站搭建在小型服务器上，为了保证数据库的读取速度和总大小，每个投稿数据长度的上限被设置在2048byte。通常一个投稿的数据长度在500-1000byte之间，所以不用过于担心大小问题。带来的不便请谅解。"
+		},
+		"tooLong": "投稿的数据长度过长，请适当减少内容",
+		"done": "投稿成功~"
+	},
+	"worksPage": {
+		"filter": {
+			"allTicketType": "全部票种",
+			"allCompany": "全部公司",
+			"order": {
+				"label": "排序",
+				"none": "不排序",
+				"createTime": "时间",
+				"like": "like",
+				"views": "浏览量",
+				"asc": "升序",
+				"desc": "降序"
+			},
+			"search": {
+				"from": "出發",
+				"to": "到达",
+				"searchText": "搜索",
+				"search": "搜索"
+			},
+			"reset": "重置"
+		},
+		"latest": {
+			"title": "最新投稿"
+		}
+	},
+	"TicketViewer": {
+		"loadingBackgroundImage": "加载背景中",
+		"loadingFont": "加载字体中"
+	},
+	"CopyLinkModal": {
+		"copy": "复制",
+		"title": "分享链接",
+		"editorLink": "到编辑器的链接",
+		"viewerLink": "可以直接预览的链接",
+		"noViewerLink": "只有投稿後才能生成预览链接或者分享到推特...",
+		"submit": "投稿",
+		"noViewerLinkDescription": "编辑链接中存放了票面的所有数据，长度有数百到1000Byte，难以在限制文字数的SNS上分享。",
+		"whyDontUseViewerLink": "那为什么不用id做编辑链接？",
+		"whyDontUseViewerLinkDescription": "因为编辑链接指向的可以是还未投稿的，制作中的票面。"
+	}
 }

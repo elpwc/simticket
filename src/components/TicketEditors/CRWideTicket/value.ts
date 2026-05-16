@@ -181,6 +181,7 @@ export const purchaseMethodList: PurchaseMethod[] = [
 	{ type: PurchaseMethodType.WebPurchase, title: '现', desc: 'value.purchaseMethod.list.xian' },
 	{ type: PurchaseMethodType.Other, title: '赠', desc: 'value.purchaseMethod.list.zeng' },
 	{ type: PurchaseMethodType.Other, title: '折', desc: 'value.purchaseMethod.list.zhe' },
+	{ type: PurchaseMethodType.Other, title: '惠', desc: 'value.purchaseMethod.list.hui' },
 	{ type: PurchaseMethodType.Other, title: '补', desc: 'value.purchaseMethod.list.bu' },
 	{ type: PurchaseMethodType.Other, title: '专', desc: 'value.purchaseMethod.list.zhuan' },
 	{ type: PurchaseMethodType.Other, title: '行', desc: 'value.purchaseMethod.list.xing' },
