@@ -231,7 +231,7 @@ export const drawCRWideTicket = (
 				ctx.fillStyle = 'black';
 				ctx.strokeStyle = 'black';
 				ctx.font = `${resizedFont(6, 'SongTi')}`;
-				ctx.fillText(drawParameters.soldplace, offsetScaleX(1315), offsetScaleY(210));
+				drawText(ctx, drawParameters.soldplace, offsetScaleX(555), offsetScaleY(210), resizedScaleX(900), TextAlign.Right);
 
 				ctx.beginPath();
 				ctx.arc(offsetScaleX(1500), offsetScaleY(185), resizedScaleY(40), 0, 2 * Math.PI);
