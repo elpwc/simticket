@@ -45,7 +45,7 @@ export const drawCRWideTicket = (
 	onBgImageLoadStart?: () => void,
 	onBgImageLoaded?: () => void,
 	onFontLoadStart?: () => void,
-	onFontLoaded?: () => void
+	onFontLoaded?: () => void,
 ) => {
 	if (!ctx || !canvas) return;
 
@@ -66,7 +66,7 @@ export const drawCRWideTicket = (
 		},
 		() => {
 			onFontLoaded?.();
-		}
+		},
 	);
 
 	const drawParameters: CRWideTicketDrawParameters = {
@@ -262,7 +262,7 @@ export const drawCRWideTicket = (
 				// 自定义
 				ctx.fillStyle = 'black';
 				ctx.font = `${resizedFont(6, 'SongTi')}`;
-				ctx.fillText(drawParameters.rightUpContentType, offsetScaleX(1315), offsetScaleY(210));
+				drawText(ctx, drawParameters.rightUpContentType, offsetScaleX(701), offsetScaleY(210), resizedScaleX(900), TextAlign.Right);
 				break;
 		}
 
@@ -283,7 +283,7 @@ export const drawCRWideTicket = (
 			offsetScaleX(167),
 			offsetScaleY(drawParameters.doShowEnglish ? 335 : 365),
 			resizedScaleX(drawParameters.doShowZhan ? (drawParameters.station1.length > 4 ? 452 : 365) : 500),
-			TextAlign.JustifyEvenly
+			TextAlign.JustifyEvenly,
 		);
 		ctx.font = `${drawParameters.doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
 		drawText(
@@ -292,7 +292,7 @@ export const drawCRWideTicket = (
 			offsetScaleX(1074),
 			offsetScaleY(drawParameters.doShowEnglish ? 335 : 365),
 			resizedScaleX(drawParameters.doShowZhan ? (drawParameters.station2.length > 4 ? 435 : 365) : 500),
-			TextAlign.JustifyEvenly
+			TextAlign.JustifyEvenly,
 		);
 
 		// 英文站名
@@ -558,7 +558,7 @@ export const drawCRWideTicket = (
 			TextAlign.Left,
 			DrawTextMethod.fillText,
 			0,
-			1.25
+			1.25,
 		);
 
 		if (!isMag) {
