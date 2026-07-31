@@ -4,7 +4,7 @@ import Link from 'next/link';
 import './globals.css';
 import { createContext, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { companyList } from '@/utils/companies';
+import { companyList, getCompanyById, getDefaultTicketId, getTicketType } from '@/utils/companies';
 import { useIsMobile } from '@/utils/hooks';
 import LangSwitcher from '@/components/InfrastructureCompo/LangSwitcher';
 import { useLocale } from '@/utils/hooks/useLocale';
@@ -22,8 +22,8 @@ export default function App({
 	const { t } = useLocale();
 	const isMobile = useIsMobile();
 
-	const [selectedCompanyId, setSelectedCompanyId] = useState(0);
-	const [selectedTicketId, setSelectedTicketId] = useState(companyList[selectedCompanyId].defaultSelectedTicketId ?? 0);
+	const [selectedCompanyId, setSelectedCompanyId] = useState(companyList[0].id);
+	const [selectedTicketId, setSelectedTicketId] = useState(getDefaultTicketId(companyList[0].id));
 	const [showMobileCompanySelectMenu, setShowMobileCompanySelectMenu] = useState(true);
 	const [showDevProgressModal, setShowDevProgressModal] = useState(false);
 	const [ticketListItems, setTicketListItems] = useState<TicketListItemProperty[]>([]);
@@ -93,11 +93,11 @@ export default function App({
 								setShowMobileCompanySelectMenu(!showMobileCompanySelectMenu);
 							}}
 						>
-							<Image className="h-8 w-8" src={companyList[selectedCompanyId].logo} alt={companyList[selectedCompanyId].abbr} />
+							<Image className="h-8 w-8" src={getCompanyById(selectedCompanyId)?.logo ?? companyList[0].logo} alt={getCompanyById(selectedCompanyId)?.abbr ?? ''} />
 							{!isMobile && (
 								<div className="flex flex-col items-center">
-									<span className="w-max">{companyList[selectedCompanyId].name}</span>
-									<span className="w-max">{companyList[selectedCompanyId].tickets?.[selectedTicketId].name}</span>
+									<span className="w-max">{getCompanyById(selectedCompanyId)?.name}</span>
+									<span className="w-max">{getTicketType(selectedCompanyId, selectedTicketId)?.name}</span>
 								</div>
 							)}
 

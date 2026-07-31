@@ -1,16 +1,14 @@
 'use client';
 
-import CRWideTicket from '@/components/TicketEditors/CRWideTicket';
 import './globals.css';
 import Image from 'next/image';
 import { useContext, useEffect, useState } from 'react';
-import { companyList } from '@/utils/companies';
+import { companyList, getCompanyById, getDefaultTicketId } from '@/utils/companies';
+import { getTicketEditor } from '@/utils/ticketEditorRegistry';
 import { AppContext } from './app';
 import { useIsMobile } from '@/utils/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
-import JRWideTicket from '@/components/TicketEditors/JRWideTicket';
-import { UnderConstruction } from '@/components/TicketEditorCompo/UnderConstruction';
 import { TicketListView } from '@/components/InfrastructureCompo/ticketListView';
 
 export default function HomePage() {
@@ -23,6 +21,8 @@ export default function HomePage() {
 
 	const router = useRouter();
 	const searchParams = useSearchParams();
+
+	const selectedCompany = getCompanyById(selectedCompanyId);
 
 	useEffect(() => {
 		const comParam = searchParams.get('com');
@@ -45,6 +45,8 @@ export default function HomePage() {
 		}
 	}, [showMobileCompanySelectMenu, isMobile, selectedCompanyId]);
 
+	const TicketEditor = getTicketEditor(selectedCompanyId, selectedTicketId);
+
 	useEffect(() => {
 		const params = new URLSearchParams(searchParams.toString());
 		params.set('com', String(selectedCompanyId));
@@ -66,20 +68,20 @@ export default function HomePage() {
 						style={{ top: isMobile ? '46px' : '50px' }}
 					>
 						<menu className="flex gap-2 flex-wrap bg-[#b9e3ff]">
-							{companyList.map((company, index) => {
+							{companyList.map((company) => {
 								return (
 									<div
 										className={
 											`${isMobile ? 'rounded-[4px]' : 'rounded-[4px_4px_0_0]'}` +
 											' company-menu-item' +
-											(selectedCompanyId === index ? ' selected' : '') +
+											(selectedCompanyId === company.id ? ' selected' : '') +
 											(company.disabled ? ' disabled' : '')
 										}
 										key={company.abbr}
 										onClick={() => {
 											if (!company.disabled) {
-												setSelectedCompanyId(index);
-												setSelectedTicketId(companyList[index].defaultSelectedTicketId ?? 0);
+												setSelectedCompanyId(company.id);
+												setSelectedTicketId(getDefaultTicketId(company.id));
 											}
 										}}
 									>
@@ -89,17 +91,16 @@ export default function HomePage() {
 								);
 							})}
 						</menu>
-						{(companyList[selectedCompanyId].tickets?.length ?? 0) > 0 && (
+						{(selectedCompany?.tickets?.length ?? 0) > 0 && (
 							<menu className="px-2 flex gap-1 flex-wrap shadow-sm items-center bg-white sticky bottom-0">
-								{companyList[selectedCompanyId].tickets?.map((ticket, index) => {
+								{selectedCompany?.tickets?.map((ticket) => {
 									return (
-										<div key={index} className="flex items-center">
+										<div key={ticket.id} className="flex items-center">
 											<div
-												className={'ticket-menu-item' + (selectedTicketId === index ? ' selected' : '') + (ticket.disabled ? ' disabled' : '')}
-												key={index}
+												className={'ticket-menu-item' + (selectedTicketId === ticket.id ? ' selected' : '') + (ticket.disabled ? ' disabled' : '')}
 												onClick={() => {
 													if (!ticket.disabled) {
-														setSelectedTicketId(index);
+														setSelectedTicketId(ticket.id);
 													}
 												}}
 											>
@@ -116,51 +117,7 @@ export default function HomePage() {
 			</AnimatePresence>
 
 			<motion.div className="mb-[200px]" animate={{ marginTop: `${menuHeight}px` }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
-				{(() => {
-					switch (selectedCompanyId) {
-						case 0: //CR
-							switch (selectedTicketId) {
-								case 0:
-								case 1:
-								case 2:
-								case 3:
-									return <UnderConstruction />;
-								case 4:
-									return <CRWideTicket />;
-								default:
-									return <UnderConstruction />;
-							}
-						case 1: // JR
-							switch (selectedTicketId) {
-								case 0:
-									return <UnderConstruction />;
-								case 1:
-									return <JRWideTicket />;
-								case 2:
-								default:
-									return <UnderConstruction />;
-							}
-						case 2: // JNR
-							switch (selectedTicketId) {
-								case 0:
-								default:
-									return <UnderConstruction />;
-							}
-						case 3: // TR
-							switch (selectedTicketId) {
-								case 0:
-								case 1:
-								case 2:
-								default:
-									return <UnderConstruction />;
-							}
-						case 4: // THSR
-						case 5: // VNR
-						case 6: // KR
-						default:
-							return <UnderConstruction />;
-					}
-				})()}
+				<TicketEditor key={`${selectedCompanyId}-${selectedTicketId}`} />
 			</motion.div>
 			<footer className="">
 				<TicketListView />

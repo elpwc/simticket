@@ -4,7 +4,6 @@ import cr_mag_blue_preview from '../../../assets/tickets_preview/cr_mag_blue.png
 import cr_mag_red_preview from '../../../assets/tickets_preview/cr_mag_red.png';
 import cr_preview from '../../../assets/tickets_preview/cr.png';
 import cr_mag_preview from '../../../assets/tickets_preview/cr_mag.png';
-// @ts-expect-error Need to import stylesheet 20260516
 import './index.css';
 import { CRTicketBackGround } from './type';
 

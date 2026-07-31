@@ -7,7 +7,7 @@ import { UploadedTicketInfo } from '@/utils/utils';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './style.css';
 import PrettyDropdown from '@/components/InfrastructureCompo/PrettyDropdown';
-import { companyList } from '@/utils/companies';
+import { companyList, getCompanyById } from '@/utils/companies';
 import Image from 'next/image';
 import { TicketListView } from '@/components/InfrastructureCompo/ticketListView';
 import { useIsMobile } from '@/utils/hooks';
@@ -213,9 +213,9 @@ export default function Works() {
 										return <span className="flex">{t('worksPage.filter.allCompany')}</span>;
 									},
 								},
-								...companyList.map((company, index) => {
+								...companyList.map((company) => {
 									return {
-										value: index,
+										value: company.id,
 										getCaption: () => {
 											return (
 												<span className="flex gap-1">
@@ -245,9 +245,9 @@ export default function Works() {
 										return <span className="flex">{t('worksPage.filter.allTicketType')}</span>;
 									},
 								},
-								...(companyList[companyId]?.tickets?.map((ticket, index) => {
+								...(getCompanyById(companyId)?.tickets?.map((ticket) => {
 									return {
-										value: index,
+										value: ticket.id,
 										getCaption: () => {
 											return <>{ticket.name}</>;
 										},
