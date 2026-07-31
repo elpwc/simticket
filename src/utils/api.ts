@@ -1,5 +1,4 @@
 export const API_PREFIX = '/simticket';
-const prefix = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 export const request = (input: string | URL | Request, init?: RequestInit | undefined) => {
 	return fetch(API_PREFIX + input, init);
@@ -9,7 +8,6 @@ export const getIP = async () => {
 	return await request('/api/ip')
 		.then((response) => response.json())
 		.then((data) => {
-			console.log('IP:', data);
 			return data.ip;
 		})
 		.catch((e) => {
@@ -24,6 +22,11 @@ export enum OrderType {
 	createTime = 'createTime',
 }
 
+export interface UploadedTicketsResponse {
+	items: unknown[];
+	hasMore: boolean;
+}
+
 export const getUploadedTickets = async (
 	companyId: number = -1,
 	ticketTypeId: number = -1,
@@ -35,40 +38,48 @@ export const getUploadedTickets = async (
 	from: string = '',
 	to: string = '',
 	search: string = ''
-) => {
+): Promise<UploadedTicketsResponse> => {
 	const params = new URLSearchParams();
-	//console.log(companyId, from, to, search);
 	if (companyId >= 0) params.append('companyId', String(companyId));
-	if (ticketTypeId >= 0) params.append('ticketId', String(ticketTypeId));
+	if (ticketTypeId >= 0) params.append('ticketTypeId', String(ticketTypeId));
 	if (orderBy !== OrderType.none) params.append('orderBy', orderBy);
 	if (ip !== '') params.append('ip', ip);
 	if (limit >= 0) params.append('limit', String(limit));
-	if (asc) params.append('asc', asc ? 'asc' : 'desc');
-	if (page) params.append('page', page.toString());
+	if (asc) params.append('asc', 'asc');
+	if (page > 0) params.append('page', page.toString());
 	if (from !== '') params.append('from', from);
 	if (to !== '') params.append('to', to);
 	if (search !== '') params.append('search', search);
 
-	//console.log(params);
-	return await request('/api/ticket' + (params.toString() ? `?${params.toString()}` : ''))
-		.then((response) => response.json())
-		.then((data) => {
-			//console.log(data);
-			return data;
-		})
-		.catch((e) => {
-			console.error(e);
-		});
+	try {
+		const response = await request('/api/ticket' + (params.toString() ? `?${params.toString()}` : ''));
+		const data = await response.json();
+		if (data && Array.isArray(data.items)) {
+			return { items: data.items, hasMore: Boolean(data.hasMore) };
+		}
+		// fallback for legacy array response
+		if (Array.isArray(data)) {
+			return { items: data, hasMore: data.length >= limit };
+		}
+		return { items: [], hasMore: false };
+	} catch (e) {
+		console.error(e);
+		return { items: [], hasMore: false };
+	}
 };
 
 export const getUploadedTicketById = async (id: number) => {
 	try {
-		const response = await request('/api/ticket?ticketId=' + id);
+		const response = await request('/api/ticket?id=' + id);
 		const data = await response.json();
 
-		//console.log(data);
-
-		return data ?? null;
+		if (data && Array.isArray(data.items)) {
+			return data.items;
+		}
+		if (Array.isArray(data)) {
+			return data;
+		}
+		return null;
 	} catch (e) {
 		console.error('getUploadedTicketById error:', e);
 		return null;

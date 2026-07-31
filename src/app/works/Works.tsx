@@ -4,33 +4,33 @@ import { UploadedWorkItem } from '@/components/InfrastructureCompo/UploadedWorkI
 import { getUploadedTicketById, getUploadedTickets, OrderType } from '@/utils/api';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { UploadedTicketInfo } from '@/utils/utils';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './style.css';
 import PrettyDropdown from '@/components/InfrastructureCompo/PrettyDropdown';
 import { companyList } from '@/utils/companies';
 import Image from 'next/image';
-import InfiniteScroll from 'react-infinite-scroller';
 import { TicketListView } from '@/components/InfrastructureCompo/ticketListView';
 import { useIsMobile } from '@/utils/hooks';
 import { useSearchParams } from 'next/navigation';
 import { TicketViewerModal } from '@/components/Modals/TicketViewerModal';
 import { CopyLinkModal } from '@/components/Modals/CopyLinkModal';
+import { useInfiniteScroll } from '@/utils/hooks/useInfiniteScroll';
+
+const pageSize = 15;
+
+function dedupeById(items: UploadedTicketInfo[]): UploadedTicketInfo[] {
+	const seen = new Set<number>();
+	return items.filter((item) => {
+		if (seen.has(item.id)) return false;
+		seen.add(item.id);
+		return true;
+	});
+}
 
 export default function Works() {
 	const { t, locale } = useLocale();
 	const isMobile = useIsMobile();
 	const searchParams = useSearchParams();
-
-	const infiniteScrollRef = useRef(null);
-
-	const resetInfiniteScrollPage = () => {
-		if (typeof window !== 'undefined') {
-			if (infiniteScrollRef.current) {
-				//@ts-expect-error outer library
-				infiniteScrollRef.current.pageLoaded = 0;
-			}
-		}
-	};
 
 	const [orderBy, setOrderBy] = useState<OrderType>(OrderType.views);
 	const [asc, setAsc] = useState<boolean>(false);
@@ -39,78 +39,143 @@ export default function Works() {
 	const [startStation, setStartStation] = useState<string>('');
 	const [endStation, setEndStation] = useState<string>('');
 	const [anyText, setAnyText] = useState<string>('');
+	const [appliedSearch, setAppliedSearch] = useState({ from: '', to: '', text: '' });
 
 	const [works, setWorks] = useState<UploadedTicketInfo[]>([]);
 	const [latestWorks, setLatestWorks] = useState<UploadedTicketInfo[]>([]);
+	const [page, setPage] = useState(0);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [hasMore, setHasMore] = useState<boolean>(true);
 	const [showTicketViewerModal, setShowTicketViewerModal] = useState<boolean>(false);
 	const [urlParamTicketInfo, setUrlParamTicketInfo] = useState<UploadedTicketInfo | null>(null);
 	const [showCopyLinkModal, setShowCopyLinkModal] = useState<boolean>(false);
 
-	const pageSize = 15;
+	const filterKey = useMemo(
+		() => JSON.stringify({ companyId, ticketId, orderBy, asc, appliedSearch }),
+		[companyId, ticketId, orderBy, asc, appliedSearch]
+	);
 
-	const load = useCallback(async () => {
-		if (typeof window !== 'undefined') {
-			getUploadedTickets(companyId, ticketId, orderBy, '', pageSize, asc, 0, startStation, endStation, anyText).then((e) => {
-				resetInfiniteScrollPage();
-				setHasMore(true);
-				setWorks(e);
-			});
-		}
-	}, [companyId, ticketId, orderBy, anyText, asc]);
+	const fetchPage = useCallback(
+		async (pageIndex: number, mode: 'replace' | 'append'): Promise<{ hasMore: boolean }> => {
+			const res = await getUploadedTickets(
+				companyId,
+				ticketId,
+				orderBy,
+				'',
+				pageSize,
+				asc,
+				pageIndex,
+				appliedSearch.from,
+				appliedSearch.to,
+				appliedSearch.text
+			);
+
+			const items = (res.items ?? []) as UploadedTicketInfo[];
+
+			if (items.length === 0) {
+				if (mode === 'replace') setWorks([]);
+				setHasMore(false);
+				return { hasMore: false };
+			}
+
+			setWorks((prev) => (mode === 'append' ? dedupeById([...prev, ...items]) : items));
+			setHasMore(res.hasMore);
+			return { hasMore: res.hasMore };
+		},
+		[companyId, ticketId, orderBy, asc, appliedSearch]
+	);
 
 	const loadLatest = useCallback(async () => {
-		getUploadedTickets(companyId, ticketId, OrderType.createTime, '', 10, asc, 0, startStation, endStation, anyText).then((e) => {
-			setLatestWorks(e);
-		});
-	}, [companyId, ticketId, asc]);
+		const res = await getUploadedTickets(
+			companyId,
+			ticketId,
+			OrderType.createTime,
+			'',
+			10,
+			asc,
+			0,
+			appliedSearch.from,
+			appliedSearch.to,
+			appliedSearch.text
+		);
+		setLatestWorks((res.items ?? []) as UploadedTicketInfo[]);
+	}, [companyId, ticketId, asc, appliedSearch]);
 
-	const loadMore = async (nextPageIndex: number) => {
-		if (typeof window === 'undefined') return;
-		if (isLoading || !hasMore) return;
+	const isLoadingRef = useRef(false);
+
+	const loadMore = useCallback(async () => {
+		if (isLoadingRef.current || !hasMore) return;
+		isLoadingRef.current = true;
 		setIsLoading(true);
 		try {
-			const res = await getUploadedTickets(companyId, ticketId, orderBy, anyText, pageSize, asc, nextPageIndex, startStation, endStation, anyText);
-			if (!res || res.length === 0) {
-				setHasMore(false);
-			} else {
-				setWorks((prev) => [...prev, ...res]);
-				if (res.length < pageSize) setHasMore(false);
-			}
+			const nextPage = page + 1;
+			await fetchPage(nextPage, 'append');
+			setPage(nextPage);
 		} catch (e) {
 			console.error(e);
 		} finally {
+			isLoadingRef.current = false;
 			setIsLoading(false);
 		}
-	};
+	}, [page, hasMore, fetchPage]);
+
+	const sentinelRef = useInfiniteScroll({ hasMore, isLoading, onLoadMore: loadMore });
+
+	// Reset and load first page when filters change
+	useEffect(() => {
+		let cancelled = false;
+		setPage(0);
+		setHasMore(true);
+		setIsLoading(true);
+		isLoadingRef.current = true;
+
+		fetchPage(0, 'replace').finally(() => {
+			if (!cancelled) {
+				isLoadingRef.current = false;
+				setIsLoading(false);
+			}
+		});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [filterKey, fetchPage]);
 
 	useEffect(() => {
-		const ticketId = searchParams.get('ticketId');
-		if (ticketId !== null && !isNaN(Number(ticketId))) {
-			const id = Number(ticketId);
+		loadLatest();
+	}, [loadLatest]);
+
+	useEffect(() => {
+		const ticketIdParam = searchParams.get('ticketId');
+		if (ticketIdParam !== null && !isNaN(Number(ticketIdParam))) {
+			const id = Number(ticketIdParam);
 			if (id >= 0) {
 				const fetchData = async () => {
 					const res = await getUploadedTicketById(id);
-					console.log(1145141919, res);
 					if (res && res.length === 1) {
-						setUrlParamTicketInfo(res[0]);
+						setUrlParamTicketInfo(res[0] as UploadedTicketInfo);
 						setShowTicketViewerModal(true);
 					}
 				};
-				console.log(114514);
 				fetchData();
 			}
 		}
 	}, [searchParams, locale]);
 
-	useEffect(() => {
-		load();
-	}, [orderBy, asc, companyId, ticketId]);
+	const handleSearch = () => {
+		setAppliedSearch({ from: startStation, to: endStation, text: anyText });
+	};
 
-	useEffect(() => {
-		loadLatest();
-	}, [companyId, ticketId]);
+	const handleReset = () => {
+		setCompanyId(-1);
+		setTicketId(-1);
+		setStartStation('');
+		setEndStation('');
+		setAnyText('');
+		setOrderBy(OrderType.createTime);
+		setAsc(false);
+		setAppliedSearch({ from: '', to: '', text: '' });
+	};
 
 	return (
 		<div className="">
@@ -144,14 +209,14 @@ export default function Works() {
 							options={[
 								{
 									value: -1,
-									getCaption: (isShownOnTop?: boolean, isSelected?: boolean) => {
+									getCaption: () => {
 										return <span className="flex">{t('worksPage.filter.allCompany')}</span>;
 									},
 								},
 								...companyList.map((company, index) => {
 									return {
 										value: index,
-										getCaption: (isShownOnTop?: boolean, isSelected?: boolean) => {
+										getCaption: () => {
 											return (
 												<span className="flex gap-1">
 													<Image style={{ height: 'auto', width: '20px' }} src={company.logo} alt={company.abbr} />
@@ -176,14 +241,14 @@ export default function Works() {
 							options={[
 								{
 									value: -1,
-									getCaption: (isShownOnTop?: boolean, isSelected?: boolean) => {
+									getCaption: () => {
 										return <span className="flex">{t('worksPage.filter.allTicketType')}</span>;
 									},
 								},
 								...(companyList[companyId]?.tickets?.map((ticket, index) => {
 									return {
 										value: index,
-										getCaption: (isShownOnTop?: boolean, isSelected?: boolean) => {
+										getCaption: () => {
 											return <>{ticket.name}</>;
 										},
 									};
@@ -245,43 +310,21 @@ export default function Works() {
 						<p className="break-keep">{t('worksPage.filter.search.searchText')}</p>
 						<input value={anyText} onChange={(e) => setAnyText(e.target.value)} className="menu-input" style={{ borderColor: '#ccc' }} placeholder="any text" />
 					</div>
-					<button onClick={load} className="primary px-4">
+					<button onClick={handleSearch} className="primary px-4">
 						{t('worksPage.filter.search.search')}
 					</button>
 
-					<button
-						onClick={() => {
-							setCompanyId(-1);
-							setTicketId(-1);
-							setStartStation('');
-							setEndStation('');
-							setAnyText('');
-							setOrderBy(OrderType.createTime);
-							setAsc(false);
-							load();
-						}}
-						className=""
-					>
+					<button onClick={handleReset} className="">
 						{t('worksPage.filter.reset')}
 					</button>
 				</div>
 			</div>
 
-			<InfiniteScroll
-				ref={infiniteScrollRef}
-				pageStart={0}
-				loadMore={loadMore}
-				hasMore={hasMore}
-				loader={<div className="horizonal-end">loading...</div>}
-				useWindow={true}
-				className="flex flex-wrap pb-[500px]"
-				style={{ justifyContent: isMobile ? 'center' : 'start' }}
-			>
+			<div className="flex flex-wrap pb-[500px]" style={{ justifyContent: isMobile ? 'center' : 'start' }}>
 				{works.map((work: UploadedTicketInfo) => {
 					return (
 						<div className="h-item" key={work.id}>
 							<UploadedWorkItem
-								key={work.id}
 								uploadedTicketInfo={work}
 								onLiked={() => {
 									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
@@ -295,11 +338,13 @@ export default function Works() {
 						</div>
 					);
 				})}
-			</InfiniteScroll>
+			</div>
+			<div ref={sentinelRef} className="horizonal-end">
+				{isLoading ? 'loading...' : !hasMore && works.length > 0 ? '—' : ''}
+			</div>
 			<footer className="">
 				<TicketListView showAddButton={false} />
 			</footer>
-			{/* 只用来打开 URL params 的ticket */}
 			<TicketViewerModal
 				show={showTicketViewerModal}
 				ticketInfo={urlParamTicketInfo}
