@@ -1,20 +1,18 @@
 'use client';
 
-import { UploadedWorkItem } from '@/components/InfrastructureCompo/UploadedWorkItem';
 import { getUploadedTicketById, getUploadedTickets, OrderType } from '@/utils/api';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { UploadedTicketInfo } from '@/utils/utils';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './style.css';
-import PrettyDropdown from '@/components/InfrastructureCompo/PrettyDropdown';
-import { companyList, getCompanyById } from '@/utils/companies';
-import Image from 'next/image';
-import { TicketListView } from '@/components/InfrastructureCompo/ticketListView';
 import { useIsMobile } from '@/utils/hooks';
 import { useSearchParams } from 'next/navigation';
 import { TicketViewerModal } from '@/components/Modals/TicketViewerModal';
 import { CopyLinkModal } from '@/components/Modals/CopyLinkModal';
 import { useInfiniteScroll } from '@/utils/hooks/useInfiniteScroll';
+import { WorksPageHeader } from './WorksPageHeader';
+import { WorksFilterPanel } from './WorksFilterPanel';
+import { WorksGrid } from './WorksGrid';
 
 const pageSize = 15;
 
@@ -27,32 +25,43 @@ function dedupeById(items: UploadedTicketInfo[]): UploadedTicketInfo[] {
 	});
 }
 
+/**
+ * Works 页：filterKey 驱动首屏加载，Intersection Observer 触发分页追加。
+ */
 export default function Works() {
 	const { t, locale } = useLocale();
 	const isMobile = useIsMobile();
-	const searchParams = useSearchParams();
+	const isMobileDevice = isMobile ?? false;
 
-	const [orderBy, setOrderBy] = useState<OrderType>(OrderType.views);
-	const [asc, setAsc] = useState<boolean>(false);
+	const [orderBy, setOrderBy] = useState<OrderType>(OrderType.createTime);
+	const asc = false;
 	const [companyId, setCompanyId] = useState<number>(-1);
 	const [ticketId, setTicketId] = useState<number>(-1);
 	const [startStation, setStartStation] = useState<string>('');
 	const [endStation, setEndStation] = useState<string>('');
 	const [anyText, setAnyText] = useState<string>('');
 	const [appliedSearch, setAppliedSearch] = useState({ from: '', to: '', text: '' });
+	const searchParams = useSearchParams();
+
+	const [filterExpanded, setFilterExpanded] = useState(!(isMobile ?? false));
 
 	const [works, setWorks] = useState<UploadedTicketInfo[]>([]);
-	const [latestWorks, setLatestWorks] = useState<UploadedTicketInfo[]>([]);
 	const [page, setPage] = useState(0);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [isInitialLoading, setIsInitialLoading] = useState<boolean>(true);
 	const [hasMore, setHasMore] = useState<boolean>(true);
 	const [showTicketViewerModal, setShowTicketViewerModal] = useState<boolean>(false);
 	const [urlParamTicketInfo, setUrlParamTicketInfo] = useState<UploadedTicketInfo | null>(null);
 	const [showCopyLinkModal, setShowCopyLinkModal] = useState<boolean>(false);
 
+	// 移动端默认收起筛选；桌面端常显
+	useEffect(() => {
+		setFilterExpanded(!(isMobile ?? false));
+	}, [isMobile]);
+
 	const filterKey = useMemo(
 		() => JSON.stringify({ companyId, ticketId, orderBy, asc, appliedSearch }),
-		[companyId, ticketId, orderBy, asc, appliedSearch]
+		[companyId, ticketId, orderBy, appliedSearch]
 	);
 
 	const fetchPage = useCallback(
@@ -82,29 +91,13 @@ export default function Works() {
 			setHasMore(res.hasMore);
 			return { hasMore: res.hasMore };
 		},
-		[companyId, ticketId, orderBy, asc, appliedSearch]
+		[companyId, ticketId, orderBy, appliedSearch]
 	);
-
-	const loadLatest = useCallback(async () => {
-		const res = await getUploadedTickets(
-			companyId,
-			ticketId,
-			OrderType.createTime,
-			'',
-			10,
-			asc,
-			0,
-			appliedSearch.from,
-			appliedSearch.to,
-			appliedSearch.text
-		);
-		setLatestWorks((res.items ?? []) as UploadedTicketInfo[]);
-	}, [companyId, ticketId, asc, appliedSearch]);
 
 	const isLoadingRef = useRef(false);
 
 	const loadMore = useCallback(async () => {
-		if (isLoadingRef.current || !hasMore) return;
+		if (isLoadingRef.current || !hasMore || isInitialLoading) return;
 		isLoadingRef.current = true;
 		setIsLoading(true);
 		try {
@@ -117,22 +110,24 @@ export default function Works() {
 			isLoadingRef.current = false;
 			setIsLoading(false);
 		}
-	}, [page, hasMore, fetchPage]);
+	}, [page, hasMore, fetchPage, isInitialLoading]);
 
-	const sentinelRef = useInfiniteScroll({ hasMore, isLoading, onLoadMore: loadMore });
+	const sentinelRef = useInfiniteScroll({ hasMore, isLoading: isLoading || isInitialLoading, onLoadMore: loadMore });
 
-	// Reset and load first page when filters change
+	// 筛选 / 排序变化 → 重置分页并加载第 0 页
 	useEffect(() => {
 		let cancelled = false;
 		setPage(0);
 		setHasMore(true);
 		setIsLoading(true);
+		setIsInitialLoading(true);
 		isLoadingRef.current = true;
 
 		fetchPage(0, 'replace').finally(() => {
 			if (!cancelled) {
 				isLoadingRef.current = false;
 				setIsLoading(false);
+				setIsInitialLoading(false);
 			}
 		});
 
@@ -141,10 +136,7 @@ export default function Works() {
 		};
 	}, [filterKey, fetchPage]);
 
-	useEffect(() => {
-		loadLatest();
-	}, [loadLatest]);
-
+	// URL ?ticketId= 打开分享作品预览
 	useEffect(() => {
 		const ticketIdParam = searchParams.get('ticketId');
 		if (ticketIdParam !== null && !isNaN(Number(ticketIdParam))) {
@@ -162,6 +154,12 @@ export default function Works() {
 		}
 	}, [searchParams, locale]);
 
+	const updateWorkLike = useCallback((id: number, delta: number) => {
+		setWorks((prev) =>
+			prev.map((item) => (item.id === id ? { ...item, like: Math.max(0, item.like + delta) } : item))
+		);
+	}, []);
+
 	const handleSearch = () => {
 		setAppliedSearch({ from: startStation, to: endStation, text: anyText });
 	};
@@ -173,185 +171,63 @@ export default function Works() {
 		setEndStation('');
 		setAnyText('');
 		setOrderBy(OrderType.createTime);
-		setAsc(false);
 		setAppliedSearch({ from: '', to: '', text: '' });
 	};
 
+	const resultCountText =
+		works.length > 0
+			? t('worksPage.resultCount').replace('{count}', hasMore ? `${works.length}+` : String(works.length))
+			: !isInitialLoading
+				? t('worksPage.resultCount').replace('{count}', '0')
+				: null;
+
 	return (
-		<div className="">
-			<div className="h-fit w-full overflow-x-scroll bg-gray-900">
-				<p className="text-white">{t('worksPage.latest.title')}</p>
+		<div className="works-page">
+			<WorksPageHeader
+				orderBy={orderBy}
+				onOrderByChange={setOrderBy}
+				isMobile={isMobileDevice}
+				filterExpanded={filterExpanded}
+				onFilterToggle={() => setFilterExpanded((v) => !v)}
+				resultCountText={resultCountText}
+				isInitialLoading={isInitialLoading}
+			/>
 
-				<div className="flex">
-					{latestWorks.map((work: UploadedTicketInfo) => {
-						return (
-							<UploadedWorkItem
-								key={work.id}
-								uploadedTicketInfo={work}
-								onLiked={() => {
-									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
-									setLatestWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
-								}}
-								onUndoLiked={() => {
-									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
-									setLatestWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
-								}}
-							/>
-						);
-					})}
-				</div>
-			</div>
-			<div className="bg-white shadow-md rounded-2xl p-2 mb-4 flex flex-wrap gap-2">
-				<div className="flex flex-wrap md:flex-nowrap gap-4 w-full md:w-fit">
-					<div className="flex flex-col md:w-[200px] w-full">
-						<PrettyDropdown
-							mainClassname="w-full"
-							options={[
-								{
-									value: -1,
-									getCaption: () => {
-										return <span className="flex">{t('worksPage.filter.allCompany')}</span>;
-									},
-								},
-								...companyList.map((company) => {
-									return {
-										value: company.id,
-										getCaption: () => {
-											return (
-												<span className="flex gap-1">
-													<Image style={{ height: 'auto', width: '20px' }} src={company.logo} alt={company.abbr} />
-													{company.name}
-												</span>
-											);
-										},
-									};
-								}),
-							]}
-							value={companyId}
-							onChange={(i) => {
-								setCompanyId(Number(i));
-								setTicketId(-1);
-							}}
-						/>
-					</div>
+			<WorksFilterPanel
+				expanded={filterExpanded}
+				isMobile={isMobileDevice}
+				companyId={companyId}
+				ticketId={ticketId}
+				startStation={startStation}
+				endStation={endStation}
+				anyText={anyText}
+				onCompanyChange={(id) => {
+					setCompanyId(id);
+					setTicketId(-1);
+				}}
+				onTicketChange={setTicketId}
+				onStartStationChange={setStartStation}
+				onEndStationChange={setEndStation}
+				onAnyTextChange={setAnyText}
+				onSearch={handleSearch}
+				onReset={handleReset}
+			/>
 
-					<div className="flex flex-col md:w-[200px] w-full">
-						<PrettyDropdown
-							mainClassname="w-full"
-							options={[
-								{
-									value: -1,
-									getCaption: () => {
-										return <span className="flex">{t('worksPage.filter.allTicketType')}</span>;
-									},
-								},
-								...(getCompanyById(companyId)?.tickets?.map((ticket) => {
-									return {
-										value: ticket.id,
-										getCaption: () => {
-											return <>{ticket.name}</>;
-										},
-									};
-								}) || []),
-							]}
-							value={ticketId}
-							onChange={(i) => {
-								setTicketId(Number(i));
-							}}
-						/>
-					</div>
-				</div>
+			<WorksGrid
+				works={works}
+				isLoading={isLoading}
+				hasMore={hasMore}
+				isInitialLoading={isInitialLoading}
+				sentinelRef={sentinelRef}
+				onLiked={(id) => updateWorkLike(id, 1)}
+				onUndoLiked={(id) => updateWorkLike(id, -1)}
+			/>
 
-				<div className="flex flex-wrap items-center gap-1">
-					<span className="text-sm text-gray-600">{t('worksPage.filter.order.label')}</span>
-
-					<select
-						value={orderBy}
-						onChange={(e) => setOrderBy(e.target.value as OrderType)}
-						className="border-1 border-[#cccccc] rounded-[4px] px-1 py-1 focus:ring-2 focus:ring-blue-400 outline-none transition"
-					>
-						<option value={OrderType.none}>{t('worksPage.filter.order.none')}</option>
-						<option value={OrderType.createTime}>{t('worksPage.filter.order.createTime')}</option>
-						<option value={OrderType.like}>{t('worksPage.filter.order.like')}</option>
-						<option value={OrderType.views}>{t('worksPage.filter.order.views')}</option>
-					</select>
-
-					<div className="flex gap-1">
-						<button
-							onClick={() => setAsc(true)}
-							className={`px-2 transition hover:bg-gray-100 active:scale-95 
-								${asc ? 'bg-blue-200 border-blue-400' : ''}
-							`}
-						>
-							↑ {t('worksPage.filter.order.asc')}
-						</button>
-						<button
-							onClick={() => setAsc(false)}
-							className={`px-2 transition hover:bg-gray-100 active:scale-95
-								${!asc ? 'bg-blue-200 border-blue-400' : ''}
-							`}
-						>
-							↓ {t('worksPage.filter.order.desc')}
-						</button>
-					</div>
-				</div>
-
-				<div className="flex flex-wrap gap-2">
-					<div className="flex flex-row w-full md:w-[150px] items-center gap-1">
-						<p className="break-keep">{t('worksPage.filter.search.from')}</p>
-						<input value={startStation} onChange={(e) => setStartStation(e.target.value)} className="menu-input" style={{ borderColor: '#ccc' }} placeholder="from" />
-					</div>
-
-					<div className="flex flex-row w-full md:w-[150px] items-center gap-1">
-						<p className="break-keep">{t('worksPage.filter.search.to')}</p>
-						<input value={endStation} onChange={(e) => setEndStation(e.target.value)} className="menu-input" style={{ borderColor: '#ccc' }} placeholder="to" />
-					</div>
-					<div className="flex flex-row w-full md:w-[150px] items-center gap-1">
-						<p className="break-keep">{t('worksPage.filter.search.searchText')}</p>
-						<input value={anyText} onChange={(e) => setAnyText(e.target.value)} className="menu-input" style={{ borderColor: '#ccc' }} placeholder="any text" />
-					</div>
-					<button onClick={handleSearch} className="primary px-4">
-						{t('worksPage.filter.search.search')}
-					</button>
-
-					<button onClick={handleReset} className="">
-						{t('worksPage.filter.reset')}
-					</button>
-				</div>
-			</div>
-
-			<div className="flex flex-wrap pb-[500px]" style={{ justifyContent: isMobile ? 'center' : 'start' }}>
-				{works.map((work: UploadedTicketInfo) => {
-					return (
-						<div className="h-item" key={work.id}>
-							<UploadedWorkItem
-								uploadedTicketInfo={work}
-								onLiked={() => {
-									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
-									setLatestWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like + 1 } : item)));
-								}}
-								onUndoLiked={() => {
-									setWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
-									setLatestWorks((prev) => prev.map((item) => (item.id === work.id ? { ...item, like: item.like > 0 ? item.like - 1 : 0 } : item)));
-								}}
-							/>
-						</div>
-					);
-				})}
-			</div>
-			<div ref={sentinelRef} className="horizonal-end">
-				{isLoading ? 'loading...' : !hasMore && works.length > 0 ? '—' : ''}
-			</div>
-			<footer className="">
-				<TicketListView showAddButton={false} />
-			</footer>
 			<TicketViewerModal
 				show={showTicketViewerModal}
 				ticketInfo={urlParamTicketInfo}
 				onClose={() => setShowTicketViewerModal(false)}
-				onShare={() => {
-					setShowCopyLinkModal(true);
-				}}
+				onShare={() => setShowCopyLinkModal(true)}
 			/>
 			<CopyLinkModal
 				show={showCopyLinkModal}
@@ -361,9 +237,7 @@ export default function Works() {
 					ticketData: urlParamTicketInfo ? urlParamTicketInfo.data : {},
 					id: '',
 				}}
-				onClose={() => {
-					setShowCopyLinkModal(false);
-				}}
+				onClose={() => setShowCopyLinkModal(false)}
 				ticketId={urlParamTicketInfo ? urlParamTicketInfo.id : -1}
 			/>
 		</div>

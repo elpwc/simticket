@@ -9,7 +9,6 @@ import { AppContext } from './app';
 import { useIsMobile } from '@/utils/hooks';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { TicketListView } from '@/components/InfrastructureCompo/ticketListView';
 
 export default function HomePage() {
 	const isMobile = useIsMobile();
@@ -116,12 +115,9 @@ export default function HomePage() {
 				)}
 			</AnimatePresence>
 
-			<motion.div className="mb-[200px]" animate={{ marginTop: `${menuHeight}px` }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
+			<motion.div animate={{ marginTop: `${menuHeight}px` }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
 				<TicketEditor key={`${selectedCompanyId}-${selectedTicketId}`} />
 			</motion.div>
-			<footer className="">
-				<TicketListView />
-			</footer>
 		</div>
 	);
 }

@@ -1,0 +1,66 @@
+.ticket-list-view-item-compact {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+
+.ticket-list-view-item-compact__preview {
+	cursor: pointer;
+	line-height: 0;
+}
+
+/* 紧凑工具栏：位于票面下方，不遮挡券面 */
+.ticket-list-view-item-compact__toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 2px;
+	width: 100%;
+	margin-top: 4px;
+	padding: 0 2px;
+}
+
+.ticket-list-view-item-compact__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	margin: 0;
+	padding: 2px 4px;
+	border-radius: 4px;
+	background: #f3f4f6;
+	color: #374151;
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color 0.15s;
+}
+
+.ticket-list-view-item-compact__btn:hover,
+.ticket-list-view-item-compact__btn:focus-visible {
+	background: #e5e7eb;
+	outline: none;
+}
+
+.ticket-list-view-item-compact__btn--danger {
+	background: #fef2f2;
+	color: #dc2626;
+}
+
+.ticket-list-view-item-compact__btn--danger:hover,
+.ticket-list-view-item-compact__btn--danger:focus-visible {
+	background: #fee2e2;
+}
+
+.ticket-list-view-item-compact__btn-label {
+	font-size: 9px;
+	padding: 2px 5px;
+}
+
+.ticket-list-view-item-compact__divider {
+	width: 1px;
+	height: 12px;
+	background: #d1d5db;
+	margin: 0 1px;
+}

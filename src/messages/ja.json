@@ -95,7 +95,10 @@
 		"addResultToListButtonShort": "リストに追加",
 		"exportListShort": "A4に保存",
 		"hideListButtonText": "折畳み",
-		"openListButtonText": "開く"
+		"openListButtonText": "開く",
+		"panelTitle": "印刷リスト",
+		"triggerLabel": "印刷リスト",
+		"addedToListHint": "印刷リストに追加しました"
 	},
 	"editor": {
 		"common": {
@@ -254,9 +257,29 @@
 		"done": "投稿しました～"
 	},
 	"worksPage": {
+		"title": "みんなの作品",
+		"subtitle": "他のユーザーが投稿した切符を閲覧できます",
+		"sort": {
+			"latest": "新着順",
+			"mostLiked": "いいね順"
+		},
+		"addToList": "追加",
+		"resultCount": "{count} 件",
+		"loading": "読み込み中…",
+		"noMore": "すべて読み込みました",
+		"empty": {
+			"title": "作品がありません",
+			"description": "フィルターを変更するか、最初の切符を作成してみてください",
+			"cta": "切符を作成する"
+		},
 		"filter": {
 			"allCompany": "全部会社",
 			"allTicketType": "全部券種",
+			"toggle": "フィルター",
+			"toggleClose": "フィルターを閉じる",
+			"placeholderFrom": "出発駅",
+			"placeholderTo": "到着駅",
+			"placeholderSearch": "キーワード",
 			"order": {
 				"createTime": "時間",
 				"label": "並べ替え",
@@ -273,9 +296,6 @@
 				"to": "到着"
 			},
 			"reset": "リセット"
-		},
-		"latest": {
-			"title": "新着投稿"
 		}
 	},
 	"TicketViewer": {

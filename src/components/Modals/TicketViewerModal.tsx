@@ -5,11 +5,10 @@ import { useLocale } from '@/utils/hooks/useLocale';
 import { UploadedTicketInfo } from '@/utils/utils';
 import './index.css';
 import { TicketViewer } from '../InfrastructureCompo/ticketViewer';
-import { useHint } from '../InfrastructureCompo/HintProvider';
 import { CRWideTicketDrawParametersInitialValues } from '../TicketEditors/CRWideTicket/value';
 import { UploadedWorkItemToolbar } from '../InfrastructureCompo/UploadedWorkItemToolbar';
 import { useIsMobile } from '@/utils/hooks';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SaveImageModal } from './SaveImageModal';
 
 interface Props {
@@ -21,18 +20,49 @@ interface Props {
 
 export const TicketViewerModal = ({ show, ticketInfo, onClose, onShare }: Props) => {
 	const { t } = useLocale();
-	const hint = useHint();
 	const isMobile = useIsMobile();
 
 	const [isFlipSide, setIsFlipSide] = useState(false);
-	const [ticketViewerModalContentWidth, setTicketViewerModalContentWidth] = useState(-1);
+	/** Modal 内容区实测宽度；null 表示尚未量到，避免用错误 fallback 绘制 */
+	const [contentWidth, setContentWidth] = useState<number | null>(null);
+	const contentRef = useRef<HTMLDivElement>(null);
 	const [showSaveImageModal, setShowSaveImageModal] = useState(false);
-	// for save modal default size
 	const [saveModalDefaultSize, setSaveModalDefaultSize] = useState<[number, number]>([0, 0]);
 
+	const measureContentWidth = useCallback(() => {
+		const w = contentRef.current?.clientWidth ?? 0;
+		if (w > 0) setContentWidth(w);
+	}, []);
+
+	// Modal 打开后再测量（动画结束后布局才稳定）；关闭时重置
 	useEffect(() => {
-		setTicketViewerModalContentWidth(document.getElementById('TicketViewerModal_content')?.clientWidth ?? -1);
-	}, [window.innerWidth]);
+		if (!show) {
+			setContentWidth(null);
+			setIsFlipSide(false);
+			return;
+		}
+
+		const el = contentRef.current;
+		let ro: ResizeObserver | null = null;
+		const attachObserver = () => {
+			const node = contentRef.current;
+			if (!node || ro) return;
+			ro = new ResizeObserver(measureContentWidth);
+			ro.observe(node);
+			measureContentWidth();
+		};
+
+		if (el) attachObserver();
+		const rafId = requestAnimationFrame(attachObserver);
+
+		const timerId = window.setTimeout(measureContentWidth, 350);
+
+		return () => {
+			cancelAnimationFrame(rafId);
+			window.clearTimeout(timerId);
+			ro?.disconnect();
+		};
+	}, [show, measureContentWidth]);
 
 	return (
 		<Modal
@@ -42,21 +72,24 @@ export const TicketViewerModal = ({ show, ticketInfo, onClose, onShare }: Props)
 			style={{ maxWidth: isMobile ? '100%' : '800px', width: isMobile ? '100%' : '80%' }}
 			bodyStyle={{ padding: 0 }}
 		>
-			<div id="TicketViewerModal_content" className="flex flex-col">
-				<TicketViewer
-					width={ticketViewerModalContentWidth === -1 ? (isMobile ? 300 : 650) : ticketViewerModalContentWidth}
-					height={-1}
-					className="w-full m-auto md:p-10 p-0"
-					companyId={ticketInfo === null ? 0 : ticketInfo.companyId}
-					ticketTypeId={ticketInfo === null ? 4 : ticketInfo.ticketId}
-					ticketData={ticketInfo === null ? CRWideTicketDrawParametersInitialValues : ticketInfo.data}
-					isFlip={isFlipSide}
-					isTiltable
-					doPreventRenderError
-					onCanvasSizeChanged={(w: number, h: number) => {
-						setSaveModalDefaultSize([w, h]);
-					}}
-				/>
+			<div ref={contentRef} className="flex flex-col w-full">
+				{contentWidth !== null && contentWidth > 0 && (
+					<TicketViewer
+						key={contentWidth}
+						width={contentWidth}
+						height={-1}
+						className="w-full m-auto md:p-10 p-0"
+						companyId={ticketInfo === null ? 0 : ticketInfo.companyId}
+						ticketTypeId={ticketInfo === null ? 4 : ticketInfo.ticketId}
+						ticketData={ticketInfo === null ? CRWideTicketDrawParametersInitialValues : ticketInfo.data}
+						isFlip={isFlipSide}
+						isTiltable
+						doPreventRenderError
+						onCanvasSizeChanged={(w: number, h: number) => {
+							setSaveModalDefaultSize([w, h]);
+						}}
+					/>
+				)}
 				<div className="flex ml-auto">
 					<button
 						className="ticketEditorTemplateToolBarItem flex items-center gap-1 primary green"

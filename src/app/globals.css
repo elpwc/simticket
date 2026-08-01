@@ -26,17 +26,59 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+/* 桌面 Dock 展开时为 main 预留底部空间，由 TicketListDock 写入 --ticket-list-dock-height */
+.app-main {
+	padding-bottom: var(--ticket-list-dock-height, 0px);
+	transition: padding-bottom 0.2s ease;
+}
+
 .navitem {
 	display: flex;
 	align-items: center;
 	cursor: pointer;
 	border-radius: 5px;
 	padding: 6px 4px;
-	display: flex;
 	gap: 2px;
+	color: inherit;
 }
-.navitem:hover {
+
+/* 覆盖 globals 里 button 的白底/灰边，避免在蓝色 navbar 上不可见 */
+header nav .navitem,
+header nav button.navitem {
+	border: none;
+	margin: 0;
+	background-color: transparent;
+	color: inherit;
+}
+
+header nav .navitem:hover,
+header nav .navitem:focus,
+header nav .navitem:focus-visible,
+header nav .navitem:active,
+header nav button.navitem:hover,
+header nav button.navitem:focus,
+header nav button.navitem:focus-visible,
+header nav button.navitem:active {
 	background-color: #2396e2;
+	color: #fff;
+	outline: none;
+}
+
+/* 语言下拉项：同样避免全局 button 白底 */
+header nav .lang-switcher-menu button.lang-switcher-option {
+	border: none;
+	margin: 0;
+	background-color: transparent;
+	color: #fff;
+}
+
+header nav .lang-switcher-menu button.lang-switcher-option:hover,
+header nav .lang-switcher-menu button.lang-switcher-option:focus,
+header nav .lang-switcher-menu button.lang-switcher-option:focus-visible,
+header nav .lang-switcher-menu button.lang-switcher-option:active {
+	background-color: #2396e2;
+	color: #fff;
+	outline: none;
 }
 
 button {
@@ -174,4 +216,19 @@ textarea {
 	display: grid;
 
 	grid-template-columns: 35% 65%;
+}
+
+.truncated-tooltip-bubble {
+	position: fixed;
+	z-index: 200;
+	padding: 6px 10px;
+	font-size: 12px;
+	line-height: 1.4;
+	color: #fff;
+	background: rgba(23, 23, 23, 0.95);
+	border-radius: 6px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+	word-break: break-word;
+	white-space: normal;
+	pointer-events: none;
 }

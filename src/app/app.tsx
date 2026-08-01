@@ -11,6 +11,7 @@ import { useLocale } from '@/utils/hooks/useLocale';
 import { DevProgressModal } from '@/components/Modals/DevProgressModal';
 import { TicketListItemProperty } from '@/utils/utils';
 import { HintProvider } from '@/components/InfrastructureCompo/HintProvider';
+import { TicketListProvider, TicketListTrigger } from '@/components/InfrastructureCompo/TicketList';
 
 export const AppContext = createContext<any>(null);
 
@@ -54,6 +55,7 @@ export default function App({
 			}}
 		>
 			<HintProvider>
+				<TicketListProvider>
 				<header className="sticky top-0 z-[100]" style={{ height: isMobile ? '46px' : '50px' }}>
 					<nav className="bg-[#007fd4] text-white flex items-center justify-between">
 						<section className="px-2 py-1 flex gap-1 max-h-[56px] items-center">
@@ -86,6 +88,7 @@ export default function App({
 								</div>
 							</Link>
 							<LangSwitcher />
+							<TicketListTrigger />
 						</section>
 						<button
 							className="mobile-company-select-button flex items-center gap-2"
@@ -115,13 +118,14 @@ export default function App({
 						</button>
 					</nav>
 				</header>
-				<main>{children}</main>
+				<main className="app-main">{children}</main>
 				<DevProgressModal
 					show={showDevProgressModal}
 					onClose={() => {
 						setShowDevProgressModal(false);
 					}}
 				/>
+				</TicketListProvider>
 			</HintProvider>
 		</AppContext.Provider>
 	);

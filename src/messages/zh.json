@@ -95,7 +95,10 @@
 		"addResultToListButtonShort": "添加到列表",
 		"exportListShort": "导出为A4",
 		"openListButtonText": "展开",
-		"hideListButtonText": "收起"
+		"hideListButtonText": "收起",
+		"panelTitle": "打印列表",
+		"triggerLabel": "打印列表",
+		"addedToListHint": "已加入打印列表"
 	},
 	"editor": {
 		"cr": {
@@ -254,9 +257,29 @@
 		"done": "投稿成功~"
 	},
 	"worksPage": {
+		"title": "大家的作品",
+		"subtitle": "浏览并鉴赏其他用户分享的车票",
+		"sort": {
+			"latest": "最新发布",
+			"mostLiked": "点赞最多"
+		},
+		"addToList": "追加",
+		"resultCount": "共 {count} 件",
+		"loading": "加载中…",
+		"noMore": "已加载全部",
+		"empty": {
+			"title": "暂无作品",
+			"description": "试试调整筛选条件，或去制作第一张车票",
+			"cta": "去制作车票"
+		},
 		"filter": {
 			"allTicketType": "全部票种",
 			"allCompany": "全部公司",
+			"toggle": "筛选",
+			"toggleClose": "收起筛选",
+			"placeholderFrom": "出发站",
+			"placeholderTo": "到达站",
+			"placeholderSearch": "任意关键词",
 			"order": {
 				"label": "排序",
 				"none": "不排序",
@@ -273,9 +296,6 @@
 				"search": "搜索"
 			},
 			"reset": "重置"
-		},
-		"latest": {
-			"title": "最新投稿"
 		}
 	},
 	"TicketViewer": {

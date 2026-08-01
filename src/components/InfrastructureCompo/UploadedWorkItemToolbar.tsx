@@ -5,6 +5,9 @@ import { TicketListItemProperty, UploadedTicketInfo } from '@/utils/utils';
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { CRWideTicketDrawParameters } from '../TicketEditors/CRWideTicket/type';
 import { JRWideTicketDrawParameters } from '../TicketEditors/JRWideTicket/type';
+import { useLocale } from '@/utils/hooks/useLocale';
+import { TruncatedTooltipText } from './TruncatedTooltipText';
+import { useHint } from './HintProvider';
 
 interface Props {
 	uploadedTicketInfo: UploadedTicketInfo;
@@ -14,6 +17,8 @@ interface Props {
 }
 
 export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLiked, onClick }: Props) => {
+	const { t } = useLocale();
+	const hint = useHint();
 	const [doHasLiked, setDoHasLiked] = useState(hasLiked(uploadedTicketInfo.id));
 	const [isLikeDisabled, setIsLikeDisabled] = useState(false);
 
@@ -46,14 +51,15 @@ export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLik
 				ticketData: structuredClone(uploadedTicketInfo.data) as CRWideTicketDrawParameters | JRWideTicketDrawParameters,
 			},
 		]);
+		hint('top', t('ticketListView.addedToListHint'));
 	};
 
 	return (
-		<div>
-			<div className="flex justify-between items-center">
-				<p className="font-semibold text-sm truncate flex-1 min-w-0">{uploadedTicketInfo.name}</p>
+		<div className="min-w-0 w-full overflow-hidden pt-1">
+			<div className="flex justify-between items-center gap-2 min-w-0">
+				<TruncatedTooltipText text={uploadedTicketInfo.name} className="font-semibold text-sm truncate min-w-0 flex-1" />
 
-				<div className="flex">
+				<div className="flex shrink-0 items-center">
 					<button
 						className="
 					border-0
@@ -114,14 +120,14 @@ export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLik
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
 							<path fillRule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
 						</svg>
-						追加
+						{t('worksPage.addToList')}
 					</button>
 				</div>
 			</div>
 
-			<div className="flex justify-between text-[11px] text-gray-400">
-				<p className="truncate max-w-[120px]">{uploadedTicketInfo.editorName}</p>
-				<p>view {uploadedTicketInfo.views}</p>
+			<div className="flex justify-between gap-2 min-w-0 text-[11px] text-gray-400 mt-0.5">
+				<p className="truncate min-w-0 flex-1">{uploadedTicketInfo.editorName}</p>
+				<p className="shrink-0">view {uploadedTicketInfo.views}</p>
 			</div>
 		</div>
 	);

@@ -42,11 +42,21 @@ export const TicketViewer = ({
 	const { t } = useLocale();
 	const canvasRef = useRef<HTMLCanvasElement | null>(null);
 	const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+	const onCanvasSizeChangedRef = useRef(onCanvasSizeChanged);
+	onCanvasSizeChangedRef.current = onCanvasSizeChanged;
 	const [canvasWidth, setCanvasWidth] = useState(width);
 	const [canvasHeight, setCanvasHeight] = useState(height);
 
 	const [loadingFontHintText, setLoadingFontHintText] = useState<string>('');
 	const [loadingBgHintText, setLoadingBgHintText] = useState<string>('');
+
+	// 父级传入的 width/height 变化时同步 canvas 尺寸（如 Modal 量完宽后重绘）
+	useEffect(() => {
+		setCanvasWidth(width);
+		if (height > 0) {
+			setCanvasHeight(height);
+		}
+	}, [width, height]);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -69,12 +79,12 @@ export const TicketViewer = ({
 				/*onWidthChanged*/
 				(newValue: number) => {
 					setCanvasWidth(newValue);
-					onCanvasSizeChanged?.(newValue, height);
+					onCanvasSizeChangedRef.current?.(newValue, height);
 				},
 				/*onHeightChanged*/
 				(newValue: number) => {
 					setCanvasHeight(newValue);
-					onCanvasSizeChanged?.(width, newValue);
+					onCanvasSizeChangedRef.current?.(width, newValue);
 				},
 				isFlip,
 				/*onDone*/ () => {
@@ -102,7 +112,7 @@ export const TicketViewer = ({
 				draw();
 			}, 500);
 		}
-	}, [canvasRef.current?.width, canvasRef.current?.height, canvasRef.current, isFlip, ticketData, ticketTypeId, companyId]);
+	}, [width, height, isFlip, ticketData, ticketTypeId, companyId, doPreventRenderError, showLoadingStatus, t]);
 
 	const canvasBorderRadius = companyId === 0 && ticketTypeId === 4 && (ticketData.background === CRTicketBackGround.MagBlue || ticketData.background === CRTicketBackGround.MagRed) ? 16 : 0;
 	const canvasShowShandow = (companyId === 0 && ticketTypeId === 4 && ticketData.background !== CRTicketBackGround.MagBlue && ticketData.background !== CRTicketBackGround.MagRed) || companyId !== 0;

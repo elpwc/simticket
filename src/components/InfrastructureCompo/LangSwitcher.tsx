@@ -5,14 +5,17 @@ import { useState } from 'react';
 
 export default function LangSwitcher() {
 	const [open, setOpen] = useState(false);
-	const { t, locale, setLocale } = useLocale();
+	const { locale, setLocale } = useLocale();
 
 	return (
 		<div className="relative inline-block text-left">
 			<div className="h-full flex items-center">
 				<button
+					type="button"
 					onClick={() => setOpen(!open)}
-					className="border-0 flex justify-center items-center px-0 py-0 bg-[transparent] dark:bg-gray-800 rounded hover:bg-[#2396e2] dark:hover:bg-gray-700 text-sm"
+					className="navitem border-0 bg-transparent text-inherit"
+					aria-expanded={open}
+					aria-haspopup="listbox"
 				>
 					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
 						<path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286zm1.634-.736L5.5 3.956h-.049l-.679 2.022z" />
@@ -22,16 +25,17 @@ export default function LangSwitcher() {
 			</div>
 
 			{open && (
-				<div className="absolute mt-1 right-0 w-24 bg-[#007fd4] dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow">
+				<div className="lang-switcher-menu absolute mt-1 right-0 w-24 bg-[#007fd4] border border-gray-200 dark:border-gray-700 rounded shadow">
 					{LanguageList.map((lang: { id: string; name: string }) => (
 						<button
+							type="button"
 							key={lang.id}
 							onClick={() => {
-								//switchLanguage(lang.id);
 								setLocale(lang.id as Locale);
 								setOpen(false);
 							}}
-							className="border-0 !m-0 bg-[transparent] w-full text-left px-2 py-1 text-sm hover:bg-[#2396e2] dark:hover:bg-gray-700"
+							className="lang-switcher-option border-0 !m-0 bg-transparent w-full text-left px-2 py-1 text-sm text-white hover:bg-[#2396e2] focus:bg-[#2396e2] focus:outline-none"
+							aria-selected={locale === lang.id}
 						>
 							{lang.name}
 						</button>
