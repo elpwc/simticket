@@ -104,7 +104,11 @@ export default function JRWideTicket() {
 			};
 		}
 	};
-	const [drawParameters, setDrawParameters] = useState<JRWideTicketDrawParameters>(copyEditingTicketDataToDrawParameters ? editingTicketData : getInitialValues());
+	const [drawParameters, setDrawParameters] = useState<JRWideTicketDrawParameters>(() =>
+		copyEditingTicketDataToDrawParameters && editingTicketData
+			? structuredClone(editingTicketData)
+			: getInitialValues()
+	);
 
 	const [offsetContent, setOffsetContent] = useState([drawParameters.offsetX.toString(), (0 - drawParameters.offsetY).toString()]);
 
@@ -117,11 +121,11 @@ export default function JRWideTicket() {
 	}, [offsetContent]);
 
 	useEffect(() => {
-		if (copyEditingTicketDataToDrawParameters) {
-			setDrawParameters(editingTicketData);
+		if (copyEditingTicketDataToDrawParameters && editingTicketData) {
+			setDrawParameters(structuredClone(editingTicketData));
 			setCopyEditingTicketDataToDrawParameters(false);
 		}
-	}, [copyEditingTicketDataToDrawParameters]);
+	}, [copyEditingTicketDataToDrawParameters, editingTicketData, setCopyEditingTicketDataToDrawParameters]);
 
 	useEffect(() => {}, []);
 
@@ -150,10 +154,11 @@ export default function JRWideTicket() {
 		drawTicket();
 	}, [drawTicket, size, canvasSize, drawParameters, isFontLoading]);
 
-	// 下のリスト更新用
+	// 下のリスト更新用（列表导入期间跳过，避免覆盖待载入数据）
 	useEffect(() => {
+		if (copyEditingTicketDataToDrawParameters) return;
 		setEditingTicketData(drawParameters);
-	}, [drawParameters]);
+	}, [drawParameters, copyEditingTicketDataToDrawParameters, setEditingTicketData]);
 
 	return (
 		<TicketEditorTemplate

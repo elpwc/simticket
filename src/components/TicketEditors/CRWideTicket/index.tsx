@@ -109,7 +109,11 @@ export default function CRWideTicket() {
 		}
 	};
 
-	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(copyEditingTicketDataToDrawParameters ? editingTicketData : getInitialValues());
+	const [drawParameters, setDrawParameters] = useState<CRWideTicketDrawParameters>(() =>
+		copyEditingTicketDataToDrawParameters && editingTicketData
+			? structuredClone(editingTicketData)
+			: getInitialValues()
+	);
 
 	const [offsetContent, setOffsetContent] = useState([drawParameters.offsetX.toString(), (0 - drawParameters.offsetY).toString()]);
 	const [TMIS, setTMIS] = useState(drawParameters.serialCode.slice(0, 5));
@@ -136,11 +140,11 @@ export default function CRWideTicket() {
 	}, [TMIS, machineNo, purchaseDate, drawParameters.ticketNo, purchaseCertType, purchasePassportCode]);
 
 	useEffect(() => {
-		if (copyEditingTicketDataToDrawParameters) {
-			setDrawParameters(editingTicketData);
+		if (copyEditingTicketDataToDrawParameters && editingTicketData) {
+			setDrawParameters(structuredClone(editingTicketData));
 			setCopyEditingTicketDataToDrawParameters(false);
 		}
-	}, [copyEditingTicketDataToDrawParameters]);
+	}, [copyEditingTicketDataToDrawParameters, editingTicketData, setCopyEditingTicketDataToDrawParameters]);
 
 	const drawTicket = () => {
 		drawCRWideTicket(
@@ -182,10 +186,11 @@ export default function CRWideTicket() {
 		drawTicket();
 	}, [drawTicket, size, canvasSize, drawParameters, isFontLoading]);
 
-	// 下のリスト更新
+	// 下のリスト更新（列表导入期间跳过，避免用 getInitialValues 覆盖待载入数据）
 	useEffect(() => {
+		if (copyEditingTicketDataToDrawParameters) return;
 		setEditingTicketData(drawParameters);
-	}, [drawParameters]);
+	}, [drawParameters, copyEditingTicketDataToDrawParameters, setEditingTicketData]);
 
 	useEffect(() => {
 		setDrawParameters((prev) => ({

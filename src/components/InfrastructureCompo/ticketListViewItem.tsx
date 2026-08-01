@@ -61,7 +61,7 @@ export const TicketListViewItem = ({
 	const [showEditComfirmDialog, setShowEditComfirmDialog] = useState(false);
 
 	const { editingTicketData, setEditingTicketData } = useContext(AppContext);
-	const { copyEditingTicketDataToDrawParameters, setCopyEditingTicketDataToDrawParameters } = useContext(AppContext);
+	const { setCopyEditingTicketDataToDrawParameters } = useContext(AppContext);
 
 	const {
 		ticketListItems,
@@ -76,6 +76,17 @@ export const TicketListViewItem = ({
 	};
 	const { selectedCompanyId, setSelectedCompanyId } = useContext(AppContext);
 	const { selectedTicketId, setSelectedTicketId } = useContext(AppContext);
+
+	/** 将列表中的车票载入编辑页：与 copy 标志同批次更新，避免 remount 时被 getInitialValues 覆盖 */
+	const loadTicketIntoEditor = () => {
+		const data = structuredClone(ticketInfo.ticketData);
+		setEditingTicketData(data);
+		setSelectedCompanyId(ticketInfo.companyId);
+		setSelectedTicketId(ticketInfo.ticketTypeId);
+		setCopyEditingTicketDataToDrawParameters(true);
+		setShowEditComfirmDialog(false);
+		router.push(`/?com=${ticketInfo.companyId}&ticket=${ticketInfo.ticketTypeId}&id=${ticketInfo.id}`);
+	};
 
 	const stopProp = (e: MouseEvent, fn?: () => void) => {
 		e.stopPropagation();
@@ -225,14 +236,7 @@ export const TicketListViewItem = ({
 					setShowEditComfirmDialog(false);
 				}}
 				onCancel2={() => {
-					setEditingTicketData(structuredClone(ticketInfo.ticketData));
-					setSelectedCompanyId(ticketInfo.companyId);
-					setSelectedTicketId(ticketInfo.ticketTypeId);
-					router.push(`/?com=${ticketInfo.companyId}&ticket=${ticketInfo.ticketTypeId}&id=${ticketInfo.id}`);
-					setTimeout(() => {
-						setCopyEditingTicketDataToDrawParameters(true);
-						setShowEditComfirmDialog(false);
-					}, 500);
+					loadTicketIntoEditor();
 				}}
 				onOk={() => {
 					setTicketListItems((prev: TicketListItemProperty[]) => [
@@ -244,14 +248,7 @@ export const TicketListViewItem = ({
 							ticketData: structuredClone(editingTicketData),
 						},
 					]);
-					setEditingTicketData(structuredClone(ticketInfo.ticketData));
-					setSelectedCompanyId(ticketInfo.companyId);
-					setSelectedTicketId(ticketInfo.ticketTypeId);
-					router.push(`/?com=${ticketInfo.companyId}&ticket=${ticketInfo.ticketTypeId}&id=${ticketInfo.id}`);
-					setTimeout(() => {
-						setCopyEditingTicketDataToDrawParameters(true);
-						setShowEditComfirmDialog(false);
-					}, 500);
+					loadTicketIntoEditor();
 				}}
 				onClose={() => {
 					setShowEditComfirmDialog(false);
