@@ -218,6 +218,29 @@ textarea {
 	grid-template-columns: 35% 65%;
 }
 
+/* 窄屏：标签在上、输入在下，便于触控 */
+@media (max-width: 767px) {
+	.ticket-form-label {
+		grid-template-columns: 1fr;
+		gap: 4px;
+		margin-bottom: 10px;
+	}
+
+	.ticket-form-label input,
+	.ticket-form-label select,
+	.ticket-form-label textarea {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		font-size: 16px;
+		padding: 8px 6px;
+	}
+
+	.ticket-form-label button {
+		min-height: 36px;
+	}
+}
+
 .truncated-tooltip-bubble {
 	position: fixed;
 	z-index: 200;

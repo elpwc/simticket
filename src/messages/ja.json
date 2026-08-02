@@ -69,7 +69,11 @@
 		"saveButton": "画像保存",
 		"reverse": "裏面",
 		"reverse2": "表面",
-		"loadingImage": "背景画像を読み込み中..."
+		"loadingImage": "背景画像を読み込み中...",
+		"previewExpand": "プレビューを開く",
+		"previewCollapse": "プレビューを閉じる",
+		"previewLabel": "切符プレビュー",
+		"moreTools": "その他"
 	},
 	"SaveImageModal": {
 		"customizeSizeTab": {
@@ -101,6 +105,15 @@
 		"addedToListHint": "印刷リストに追加しました"
 	},
 	"editor": {
+		"shell": {
+			"trip": "券面と行程",
+			"tripDesc": "駅名・列車・日時・座席など",
+			"purchase": "購入情報",
+			"purchaseDesc": "料金・購入方法・乗客情報など",
+			"serial": "票番データ",
+			"serialDesc": "券番・QR・識別码など",
+			"randomPreset": "ランダム预设"
+		},
 		"common": {
 			"ticketFace": {
 				"title": "券面",

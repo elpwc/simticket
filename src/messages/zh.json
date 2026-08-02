@@ -69,7 +69,11 @@
 		"saveButton": "保存图像",
 		"reverse": "背面",
 		"reverse2": "正面",
-		"loadingImage": "加载背景图像中..."
+		"loadingImage": "加载背景图像中...",
+		"previewExpand": "展开预览",
+		"previewCollapse": "收起预览",
+		"previewLabel": "车票预览",
+		"moreTools": "更多"
 	},
 	"SaveImageModal": {
 		"title": "选择保存尺寸",
@@ -159,6 +163,15 @@
 					"showMessageBorder": "显示边框"
 				}
 			}
+		},
+		"shell": {
+			"trip": "票面和行程",
+			"tripDesc": "车站、车次、日期、席别",
+			"purchase": "购票信息",
+			"purchaseDesc": "价格、购票方式、乘车人等",
+			"serial": "票号数据",
+			"serialDesc": "票号、二维码、标识码",
+			"randomPreset": "随机预设站名"
 		},
 		"common": {
 			"ticketFace": {

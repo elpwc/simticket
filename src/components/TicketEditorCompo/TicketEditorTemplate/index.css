@@ -2,3 +2,135 @@
 	flex: 1 1 100px;
 	max-width: max-content;
 }
+
+.editor-template-form-column {
+	min-width: 0;
+}
+
+.editor-template-form-column--compact {
+	padding-bottom: 16px;
+}
+
+/* ── 窄屏编辑器 ── */
+.editor-template--compact {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	--editor-mobile-header-height: 46px;
+	--editor-mobile-preview-bar-height: 44px;
+	--editor-mobile-section-nav-top: calc(var(--editor-mobile-header-height) + var(--editor-mobile-preview-bar-height));
+}
+
+/* 预览区（折叠条 + 展开内容）整体固定在顶栏下方 */
+.editor-template__mobile-preview {
+	position: sticky;
+	top: var(--editor-mobile-header-height);
+	z-index: 51;
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(8px);
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.editor-template__mobile-preview-bar {
+	min-height: var(--editor-mobile-preview-bar-height);
+}
+
+.editor-template__mobile-preview-toggle {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	width: 100%;
+	border: none;
+	margin: 0;
+	padding: 10px 14px;
+	background: transparent;
+	cursor: pointer;
+	font-size: 14px;
+	color: #111827;
+	text-align: left;
+}
+
+.editor-template__mobile-preview-meta {
+	font-size: 12px;
+	color: #6b7280;
+}
+
+.editor-template__mobile-preview-action {
+	margin-left: auto;
+	font-size: 12px;
+	color: #007fd4;
+	white-space: nowrap;
+}
+
+.editor-template__mobile-preview-body {
+	padding: 0 12px 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	max-height: min(42vh, 360px);
+	overflow-y: auto;
+}
+
+.editor-template__mobile-preview-tools {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+	width: 100%;
+	padding: 4px 0 2px;
+}
+
+.editor-template__canvas-wrap {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	overflow: hidden;
+}
+
+.editor-template__canvas--compact {
+	margin: 0;
+	max-width: 100%;
+	height: auto;
+}
+
+.editor-template__secondary-tools {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+}
+
+.editor-template__icon-btn {
+	border: 1px solid #d1d5db;
+	background: #fff;
+	border-radius: 6px;
+	padding: 4px 6px;
+	margin: 0;
+	cursor: pointer;
+}
+
+.editor-template__loading-hint {
+	display: block;
+	text-align: center;
+	padding: 0 8px 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+	.editor-template__mobile-preview {
+		background: rgba(23, 23, 23, 0.95);
+		border-bottom-color: #404040;
+	}
+
+	.editor-template__mobile-preview-toggle {
+		color: #f5f5f5;
+	}
+
+	.editor-template__icon-btn {
+		background: #262626;
+		border-color: #525252;
+		color: #e5e5e5;
+	}
+}

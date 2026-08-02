@@ -3,6 +3,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
+import { EditorFormShell } from '../../TicketEditorCompo/EditorShell';
 import { decodeTicket, fontsLoader, TextAlign } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import TitleContainer from '../../InfrastructureCompo/TitleContainer';
@@ -245,8 +246,21 @@ export default function CRWideTicket() {
 				setIsFlipSide(isFlip);
 			}}
 			form={
-				<div className="flex flex-col m-4">
-					<TitleContainer title={t('editor.common.ticketFace.title')} className="flex flex-wrap gap-1">
+				<EditorFormShell defaultSectionId="trip" sectionOrder={['trip', 'style', 'purchase', 'serial']}>
+					<EditorFormShell.Section id="trip" label={t('editor.shell.trip')} description={t('editor.shell.tripDesc')}>
+					{/* <div className="editor-form-shell__quick">
+						<button
+							type="button"
+							className="editor-form-shell__quick-btn"
+							onClick={() => {
+								const preset = CRPresetStations[Math.floor(Math.random() * CRPresetStations.length)];
+								setDrawParameters((prev) => ({ ...prev, ...preset }));
+							}}
+						>
+							{t('editor.shell.randomPreset')}
+						</button>
+					</div> */}
+										<TitleContainer title={t('editor.common.ticketFace.title')} className="flex flex-wrap gap-1">
 						<label className="ticket-form-label">
 							{t('editor.common.ticketFace.paper')}
 							<CRWideTicketBgSelector value={drawParameters.background} onChange={(value: CRTicketBackGround) => setDrawParameters((prev) => ({ ...prev, background: value }))} />
@@ -664,7 +678,8 @@ export default function CRWideTicket() {
 							/>
 						</label>
 					</TitleContainer>
-
+					</EditorFormShell.Section>
+					<EditorFormShell.Section id="purchase" label={t('editor.shell.purchase')} description={t('editor.shell.purchaseDesc')}>
 					<TitleContainer title={t('editor.common.purchaseInfo.title')} className="flex flex-wrap">
 						<label className="ticket-form-label">
 							{t('editor.common.purchaseInfo.price')} {drawParameters.isHKWestKowloonStyle ? 'HK＄' : '￥'}
@@ -929,6 +944,8 @@ export default function CRWideTicket() {
 							</div>
 						</label>
 					</TitleContainer>
+					</EditorFormShell.Section>
+					<EditorFormShell.Section id="serial" label={t('editor.shell.serial')} description={t('editor.shell.serialDesc')}>
 					<TitleContainer title={t('editor.cr.jisuanjikepiao2010.ticketNoInfo.title')} className="flex flex-wrap">
 						<label className="ticket-form-label">
 							{t('editor.common.ticketNoInfo.ticketNo')}
@@ -1092,7 +1109,8 @@ export default function CRWideTicket() {
 							</div>
 						</label>
 					</TitleContainer>
-				</div>
+					</EditorFormShell.Section>
+				</EditorFormShell>
 			}
 		/>
 	);
