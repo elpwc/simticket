@@ -93,14 +93,13 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 							<TicketViewer
 								width={500}
 								height={-1}
-								className="w-full m-auto"
-								style={{ boxShadow: '0 0 3px 0px #858585' }}
+								className="w-full m-auto upload-ticket-preview"
 								companyId={ticketInfo.companyId}
 								ticketTypeId={ticketInfo.ticketTypeId}
 								ticketData={ticketInfo.ticketData}
 							/>
 
-							<div className="text-[12px] flex flex-col gap-3">
+							<div className="text-[12px] flex flex-col gap-3 text-neutral-700 dark:text-neutral-300">
 								<p>{t('UploadTicketModal.tips.tip1')}</p>
 								<span>{t('UploadTicketModal.tips.tip2')}</span>
 								<span>
@@ -115,7 +114,8 @@ export const UploadTicketModal = ({ show, ticketInfo, onClose }: Props) => {
 											</span>
 										}
 										modalTitle={t('UploadTicketModal.tips.why')}
-										textColor="gray"
+										textColor="#6b7280"
+										darkTextColor="#d4d4d4"
 									>
 										{t('UploadTicketModal.tips.whyText')}
 									</DescriptionButton>

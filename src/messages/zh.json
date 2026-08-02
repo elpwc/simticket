@@ -10,6 +10,12 @@
 		"menu": {
 			"about": "关于",
 			"post": "大家的作品"
+		},
+		"theme": {
+			"label": "外观主题",
+			"light": "明亮",
+			"dark": "夜间",
+			"system": "跟随系统"
 		}
 	},
 	"value": {
@@ -271,7 +277,6 @@
 	},
 	"worksPage": {
 		"title": "大家的作品",
-		"subtitle": "浏览并鉴赏其他用户分享的车票",
 		"sort": {
 			"latest": "最新发布",
 			"mostLiked": "点赞最多"

@@ -67,7 +67,7 @@ export const SaveImageModal = ({ show, ticketInfo, saveFilename, defaultCanvasSi
 					return (
 						<button
 							key={SAVE_IMAGE_SIZE.title}
-							className="flex justify-between"
+							className="flex justify-between dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700"
 							style={{ padding: '10px 10px' }}
 							onClick={() => {
 								handleSave(SAVE_IMAGE_SIZE.scale, SAVE_IMAGE_SIZE.title);
@@ -117,7 +117,10 @@ export const SaveImageModal = ({ show, ticketInfo, saveFilename, defaultCanvasSi
 				</div>
 				<button
 					key={'自定义'}
-					className={clsx('flex justify-between w-full', !Number.isNaN(width) && !Number.isNaN(height) && width > 0 && height > 0 ? '' : 'disabled')}
+					className={clsx(
+						'flex justify-between w-full dark:bg-neutral-800 dark:border-neutral-600 dark:hover:bg-neutral-700',
+						!Number.isNaN(width) && !Number.isNaN(height) && width > 0 && height > 0 ? '' : 'disabled'
+					)}
 					style={{ padding: '10px 10px', marginTop: '12px' }}
 					onClick={() => {
 						handleSave(width / defaultCanvasSize[0], t('SaveImageModal.customizeSizeTab.buttonTitle'));

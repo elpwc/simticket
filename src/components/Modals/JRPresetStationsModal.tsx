@@ -5,6 +5,7 @@ import { useLocale } from '@/utils/hooks/useLocale';
 import { JRStationNameType } from '../TicketEditors/JRWideTicket/type';
 import Toggle from '../InfrastructureCompo/Toggle';
 import { useState } from 'react';
+import clsx from 'clsx';
 import { useIsMobile } from '@/utils/hooks';
 import { JRStationNameText } from '../InfrastructureCompo/JRComponents/JRStationNameText';
 import { JRCompanies, JRStationNameTypeRadioboxItemData } from '../TicketEditors/JRWideTicket/value';
@@ -104,7 +105,10 @@ export const JRPresetStationsModal = ({ show, onClose, onSelect }: Props) => {
 					}, {})
 				).map(([type, items]) => (
 					<div key={type} className="w-fit" style={{ marginLeft: isMobile ? '0' : '40px' }}>
-						<div className="text-sm font-semibold mt-1 mb-0" style={{ color: showAsCompany ? JRCompanies.find((item) => item.value === type)?.color : 'black' }}>
+						<div
+							className={clsx('text-sm font-semibold mt-1 mb-0', !showAsCompany && 'text-black dark:text-white')}
+							style={showAsCompany ? { color: JRCompanies.find((item) => item.value === type)?.color } : undefined}
+						>
 							{showAsCompany ? JRCompanies.find((item) => item.value === type)?.name : JRStationNameTypeRadioboxItemData[Number(type)].name}
 						</div>
 						<div className="flex flex-wrap gap-1">
@@ -112,7 +116,7 @@ export const JRPresetStationsModal = ({ show, onClose, onSelect }: Props) => {
 								return (
 									<button
 										key={index}
-										className="min-h-[36px] bg-[#DDF6EE] hover:bg-[#8ce6cb]"
+										className="min-h-[36px] bg-[#DDF6EE] hover:bg-[#8ce6cb] !text-black"
 										onClick={() => {
 											onSelect(JRPresetStationNamesItem);
 										}}

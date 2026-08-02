@@ -8,8 +8,8 @@
 	padding: 0 0.7rem;
 	border-radius: 2px;
 	border: 1px solid #aaa;
-	background: #ffffff;
-	color: #333;
+	background: var(--control-bg, #ffffff);
+	color: var(--foreground, #333);
 	font-size: 0.85rem;
 	line-height: 1;
 	cursor: pointer;
@@ -18,13 +18,23 @@
 }
 
 .radio-btn:hover {
-	background: #f0f0f0;
+	background: var(--hover-bg, #f0f0f0);
+}
+
+.dark .radio-btn {
+	border-color: #737373;
 }
 
 .radio-btn.active {
 	background: #4a9bde;
-	color: white;
+	color: #fff !important;
 	border-color: #4a9bde;
+}
+
+.dark .radio-btn.active {
+	background: #2563eb;
+	border-color: #2563eb;
+	color: #fff !important;
 }
 
 .radio-diy-input {
@@ -35,6 +45,12 @@
 	font-size: 0.85rem;
 	transition: border-color 0.2s, box-shadow 0.2s;
 	min-width: 5rem;
+	background: var(--control-bg, #fff);
+	color: var(--foreground, inherit);
+}
+
+.dark .radio-diy-input {
+	border-color: #737373;
 }
 
 .radio-diy-input:focus {

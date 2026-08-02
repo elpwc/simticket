@@ -71,7 +71,9 @@ export const Tab = ({
 							'px-2 py-1 text-sm transition-all select-none',
 							'flex items-center justify-center',
 							isMobile && !isHorizontal ? 'grow' : '',
-							active ? 'text-black bg-white hover:bg-white' : 'text-gray-600 bg-[#f7f7f7] hover:text-black hover:bg-gray-100/70',
+							active
+								? 'text-black dark:text-white bg-white dark:bg-neutral-900 hover:bg-white dark:hover:bg-neutral-900'
+								: 'text-gray-600 dark:text-neutral-400 bg-[#f7f7f7] dark:bg-neutral-800 hover:text-black dark:hover:text-white hover:bg-gray-100/70 dark:hover:bg-neutral-700',
 							disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer',
 							' border-[#ccc]',
 							menuPosition === 'top' && 'mb-0 border-b-0 rounded-[4px_4px_0_0]',
@@ -90,13 +92,13 @@ export const Tab = ({
 	);
 
 	const contentNode = (
-		<div className={clsx('w-full h-full p-2 overflow-auto', 'text-gray-900 content-area', contentClassName)} style={contentStyle}>
+		<div className={clsx('w-full h-full p-2 overflow-auto', 'text-gray-900 dark:text-neutral-100 content-area', contentClassName)} style={contentStyle}>
 			{pages[selectedIndex]}
 		</div>
 	);
 
 	return (
-		<div className={clsx('flex w-full h-full', isHorizontal ? 'flex-col' : 'flex-row', 'tab-container rounded-[4px] bg-white border border-[#ccc]', tabClassName)} style={tabStyle}>
+		<div className={clsx('flex w-full h-full', isHorizontal ? 'flex-col' : 'flex-row', 'tab-container rounded-[4px] bg-white dark:bg-neutral-900 border border-[#ccc] dark:border-neutral-600', tabClassName)} style={tabStyle}>
 			{menuPosition === 'bottom' || menuPosition === 'right' ? (
 				<>
 					{contentNode}

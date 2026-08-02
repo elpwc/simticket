@@ -86,7 +86,7 @@ export const JRStationNameText = ({ className, style, stationName, stationNameTy
 	}
 
 	return (
-		<div className={clsx(styleContainer, className)} style={{ ...style, fontFamily: 'DotFont', fontWeight: 'bold' }}>
+		<div className={clsx(styleContainer, className)} style={{ fontFamily: 'DotFont', fontWeight: 'bold', color: 'inherit', ...style }}>
 			{stationAreaChar.length > 0 ? <span className="bg-black text-white text-[14px] p-[2px]">{stationAreaChar}</span> : <></>}
 			{stationNameType === JRStationNameType.LeftLargeRightUpAndDown || stationNameType === JRStationNameType.LeftUpAndDownRightLarge ? (
 				stationNameType === JRStationNameType.LeftLargeRightUpAndDown ? (

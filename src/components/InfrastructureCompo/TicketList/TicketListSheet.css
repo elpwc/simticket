@@ -75,16 +75,14 @@
 	}
 }
 
-@media (prefers-color-scheme: dark) {
-	.ticket-list-sheet-panel {
-		background: #171717;
-	}
+.dark .ticket-list-sheet-panel {
+	background: #171717;
+}
 
-	.ticket-list-sheet-header {
-		border-bottom-color: #404040;
-	}
+.dark .ticket-list-sheet-header {
+	border-bottom-color: #404040;
+}
 
-	.ticket-list-sheet-title {
-		color: #ededed;
-	}
+.dark .ticket-list-sheet-title {
+	color: #ededed;
 }

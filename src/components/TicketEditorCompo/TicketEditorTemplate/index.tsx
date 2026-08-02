@@ -152,7 +152,10 @@ export default ({
 			ref={canvasRef}
 			width={canvasWidth * currentSizeScale}
 			height={canvasHeight * currentSizeScale}
-			className={clsx(isCompactEditor ? 'editor-template__canvas--compact' : 'm-10', canvasShowShandow && 'shadow-[0_0_16px_0px_#d1d1d1]')}
+			className={clsx(
+				isCompactEditor ? 'editor-template__canvas--compact' : 'm-10',
+				canvasShowShandow && 'shadow-[0_0_16px_0px_#d1d1d1] dark:shadow-[0_0_18px_0px_#000000]'
+			)}
 			borderRadius={`${canvasBorderRadius}px`}
 			onWheel={(isZoomIn: boolean) => {
 				if (isZoomIn) increaseScale();
@@ -290,7 +293,7 @@ export default ({
 
 	return (
 		<div className="editor-template editor-template--desktop w-[100%] flex flex-row items-start justify-start">
-			<div className="editor-template__desktop-preview w-[40%] flex flex-col items-center h-[100%] sticky z-[50] bg-[#ffffff9e] backdrop-blur-[8px]" style={{ top: '56px' }}>
+			<div className="editor-template__desktop-preview w-[40%] flex flex-col items-center h-[100%] sticky z-[50] bg-[#ffffff9e] dark:bg-[#171717cc] backdrop-blur-[8px]" style={{ top: '56px' }}>
 				<div className="flex justify-center items-center flex-wrap">
 					{secondaryToolbar}
 					<button type="button" className="ticketEditorTemplateToolBarItem flex items-center gap-1 primary green" onClick={() => setShowSaveImageModal(true)}>

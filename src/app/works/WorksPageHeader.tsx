@@ -15,24 +15,11 @@ interface Props {
 }
 
 /** 页面标题、排序切换与（移动端）筛选折叠按钮 */
-export function WorksPageHeader({
-	orderBy,
-	onOrderByChange,
-	isMobile,
-	filterExpanded,
-	onFilterToggle,
-	resultCountText,
-	isInitialLoading,
-}: Props) {
+export function WorksPageHeader({ orderBy, onOrderByChange, isMobile, filterExpanded, onFilterToggle, resultCountText, isInitialLoading }: Props) {
 	const { t } = useLocale();
 
 	return (
 		<header className="works-page-header mb-4">
-			<div className="mb-3">
-				<h1 className="text-xl md:text-2xl font-semibold text-gray-900">{t('worksPage.title')}</h1>
-				<p className="text-sm text-gray-500 mt-1">{t('worksPage.subtitle')}</p>
-			</div>
-
 			<div className="flex flex-wrap items-center justify-between gap-2">
 				<div className="flex flex-wrap items-center gap-2">
 					<WorksSortToggle orderBy={orderBy} onChange={onOrderByChange} />
@@ -45,7 +32,7 @@ export function WorksPageHeader({
 						</button>
 					)}
 				</div>
-				{!isInitialLoading && resultCountText && <span className="text-sm text-gray-500 tabular-nums">{resultCountText}</span>}
+				{!isInitialLoading && resultCountText && <span className="text-sm text-gray-500 dark:text-neutral-400 tabular-nums">{resultCountText}</span>}
 			</div>
 		</header>
 	);

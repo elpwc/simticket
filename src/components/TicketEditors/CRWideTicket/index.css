@@ -21,3 +21,13 @@
 	cursor: default;
 	color: rgb(177, 177, 177);
 }
+
+.dark .CRWideTicketBgSelector-item:hover {
+	background-color: #404040;
+}
+
+.dark .CRWideTicketBgSelector-item.selected {
+	background-color: #3b82f6;
+	border-color: #93c5fd;
+	color: #fff;
+}

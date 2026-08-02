@@ -783,13 +783,13 @@ export default function CRWideTicket() {
 																<span
 																	className={
 																		purchaseMethodItem.title.length === 1
-																			? 'border-black flex justify-center items-center border rounded-[20px] text-[13px] w-[18px] h-[18px]'
+																			? 'border-black dark:border-white flex justify-center items-center border rounded-[20px] text-[13px] w-[18px] h-[18px]'
 																			: ''
 																	}
 																>
 																	{purchaseMethodItem.title}
 																</span>
-																<span className="text-[12px] text-[#242424]">{t(purchaseMethodItem.desc)}</span>
+																<span className="text-[12px] text-[#242424] dark:text-neutral-100">{t(purchaseMethodItem.desc)}</span>
 															</label>
 														);
 													})}
@@ -831,7 +831,7 @@ export default function CRWideTicket() {
 															className={
 																drawParameters.doPurchaseMethodHaveCircle
 																	? purchaseMethodItem.title.length === 1
-																		? 'border-black flex justify-center items-center border rounded-[20px] text-[13px] w-[18px] h-[18px]'
+																		? 'border-black dark:border-white flex justify-center items-center border rounded-[20px] text-[13px] w-[18px] h-[18px]'
 																		: ''
 																	: ''
 															}

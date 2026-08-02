@@ -203,7 +203,7 @@ export const TicketListViewItem = ({
 								animate={{ opacity: 1, y: 0 }}
 								exit={{ opacity: 0, y: 20 }}
 								transition={{ duration: 0.1 }}
-								className="absolute bottom-0 left-0 w-full bg-white/60 backdrop-blur-sm flex justify-around py-1 text-sm"
+								className="absolute bottom-0 left-0 w-full bg-white/60 dark:bg-neutral-900/70 backdrop-blur-sm flex justify-around py-1 text-sm"
 							>
 								<button type="button" className="w-full text-[10px] px-2 py-1 rounded hover:bg-gray-100 transition" onClick={(e) => stopProp(e, handleEdit)}>
 									編集

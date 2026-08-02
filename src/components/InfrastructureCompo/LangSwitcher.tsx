@@ -25,7 +25,7 @@ export default function LangSwitcher() {
 			</div>
 
 			{open && (
-				<div className="lang-switcher-menu absolute mt-1 right-0 w-24 bg-[#007fd4] border border-gray-200 dark:border-gray-700 rounded shadow">
+				<div className="lang-switcher-menu absolute mt-1 right-0 w-24 bg-[#007fd4] dark:bg-[#0b4f7d] border border-gray-200 dark:border-gray-700 rounded shadow">
 					{LanguageList.map((lang: { id: string; name: string }) => (
 						<button
 							type="button"

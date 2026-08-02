@@ -37,7 +37,11 @@ export const CopyLinkModal = ({ show, ticketInfo, ticketId = -1, onClose, onSubm
 							{t('CopyLinkModal.copy')}
 						</button>
 					</div>
-					<textarea className="bg-gray-200 text-[12px] w-[95%] h-[100px] p-1" readOnly value={getTicketURL(ticketInfo.companyId, ticketInfo.ticketTypeId, ticketInfo.ticketData)} />
+					<textarea
+						className="bg-gray-200 dark:bg-neutral-800 dark:text-neutral-100 dark:border-neutral-600 text-[12px] w-[95%] h-[100px] p-1"
+						readOnly
+						value={getTicketURL(ticketInfo.companyId, ticketInfo.ticketTypeId, ticketInfo.ticketData)}
+					/>
 				</label>
 				<label className="flex flex-col">
 					<div className="flex justify-between items-center">
@@ -70,7 +74,7 @@ export const CopyLinkModal = ({ show, ticketInfo, ticketId = -1, onClose, onSubm
 						</div>
 					</div>
 					{ticketId < 0 ? (
-						<div className="border-1 rounded-[4px] p-2 border-gray-300 flex flex-col items-center">
+						<div className="border-1 rounded-[4px] p-2 border-gray-300 dark:border-neutral-600 flex flex-col items-center">
 							<p className="text-[14px]">
 								{t('CopyLinkModal.noViewerLink')}
 								<DescriptionButton
@@ -105,7 +109,11 @@ export const CopyLinkModal = ({ show, ticketInfo, ticketId = -1, onClose, onSubm
 							</button>
 						</div>
 					) : (
-						<input className="bg-gray-200 text-[12px] w-[95%] h-[30px] p-1" readOnly value={getUploadedTicketURL(ticketId)} />
+						<input
+							className="bg-gray-200 dark:bg-neutral-800 dark:text-neutral-100 dark:border-neutral-600 text-[12px] w-[95%] h-[30px] p-1"
+							readOnly
+							value={getUploadedTicketURL(ticketId)}
+						/>
 					)}
 				</label>
 			</div>

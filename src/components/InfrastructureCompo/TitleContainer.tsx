@@ -52,7 +52,7 @@ const TitleContainer: React.FC<Props> = ({
 			style={{ ...style, opacity: !allDisabled ? 1 : 0.5, pointerEvents: !allDisabled ? 'auto' : 'none' }}
 			className={clsx('relative border rounded-md p-4 pt-6 mt-4 border-[#6fc5ff]', classNameOuter)}
 		>
-			<label style={styleTitle} className={clsx('absolute -top-3 left-3 bg-white px-2 text-sm font-semibold', addCheckbox ? 'select-none' : '', classNameTitle)}>
+			<label style={styleTitle} className={clsx('absolute -top-3 left-3 bg-white dark:bg-[var(--background)] px-2 text-sm font-semibold', addCheckbox ? 'select-none' : '', classNameTitle)}>
 				{addCheckbox && (
 					<input
 						type="checkbox"

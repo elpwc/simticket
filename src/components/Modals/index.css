@@ -8,7 +8,8 @@
 }
 
 .login-form {
-	background: white;
+	background: var(--surface, white);
+	color: var(--foreground, inherit);
 	box-shadow: 0 0 7px 1px rgba(0, 0, 0, 0.1);
 	padding: 1rem;
 	max-width: 400px;
@@ -19,10 +20,15 @@
 	align-items: center;
 }
 
+.dark .login-form {
+	box-shadow: none;
+	background: transparent;
+}
+
 .login-title {
 	font-size: 1.5rem;
 	font-weight: 600;
-	color: #374151;
+	color: var(--foreground, #374151);
 	text-align: center;
 	margin-bottom: 1.5rem;
 }
@@ -31,19 +37,24 @@
 	width: 100%;
 	padding: 0.5rem 0.5rem;
 	box-sizing: border-box;
-	border-color: rgb(132, 132, 132);
+	border-color: var(--control-border, rgb(132, 132, 132));
 	border-radius: 3px;
 	border-width: 1px;
 	border-style: solid;
 	margin-top: 0.5rem;
 	transition: all 0.3s ease;
-	background-color: #f5f5f5;
+	background-color: var(--control-bg, #f5f5f5);
+	color: var(--foreground, inherit);
 }
 
 .login-input:focus {
 	outline: none;
-	background-color: #ffffff;
-	box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+	background-color: var(--surface, #ffffff);
+	box-shadow: 0 0 0 3px rgba(0, 127, 212, 0.25);
+}
+
+.dark .login-input::placeholder {
+	color: #737373;
 }
 
 .login-button {
@@ -51,21 +62,28 @@
 	padding: 0.7rem;
 	font-weight: 500;
 	cursor: pointer;
-	background-color: white;
-	border-color: rgb(132, 132, 132);
+	background-color: var(--control-bg, white);
+	color: var(--foreground, inherit);
+	border-color: var(--control-border, rgb(132, 132, 132));
 	border-radius: 3px;
 	border-width: 1px;
 	border-style: solid;
 }
 
 .login-button:hover {
-	background-color: #f0f0f0;
+	background-color: var(--hover-bg, #f0f0f0);
+}
+
+.login-button.disabled,
+.login-button.disabled:hover {
+	color: var(--muted, gray);
+	background-color: var(--surface-2, #ccc);
 }
 
 .login-tip {
 	text-align: center;
 	margin-top: 0.75rem;
-	color: #222222;
+	color: var(--foreground, #222222);
 	min-height: 1rem;
 }
 
@@ -80,11 +98,13 @@
 	height: 1.25rem;
 	margin-right: 0.5rem;
 	cursor: pointer;
+	accent-color: #007fd4;
 }
 
 .auto-login-label {
 	user-select: none;
 	font-size: 16px;
+	color: var(--foreground, inherit);
 }
 
 .login-form-item-container {
@@ -97,12 +117,20 @@
 }
 
 .login-form-footer-link {
-	color: #898989;
+	color: var(--muted, #898989);
 	text-decoration: none;
 	font-size: 0.7rem;
 	cursor: pointer;
 }
 
 .login-form-footer-link:hover {
-	color: #2c2c2c;
+	color: var(--foreground, #2c2c2c);
+}
+
+.upload-ticket-preview {
+	box-shadow: 0 0 3px 0px #858585;
+}
+
+.dark .upload-ticket-preview {
+	box-shadow: 0 0 12px 0px #000000;
 }

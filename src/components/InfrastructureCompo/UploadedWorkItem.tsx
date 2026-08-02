@@ -27,7 +27,7 @@ export const UploadedWorkItem = ({ uploadedTicketInfo, onLiked, onUndoLiked, onC
 		<>
 			<div
 				className={
-					`bg-white rounded-[6px] shadow-sm hover:shadow-md transition hover:-translate-y-[2px] p-2 pb-0 w-full min-w-0 max-w-full overflow-hidden border border-gray-200 flex flex-col justify-between` +
+					`bg-white dark:bg-neutral-900 rounded-[6px] shadow-sm hover:shadow-md transition hover:-translate-y-[2px] p-2 pb-0 w-full min-w-0 max-w-full overflow-hidden border border-gray-200 dark:border-neutral-700 flex flex-col justify-between` +
 					(className ? ` ${className}` : '')
 				}
 			>

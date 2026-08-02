@@ -105,7 +105,6 @@ export default function PrettyDropdown({
 									padding: bordered ? '8px 12px' : 0,
 									cursor: 'pointer',
 								}}
-								whileHover={bordered ? { backgroundColor: '#f0f0f0' } : {}}
 								onClick={() => {
 									onChange(option.value);
 									setOpen(false);

@@ -64,7 +64,7 @@ export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLik
 						className="
 					border-0
 						flex items-center gap-1 
-						text-gray-600 
+						text-gray-600 dark:text-neutral-300
 						hover:text-red-500 
 						transition 
 						active:scale-90 
@@ -96,7 +96,7 @@ export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLik
 							}
 						}}
 						style={{
-							color: doHasLiked ? '#fb2c36' : '#4a5565',
+							color: doHasLiked ? '#fb2c36' : undefined,
 						}}
 					>
 						<span>{uploadedTicketInfo.like > 0 ? uploadedTicketInfo.like : '　'}</span>
@@ -108,8 +108,8 @@ export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLik
 						className="
 						border-0
 						flex items-center
-						text-gray-600 
-						hover:text-[#009688] 
+						text-gray-600 dark:text-neutral-300
+						hover:text-[#009688] dark:hover:text-[#2dd4bf]
 						transition 
 						active:scale-90 
 						cursor-pointer
@@ -125,7 +125,7 @@ export const UploadedWorkItemToolbar = ({ uploadedTicketInfo, onLiked, onUndoLik
 				</div>
 			</div>
 
-			<div className="flex justify-between gap-2 min-w-0 text-[11px] text-gray-400 mt-0.5">
+			<div className="flex justify-between gap-2 min-w-0 text-[11px] text-gray-400 dark:text-neutral-500 mt-0.5">
 				<p className="truncate min-w-0 flex-1">{uploadedTicketInfo.editorName}</p>
 				<p className="shrink-0">view {uploadedTicketInfo.views}</p>
 			</div>

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import App from './app';
 import { LocaleProvider } from '@/utils/hooks/useLocale';
+import { ThemeProvider } from '@/utils/hooks/useTheme';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 const geistSans = Geist({
@@ -20,17 +21,24 @@ export const metadata: Metadata = {
 	description: 'simticket',
 };
 
+const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');var dark=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',dark);document.documentElement.style.colorScheme=dark?'dark':'light';}catch(e){}})();`;
+
 export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="zh">
+		<html lang="zh" suppressHydrationWarning>
+			<head>
+				<script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+			</head>
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-				<LocaleProvider>
-					<App>{children}</App>
-				</LocaleProvider>
+				<ThemeProvider>
+					<LocaleProvider>
+						<App>{children}</App>
+					</LocaleProvider>
+				</ThemeProvider>
 				<GoogleAnalytics gaId="G-2QPFFFRRK3" />
 			</body>
 		</html>

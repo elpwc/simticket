@@ -10,6 +10,12 @@
 		"menu": {
 			"about": "説明",
 			"post": "みんなの作品"
+		},
+		"theme": {
+			"label": "テーマ",
+			"light": "ライト",
+			"dark": "ダーク",
+			"system": "システム"
 		}
 	},
 	"value": {
@@ -271,7 +277,6 @@
 	},
 	"worksPage": {
 		"title": "みんなの作品",
-		"subtitle": "他のユーザーが投稿した切符を閲覧できます",
 		"sort": {
 			"latest": "新着順",
 			"mostLiked": "いいね順"

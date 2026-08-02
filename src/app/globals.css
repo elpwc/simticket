@@ -1,9 +1,31 @@
 @tailwind utilities;
 @import 'tailwindcss';
 
+/* class 策略：由 ThemeProvider / 启动脚本在 <html> 上切换 .dark */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
 	--background: #ffffff;
 	--foreground: #171717;
+	--surface: #ffffff;
+	--surface-2: #f3f4f6;
+	--border: #d1d5db;
+	--muted: #6b7280;
+	--control-bg: #ffffff;
+	--control-border: #6d6d6d;
+	--hover-bg: #e6e6e6;
+}
+
+.dark {
+	--background: #0a0a0a;
+	--foreground: #ededed;
+	--surface: #171717;
+	--surface-2: #262626;
+	--border: #525252;
+	--muted: #a3a3a3;
+	--control-bg: #262626;
+	--control-border: #737373;
+	--hover-bg: #404040;
 }
 
 @theme inline {
@@ -11,13 +33,6 @@
 	--color-foreground: var(--foreground);
 	--font-sans: var(--font-geist-sans);
 	--font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
-	}
 }
 
 body {
@@ -85,9 +100,10 @@ button {
 	cursor: pointer;
 	padding: 2px 6px;
 	margin: 2px 4px;
-	border: solid 1px #ccc;
+	border: solid 1px var(--border, #ccc);
 	border-radius: 4px;
-	background-color: white;
+	background-color: var(--control-bg, white);
+	color: inherit;
 	transition: all 0.2s;
 }
 
@@ -123,8 +139,26 @@ button.alert:hover {
 	background-color: oklch(88.5% 0.062 18.334);
 }
 
+.dark button.alert {
+	color: #fca5a5;
+	background-color: #450a0a;
+}
+
+.dark button.alert:hover {
+	background-color: #7f1d1d;
+}
+
+.dark button.disabled {
+	color: #a3a3a3;
+	background-color: #404040;
+}
+
+.dark button.disabled:hover {
+	background-color: #404040;
+}
+
 button:hover {
-	background-color: #e6e6e6;
+	background-color: var(--hover-bg, #e6e6e6);
 }
 
 button.disabled {
@@ -159,7 +193,13 @@ button.disabled:hover {
 	background-color: #dcf1ff;
 }
 .company-menu-item.selected {
-	background-color: #ffffff;
+	background-color: var(--surface, #ffffff);
+}
+.dark .company-menu-item:hover {
+	background-color: #1e3a5f;
+}
+.dark .company-menu-item.selected {
+	background-color: #262626;
 }
 
 .company-menu-item img {
@@ -170,7 +210,7 @@ button.disabled:hover {
 
 .ticket-menu-item {
 	cursor: pointer;
-	background-color: white;
+	background-color: var(--surface, white);
 	margin: 2px 0;
 	padding: 4px 32px;
 	border-radius: 4px;
@@ -188,26 +228,53 @@ button.disabled:hover {
 .ticket-menu-item.selected {
 	background-color: rgb(216, 216, 216);
 }
+.dark .ticket-menu-item:hover {
+	background-color: #404040;
+}
+.dark .ticket-menu-item.selected {
+	background-color: #525252;
+}
 
 .mobile-company-select-button {
 	background-color: #007fd4 !important;
 	padding: 4px 4px;
 	box-sizing: border-box !important;
 	font-size: 12px;
+	color: #fff !important;
+}
+
+.dark .mobile-company-select-button {
+	background-color: #0b4f7d !important;
+}
+
+.dark header nav {
+	background-color: #0b4f7d;
+}
+
+.dark header nav .lang-switcher-menu,
+.dark header nav .theme-switcher-menu {
+	background-color: #0b4f7d;
 }
 
 /* ticket editor */
-input {
-	border: solid 1px rgb(109, 109, 109);
+input,
+textarea,
+select {
+	border: solid 1px var(--control-border, rgb(109, 109, 109));
 	margin: 1px;
 	border-radius: 2px;
 	padding: 0 2px;
+	background-color: var(--control-bg, #fff);
+	color: var(--foreground, inherit);
 }
 
 textarea {
-	border: solid 1px rgb(109, 109, 109);
-	margin: 1px;
-	border-radius: 2px;
+	padding: 2px;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+	color: #737373;
 }
 
 .ticket-form-label {

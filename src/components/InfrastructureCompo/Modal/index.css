@@ -9,7 +9,8 @@
 }
 
 .modal-content {
-	background: #fff;
+	background: var(--surface, #fff);
+	color: var(--foreground, inherit);
 	border-radius: 12px;
 	padding: 20px;
 	width: 90%;
@@ -89,7 +90,7 @@
 	font-size: 18px;
 	font-weight: bold;
 	margin-bottom: 16px;
-	color: #333;
+	color: var(--foreground, #333);
 	text-align: center;
 }
 
@@ -107,5 +108,9 @@
 }
 
 .modal-close-btn:hover {
-	color: #333;
+	color: var(--foreground, #333);
+}
+
+.dark .modal-content {
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
 }

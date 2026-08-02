@@ -66,7 +66,7 @@ export default function HomePage() {
 						className="ticket-select-menu-container absolute left-0 right-0"
 						style={{ top: isMobile ? '46px' : '50px' }}
 					>
-						<menu className="flex gap-2 flex-wrap bg-[#b9e3ff]">
+						<menu className="flex gap-2 flex-wrap bg-[#b9e3ff] dark:bg-[#1a3a52]">
 							{companyList.map((company) => {
 								return (
 									<div
@@ -91,7 +91,7 @@ export default function HomePage() {
 							})}
 						</menu>
 						{(selectedCompany?.tickets?.length ?? 0) > 0 && (
-							<menu className="px-2 flex gap-1 flex-wrap shadow-sm items-center bg-white sticky bottom-0">
+							<menu className="px-2 flex gap-1 flex-wrap shadow-sm items-center bg-white dark:bg-neutral-900 sticky bottom-0">
 								{selectedCompany?.tickets?.map((ticket) => {
 									return (
 										<div key={ticket.id} className="flex items-center">
