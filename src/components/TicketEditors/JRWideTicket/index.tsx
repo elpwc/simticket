@@ -3,6 +3,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
+import { EditorFormShell } from '../../TicketEditorCompo/EditorShell';
 import { decodeTicket } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import TitleContainer from '../../InfrastructureCompo/TitleContainer';
@@ -191,9 +192,11 @@ export default function JRWideTicket() {
 				setIsFlipSide(isFlip);
 			}}
 			form={
-				<div className="flex flex-col m-4">
-					<UnderConstruction size="small" />
-					<TitleContainer title="券面" className="flex flex-wrap gap-1">
+				<>
+					<EditorFormShell defaultSectionId="trip" sectionOrder={['trip', 'purchase', 'serial']}>
+						<EditorFormShell.Section id="trip" label={t('editor.shell.trip')} description={t('editor.shell.tripDesc')}>
+							<UnderConstruction size="small" />
+							<TitleContainer title="券面" className="flex flex-wrap gap-1">
 						<label className="ticket-form-label">
 							券面
 							<JRWideTicketBgSelector is120mm={drawParameters.is120mm} value={drawParameters.background} onChange={(e) => setDrawParameters((prev) => ({ ...prev, background: e }))} />
@@ -828,6 +831,8 @@ export default function JRWideTicket() {
 						</label>
 					</TitleContainer>
 
+						</EditorFormShell.Section>
+						<EditorFormShell.Section id="purchase" label={t('editor.shell.purchase')} description={t('editor.shell.purchaseDesc')}>
 					<TitleContainer title="購入情報（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
 							購入手段（仮）
@@ -978,6 +983,8 @@ export default function JRWideTicket() {
 						</label>
 						<Divider />
 					</TitleContainer>
+						</EditorFormShell.Section>
+						<EditorFormShell.Section id="serial" label={t('editor.shell.serial')} description={t('editor.shell.serialDesc')}>
 					<TitleContainer title="番号（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
 							<label>
@@ -998,6 +1005,8 @@ export default function JRWideTicket() {
 							<input disabled className="" value={'開発中'} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
 						</label>
 					</TitleContainer>
+						</EditorFormShell.Section>
+					</EditorFormShell>
 					<JRPresetStationsModal
 						show={showJRPresetStationsModal > 0}
 						onClose={() => {
@@ -1024,7 +1033,7 @@ export default function JRWideTicket() {
 							setShowJRPresetStationsModal(0);
 						}}
 					/>
-				</div>
+				</>
 			}
 		/>
 	);
