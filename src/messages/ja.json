@@ -111,15 +111,6 @@
 		"addedToListHint": "印刷リストに追加しました"
 	},
 	"editor": {
-		"shell": {
-			"trip": "券面と行程",
-			"tripDesc": "駅名・列車・日時・座席など",
-			"purchase": "購入情報",
-			"purchaseDesc": "料金・購入方法・乗客情報など",
-			"serial": "票番データ",
-			"serialDesc": "券番・QR・識別码など",
-			"randomPreset": "ランダム预设"
-		},
 		"common": {
 			"ticketFace": {
 				"title": "券面",
@@ -217,11 +208,28 @@
 					"ticketSerialCode": "乗車券シリアルコード",
 					"title": "券番データ",
 					"showMessageBorder": "枠を表示する"
+				},
+				"shell": {
+					"trip": "券面と行程",
+					"tripDesc": "駅・列車番号・日付・座席種別",
+					"purchase": "座席と購入情報",
+					"purchaseDesc": "料金・購入方法・乗客など",
+					"serial": "購入者と券番",
+					"serialDesc": "券番・QR・識別コード",
+					"randomPreset": "ランダム駅名プリセット"
 				}
 			}
 		},
 		"jr": {
 			"mars": {
+				"shell": {
+					"trip": "券面と行程",
+					"tripDesc": "券種・駅名・運行情報",
+					"purchase": "購入情報",
+					"purchaseDesc": "支払方法・料金・割引など",
+					"serial": "番号データ",
+					"serialDesc": "通番・印字など"
+				},
 				"stationInfo": {
 					"specialStationNamePresetButton": "特殊駅名プリセット",
 					"specialStationNameTip": "2/3段式駅名は半角/で各部分を分けて下さい"

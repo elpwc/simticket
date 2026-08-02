@@ -247,7 +247,7 @@ export default function CRWideTicket() {
 			}}
 			form={
 				<EditorFormShell defaultSectionId="trip" sectionOrder={['trip', 'style', 'purchase', 'serial']}>
-					<EditorFormShell.Section id="trip" label={t('editor.shell.trip')} description={t('editor.shell.tripDesc')}>
+					<EditorFormShell.Section id="trip" label={t('editor.cr.jisuanjikepiao2010.shell.trip')} description={t('editor.cr.jisuanjikepiao2010.shell.tripDesc')}>
 					{/* <div className="editor-form-shell__quick">
 						<button
 							type="button"
@@ -257,7 +257,7 @@ export default function CRWideTicket() {
 								setDrawParameters((prev) => ({ ...prev, ...preset }));
 							}}
 						>
-							{t('editor.shell.randomPreset')}
+							{t('editor.cr.jisuanjikepiao2010.shell.randomPreset')}
 						</button>
 					</div> */}
 										<TitleContainer title={t('editor.common.ticketFace.title')} className="flex flex-wrap gap-1">
@@ -679,7 +679,7 @@ export default function CRWideTicket() {
 						</label>
 					</TitleContainer>
 					</EditorFormShell.Section>
-					<EditorFormShell.Section id="purchase" label={t('editor.shell.purchase')} description={t('editor.shell.purchaseDesc')}>
+					<EditorFormShell.Section id="purchase" label={t('editor.cr.jisuanjikepiao2010.shell.purchase')} description={t('editor.cr.jisuanjikepiao2010.shell.purchaseDesc')}>
 					<TitleContainer title={t('editor.common.purchaseInfo.title')} className="flex flex-wrap">
 						<label className="ticket-form-label">
 							{t('editor.common.purchaseInfo.price')} {drawParameters.isHKWestKowloonStyle ? 'HK＄' : '￥'}
@@ -945,7 +945,7 @@ export default function CRWideTicket() {
 						</label>
 					</TitleContainer>
 					</EditorFormShell.Section>
-					<EditorFormShell.Section id="serial" label={t('editor.shell.serial')} description={t('editor.shell.serialDesc')}>
+					<EditorFormShell.Section id="serial" label={t('editor.cr.jisuanjikepiao2010.shell.serial')} description={t('editor.cr.jisuanjikepiao2010.shell.serialDesc')}>
 					<TitleContainer title={t('editor.cr.jisuanjikepiao2010.ticketNoInfo.title')} className="flex flex-wrap">
 						<label className="ticket-form-label">
 							{t('editor.common.ticketNoInfo.ticketNo')}

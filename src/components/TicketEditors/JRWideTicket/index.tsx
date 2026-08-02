@@ -194,7 +194,7 @@ export default function JRWideTicket() {
 			form={
 				<>
 					<EditorFormShell defaultSectionId="trip" sectionOrder={['trip', 'purchase', 'serial']}>
-						<EditorFormShell.Section id="trip" label={t('editor.shell.trip')} description={t('editor.shell.tripDesc')}>
+						<EditorFormShell.Section id="trip" label={t('editor.jr.mars.shell.trip')} description={t('editor.jr.mars.shell.tripDesc')}>
 							<UnderConstruction size="small" />
 							<TitleContainer title="券面" className="flex flex-wrap gap-1">
 						<label className="ticket-form-label">
@@ -832,7 +832,7 @@ export default function JRWideTicket() {
 					</TitleContainer>
 
 						</EditorFormShell.Section>
-						<EditorFormShell.Section id="purchase" label={t('editor.shell.purchase')} description={t('editor.shell.purchaseDesc')}>
+						<EditorFormShell.Section id="purchase" label={t('editor.jr.mars.shell.purchase')} description={t('editor.jr.mars.shell.purchaseDesc')}>
 					<TitleContainer title="購入情報（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
 							購入手段（仮）
@@ -984,7 +984,7 @@ export default function JRWideTicket() {
 						<Divider />
 					</TitleContainer>
 						</EditorFormShell.Section>
-						<EditorFormShell.Section id="serial" label={t('editor.shell.serial')} description={t('editor.shell.serialDesc')}>
+						<EditorFormShell.Section id="serial" label={t('editor.jr.mars.shell.serial')} description={t('editor.jr.mars.shell.serialDesc')}>
 					<TitleContainer title="番号（仮）" className="flex flex-wrap">
 						<label className="ticket-form-label">
 							<label>

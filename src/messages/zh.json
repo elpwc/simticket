@@ -167,17 +167,17 @@
 						"justifyAround": "最优铺开"
 					},
 					"showMessageBorder": "显示边框"
+				},
+				"shell": {
+					"trip": "票面和行程",
+					"tripDesc": "车站、车次、日期、席别",
+					"purchase": "座位和购票信息",
+					"purchaseDesc": "价格、购票方式、乘车人等",
+					"serial": "购票人和票号",
+					"serialDesc": "票号、二维码、标识码",
+					"randomPreset": "随机预设站名"
 				}
 			}
-		},
-		"shell": {
-			"trip": "票面和行程",
-			"tripDesc": "车站、车次、日期、席别",
-			"purchase": "购票信息",
-			"purchaseDesc": "价格、购票方式、乘车人等",
-			"serial": "票号数据",
-			"serialDesc": "票号、二维码、标识码",
-			"randomPreset": "随机预设站名"
 		},
 		"common": {
 			"ticketFace": {
@@ -222,6 +222,14 @@
 		},
 		"jr": {
 			"mars": {
+				"shell": {
+					"trip": "票面和行程",
+					"tripDesc": "券种、车站、运行信息",
+					"purchase": "购票信息",
+					"purchaseDesc": "支付方式、价格、折扣等",
+					"serial": "票号数据",
+					"serialDesc": "通番、印字等"
+				},
 				"stationInfo": {
 					"specialStationNamePresetButton": "特殊站名预设",
 					"specialStationNameTip": "2/3段式站名请用半角/分割开各部分"
