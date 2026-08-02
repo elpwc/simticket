@@ -324,11 +324,29 @@ export const drawCRWideTicket = (
 		const routeIdentifierFirstChar = drawParameters.routeIdentifier.substring(0, 1);
 		const routeIdentifierNumbersChar = drawParameters.routeIdentifier.substring(1, drawParameters.routeIdentifier.length);
 		if (/^[A-Z]$/.test(routeIdentifierFirstChar)) {
+			// 非普客普快（带字母）
+			/** 右侧纯数字的最大宽度 */
+			const routeIdentifierNumbersCharWidth = 230;
+			/** 字母和数字的总体居中偏移量 */
+			let alignCenterOffset = (routeIdentifierNumbersCharWidth - 40 - 50 * routeIdentifierNumbersChar.length) / 2;
+			if (alignCenterOffset < 0) {
+				alignCenterOffset = 0;
+			}
 			ctx.font = `${resizedFont(7.1, 'TrainCodeFont')}`;
-			ctx.fillText(routeIdentifierFirstChar, offsetScaleX(720), offsetScaleY(324), resizedScaleX(64));
+			ctx.fillText(routeIdentifierFirstChar, offsetScaleX(720 + alignCenterOffset), offsetScaleY(324), resizedScaleX(64));
 			ctx.font = `${resizedFont(8, 'TrainCodeFont')}`;
-			drawText(ctx, routeIdentifierNumbersChar, offsetScaleX(783), offsetScaleY(332), resizedScaleX(271), TextAlign.Left, DrawTextMethod.fillText, 2.2);
+			drawText(
+				ctx,
+				routeIdentifierNumbersChar,
+				offsetScaleX(783 + alignCenterOffset),
+				offsetScaleY(332),
+				resizedScaleX(routeIdentifierNumbersCharWidth),
+				TextAlign.Left,
+				DrawTextMethod.fillText,
+				2.2,
+			);
 		} else {
+			// 普客普快（不带字母）
 			ctx.font = `${resizedFont(8, 'TrainCodeFont')}`;
 			drawText(ctx, drawParameters.routeIdentifier, offsetScaleX(720), offsetScaleY(332), resizedScaleX(284), TextAlign.Center, DrawTextMethod.fillText, 1.5);
 		}
