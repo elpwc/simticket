@@ -389,20 +389,31 @@ export const drawCRWideTicket = (
 				ctx.fillText(`${drawParameters.carriage}`, offsetScaleX(1096), offsetScaleY(489));
 			}
 
-			if (drawParameters.noSeat) {
-				ctx.font = resizedFont(4, 'SongTi', true);
-				ctx.fillText(`無座`, offsetScaleX(1330), offsetScaleY(454));
-				ctx.font = resizedFont(3.5, 'SongTi', true);
-				ctx.fillText(`No Seat`, offsetScaleX(1300), offsetScaleY(494));
+			if (drawParameters.seatStatus === '') {
+				if (['硬卧代硬座', '软卧代软座'].includes(drawParameters.seatClass)) {
+					ctx.font = resizedFont(4, 'SongTi', true);
+					ctx.fillText(`座`, offsetScaleX(1410), offsetScaleY(454));
+					ctx.font = resizedFont(3.5, 'SongTi', true);
+					ctx.fillText(`Seat`, offsetScaleX(1395), offsetScaleY(494));
+					ctx.font = resizedFont(6.5, 'HeiTi');
+					ctx.fillText(`${drawParameters.seat1}`, offsetScaleX(1281), offsetScaleY(489));
+					ctx.font = resizedFont(5, 'SongTi');
+					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1488), offsetScaleY(481));
+				} else {
+					ctx.font = resizedFont(4, 'SongTi', true);
+					ctx.fillText(`座`, offsetScaleX(1410), offsetScaleY(454));
+					ctx.font = resizedFont(3.5, 'SongTi', true);
+					ctx.fillText(`Seat`, offsetScaleX(1395), offsetScaleY(494));
+					ctx.font = resizedFont(6.5, 'HeiTi');
+					ctx.fillText(`${drawParameters.seat1}`, offsetScaleX(1281), offsetScaleY(489));
+					ctx.font = resizedFont(5, 'SongTi');
+					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1358), offsetScaleY(481));
+				}
+				ctx.font = resizedFont(5.5, 'SongTi');
+				ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(489));
 			} else {
-				ctx.font = resizedFont(4, 'SongTi', true);
-				ctx.fillText(`座`, offsetScaleX(1410), offsetScaleY(454));
-				ctx.font = resizedFont(3.5, 'SongTi', true);
-				ctx.fillText(`Seat`, offsetScaleX(1395), offsetScaleY(494));
-				ctx.font = resizedFont(6.5, 'HeiTi');
-				ctx.fillText(`${drawParameters.seat1}`, offsetScaleX(1281), offsetScaleY(489));
-				ctx.font = resizedFont(5, 'SongTi');
-				ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1358), offsetScaleY(481));
+				ctx.font = resizedFont(6, 'SongTi');
+				ctx.fillText(drawParameters.seatStatus, offsetScaleX(drawParameters.noCarriage ? 1180 : 1280), offsetScaleY(484));
 			}
 		} else {
 			// 非香港样式
@@ -414,34 +425,29 @@ export const drawCRWideTicket = (
 				ctx.fillText(`${drawParameters.carriage}`, offsetScaleX(1096), offsetScaleY(489));
 			}
 
-			if (drawParameters.noSeat) {
-				ctx.font = resizedFont(6, 'SongTi');
-				ctx.fillText(`无座`, offsetScaleX(drawParameters.noCarriage ? 1180 : 1250), offsetScaleY(484));
-			} else {
-				if (drawParameters.seatStatus === '') {
-					if (['硬卧代硬座', '软卧代软座'].includes(drawParameters.seatClass)) {
-						ctx.font = resizedFont(4, 'SongTi', true);
+			if (drawParameters.seatStatus === '') {
+				if (['硬卧代硬座', '软卧代软座'].includes(drawParameters.seatClass)) {
+					ctx.font = resizedFont(4, 'SongTi', true);
 
-						ctx.fillText(`号`, offsetScaleX(1325), offsetScaleY(484));
-						ctx.font = resizedFont(6.5, 'HeiTi');
-						drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 100), TextAlign.Right);
-						ctx.font = resizedFont(5, 'SongTi');
-						ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1368), offsetScaleY(481));
-					} else {
-						ctx.font = resizedFont(4, 'SongTi', true);
-
-						ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(484));
-						ctx.font = resizedFont(6.5, 'HeiTi');
-						drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 79), TextAlign.Right);
-						ctx.font = resizedFont(5, 'SongTi');
-						ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1308), offsetScaleY(481));
-					}
-					ctx.font = resizedFont(5.5, 'SongTi');
-					ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(489));
+					ctx.fillText(`号`, offsetScaleX(1325), offsetScaleY(484));
+					ctx.font = resizedFont(6.5, 'HeiTi');
+					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 100), TextAlign.Right);
+					ctx.font = resizedFont(5, 'SongTi');
+					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1368), offsetScaleY(481));
 				} else {
-					ctx.font = resizedFont(6, 'SongTi');
-					ctx.fillText(drawParameters.seatStatus, offsetScaleX(drawParameters.noCarriage ? 1180 : 1250), offsetScaleY(484));
+					ctx.font = resizedFont(4, 'SongTi', true);
+
+					ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(484));
+					ctx.font = resizedFont(6.5, 'HeiTi');
+					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 79), TextAlign.Right);
+					ctx.font = resizedFont(5, 'SongTi');
+					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1308), offsetScaleY(481));
 				}
+				ctx.font = resizedFont(5.5, 'SongTi');
+				ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(489));
+			} else {
+				ctx.font = resizedFont(6, 'SongTi');
+				ctx.fillText(drawParameters.seatStatus, offsetScaleX(drawParameters.noCarriage ? 1180 : 1250), offsetScaleY(484));
 			}
 		}
 
