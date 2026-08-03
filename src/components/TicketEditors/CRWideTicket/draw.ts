@@ -89,86 +89,85 @@ export const drawCRWideTicket = (
 		}
 	}
 
+	enum BackgroundImageType {
+		Soft,
+		Mag,
+	}
+
 	const bg = new Image();
+	/** 车票是红票还是蓝票 */
+	let isBackgroundImageType = BackgroundImageType.Mag;
 	switch (drawParameters.background) {
 		case CRTicketBackGround.SoftRed:
 			bg.src = cr_red.src;
+			isBackgroundImageType = BackgroundImageType.Soft;
 			break;
 		case CRTicketBackGround.SoftBlue:
 			bg.src = cr_blue.src;
+			isBackgroundImageType = BackgroundImageType.Soft;
 			break;
 		case CRTicketBackGround.MagRed:
 			bg.src = cr_mag_red.src;
+			isBackgroundImageType = BackgroundImageType.Mag;
 			break;
 		case CRTicketBackGround.MagBlue:
 			bg.src = cr_mag_blue.src;
+			isBackgroundImageType = BackgroundImageType.Mag;
 			break;
 		case CRTicketBackGround.MagNoneBackground:
+			isBackgroundImageType = BackgroundImageType.Mag;
+			break;
 		case CRTicketBackGround.SoftNoneBackground:
+			isBackgroundImageType = BackgroundImageType.Soft;
 			break;
 	}
 
 	const resizedScaleX = (value: number) => {
-		switch (drawParameters.background) {
-			case CRTicketBackGround.MagRed:
-			case CRTicketBackGround.MagBlue:
-			case CRTicketBackGround.MagNoneBackground:
+		switch (isBackgroundImageType) {
+			case BackgroundImageType.Mag:
 				return initialMethods.scaleX((value / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0]);
-			case CRTicketBackGround.SoftRed:
-			case CRTicketBackGround.SoftBlue:
-			case CRTicketBackGround.SoftNoneBackground:
+			case BackgroundImageType.Soft:
+				return initialMethods.scaleX(value);
 			default:
 				return initialMethods.scaleX(value);
 		}
 	};
 	const resizedScaleY = (value: number) => {
-		switch (drawParameters.background) {
-			case CRTicketBackGround.MagRed:
-			case CRTicketBackGround.MagBlue:
-			case CRTicketBackGround.MagNoneBackground:
+		switch (isBackgroundImageType) {
+			case BackgroundImageType.Mag:
 				return initialMethods.scaleY((value / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1]);
-			case CRTicketBackGround.SoftRed:
-			case CRTicketBackGround.SoftBlue:
-			case CRTicketBackGround.SoftNoneBackground:
+			case BackgroundImageType.Soft:
+				return initialMethods.scaleY(value);
 			default:
 				return initialMethods.scaleY(value);
 		}
 	};
 	const offsetScaleX = (value: number, addOffsetValue: boolean = true) => {
-		switch (drawParameters.background) {
-			case CRTicketBackGround.MagRed:
-			case CRTicketBackGround.MagBlue:
-			case CRTicketBackGround.MagNoneBackground:
+		switch (isBackgroundImageType) {
+			case BackgroundImageType.Mag:
 				return initialMethods.scaleX(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeHori) / MAG_TICKET_SIZE[0]) * PAPER_TICKET_SIZE[0] + (addOffsetValue ? drawParameters.offsetX : 0));
-			case CRTicketBackGround.SoftRed:
-			case CRTicketBackGround.SoftBlue:
-			case CRTicketBackGround.SoftNoneBackground:
+			case BackgroundImageType.Soft:
+				return initialMethods.scaleX(value + (addOffsetValue ? drawParameters.offsetX : 0));
 			default:
 				return initialMethods.scaleX(value + (addOffsetValue ? drawParameters.offsetX : 0));
 		}
 	};
 	const offsetScaleY = (value: number, addOffsetValue: boolean = true) => {
-		switch (drawParameters.background) {
-			case CRTicketBackGround.MagRed:
-			case CRTicketBackGround.MagBlue:
-			case CRTicketBackGround.MagNoneBackground:
+		switch (isBackgroundImageType) {
+			case BackgroundImageType.Mag:
 				return initialMethods.scaleY(((value - PAPER_TICKET_SIZE[1] * backgroundEdgeVert) / MAG_TICKET_SIZE[1]) * PAPER_TICKET_SIZE[1] + (addOffsetValue ? drawParameters.offsetY : 0));
-			case CRTicketBackGround.SoftRed:
-			case CRTicketBackGround.SoftBlue:
-			case CRTicketBackGround.SoftNoneBackground:
+			case BackgroundImageType.Soft:
+				return initialMethods.scaleY(value + (addOffsetValue ? drawParameters.offsetY : 0));
 			default:
 				return initialMethods.scaleY(value + (addOffsetValue ? drawParameters.offsetY : 0));
 		}
 	};
 	const resizedFont = (size: number, fontName: string, isBold?: boolean) => {
-		switch (drawParameters.background) {
-			case CRTicketBackGround.MagRed:
-			case CRTicketBackGround.MagBlue:
-			case CRTicketBackGround.MagNoneBackground:
+		switch (isBackgroundImageType) {
+			case BackgroundImageType.Mag:
 				return initialMethods.font((size / MAG_TICKET_CANVAS_SIZE[1]) * PAPER_TICKET_CANVAS_SIZE[1], fontName, isBold);
-			case CRTicketBackGround.SoftRed:
-			case CRTicketBackGround.SoftBlue:
-			case CRTicketBackGround.SoftNoneBackground:
+			case BackgroundImageType.Soft:
+				return initialMethods.font(size, fontName, isBold);
 			default:
 				return initialMethods.font(size, fontName, isBold);
 		}
@@ -577,7 +576,14 @@ export const drawCRWideTicket = (
 
 		//QR
 		if (drawParameters.doShowQRCode) {
-			drawQRCode(ctx, offsetScaleX(1223), offsetScaleY(730), resizedScaleX(380), drawParameters.qrCodeText);
+			switch (isBackgroundImageType) {
+				case BackgroundImageType.Mag:
+					drawQRCode(ctx, offsetScaleX(1310), offsetScaleY(730), resizedScaleX(280), drawParameters.qrCodeText);
+					break;
+				case BackgroundImageType.Soft:
+					drawQRCode(ctx, offsetScaleX(1223), offsetScaleY(730), resizedScaleX(380), drawParameters.qrCodeText);
+					break;
+			}
 		}
 
 		// code 下方购票处
