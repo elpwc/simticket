@@ -5,6 +5,8 @@ export const enum RightUpContentType {
 	SoldPlace = 'soldplace',
 	Turnstile = 'turnstile',
 	International = 'international',
+	Chebu = 'chebu',
+	Zhanbu = 'zhanbu',
 }
 
 export enum CRTicketBackGround {

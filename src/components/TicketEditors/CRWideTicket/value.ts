@@ -193,7 +193,7 @@ export const purchaseMethodList: PurchaseMethod[] = [
 	{ type: PurchaseMethodType.Other, title: '挂失补', desc: 'value.purchaseMethod.list.guashi' },
 ];
 
-export const info1List = ['限乘当日当次车', '乘车纪念'];
+export const info1List = ['限乘当日当次车', '乘车纪念', '中国铁路纪念票'];
 export const info2List = ['中途下车失效', '在2日内有效', '在3日内有效', '随原票使用', '随原票使用有效', '随乘车证使用', '乘车纪念'];
 export const info3List = ['仅供报销使用', '变更到站', '退票费', '中转签证', '乘车证签证', '始发改签', '乘车纪念'];
 
@@ -296,6 +296,7 @@ export const purchaseCertTypeList = [
 	{ value: 'TN', title: '台湾居民来往大陆通行证（台胞证）' },
 	{ value: 'QT', title: '其他' },
 	{ value: 'DL', title: '调度命令' },
+	{ value: 'JN', title: '中国铁路纪念票' },
 ];
 
 export const purchasePassportNationList = [{ value: 'JPN', title: '日本' }];

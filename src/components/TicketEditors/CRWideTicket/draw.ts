@@ -281,6 +281,18 @@ export const drawCRWideTicket = (
 				ctx.font = `${resizedFont(6, 'SongTi')}`;
 				ctx.fillText('国际联运', offsetScaleX(1240), offsetScaleY(210));
 				break;
+			case RightUpContentType.Chebu:
+				// 列车补票
+				ctx.fillStyle = 'black';
+				ctx.font = `${resizedFont(6, 'SongTi')}`;
+				ctx.fillText('列车补票', offsetScaleX(1240), offsetScaleY(210));
+				break;
+			case RightUpContentType.Zhanbu:
+				// 到站补票
+				ctx.fillStyle = 'black';
+				ctx.font = `${resizedFont(6, 'SongTi')}`;
+				ctx.fillText('到站补票', offsetScaleX(1240), offsetScaleY(210));
+				break;
 			case RightUpContentType.None:
 				// 不显示
 				break;
