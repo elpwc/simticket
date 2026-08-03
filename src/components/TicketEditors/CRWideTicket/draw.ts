@@ -174,6 +174,32 @@ export const drawCRWideTicket = (
 		}
 	};
 
+	/** 数字用 HeiTi、其余用 SongTi，同一行连续绘制（右对齐，超宽时整体压缩） */
+	const drawMixedDigitFontText = (text: string, x: number, y: number, maxWidth: number, numFontSize: number = 6.5, otherFontSize: number = 5.5) => {
+		if (!text) return;
+		const digitFont = resizedFont(numFontSize, 'HeiTi');
+		const otherFont = resizedFont(otherFontSize, 'SongTi');
+		const parts = text.match(/\d+|\D+/g) ?? [];
+		const widths = parts.map((seg) => {
+			ctx.font = /^\d+$/.test(seg) ? digitFont : otherFont;
+			return ctx.measureText(seg).width;
+		});
+		const totalWidth = widths.reduce((sum, w) => sum + w, 0);
+		const scaleX = totalWidth > maxWidth ? maxWidth / totalWidth : 1;
+
+		ctx.save();
+		ctx.translate(x, y);
+		ctx.scale(scaleX, 1);
+		let cursorX = maxWidth / scaleX - totalWidth;
+		for (let i = 0; i < parts.length; i++) {
+			const seg = parts[i];
+			ctx.font = /^\d+$/.test(seg) ? digitFont : otherFont;
+			ctx.fillText(seg, cursorX, 0);
+			cursorX += widths[i];
+		}
+		ctx.restore();
+	};
+
 	// eslint-disable-next-line complexity
 	const draw = () => {
 		// 清空
@@ -421,30 +447,29 @@ export const drawCRWideTicket = (
 				ctx.font = resizedFont(4, 'SongTi', true);
 				ctx.fillText(`车`, offsetScaleX(1171), offsetScaleY(474));
 
-				ctx.font = resizedFont(6.5, 'HeiTi');
-				ctx.fillText(`${drawParameters.carriage}`, offsetScaleX(1096), offsetScaleY(489));
+				drawMixedDigitFontText(drawParameters.carriage, offsetScaleX(1000), offsetScaleY(482), resizedScaleX(165), 6.5, 6);
 			}
 
 			if (drawParameters.seatStatus === '') {
 				if (['硬卧代硬座', '软卧代软座'].includes(drawParameters.seatClass)) {
 					ctx.font = resizedFont(4, 'SongTi', true);
 
-					ctx.fillText(`号`, offsetScaleX(1325), offsetScaleY(484));
+					ctx.fillText(`号`, offsetScaleX(1325), offsetScaleY(474));
 					ctx.font = resizedFont(6.5, 'HeiTi');
-					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 100), TextAlign.Right);
+					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(482), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 100), TextAlign.Right);
 					ctx.font = resizedFont(5, 'SongTi');
 					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1368), offsetScaleY(481));
 				} else {
 					ctx.font = resizedFont(4, 'SongTi', true);
 
-					ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(484));
+					ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(474));
 					ctx.font = resizedFont(6.5, 'HeiTi');
-					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(489), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 79), TextAlign.Right);
+					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(482), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 79), TextAlign.Right);
 					ctx.font = resizedFont(5, 'SongTi');
 					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1308), offsetScaleY(481));
 				}
 				ctx.font = resizedFont(5.5, 'SongTi');
-				ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(489));
+				ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(482));
 			} else {
 				ctx.font = resizedFont(6, 'SongTi');
 				ctx.fillText(drawParameters.seatStatus, offsetScaleX(drawParameters.noCarriage ? 1180 : 1250), offsetScaleY(484));
