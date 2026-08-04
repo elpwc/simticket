@@ -182,6 +182,12 @@
 			}
 		},
 		"common": {
+			"ElementAddedDate": {
+				"title": "{year}年新增",
+				"descy": "此要素在{year}年加入票面",
+				"descym": "此要素在{year}年{month}月加入票面",
+				"descymd": "此要素在{year}年{month}月{day}日加入票面"
+			},
 			"ticketFace": {
 				"watermark": "水印",
 				"offset": "印刷偏移",

@@ -281,8 +281,19 @@ textarea {
 	box-sizing: content-box;
 	width: 100%;
 	display: grid;
-
 	grid-template-columns: 35% 65%;
+	gap: 4px;
+	align-items: start;
+}
+
+.ticket-form-label__text {
+	font-weight: 500;
+	line-height: 1.3;
+	cursor: default;
+}
+
+.ticket-form-label__control {
+	min-width: 0;
 }
 
 /* 窄屏：标签在上、输入在下，便于触控 */
@@ -295,7 +306,10 @@ textarea {
 
 	.ticket-form-label input,
 	.ticket-form-label select,
-	.ticket-form-label textarea {
+	.ticket-form-label textarea,
+	.ticket-form-label__control input,
+	.ticket-form-label__control select,
+	.ticket-form-label__control textarea {
 		width: 100%;
 		max-width: 100%;
 		box-sizing: border-box;
@@ -303,7 +317,8 @@ textarea {
 		padding: 8px 6px;
 	}
 
-	.ticket-form-label button {
+	.ticket-form-label button,
+	.ticket-form-label__control button {
 		min-height: 36px;
 	}
 }

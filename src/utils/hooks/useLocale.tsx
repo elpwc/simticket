@@ -64,17 +64,27 @@ export const LocaleProvider = ({ children }: { children: ReactNode }) => {
 	return <LocaleContext.Provider value={{ locale, t, setLocale }}>{children}</LocaleContext.Provider>;
 };
 
-export const useLocale = (...baseKeys: string[]) => {
+export const useLocale = () => {
 	const { locale, t: rawT, setLocale } = useContext(LocaleContext);
 
-	const t = (key: string) => {
+	const t = (key: string, params?: Record<string, unknown> | unknown, ...rest: unknown[]) => {
 		if (typeof window === 'undefined') return '';
-		for (const baseKey of baseKeys) {
-			const fullKey = `${baseKey}.${key}`;
-			const translated = rawT(fullKey);
-			if (translated !== fullKey) return translated;
+		let translated = rawT(key);
+
+		if (params !== undefined && params !== null && typeof params === 'object' && !Array.isArray(params)) {
+			translated = translated.replace(/\{(\w+)\}/g, (match, name: string) => {
+				const value = (params as Record<string, unknown>)[name];
+				return value !== undefined && value !== null ? String(value) : match;
+			});
+		} else if (params !== undefined || rest.length > 0) {
+			const args = [params, ...rest];
+			translated = translated.replace(/\{(\d+)\}/g, (match, p1: string) => {
+				const value = args[parseInt(p1, 10) - 1];
+				return value !== undefined && value !== null ? String(value) : match;
+			});
 		}
-		return rawT(key);
+
+		return translated;
 	};
 
 	return { locale, t, setLocale };

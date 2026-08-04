@@ -112,6 +112,12 @@
 	},
 	"editor": {
 		"common": {
+			"ElementAddedDate": {
+				"title": "{year}年から",
+				"descy": "この要素は{year}年に券面に追加されました",
+				"descym": "この要素は{year}年{month}月に券面に追加されました",
+				"descymd": "この要素は{year}年{month}月{day}日に券面に追加されました"
+			},
 			"ticketFace": {
 				"title": "券面",
 				"paper": "券面用紙",

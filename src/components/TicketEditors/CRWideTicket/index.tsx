@@ -3,7 +3,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import './index.css';
 import TicketEditorTemplate from '../../TicketEditorCompo/TicketEditorTemplate';
-import { EditorFormShell } from '../../TicketEditorCompo/EditorShell';
+import { EditorFormShell, TicketFormLabel } from '../../TicketEditorCompo/EditorShell';
 import { decodeTicket, fontsLoader, TextAlign } from '@/utils/utils';
 import Toggle from '../../InfrastructureCompo/Toggle';
 import TitleContainer from '../../InfrastructureCompo/TitleContainer';
@@ -37,6 +37,7 @@ import { AppContext } from '@/app/app';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { useSearchParams } from 'next/navigation';
 import { getRandomCRTicketNo } from './utils';
+import ElementAddedDate from '@/components/TicketEditorCompo/ElementAddedDate';
 
 export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
@@ -255,12 +256,18 @@ export default function CRWideTicket() {
 						</button>
 					</div> */}
 						<TitleContainer title={t('editor.common.ticketFace.title')} className="flex flex-wrap gap-1">
-							<label className="ticket-form-label">
-								{t('editor.common.ticketFace.paper')}
-								<CRWideTicketBgSelector value={drawParameters.background} onChange={(value: CRTicketBackGround) => setDrawParameters((prev) => ({ ...prev, background: value }))} />
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.common.ticketFace.offset')}
+							<TicketFormLabel label={t('editor.common.ticketFace.paper')}>
+								<CRWideTicketBgSelector
+									value={drawParameters.background}
+									onChange={(value: CRTicketBackGround) =>
+										setDrawParameters((prev) => ({
+											...prev,
+											background: value,
+										}))
+									}
+								/>
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.common.ticketFace.offset')}>
 								<div className="flex grid-cols-3">
 									<label className="flex items-center">
 										X
@@ -272,7 +279,11 @@ export default function CRWideTicket() {
 									</label>
 									<button
 										className="w-[max-content] text-[12px]"
-										style={{ borderRadius: '4px 0 0 4px', padding: '4px 4px', marginRight: 0 }}
+										style={{
+											borderRadius: '4px 0 0 4px',
+											padding: '4px 4px',
+											marginRight: 0,
+										}}
 										onClick={() => {
 											setOffsetContent(['0', '0']);
 										}}
@@ -284,7 +295,12 @@ export default function CRWideTicket() {
 									</button>
 									<button
 										className="w-[max-content] text-[12px]"
-										style={{ borderRadius: '0 4px 4px 0', padding: '4px 4px', marginLeft: 0, borderLeft: 'none' }}
+										style={{
+											borderRadius: '0 4px 4px 0',
+											padding: '4px 4px',
+											marginLeft: 0,
+											borderLeft: 'none',
+										}}
 										onClick={() => {
 											setOffsetContent([(Math.random() * 100 - 50).toFixed(0), (Math.random() * 80 - 40).toFixed(0)]);
 										}}
@@ -298,14 +314,25 @@ export default function CRWideTicket() {
 										</svg>
 									</button>
 								</div>
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.common.ticketNoInfo.ticketNo')}
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.common.ticketNoInfo.ticketNo')}>
 								<div className="flex">
-									<input className="text-red-500 w-full" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />
+									<input
+										className="text-red-500 w-full"
+										value={drawParameters.ticketNo}
+										onChange={(e) =>
+											setDrawParameters((prev) => ({
+												...prev,
+												ticketNo: e.target.value,
+											}))
+										}
+									/>
 									<button
 										onClick={() => {
-											setDrawParameters((prev) => ({ ...prev, ticketNo: getRandomCRTicketNo() }));
+											setDrawParameters((prev) => ({
+												...prev,
+												ticketNo: getRandomCRTicketNo(),
+											}));
 										}}
 									>
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -314,19 +341,34 @@ export default function CRWideTicket() {
 										</svg>
 									</button>
 								</div>
-							</label>
-							<label className="ticket-form-label">
-								<div>
-									{t('editor.common.ticketFace.watermark')}
-									<Toggle
-										value={drawParameters.showWatermark}
-										onChange={(value) => {
-											setDrawParameters((prev) => ({ ...prev, showWatermark: value }));
-										}}
-									/>
-								</div>
-								<input className="text-red-400" value={drawParameters.watermark} onChange={(e) => setDrawParameters((prev) => ({ ...prev, watermark: e.target.value }))} />
-							</label>
+							</TicketFormLabel>
+							<TicketFormLabel
+								label={
+									<>
+										{t('editor.common.ticketFace.watermark')}
+										<Toggle
+											value={drawParameters.showWatermark}
+											onChange={(value) => {
+												setDrawParameters((prev) => ({
+													...prev,
+													showWatermark: value,
+												}));
+											}}
+										/>
+									</>
+								}
+							>
+								<input
+									className="text-red-400"
+									value={drawParameters.watermark}
+									onChange={(e) =>
+										setDrawParameters((prev) => ({
+											...prev,
+											watermark: e.target.value,
+										}))
+									}
+								/>
+							</TicketFormLabel>
 							<div className="ticket-form-label">
 								&nbsp;
 								<div className="flex flex-col">
@@ -336,14 +378,32 @@ export default function CRWideTicket() {
 												value={drawParameters.isHKWestKowloonStyle}
 												onChange={(value) => {
 													if (value) {
-														setDrawParameters((prev) => ({ ...prev, seatClass: '一等/First Class' }));
-														setDrawParameters((prev) => ({ ...prev, doShowMessage: false }));
-														setDrawParameters((prev) => ({ ...prev, showSoldPlaceDown: true }));
+														setDrawParameters((prev) => ({
+															...prev,
+															seatClass: '一等/First Class',
+														}));
+														setDrawParameters((prev) => ({
+															...prev,
+															doShowMessage: false,
+														}));
+														setDrawParameters((prev) => ({
+															...prev,
+															showSoldPlaceDown: true,
+														}));
 													} else {
-														setDrawParameters((prev) => ({ ...prev, seatClass: '一等座' }));
-														setDrawParameters((prev) => ({ ...prev, doShowMessage: true }));
+														setDrawParameters((prev) => ({
+															...prev,
+															seatClass: '一等座',
+														}));
+														setDrawParameters((prev) => ({
+															...prev,
+															doShowMessage: true,
+														}));
 													}
-													setDrawParameters((prev) => ({ ...prev, isHKWestKowloonStyle: value }));
+													setDrawParameters((prev) => ({
+														...prev,
+														isHKWestKowloonStyle: value,
+													}));
 												}}
 											/>
 											{t('editor.cr.jisuanjikepiao2010.ticketFace.useHKWestKowloonStyle')}
@@ -354,7 +414,10 @@ export default function CRWideTicket() {
 											<Toggle
 												value={drawParameters.showBorder}
 												onChange={(value) => {
-													setDrawParameters((prev) => ({ ...prev, showBorder: value }));
+													setDrawParameters((prev) => ({
+														...prev,
+														showBorder: value,
+													}));
 												}}
 											/>
 											{t('editor.cr.jisuanjikepiao2010.ticketFace.showBorderForNonBorder')}
@@ -363,122 +426,192 @@ export default function CRWideTicket() {
 								</div>
 							</div>
 						</TitleContainer>
-						<TitleContainer title={t('editor.common.stationInfo.title')} className="flex flex-wrap gap-1">
-							<div className="flex flex-col gap-[2px]">
-								<label className="ticket-form-label">
-									{t('editor.common.stationInfo.departure')}
-									<input
-										value={drawParameters.station1}
-										onChange={(e) => {
-											let stationEnglish = pinyin(e.target.value, { toneType: 'none', type: 'array' }).join('');
-											if (['香港西九龍', '香港西九龙'].includes(e.target.value)) {
-												stationEnglish = 'HKWestKowloon';
-											} else {
-												stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
-											}
-											setDrawParameters((prev) => ({ ...prev, station1en: stationEnglish }));
+						<TitleContainer title={t('editor.common.stationInfo.title')} className="flex flex-wrap gap-2">
+							<div className="flex w-full flex-col gap-2 md:flex-row md:flex-wrap md:items-center justify-center">
+								<div className="flex flex-col p-2 rounded-[4px] gap-[2px] border border-gray-300 dark:border-gray-700 pb-2">
+									<TicketFormLabel label={t('editor.common.stationInfo.departure')}>
+										<input
+											className="w-full font-bold"
+											value={drawParameters.station1}
+											onChange={(e) => {
+												let stationEnglish = pinyin(e.target.value, {
+													toneType: 'none',
+													type: 'array',
+												}).join('');
+												if (['香港西九龍', '香港西九龙'].includes(e.target.value)) {
+													stationEnglish = 'HKWestKowloon';
+												} else {
+													stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
+												}
+												setDrawParameters((prev) => ({
+													...prev,
+													station1en: stationEnglish,
+												}));
 
-											setDrawParameters((prev) => ({ ...prev, station1: e.target.value }));
-										}}
-									/>
-								</label>
-								<label className="ticket-form-label">
-									{t('editor.common.stationInfo.departureForeign')}
-									<input value={drawParameters.station1en} onChange={(e) => setDrawParameters((prev) => ({ ...prev, station1en: e.target.value }))} />
-								</label>
-								<label>
-									<Toggle
-										value={drawParameters.doUseHuaWenXinWei1}
-										onChange={(value) => {
-											setDrawParameters((prev) => ({ ...prev, doUseHuaWenXinWei1: value }));
-										}}
-									/>
-									<span>
-										{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
-										<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
-										<DescriptionButton modalTitle={t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}>
-											<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
-											<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
-										</DescriptionButton>
-									</span>
-								</label>
-							</div>
-							<div className="flex flex-col gap-[2px]">
-								<label className="ticket-form-label">
-									{t('editor.common.stationInfo.arrival')}
-									<input
-										value={drawParameters.station2}
-										onChange={(e) => {
-											let stationEnglish = pinyin(e.target.value, { toneType: 'none', type: 'array' }).join('');
-											if (['香港西九龍', '香港西九龙'].includes(e.target.value)) {
-												stationEnglish = 'HKWestKowloon';
-											} else {
-												stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
+												setDrawParameters((prev) => ({
+													...prev,
+													station1: e.target.value,
+												}));
+											}}
+										/>
+									</TicketFormLabel>
+									<TicketFormLabel label={t('editor.common.stationInfo.departureForeign')}>
+										<input
+											className="w-full"
+											value={drawParameters.station1en}
+											onChange={(e) =>
+												setDrawParameters((prev) => ({
+													...prev,
+													station1en: e.target.value,
+												}))
 											}
-											setDrawParameters((prev) => ({ ...prev, station2en: stationEnglish }));
-											setDrawParameters((prev) => ({ ...prev, station2: e.target.value }));
-										}}
-									/>
-								</label>
-								<label className="ticket-form-label">
-									{t('editor.common.stationInfo.arrivalForeign')}
-									<input value={drawParameters.station2en} onChange={(e) => setDrawParameters((prev) => ({ ...prev, station2en: e.target.value }))} />
-								</label>
-								<label>
-									<Toggle
-										value={drawParameters.doUseHuaWenXinWei2}
-										onChange={(value) => {
-											setDrawParameters((prev) => ({ ...prev, doUseHuaWenXinWei2: value }));
-										}}
-									/>
-									<span>
-										{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
-										<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
-										<DescriptionButton modalTitle={t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}>
-											<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
-											<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
-										</DescriptionButton>
-									</span>
-								</label>
+										/>
+									</TicketFormLabel>
+									<label>
+										<Toggle
+											value={drawParameters.doUseHuaWenXinWei1}
+											onChange={(value) => {
+												setDrawParameters((prev) => ({
+													...prev,
+													doUseHuaWenXinWei1: value,
+												}));
+											}}
+										/>
+										<span>
+											{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
+											<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
+											<DescriptionButton modalTitle={t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}>
+												<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
+												<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
+											</DescriptionButton>
+										</span>
+									</label>
+								</div>
+								<div className="flex items-center justify-center">
+									<p className="text-[30px] text-[#696969] dark:text-neutral-100 text-center">
+										<span className="md:hidden">↓</span>
+										<span className="hidden md:inline">→</span>
+									</p>
+								</div>
+								<div className="flex flex-col p-2 rounded-[4px] gap-[2px] border border-gray-300 dark:border-gray-700 pb-2">
+									<TicketFormLabel label={t('editor.common.stationInfo.arrival')}>
+										<input
+											className="w-full font-bold"
+											value={drawParameters.station2}
+											onChange={(e) => {
+												let stationEnglish = pinyin(e.target.value, {
+													toneType: 'none',
+													type: 'array',
+												}).join('');
+												if (['香港西九龍', '香港西九龙'].includes(e.target.value)) {
+													stationEnglish = 'HKWestKowloon';
+												} else {
+													stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
+												}
+												setDrawParameters((prev) => ({
+													...prev,
+													station2en: stationEnglish,
+												}));
+												setDrawParameters((prev) => ({
+													...prev,
+													station2: e.target.value,
+												}));
+											}}
+										/>
+									</TicketFormLabel>
+									<TicketFormLabel label={t('editor.common.stationInfo.arrivalForeign')}>
+										<input
+											className="w-full"
+											value={drawParameters.station2en}
+											onChange={(e) =>
+												setDrawParameters((prev) => ({
+													...prev,
+													station2en: e.target.value,
+												}))
+											}
+										/>
+									</TicketFormLabel>
+									<label>
+										<Toggle
+											value={drawParameters.doUseHuaWenXinWei2}
+											onChange={(value) => {
+												setDrawParameters((prev) => ({
+													...prev,
+													doUseHuaWenXinWei2: value,
+												}));
+											}}
+										/>
+										<span>
+											{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
+											<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
+											<DescriptionButton modalTitle={t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}>
+												<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
+												<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
+											</DescriptionButton>
+										</span>
+									</label>
+								</div>
 							</div>
+
 							<div className="flex flex-wrap gap-2">
-								<label>
+								<label className="flex">
 									<Toggle
 										value={drawParameters.doShowZhan}
 										onChange={(value) => {
-											setDrawParameters((prev) => ({ ...prev, doShowZhan: value }));
+											setDrawParameters((prev) => ({
+												...prev,
+												doShowZhan: value,
+											}));
 										}}
 									/>
 									<span>{t('editor.common.stationInfo.showTheTextOfStation')}</span>
+									<ElementAddedDate year={2015} month={8} day={1}/>
 								</label>
-								<label>
+								<label className="flex">
 									<Toggle
 										value={drawParameters.doShowEnglish}
 										onChange={(value) => {
-											setDrawParameters((prev) => ({ ...prev, doShowEnglish: value }));
+											setDrawParameters((prev) => ({
+												...prev,
+												doShowEnglish: value,
+											}));
 										}}
 									/>
 									<span>{t('editor.common.stationInfo.showForeignLanguageStationName')}</span>
+									<ElementAddedDate year={2006} month={5}/>
 								</label>
 							</div>
 						</TitleContainer>
 
 						<TitleContainer title={t('editor.common.trainInfo.title')} className="flex flex-wrap gap-2">
-							<label className="ticket-form-label">
-								{t('editor.cr.jisuanjikepiao2010.trainInfo.routeIdentifier')}
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.trainInfo.routeIdentifier')}>
 								<div className="flex gap-4 items-center flex-wrap">
-									<input value={drawParameters.routeIdentifier} onChange={(e) => setDrawParameters((prev) => ({ ...prev, routeIdentifier: e.target.value }))} />
+									<input
+										value={drawParameters.routeIdentifier}
+										onChange={(e) =>
+											setDrawParameters((prev) => ({
+												...prev,
+												routeIdentifier: e.target.value,
+											}))
+										}
+									/>
 									<label className="">
 										<Toggle
 											value={drawParameters.routeIdentifier.substring(0, 1) === '0' ? true : false}
 											onChange={(value) => {
 												if (value) {
 													if (drawParameters.routeIdentifier.substring(0, 1) !== '0') {
-														setDrawParameters((prev) => ({ ...prev, routeIdentifier: '0' + prev.routeIdentifier }));
+														setDrawParameters((prev) => ({
+															...prev,
+															routeIdentifier: '0' + prev.routeIdentifier,
+														}));
 													}
 												} else {
 													if (drawParameters.routeIdentifier.substring(0, 1) === '0') {
-														setDrawParameters((prev) => ({ ...prev, routeIdentifier: prev.routeIdentifier.substring(1, prev.routeIdentifier.length) }));
+														setDrawParameters((prev) => ({
+															...prev,
+															routeIdentifier: prev.routeIdentifier.substring(1, prev.routeIdentifier.length),
+														}));
 													}
 												}
 											}}
@@ -486,7 +619,7 @@ export default function CRWideTicket() {
 										<span>{t('editor.common.trainInfo.returnTrain')}</span>
 									</label>
 								</div>
-							</label>
+							</TicketFormLabel>
 							<PrettyInputRadioGroup
 								list={CR_TRAIN_TYPES.map((type) => {
 									return {
@@ -522,17 +655,22 @@ export default function CRWideTicket() {
 											drawParameters.routeIdentifier.substring(0, 1) === '0' ? 2 : 1,
 											drawParameters.routeIdentifier.length,
 										);
-										setDrawParameters((prev) => ({ ...prev, routeIdentifier: (prev.routeIdentifier.substring(0, 1) === '0' ? '0' : '') + value + routeIdentifierNumbersChar }));
+										setDrawParameters((prev) => ({
+											...prev,
+											routeIdentifier: (prev.routeIdentifier.substring(0, 1) === '0' ? '0' : '') + value + routeIdentifierNumbersChar,
+										}));
 									} else {
-										setDrawParameters((prev) => ({ ...prev, routeIdentifier: value + prev.routeIdentifier }));
+										setDrawParameters((prev) => ({
+											...prev,
+											routeIdentifier: value + prev.routeIdentifier,
+										}));
 									}
 
 									setDrawParameters((prev) => ({ ...prev, seat3: value }));
 								}}
 								placeholder={t('editor.cr.jisuanjikepiao2010.trainInfo.pukepukuaiOrCustom')}
 							/>
-							<label className="ticket-form-label">
-								{t('editor.common.trainInfo.departureDate')}
+							<TicketFormLabel label={t('editor.common.trainInfo.departureDate')}>
 								<input
 									type="date"
 									value={drawParameters.date}
@@ -544,33 +682,62 @@ export default function CRWideTicket() {
 										}));
 									}}
 								/>
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.common.trainInfo.departureTime')}
-								<input type="time" value={drawParameters.time} onChange={(e) => setDrawParameters((prev) => ({ ...prev, time: e.target.value }))} />
-							</label>
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.common.trainInfo.departureTime')}>
+								<input
+									type="time"
+									value={drawParameters.time}
+									onChange={(e) =>
+										setDrawParameters((prev) => ({
+											...prev,
+											time: e.target.value,
+										}))
+									}
+								/>
+							</TicketFormLabel>
 							<Divider />
-							<label className="ticket-form-label">
-								<div className="flex gap-2">
-									{t('editor.common.trainInfo.carriage')}
-									<label className="flex items-center text-[12px]">
-										<input
-											type="checkbox"
-											checked={drawParameters.noCarriage}
-											onChange={(e) => {
-												setDrawParameters((prev) => ({ ...prev, noCarriage: e.target.checked }));
-											}}
-										/>
-										<span>{t('editor.common.trainInfo.noCarriage')}</span>
-									</label>
-								</div>
-								<input value={drawParameters.carriage} onChange={(e) => setDrawParameters((prev) => ({ ...prev, carriage: e.target.value }))} />
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.common.trainInfo.seatNo')}
-
+							<TicketFormLabel
+								label={
+									<div className="flex gap-2">
+										{t('editor.common.trainInfo.carriage')}
+										<label className="flex items-center text-[12px]">
+											<input
+												type="checkbox"
+												checked={drawParameters.noCarriage}
+												onChange={(e) => {
+													setDrawParameters((prev) => ({
+														...prev,
+														noCarriage: e.target.checked,
+													}));
+												}}
+											/>
+											<span>{t('editor.common.trainInfo.noCarriage')}</span>
+										</label>
+									</div>
+								}
+							>
+								<input
+									value={drawParameters.carriage}
+									onChange={(e) =>
+										setDrawParameters((prev) => ({
+											...prev,
+											carriage: e.target.value,
+										}))
+									}
+								/>
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.common.trainInfo.seatNo')}>
 								<div>
-									<input className="w-full" value={drawParameters.seat1} onChange={(e) => setDrawParameters((prev) => ({ ...prev, seat1: e.target.value }))} />
+									<input
+										className="w-full"
+										value={drawParameters.seat1}
+										onChange={(e) =>
+											setDrawParameters((prev) => ({
+												...prev,
+												seat1: e.target.value,
+											}))
+										}
+									/>
 
 									<PrettyInputRadioGroup
 										list={[
@@ -582,14 +749,16 @@ export default function CRWideTicket() {
 										]}
 										value={drawParameters.seatStatus}
 										onChange={(value: string) => {
-											setDrawParameters((prev) => ({ ...prev, seatStatus: value }));
+											setDrawParameters((prev) => ({
+												...prev,
+												seatStatus: value,
+											}));
 										}}
 										doNotShowInputBox
 									/>
 								</div>
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.common.trainInfo.seat2')}
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.common.trainInfo.seat2')}>
 								<PrettyInputRadioGroup
 									list={[
 										{ value: 'A', title: 'A' },
@@ -604,9 +773,8 @@ export default function CRWideTicket() {
 										setDrawParameters((prev) => ({ ...prev, seat2: value }));
 									}}
 								/>
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.cr.jisuanjikepiao2010.trainInfo.seat3')}
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.trainInfo.seat3')}>
 								<div className="flex gap-3 flex-wrap">
 									<PrettyInputRadioGroup
 										list={[
@@ -622,9 +790,8 @@ export default function CRWideTicket() {
 										}}
 									/>
 								</div>
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.cr.jisuanjikepiao2010.trainInfo.coolerType')}
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.trainInfo.coolerType')}>
 								<div className="flex gap-3 flex-wrap">
 									<PrettyInputRadioGroup
 										list={[
@@ -642,13 +809,15 @@ export default function CRWideTicket() {
 											} else {
 												seatClassMain = drawParameters.seatClass;
 											}
-											setDrawParameters((prev) => ({ ...prev, seatClass: value + seatClassMain }));
+											setDrawParameters((prev) => ({
+												...prev,
+												seatClass: value + seatClassMain,
+											}));
 										}}
 									/>
 								</div>
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.common.trainInfo.seatClass')}
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.common.trainInfo.seatClass')}>
 								<PrettyInputRadioGroup
 									list={seatType.map((seatTypeItem) => {
 										return { value: seatTypeItem, title: seatTypeItem };
@@ -662,46 +831,94 @@ export default function CRWideTicket() {
 									}
 									onChange={(value: string) => {
 										if (sleepingCarSeatType.includes(value)) {
-											setDrawParameters((prev) => ({ ...prev, seat2: '', seat3: '下铺' }));
+											setDrawParameters((prev) => ({
+												...prev,
+												seat2: '',
+												seat3: '下铺',
+											}));
 										} else {
-											setDrawParameters((prev) => ({ ...prev, seat2: 'F', seat3: '' }));
+											setDrawParameters((prev) => ({
+												...prev,
+												seat2: 'F',
+												seat3: '',
+											}));
 										}
 
-										setDrawParameters((prev) => ({ ...prev, seatClass: value }));
+										setDrawParameters((prev) => ({
+											...prev,
+											seatClass: value,
+										}));
 									}}
 								/>
-							</label>
+							</TicketFormLabel>
 						</TitleContainer>
 					</EditorFormShell.Section>
 					<EditorFormShell.Section id="purchase" label={t('editor.cr.jisuanjikepiao2010.shell.purchase')} description={t('editor.cr.jisuanjikepiao2010.shell.purchaseDesc')}>
 						<TitleContainer title={t('editor.common.purchaseInfo.title')} className="flex flex-wrap">
-							<label className="ticket-form-label">
-								{t('editor.common.purchaseInfo.price')} {drawParameters.isHKWestKowloonStyle ? 'HK＄' : '￥'}
-								<input value={drawParameters.price} onChange={(e) => setDrawParameters((prev) => ({ ...prev, price: e.target.value }))} />
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.common.purchaseInfo.soldPlace')}
-								<input className="" value={drawParameters.soldplace} onChange={(e) => setDrawParameters((prev) => ({ ...prev, soldplace: e.target.value }))} />
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.common.purchaseInfo.turnstile')}
-								<input className="" value={drawParameters.turnstile} onChange={(e) => setDrawParameters((prev) => ({ ...prev, turnstile: e.target.value }))} />
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.cr.jisuanjikepiao2010.purchaseInfo.rightUpContentText')}
+							<TicketFormLabel
+								label={
+									<>
+										{t('editor.common.purchaseInfo.price')} {drawParameters.isHKWestKowloonStyle ? 'HK＄' : '￥'}
+									</>
+								}
+							>
+								<input
+									value={drawParameters.price}
+									onChange={(e) =>
+										setDrawParameters((prev) => ({
+											...prev,
+											price: e.target.value,
+										}))
+									}
+								/>
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.common.purchaseInfo.soldPlace')}>
+								<input
+									className=""
+									value={drawParameters.soldplace}
+									onChange={(e) =>
+										setDrawParameters((prev) => ({
+											...prev,
+											soldplace: e.target.value,
+										}))
+									}
+								/>
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.common.purchaseInfo.turnstile')}>
+								<input
+									className=""
+									value={drawParameters.turnstile}
+									onChange={(e) =>
+										setDrawParameters((prev) => ({
+											...prev,
+											turnstile: e.target.value,
+										}))
+									}
+								/>
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.purchaseInfo.rightUpContentText')}>
 								<div className="flex items-center flex-wrap">
 									<PrettyInputRadioGroup
 										list={[
-											{ value: RightUpContentType.None, title: t('editor.cr.jisuanjikepiao2010.purchaseInfo.rightUpContentTextNotShow') },
+											{
+												value: RightUpContentType.None,
+												title: t('editor.cr.jisuanjikepiao2010.purchaseInfo.rightUpContentTextNotShow'),
+											},
 											{ value: RightUpContentType.SoldPlace, title: '售票站' },
 											{ value: RightUpContentType.Turnstile, title: '检票口' },
-											{ value: RightUpContentType.International, title: '国际联运' },
+											{
+												value: RightUpContentType.International,
+												title: '国际联运',
+											},
 											{ value: RightUpContentType.Chebu, title: '列车补票' },
 											{ value: RightUpContentType.Zhanbu, title: '到站补票' },
 										]}
 										value={drawParameters.rightUpContentType}
 										onChange={(value: string) => {
-											setDrawParameters((prev) => ({ ...prev, rightUpContentType: value as RightUpContentType }));
+											setDrawParameters((prev) => ({
+												...prev,
+												rightUpContentType: value as RightUpContentType,
+											}));
 										}}
 										placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 									/>
@@ -710,26 +927,38 @@ export default function CRWideTicket() {
 										<Toggle
 											value={drawParameters.showSoldPlaceDown}
 											onChange={(value) => {
-												setDrawParameters((prev) => ({ ...prev, showSoldPlaceDown: value }));
+												setDrawParameters((prev) => ({
+													...prev,
+													showSoldPlaceDown: value,
+												}));
 											}}
 										/>
 										<span>{t('editor.cr.jisuanjikepiao2010.purchaseInfo.showSoldPlaceDown')}</span>
 									</label>
 								</div>
-							</label>
-							<label className="ticket-form-label">
-								<div>
-									<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketPurchaseInfo')}</span>
-									<p className="text-[12px] text-[#696969] dark:text-neutral-100">※{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertTypeDesc')}</p>
-								</div>
+							</TicketFormLabel>
+							<TicketFormLabel
+								label={
+									<div>
+										<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketPurchaseInfo')}</span>
+										<p className="text-[12px] text-[#696969] dark:text-neutral-100">※{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertTypeDesc')}</p>
+									</div>
+								}
+							>
 								<div>
 									<label className="">
 										{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
 										<PrettyInputRadioGroup
-											list={purchaseCertTypeList.map((item) => ({ value: item.value, title: item.title + item.value }))}
+											list={purchaseCertTypeList.map((item) => ({
+												value: item.value,
+												title: item.title + item.value,
+											}))}
 											value={drawParameters.purchaseCertType}
 											onChange={(value: string) => {
-												setDrawParameters((prev) => ({ ...prev, purchaseCertType: value }));
+												setDrawParameters((prev) => ({
+													...prev,
+													purchaseCertType: value,
+												}));
 											}}
 											placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 											className="ml-2"
@@ -741,70 +970,93 @@ export default function CRWideTicket() {
 											list={purchasePassportNationList}
 											value={drawParameters.purchasePassportCode}
 											onChange={(value: string) => {
-												setDrawParameters((prev) => ({ ...prev, purchasePassportCode: value }));
+												setDrawParameters((prev) => ({
+													...prev,
+													purchasePassportCode: value,
+												}));
 											}}
 											placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 											className="ml-2"
 										/>
 									</label>
 								</div>
-							</label>
+							</TicketFormLabel>
 
-							<label className="ticket-form-label">
-								{t('editor.cr.jisuanjikepiao2010.purchaseInfo.passengerIdNumber')}
-								<input value={drawParameters.idNumber} onChange={(e) => setDrawParameters((prev) => ({ ...prev, idNumber: e.target.value }))} />
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.cr.jisuanjikepiao2010.purchaseInfo.passengerName')}
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.purchaseInfo.passengerIdNumber')}>
+								<input
+									value={drawParameters.idNumber}
+									onChange={(e) =>
+										setDrawParameters((prev) => ({
+											...prev,
+											idNumber: e.target.value,
+										}))
+									}
+								/>
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.purchaseInfo.passengerName')}>
 								<div>
-									<input value={drawParameters.passenger} onChange={(e) => setDrawParameters((prev) => ({ ...prev, passenger: e.target.value }))} />
+									<input
+										value={drawParameters.passenger}
+										onChange={(e) =>
+											setDrawParameters((prev) => ({
+												...prev,
+												passenger: e.target.value,
+											}))
+										}
+									/>
 									<label>
 										<Toggle
 											value={drawParameters.doShowPassenger}
 											onChange={(value) => {
-												setDrawParameters((prev) => ({ ...prev, doShowPassenger: value }));
+												setDrawParameters((prev) => ({
+													...prev,
+													doShowPassenger: value,
+												}));
 											}}
 										/>
 										<span>{t('editor.cr.jisuanjikepiao2010.purchaseInfo.showPassengerInfo')}</span>
 									</label>
 								</div>
-							</label>
-							<label className="ticket-form-label">
-								<div>
-									{t('editor.common.purchaseInfo.purchaseMethod')}
-									<DescriptionButton>
-										<div className="flex flex-row gap-1 flex-wrap">
-											{Object.entries(
-												purchaseMethodList.reduce<Record<string, PurchaseMethod[]>>((acc, item) => {
-													(acc[item.type] ||= []).push(item);
-													return acc;
-												}, {}),
-											).map(([type, items]) => (
-												<div key={type} className="w-full">
-													<div className="text-sm font-semibold mt-2 mb-1">{t(type)}</div>
-													<div className="flex flex-wrap gap-2">
-														{items.map((purchaseMethodItem) => {
-															return (
-																<label key={purchaseMethodItem.type + '_' + purchaseMethodItem.title} className="flex items-center gap-2">
-																	<span
-																		className={
-																			purchaseMethodItem.title.length === 1
-																				? 'border-black dark:border-white flex justify-center items-center border rounded-[20px] text-[13px] w-[18px] h-[18px]'
-																				: ''
-																		}
-																	>
-																		{purchaseMethodItem.title}
-																	</span>
-																	<span className="text-[12px] text-[#242424] dark:text-neutral-100">{t(purchaseMethodItem.desc)}</span>
-																</label>
-															);
-														})}
+							</TicketFormLabel>
+							<TicketFormLabel
+								label={
+									<div>
+										{t('editor.common.purchaseInfo.purchaseMethod')}
+										<DescriptionButton>
+											<div className="flex flex-row gap-1 flex-wrap">
+												{Object.entries(
+													purchaseMethodList.reduce<Record<string, PurchaseMethod[]>>((acc, item) => {
+														(acc[item.type] ||= []).push(item);
+														return acc;
+													}, {}),
+												).map(([type, items]) => (
+													<div key={type} className="w-full">
+														<div className="text-sm font-semibold mt-2 mb-1">{t(type)}</div>
+														<div className="flex flex-wrap gap-2">
+															{items.map((purchaseMethodItem) => {
+																return (
+																	<label key={purchaseMethodItem.type + '_' + purchaseMethodItem.title} className="flex items-center gap-2">
+																		<span
+																			className={
+																				purchaseMethodItem.title.length === 1
+																					? 'border-black dark:border-white flex justify-center items-center border rounded-[20px] text-[13px] w-[18px] h-[18px]'
+																					: ''
+																			}
+																		>
+																			{purchaseMethodItem.title}
+																		</span>
+																		<span className="text-[12px] text-[#242424] dark:text-neutral-100">{t(purchaseMethodItem.desc)}</span>
+																	</label>
+																);
+															})}
+														</div>
 													</div>
-												</div>
-											))}
-										</div>
-									</DescriptionButton>
-								</div>
+												))}
+											</div>
+										</DescriptionButton>
+									</div>
+								}
+							>
 								<div className="flex flex-row gap-1 flex-wrap">
 									{Object.entries(
 										purchaseMethodList.reduce<Record<string, PurchaseMethod[]>>((acc, item) => {
@@ -829,7 +1081,10 @@ export default function CRWideTicket() {
 																			purchaseMethod: prev.purchaseMethod.filter((j) => !(j === purchaseMethodItem.title)),
 																		}));
 																	} else {
-																		setDrawParameters((prev) => ({ ...prev, purchaseMethod: [...prev.purchaseMethod, purchaseMethodItem.title] }));
+																		setDrawParameters((prev) => ({
+																			...prev,
+																			purchaseMethod: [...prev.purchaseMethod, purchaseMethodItem.title],
+																		}));
 																	}
 																}}
 															/>
@@ -854,16 +1109,18 @@ export default function CRWideTicket() {
 										<Toggle
 											value={drawParameters.doPurchaseMethodHaveCircle}
 											onChange={(value) => {
-												setDrawParameters((prev) => ({ ...prev, doPurchaseMethodHaveCircle: value }));
+												setDrawParameters((prev) => ({
+													...prev,
+													doPurchaseMethodHaveCircle: value,
+												}));
 											}}
 										/>
 										<span>{t('editor.cr.jisuanjikepiao2010.purchaseInfo.addCircleToPurchaseMethod')}</span>
 									</label>
 								</div>
-							</label>
+							</TicketFormLabel>
 							<Divider />
-							<label className="ticket-form-label border-t-[solid_1px_#ccc]">
-								{t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.text')}
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.text')} className="border-t-[solid_1px_#ccc]">
 								<div className="flex gap-3 flex-wrap">
 									<PrettyInputRadioGroup
 										list={[
@@ -878,7 +1135,10 @@ export default function CRWideTicket() {
 															placeholder={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.inputBox1')}
 															onChange={(e) => {
 																const val = e.target.value;
-																setDrawParameters((prev) => ({ ...prev, info1TrainType: val }));
+																setDrawParameters((prev) => ({
+																	...prev,
+																	info1TrainType: val,
+																}));
 															}}
 															className="border w-16"
 														/>
@@ -889,7 +1149,10 @@ export default function CRWideTicket() {
 															placeholder={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.inputBox2')}
 															onChange={(e) => {
 																const val = e.target.value;
-																setDrawParameters((prev) => ({ ...prev, info1from: val }));
+																setDrawParameters((prev) => ({
+																	...prev,
+																	info1from: val,
+																}));
 															}}
 															className="border w-24"
 														/>
@@ -900,7 +1163,10 @@ export default function CRWideTicket() {
 															placeholder={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.inputBox3')}
 															onChange={(e) => {
 																const val = e.target.value;
-																setDrawParameters((prev) => ({ ...prev, info1to: val }));
+																setDrawParameters((prev) => ({
+																	...prev,
+																	info1to: val,
+																}));
 															}}
 															className="border w-16"
 														/>
@@ -920,46 +1186,61 @@ export default function CRWideTicket() {
 										}}
 									/>
 								</div>
-							</label>
+							</TicketFormLabel>
 							<Divider />
-							<label className="ticket-form-label border-t-[#ccc_!important]">
-								{t('editor.cr.jisuanjikepiao2010.purchaseInfo.info2')}
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info2')} className="border-t-[#ccc_!important]">
 								<div className="flex gap-3 flex-wrap">
 									<PrettyInputRadioGroup
 										name="info2"
-										list={info2List.map((item) => ({ title: item, value: item }))}
+										list={info2List.map((item) => ({
+											title: item,
+											value: item,
+										}))}
 										value={drawParameters.info2}
 										onChange={(value: string) => {
 											setDrawParameters((prev) => ({ ...prev, info2: value }));
 										}}
 									/>
 								</div>
-							</label>
+							</TicketFormLabel>
 							<Divider />
-							<label className="ticket-form-label border-t-[solid_1px_#ccc]">
-								{t('editor.cr.jisuanjikepiao2010.purchaseInfo.info3')}
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info3')} className="border-t-[solid_1px_#ccc]">
 								<div className="flex gap-3 flex-wrap">
 									<PrettyInputRadioGroup
 										name="info3"
-										list={info3List.map((item) => ({ title: item, value: item }))}
+										list={info3List.map((item) => ({
+											title: item,
+											value: item,
+										}))}
 										value={drawParameters.info3}
 										onChange={(value: string) => {
 											setDrawParameters((prev) => ({ ...prev, info3: value }));
 										}}
 									/>
 								</div>
-							</label>
+							</TicketFormLabel>
 						</TitleContainer>
 					</EditorFormShell.Section>
 					<EditorFormShell.Section id="serial" label={t('editor.cr.jisuanjikepiao2010.shell.serial')} description={t('editor.cr.jisuanjikepiao2010.shell.serialDesc')}>
 						<TitleContainer title={t('editor.cr.jisuanjikepiao2010.ticketNoInfo.title')} className="flex flex-wrap">
-							<label className="ticket-form-label">
-								{t('editor.common.ticketNoInfo.ticketNo')}
+							<TicketFormLabel label={t('editor.common.ticketNoInfo.ticketNo')}>
 								<div className="flex">
-									<input className="text-red-500 w-full" value={drawParameters.ticketNo} onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))} />
+									<input
+										className="text-red-500 w-full"
+										value={drawParameters.ticketNo}
+										onChange={(e) =>
+											setDrawParameters((prev) => ({
+												...prev,
+												ticketNo: e.target.value,
+											}))
+										}
+									/>
 									<button
 										onClick={() => {
-											setDrawParameters((prev) => ({ ...prev, ticketNo: getRandomCRTicketNo() }));
+											setDrawParameters((prev) => ({
+												...prev,
+												ticketNo: getRandomCRTicketNo(),
+											}));
 										}}
 									>
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -968,11 +1249,19 @@ export default function CRWideTicket() {
 										</svg>
 									</button>
 								</div>
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketSerialCode')}
+							</TicketFormLabel>
+							<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketSerialCode')}>
 								<div>
-									<input className="w-full" value={drawParameters.serialCode} onChange={(e) => setDrawParameters((prev) => ({ ...prev, serialCode: e.target.value }))} />
+									<input
+										className="w-full"
+										value={drawParameters.serialCode}
+										onChange={(e) =>
+											setDrawParameters((prev) => ({
+												...prev,
+												serialCode: e.target.value,
+											}))
+										}
+									/>
 									<div className="flex flex-col">
 										<div className="flex flex-wrap">
 											<label className="flex flex-col">
@@ -993,7 +1282,10 @@ export default function CRWideTicket() {
 													<button
 														className="m-0"
 														onClick={() => {
-															setDrawParameters((prev) => ({ ...prev, ticketNo: getRandomCRTicketNo() }));
+															setDrawParameters((prev) => ({
+																...prev,
+																ticketNo: getRandomCRTicketNo(),
+															}));
 														}}
 													>
 														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -1006,20 +1298,28 @@ export default function CRWideTicket() {
 													<input
 														className="text-red-500 w-[130px]"
 														value={drawParameters.ticketNo}
-														onChange={(e) => setDrawParameters((prev) => ({ ...prev, ticketNo: e.target.value }))}
+														onChange={(e) =>
+															setDrawParameters((prev) => ({
+																...prev,
+																ticketNo: e.target.value,
+															}))
+														}
 													/>
 												</div>
 											</label>
 										</div>
 									</div>
 								</div>
-							</label>
+							</TicketFormLabel>
 
-							<label className="ticket-form-label">
-								<div>
-									<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketPurchaseInfo')}</span>
-									<p className="text-[12px] text-[#696969] dark:text-neutral-100">※{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertTypeDesc')}</p>
-								</div>
+							<TicketFormLabel
+								label={
+									<div>
+										<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketPurchaseInfo')}</span>
+										<p className="text-[12px] text-[#696969] dark:text-neutral-100">※{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertTypeDesc')}</p>
+									</div>
+								}
+							>
 								<div>
 									<div className="flex flex-wrap gap-2">
 										<label className="flex flex-col">
@@ -1027,7 +1327,12 @@ export default function CRWideTicket() {
 											<input
 												className="w-[120px]"
 												value={drawParameters.purchaseCertType}
-												onChange={(e) => setDrawParameters((prev) => ({ ...prev, purchaseCertType: e.target.value }))}
+												onChange={(e) =>
+													setDrawParameters((prev) => ({
+														...prev,
+														purchaseCertType: e.target.value,
+													}))
+												}
 											/>
 										</label>
 										<label className="flex flex-col">
@@ -1035,7 +1340,12 @@ export default function CRWideTicket() {
 											<input
 												className="w-[80px]"
 												value={drawParameters.purchasePassportCode}
-												onChange={(e) => setDrawParameters((prev) => ({ ...prev, purchasePassportCode: e.target.value }))}
+												onChange={(e) =>
+													setDrawParameters((prev) => ({
+														...prev,
+														purchasePassportCode: e.target.value,
+													}))
+												}
 											/>
 										</label>
 									</div>
@@ -1044,10 +1354,16 @@ export default function CRWideTicket() {
 										<label className="">
 											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
 											<PrettyInputRadioGroup
-												list={purchaseCertTypeList.map((item) => ({ value: item.value, title: item.title + item.value }))}
+												list={purchaseCertTypeList.map((item) => ({
+													value: item.value,
+													title: item.title + item.value,
+												}))}
 												value={drawParameters.purchaseCertType}
 												onChange={(value: string) => {
-													setDrawParameters((prev) => ({ ...prev, purchaseCertType: value }));
+													setDrawParameters((prev) => ({
+														...prev,
+														purchaseCertType: value,
+													}));
 												}}
 												placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 											/>
@@ -1058,65 +1374,118 @@ export default function CRWideTicket() {
 												list={purchasePassportNationList}
 												value={drawParameters.purchasePassportCode}
 												onChange={(value: string) => {
-													setDrawParameters((prev) => ({ ...prev, purchasePassportCode: value }));
+													setDrawParameters((prev) => ({
+														...prev,
+														purchasePassportCode: value,
+													}));
 												}}
 												placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 											/>
 										</label>
 									</div>
 								</div>
-							</label>
+							</TicketFormLabel>
 
-							<label className="ticket-form-label">
-								<div>
-									<label>
+							<TicketFormLabel
+								label={
+									<>
 										<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.qrCodeText')}</span>
 										<Toggle
 											value={drawParameters.doShowQRCode}
 											onChange={(value) => {
-												setDrawParameters((prev) => ({ ...prev, doShowQRCode: value }));
+												setDrawParameters((prev) => ({
+													...prev,
+													doShowQRCode: value,
+												}));
 											}}
 										/>
-									</label>
-								</div>
-								<textarea className="w-full h-[100px]" value={drawParameters.qrCodeText} onChange={(e) => setDrawParameters((prev) => ({ ...prev, qrCodeText: e.target.value }))} />
-							</label>
-							<label className="ticket-form-label">
-								<div>
-									<label>
+									</>
+								}
+							>
+								<textarea
+									className="w-full h-[100px]"
+									value={drawParameters.qrCodeText}
+									onChange={(e) =>
+										setDrawParameters((prev) => ({
+											...prev,
+											qrCodeText: e.target.value,
+										}))
+									}
+								/>
+							</TicketFormLabel>
+							<TicketFormLabel
+								label={
+									<>
 										<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.message')}</span>
 										<Toggle
 											value={drawParameters.doShowMessage}
 											onChange={(value) => {
-												setDrawParameters((prev) => ({ ...prev, doShowMessage: value }));
+												setDrawParameters((prev) => ({
+													...prev,
+													doShowMessage: value,
+												}));
 											}}
 										/>
-									</label>
-								</div>
+									</>
+								}
+							>
 								<div>
-									<textarea className="w-full h-[100px]" value={drawParameters.message} onChange={(e) => setDrawParameters((prev) => ({ ...prev, message: e.target.value }))} />
+									<textarea
+										className="w-full h-[100px]"
+										value={drawParameters.message}
+										onChange={(e) =>
+											setDrawParameters((prev) => ({
+												...prev,
+												message: e.target.value,
+											}))
+										}
+									/>
 
 									<label>
 										<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.showMessageBorder')}</span>
 										<Toggle
 											value={drawParameters.showMessageBorder}
 											onChange={(value) => {
-												setDrawParameters((prev) => ({ ...prev, showMessageBorder: value }));
+												setDrawParameters((prev) => ({
+													...prev,
+													showMessageBorder: value,
+												}));
 											}}
 										/>
 									</label>
 									<PrettyInputRadioGroup
 										list={[
-											{ value: TextAlign.Left.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.left') },
-											{ value: TextAlign.Center.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.center') },
-											{ value: TextAlign.Right.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.right') },
-											{ value: TextAlign.JustifyBetween.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyBetween') },
-											{ value: TextAlign.JustifyEvenly.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyEvenly') },
-											{ value: TextAlign.JustifyAround.toString(), title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyAround') },
+											{
+												value: TextAlign.Left.toString(),
+												title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.left'),
+											},
+											{
+												value: TextAlign.Center.toString(),
+												title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.center'),
+											},
+											{
+												value: TextAlign.Right.toString(),
+												title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.right'),
+											},
+											{
+												value: TextAlign.JustifyBetween.toString(),
+												title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyBetween'),
+											},
+											{
+												value: TextAlign.JustifyEvenly.toString(),
+												title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyEvenly'),
+											},
+											{
+												value: TextAlign.JustifyAround.toString(),
+												title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyAround'),
+											},
 										]}
 										value={drawParameters.messageAlign.toString()}
 										onChange={(value: string) => {
-											setDrawParameters((prev) => ({ ...prev, messageAlign: Number(value) as TextAlign }));
+											setDrawParameters((prev) => ({
+												...prev,
+												messageAlign: Number(value) as TextAlign,
+											}));
 										}}
 										placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 										doNotShowInputBox
@@ -1124,17 +1493,25 @@ export default function CRWideTicket() {
 									<p>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.presetText')}</p>
 									<PrettyInputRadioGroup
 										list={messageList.map((messageListItem) => {
-											return { value: messageListItem, title: messageListItem.text };
+											return {
+												value: messageListItem,
+												title: messageListItem.text,
+											};
 										})}
 										value={messageList.find((item) => item.text === drawParameters.message)}
 										onChange={(value: (typeof messageList)[0]) => {
-											setDrawParameters((prev) => ({ ...prev, message: value.text, messageAlign: value.align, showMessageBorder: value.showBorder }));
+											setDrawParameters((prev) => ({
+												...prev,
+												message: value.text,
+												messageAlign: value.align,
+												showMessageBorder: value.showBorder,
+											}));
 										}}
 										placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
 										doNotShowInputBox
 									/>
 								</div>
-							</label>
+							</TicketFormLabel>
 						</TitleContainer>
 					</EditorFormShell.Section>
 				</EditorFormShell>
