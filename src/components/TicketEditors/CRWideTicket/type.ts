@@ -74,6 +74,7 @@ export type CRWideTicketDrawParameters = {
 	purchaseCertType: string;
 	purchasePassportCode: string;
 	isRouteIdentifierOldStyle: boolean;
+	carriageFloor: number;
 };
 
 export interface PurchaseMethod {

@@ -128,7 +128,7 @@
 				"trainInfo": {
 					"pukepukuaiOrCustom": "普客普快 / 自定义",
 					"routeIdentifier": "车次",
-					"seat3": "铺位/层",
+					"seat3": "卧铺铺位",
 					"coolerType": "空调类型"
 				},
 				"purchaseInfo": {
@@ -175,7 +175,7 @@
 					"tripDesc": "车站、车次、日期、席别",
 					"purchase": "座位和购票信息",
 					"purchaseDesc": "价格、购票方式、乘车人等",
-					"serial": "购票人和票号",
+					"serial": "票号和宣传文",
 					"serialDesc": "票号、二维码、标识码",
 					"randomPreset": "随机预设站名"
 				}
@@ -223,7 +223,9 @@
 				"noSeatNo": "无座",
 				"seat2": "座位",
 				"seat3": "铺位",
-				"seatClass": "席别"
+				"seatClass": "席别",
+				"2FloorCarriage": "双层车厢",
+				"carriageFloor": "双层车厢楼层"
 			},
 			"purchaseInfo": {
 				"title": "购票信息",

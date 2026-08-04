@@ -153,7 +153,9 @@
 				"routeIdentifier": "車番",
 				"seat2": "座席",
 				"seat3": "寝台",
-				"seatClass": "座席タイプ"
+				"seatClass": "座席タイプ",
+				"2FloorCarriage": "2階建車両",
+				"carriageFloor": "2階建車両にいるフロア"
 			},
 			"purchaseInfo": {
 				"turnstile": "改札口",
@@ -183,7 +185,7 @@
 				"trainInfo": {
 					"pukepukuaiOrCustom": "普客普快 / カスタム",
 					"routeIdentifier": "車番(车次)",
-					"seat3": "寝台/階数",
+					"seat3": "开放式寝台位置",
 					"coolerType": "空調タイプ"
 				},
 				"purchaseInfo": {
@@ -230,7 +232,7 @@
 					"tripDesc": "駅・列車番号・日付・座席種別",
 					"purchase": "座席と購入情報",
 					"purchaseDesc": "料金・購入方法・乗客など",
-					"serial": "購入者と券番",
+					"serial": "券番と宣伝文",
 					"serialDesc": "券番・QR・識別コード",
 					"randomPreset": "ランダム駅名プリセット"
 				}

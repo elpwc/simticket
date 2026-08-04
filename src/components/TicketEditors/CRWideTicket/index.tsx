@@ -729,10 +729,24 @@ export default function CRWideTicket() {
 											/>
 											<span>{t('editor.common.trainInfo.noCarriage')}</span>
 										</label>
+										<label className="flex items-center text-[12px]">
+											<input
+												type="checkbox"
+												checked={drawParameters.carriageFloor > 0}
+												onChange={(e) => {
+													setDrawParameters((prev) => ({
+														...prev,
+														carriageFloor: e.target.checked ? 1 : 0,
+													}));
+												}}
+											/>
+											<span>{t('editor.common.trainInfo.2FloorCarriage')}</span>
+										</label>
 									</div>
 								}
 							>
 								<input
+									className="w-full"
 									value={drawParameters.carriage}
 									onChange={(e) =>
 										setDrawParameters((prev) => ({
@@ -742,6 +756,27 @@ export default function CRWideTicket() {
 									}
 								/>
 							</TicketFormLabel>
+							{drawParameters.carriageFloor > 0 && (
+								<TicketFormLabel label={t('editor.common.trainInfo.carriageFloor')}>
+									<div>
+										<PrettyInputRadioGroup
+											list={[
+												{ value: 1, title: '上层' },
+												{ value: 2, title: '下层' },
+												{ value: 0, title: '单层车厢' },
+											]}
+											value={drawParameters.carriageFloor}
+											onChange={(value: number) => {
+												setDrawParameters((prev) => ({
+													...prev,
+													carriageFloor: value,
+												}));
+											}}
+											doNotShowInputBox
+										/>
+									</div>
+								</TicketFormLabel>
+							)}
 							<TicketFormLabel label={t('editor.common.trainInfo.seatNo')}>
 								<div>
 									<input
@@ -797,8 +832,6 @@ export default function CRWideTicket() {
 											{ value: '上铺', title: '上铺' },
 											{ value: '中铺', title: '中铺' },
 											{ value: '下铺', title: '下铺' },
-											{ value: '上层', title: '上层' },
-											{ value: '下层', title: '下层' },
 										]}
 										value={drawParameters.seat3}
 										onChange={(value: string) => {

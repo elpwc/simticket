@@ -497,10 +497,19 @@ export const drawCRWideTicket = (
 		} else {
 			// 非香港样式
 			if (!drawParameters.noCarriage) {
-				ctx.font = resizedFont(4, 'SongTi', true);
-				ctx.fillText(`车`, offsetScaleX(1171), offsetScaleY(474));
+				let carriageFloorX = 1171;
+				if (drawParameters.carriageFloor > 0) {
+					ctx.font = resizedFont(5.5, 'SongTi');
+					ctx.fillText(drawParameters.carriageFloor > 0 ? ' ' + (drawParameters.carriageFloor === 1 ? '上' : '下') : '', offsetScaleX(carriageFloorX - 30), offsetScaleY(482));
+					carriageFloorX = 1110;
+				} else {
+					carriageFloorX = 1171;
+				}
 
-				drawMixedDigitFontText(drawParameters.carriage, offsetScaleX(1000), offsetScaleY(482), resizedScaleX(165), 6.5, 6);
+				ctx.font = resizedFont(4, 'SongTi', true);
+				ctx.fillText('车', offsetScaleX(carriageFloorX), offsetScaleY(474));
+
+				drawMixedDigitFontText(drawParameters.carriage, offsetScaleX(carriageFloorX - 171), offsetScaleY(482), resizedScaleX(165), 6.5, 6);
 			}
 
 			if (drawParameters.seatStatus === '') {
