@@ -303,4 +303,7 @@ export const purchaseCertTypeList = [
 	{ value: 'JN', title: '中国铁路纪念票' },
 ];
 
-export const purchasePassportNationList = [{ value: 'JPN', title: '日本' }];
+export const purchasePassportNationList = [
+	{ value: 'CHN', title: '中国' },
+	{ value: 'JPN', title: '日本' },
+];
