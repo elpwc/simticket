@@ -155,6 +155,8 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	info1to: '',
 	showMessageBorder: true,
 	seatStatus: '',
+	purchaseCertType: 'JM',
+	purchasePassportCode: '',
 };
 export const purchaseMethodList: PurchaseMethod[] = [
 	{ type: PurchaseMethodType.TicketType, title: '孩', desc: 'value.purchaseMethod.list.hai' },
