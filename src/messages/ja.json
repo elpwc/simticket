@@ -113,10 +113,16 @@
 	"editor": {
 		"common": {
 			"ElementAddedDate": {
-				"title": "{year}年から",
-				"descy": "この要素は{year}年に券面に追加されました",
-				"descym": "この要素は{year}年{month}月に券面に追加されました",
-				"descymd": "この要素は{year}年{month}月{day}日に券面に追加されました"
+				"captionstart": "{year}年から",
+				"captionend": "{end_year}年まで",
+				"captionstarttoend": "{year}~{end_year}年",
+				"thisElement": "この要素は",
+				"titlestarty": "{year}年に券面に追加されました",
+				"titlestartym": "{year}年{month}月に券面に追加されました",
+				"titlestartymd": "{year}年{month}月{day}日に券面に追加されました",
+				"titleendy": "{end_year}年に券面から移除されました",
+				"titleendym": "{end_year}年{end_month}月に券面から移除されました",
+				"titleendymd": "{end_year}年{end_month}月{end_day}日に券面から移除されました"
 			},
 			"ticketFace": {
 				"title": "券面",
@@ -142,6 +148,8 @@
 				"title": "運行情報",
 				"noSeatNo": "座席なし",
 				"returnTrain": "回送車両",
+				"isRouteIdentifierOldStyle": "旧形式の矢印と車番を使用",
+				"isRouteIdentifierOldStyleDesc": "1996年に紅票誕生から2015年8月1日までの間、券面の2駅名間の矢印は今より短く、また、車番後に「次」を表示していました",
 				"routeIdentifier": "車番",
 				"seat2": "座席",
 				"seat3": "寝台",

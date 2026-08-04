@@ -57,6 +57,7 @@ export function encodeCRWideTicketParams(p: CRWideTicketDrawParameters): string 
 		p.seatStatus,
 		p.purchaseCertType,
 		p.purchasePassportCode,
+		+p.isRouteIdentifierOldStyle,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -128,6 +129,7 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		seatStatus,
 		purchaseCertType,
 		purchasePassportCode,
+		isRouteIdentifierOldStyle,
 	] = arr;
 	return {
 		background,
@@ -182,6 +184,7 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		seatStatus,
 		purchaseCertType,
 		purchasePassportCode,
+		isRouteIdentifierOldStyle: !!isRouteIdentifierOldStyle,
 	} as CRWideTicketDrawParameters;
 }
 

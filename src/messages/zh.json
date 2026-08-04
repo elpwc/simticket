@@ -183,10 +183,16 @@
 		},
 		"common": {
 			"ElementAddedDate": {
-				"title": "{year}年新增",
-				"descy": "此要素在{year}年加入票面",
-				"descym": "此要素在{year}年{month}月加入票面",
-				"descymd": "此要素在{year}年{month}月{day}日加入票面"
+				"captionstart": "{year}年新增",
+				"captionend": "{end_year}年移除",
+				"captionstarttoend": "{year}~{end_year}年",
+				"thisElement": "此要素",
+				"titlestarty": "在{year}年加入票面",
+				"titlestartym": "在{year}年{month}月加入票面",
+				"titlestartymd": "在{year}年{month}月{day}日加入票面",
+				"titleendy": "在{end_year}年从票面移除",
+				"titleendym": "在{end_year}年{end_month}月从票面移除",
+				"titleendymd": "在{end_year}年{end_month}月{end_day}日从票面移除"
 			},
 			"ticketFace": {
 				"watermark": "水印",
@@ -207,6 +213,8 @@
 				"routeIdentifier": "车次",
 				"title": "运行信息",
 				"returnTrain": "回送车次",
+				"isRouteIdentifierOldStyle": "使用旧式的箭头和车次",
+				"isRouteIdentifierOldStyleDesc": "1996年红票诞生到2015年8月1日，票面车站间的箭头比现在短，且车次後会显示「次」",
 				"departureDate": "發车日期",
 				"departureTime": "發车时间",
 				"carriage": "车厢",

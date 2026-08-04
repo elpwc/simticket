@@ -340,23 +340,65 @@ export const drawCRWideTicket = (
 		}
 
 		// 车次
-		ctx.beginPath();
-		ctx.strokeStyle = 'black';
-		ctx.lineWidth = resizedScaleY(6);
-		ctx.moveTo(offsetScaleX(716), offsetScaleY(350));
-		ctx.lineTo(offsetScaleX(1006), offsetScaleY(350));
-		ctx.stroke();
-		ctx.closePath();
+		let routeIdentifierX = 720;
+		let routeIdentifierY = 324;
+		// 箭头
+		if (drawParameters.isRouteIdentifierOldStyle) {
+			// 旧箭头
+			ctx.beginPath();
+			ctx.strokeStyle = 'black';
+			ctx.lineWidth = resizedScaleY(9);
+			ctx.moveTo(offsetScaleX(716), offsetScaleY(350));
+			ctx.lineTo(offsetScaleX(946), offsetScaleY(350));
+			ctx.stroke();
+			ctx.closePath();
 
-		ctx.beginPath();
-		ctx.lineWidth = resizedScaleY(1);
-		ctx.moveTo(offsetScaleX(1006), offsetScaleY(350));
-		ctx.lineTo(offsetScaleX(983), offsetScaleY(350));
-		ctx.lineTo(offsetScaleX(964), offsetScaleY(337));
-		ctx.lineTo(offsetScaleX(961), offsetScaleY(333));
-		ctx.lineTo(offsetScaleX(979), offsetScaleY(337));
-		ctx.fill();
-		ctx.closePath();
+			ctx.beginPath();
+			ctx.lineWidth = resizedScaleY(1);
+			ctx.moveTo(offsetScaleX(1006), offsetScaleY(355));
+			ctx.lineTo(offsetScaleX(900), offsetScaleY(355));
+			ctx.lineTo(offsetScaleX(825), offsetScaleY(325));
+			ctx.lineTo(offsetScaleX(828), offsetScaleY(322));
+			ctx.lineTo(offsetScaleX(930), offsetScaleY(339));
+			ctx.fill();
+			ctx.closePath();
+
+			// 旧车次位置
+			routeIdentifierX = 690;
+			routeIdentifierY = 300;
+			// “次”字
+			if (drawParameters.routeIdentifier.length > 0) {
+				ctx.font = resizedFont(6.5, 'SongTi', true);
+				ctx.fillText(
+					`次`,
+					offsetScaleX(routeIdentifierX + (drawParameters.routeIdentifier.length > 6 ? 6 : drawParameters.routeIdentifier.length) * 23 + 160),
+					offsetScaleY(routeIdentifierY + 8),
+				);
+			}
+		} else {
+			// 新箭头
+			ctx.beginPath();
+			ctx.strokeStyle = 'black';
+			ctx.lineWidth = resizedScaleY(6);
+			ctx.moveTo(offsetScaleX(716), offsetScaleY(350));
+			ctx.lineTo(offsetScaleX(1006), offsetScaleY(350));
+			ctx.stroke();
+			ctx.closePath();
+
+			ctx.beginPath();
+			ctx.lineWidth = resizedScaleY(1);
+			ctx.moveTo(offsetScaleX(1006), offsetScaleY(350));
+			ctx.lineTo(offsetScaleX(983), offsetScaleY(350));
+			ctx.lineTo(offsetScaleX(964), offsetScaleY(337));
+			ctx.lineTo(offsetScaleX(961), offsetScaleY(333));
+			ctx.lineTo(offsetScaleX(979), offsetScaleY(337));
+			ctx.fill();
+			ctx.closePath();
+
+			// 新车次位置
+			routeIdentifierX = 720;
+			routeIdentifierY = 324;
+		}
 
 		const routeIdentifierFirstChar = drawParameters.routeIdentifier.substring(0, 1);
 		const routeIdentifierNumbersChar = drawParameters.routeIdentifier.substring(1, drawParameters.routeIdentifier.length);
@@ -370,13 +412,13 @@ export const drawCRWideTicket = (
 				alignCenterOffset = 0;
 			}
 			ctx.font = `${resizedFont(7.1, 'TrainCodeFont')}`;
-			ctx.fillText(routeIdentifierFirstChar, offsetScaleX(720 + alignCenterOffset), offsetScaleY(324), resizedScaleX(64));
+			ctx.fillText(routeIdentifierFirstChar, offsetScaleX(routeIdentifierX + alignCenterOffset), offsetScaleY(routeIdentifierY), resizedScaleX(64));
 			ctx.font = `${resizedFont(8, 'TrainCodeFont')}`;
 			drawText(
 				ctx,
 				routeIdentifierNumbersChar,
-				offsetScaleX(783 + alignCenterOffset),
-				offsetScaleY(332),
+				offsetScaleX(routeIdentifierX + 63 + alignCenterOffset),
+				offsetScaleY(routeIdentifierY + 8),
 				resizedScaleX(routeIdentifierNumbersCharWidth),
 				TextAlign.Left,
 				DrawTextMethod.fillText,
@@ -385,7 +427,7 @@ export const drawCRWideTicket = (
 		} else {
 			// 普客普快（不带字母）
 			ctx.font = `${resizedFont(8, 'TrainCodeFont')}`;
-			drawText(ctx, drawParameters.routeIdentifier, offsetScaleX(720), offsetScaleY(332), resizedScaleX(284), TextAlign.Center, DrawTextMethod.fillText, 1.5);
+			drawText(ctx, drawParameters.routeIdentifier, offsetScaleX(routeIdentifierX), offsetScaleY(routeIdentifierY + 8), resizedScaleX(284), TextAlign.Center, DrawTextMethod.fillText, 1.5);
 		}
 
 		// 日期时间

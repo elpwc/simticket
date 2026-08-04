@@ -565,7 +565,7 @@ export default function CRWideTicket() {
 										}}
 									/>
 									<span>{t('editor.common.stationInfo.showTheTextOfStation')}</span>
-									<ElementAddedDate year={2015} month={8} day={1}/>
+									<ElementAddedDate year={2015} month={8} day={1} />
 								</label>
 								<label className="flex">
 									<Toggle
@@ -578,7 +578,7 @@ export default function CRWideTicket() {
 										}}
 									/>
 									<span>{t('editor.common.stationInfo.showForeignLanguageStationName')}</span>
-									<ElementAddedDate year={2006} month={5}/>
+									<ElementAddedDate year={2006} month={5} />
 								</label>
 							</div>
 						</TitleContainer>
@@ -595,6 +595,22 @@ export default function CRWideTicket() {
 											}))
 										}
 									/>
+
+									<label className="flex">
+										<Toggle
+											value={drawParameters.isRouteIdentifierOldStyle}
+											onChange={(value) => {
+												setDrawParameters((prev) => ({
+													...prev,
+													isRouteIdentifierOldStyle: value,
+												}));
+											}}
+										/>
+										<span>{t('editor.common.trainInfo.isRouteIdentifierOldStyle')}</span>
+										<DescriptionButton modalTitle={''}>
+											<p>{t('editor.common.trainInfo.isRouteIdentifierOldStyleDesc')}</p>
+										</DescriptionButton>
+									</label>
 									<label className="">
 										<Toggle
 											value={drawParameters.routeIdentifier.substring(0, 1) === '0' ? true : false}

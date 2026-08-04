@@ -35,6 +35,7 @@ export type CRWideTicketDrawParameters = {
 	doShowEnglish: boolean;
 	doUseHuaWenXinWei1: boolean;
 	doUseHuaWenXinWei2: boolean;
+	/** 车次 */
 	routeIdentifier: string;
 	date: string;
 	time: string;
@@ -72,6 +73,7 @@ export type CRWideTicketDrawParameters = {
 	seatStatus: string;
 	purchaseCertType: string;
 	purchasePassportCode: string;
+	isRouteIdentifierOldStyle: boolean;
 };
 
 export interface PurchaseMethod {
