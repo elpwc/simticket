@@ -70,6 +70,8 @@ export type CRWideTicketDrawParameters = {
 	info1to: string;
 	showMessageBorder: boolean;
 	seatStatus: string;
+	purchaseCertType: string;
+	purchasePassportCode: string;
 };
 
 export interface PurchaseMethod {

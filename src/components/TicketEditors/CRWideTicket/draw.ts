@@ -588,9 +588,12 @@ export const drawCRWideTicket = (
 
 		// code 下方购票处
 		ctx.font = resizedFont(5.5, 'SongTi');
-		drawText(ctx, drawParameters.serialCode, offsetScaleX(133), offsetScaleY(1080), resizedScaleX(890), TextAlign.Left, DrawTextMethod.fillText, 0, 1, 0.8, 1, false);
-		drawText(ctx, drawParameters.showSoldPlaceDown ? `  ${drawParameters.soldplace}售` : '', offsetScaleX(990), offsetScaleY(1080), resizedScaleX(260), TextAlign.Left, DrawTextMethod.fillText, 0);
-
+		drawText(ctx, drawParameters.serialCode, offsetScaleX(133), offsetScaleY(1080), resizedScaleX(770), TextAlign.Left, DrawTextMethod.fillText, 0, 1, 0.8, 1, false);
+		if (drawParameters.showSoldPlaceDown) {
+			drawText(ctx, `${drawParameters.soldplace}售`, offsetScaleX(930), offsetScaleY(1080), resizedScaleX(300), TextAlign.Center);
+		} else {
+			drawText(ctx, `${drawParameters.purchaseCertType} ${drawParameters.purchasePassportCode}`, offsetScaleX(930), offsetScaleY(1080), resizedScaleX(270));
+		}
 		onDone?.();
 	};
 

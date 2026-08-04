@@ -118,8 +118,6 @@ export default function CRWideTicket() {
 	const [TMIS, setTMIS] = useState(drawParameters.serialCode.slice(0, 5));
 	const [machineNo, setMachineNo] = useState(drawParameters.serialCode.slice(5, 10));
 	const [purchaseDate, setPurchaseDate] = useState(drawParameters.serialCode.slice(10, 14));
-	const [purchaseCertType, setPurchaseCertType] = useState(drawParameters.serialCode.split(' ').length > 1 ? drawParameters.serialCode.split(' ')[1] : 'JM');
-	const [purchasePassportCode, setPurchasePassportCode] = useState(drawParameters.serialCode.split(' ').length > 2 ? drawParameters.serialCode.split(' ')[2] : '');
 
 	useEffect(() => {
 		setDrawParameters((prev) => ({
@@ -132,11 +130,9 @@ export default function CRWideTicket() {
 	useEffect(() => {
 		setDrawParameters((prev) => ({
 			...prev,
-			serialCode:
-				`${TMIS}${machineNo}${purchaseDate}${drawParameters.ticketNo}` +
-				(purchaseCertType.length > 0 ? ` ${purchaseCertType}` + (purchasePassportCode.length > 0 ? ` ${purchasePassportCode}` : '') : ''),
+			serialCode: `${TMIS}${machineNo}${purchaseDate}${drawParameters.ticketNo}`,
 		}));
-	}, [TMIS, machineNo, purchaseDate, drawParameters.ticketNo, purchaseCertType, purchasePassportCode]);
+	}, [TMIS, machineNo, purchaseDate, drawParameters.ticketNo]);
 
 	useEffect(() => {
 		if (copyEditingTicketDataToDrawParameters && editingTicketData) {
@@ -722,26 +718,36 @@ export default function CRWideTicket() {
 								</div>
 							</label>
 							<label className="ticket-form-label">
-								{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
-								<PrettyInputRadioGroup
-									list={purchaseCertTypeList}
-									value={purchaseCertType}
-									onChange={(value: string) => {
-										setPurchaseCertType(value);
-									}}
-									placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-								/>
-							</label>
-							<label className="ticket-form-label">
-								{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
-								<PrettyInputRadioGroup
-									list={purchasePassportNationList}
-									value={purchasePassportCode}
-									onChange={(value: string) => {
-										setPurchasePassportCode(value);
-									}}
-									placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-								/>
+								<div>
+									<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketPurchaseInfo')}</span>
+									<p className="text-[12px] text-[#696969] dark:text-neutral-100">※{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertTypeDesc')}</p>
+								</div>
+								<div>
+									<label className="">
+										{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
+										<PrettyInputRadioGroup
+											list={purchaseCertTypeList.map((item) => ({ value: item.value, title: item.title + item.value }))}
+											value={drawParameters.purchaseCertType}
+											onChange={(value: string) => {
+												setDrawParameters((prev) => ({ ...prev, purchaseCertType: value }));
+											}}
+											placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
+											className="ml-2"
+										/>
+									</label>
+									<label className="">
+										{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
+										<PrettyInputRadioGroup
+											list={purchasePassportNationList}
+											value={drawParameters.purchasePassportCode}
+											onChange={(value: string) => {
+												setDrawParameters((prev) => ({ ...prev, purchasePassportCode: value }));
+											}}
+											placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
+											className="ml-2"
+										/>
+									</label>
+								</div>
 							</label>
 
 							<label className="ticket-form-label">
@@ -1004,42 +1010,63 @@ export default function CRWideTicket() {
 													/>
 												</div>
 											</label>
-											<label className="flex flex-col">
-												{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
-												<input className="w-[120px]" value={purchaseCertType} onChange={(e) => setPurchaseCertType(e.target.value)} />
-											</label>
-											<label className="flex flex-col">
-												{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
-												<input className="w-[80px]" value={purchasePassportCode} onChange={(e) => setPurchasePassportCode(e.target.value)} />
-											</label>
-										</div>
-										<div>
-											<label className="">
-												{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
-												<PrettyInputRadioGroup
-													list={purchaseCertTypeList}
-													value={purchaseCertType}
-													onChange={(value: string) => {
-														setPurchaseCertType(value);
-													}}
-													placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-												/>
-											</label>
-											<label className="">
-												{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
-												<PrettyInputRadioGroup
-													list={purchasePassportNationList}
-													value={purchasePassportCode}
-													onChange={(value: string) => {
-														setPurchasePassportCode(value);
-													}}
-													placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-												/>
-											</label>
 										</div>
 									</div>
 								</div>
 							</label>
+
+							<label className="ticket-form-label">
+								<div>
+									<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketPurchaseInfo')}</span>
+									<p className="text-[12px] text-[#696969] dark:text-neutral-100">※{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertTypeDesc')}</p>
+								</div>
+								<div>
+									<div className="flex flex-wrap gap-2">
+										<label className="flex flex-col">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
+											<input
+												className="w-[120px]"
+												value={drawParameters.purchaseCertType}
+												onChange={(e) => setDrawParameters((prev) => ({ ...prev, purchaseCertType: e.target.value }))}
+											/>
+										</label>
+										<label className="flex flex-col">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
+											<input
+												className="w-[80px]"
+												value={drawParameters.purchasePassportCode}
+												onChange={(e) => setDrawParameters((prev) => ({ ...prev, purchasePassportCode: e.target.value }))}
+											/>
+										</label>
+									</div>
+
+									<div>
+										<label className="">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
+											<PrettyInputRadioGroup
+												list={purchaseCertTypeList.map((item) => ({ value: item.value, title: item.title + item.value }))}
+												value={drawParameters.purchaseCertType}
+												onChange={(value: string) => {
+													setDrawParameters((prev) => ({ ...prev, purchaseCertType: value }));
+												}}
+												placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
+											/>
+										</label>
+										<label className="">
+											{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
+											<PrettyInputRadioGroup
+												list={purchasePassportNationList}
+												value={drawParameters.purchasePassportCode}
+												onChange={(value: string) => {
+													setDrawParameters((prev) => ({ ...prev, purchasePassportCode: value }));
+												}}
+												placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
+											/>
+										</label>
+									</div>
+								</div>
+							</label>
+
 							<label className="ticket-form-label">
 								<div>
 									<label>

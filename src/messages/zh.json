@@ -147,14 +147,16 @@
 					},
 					"info2": "信息2",
 					"info3": "信息3",
-					"purchaseCertType": "乘车人购票证件",
-					"purchasePassportCode": "护照国家码",
+					"purchaseCertType": "乘车人证件类型",
+					"purchasePassportCode": "乘车人护照国家码",
+					"purchaseCertTypeDesc": "2022年5月后代替售票处",
 					"machineNo": "售票机号",
 					"purchaseDate": "结账日期"
 				},
 				"ticketNoInfo": {
 					"title": "票号数据",
 					"ticketSerialCode": "车票标识码",
+					"ticketPurchaseInfo": "乘车人证件信息",
 					"qrCodeText": "二维码数据",
 					"message": "虚线框内文字",
 					"presetText": "预设文字：",
