@@ -1,26 +1,30 @@
 import { TextAlign } from '@/utils/utils';
-import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType } from './type';
+import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType, TongPiaoStyle } from './type';
 import { getRandomCRTicketNo } from './utils';
 
 export const CR_TRAIN_TYPES = [
-	{ value: 'G', desc: '高铁' },
-	{ value: 'D', desc: '动车' },
-	{ value: 'C', desc: '城际' },
-	{ value: 'S', desc: '市郊' },
-	{ value: 'Z', desc: '直达' },
-	{ value: 'T', desc: '特快' },
-	{ value: 'K', desc: '快速' },
-	{ value: 'N', desc: '管内快速' },
-	{ value: 'Y', desc: '旅游' },
-	{ value: 'L', desc: '临时' },
-	{ value: 'A', desc: '临时特快' },
-	{ value: 'I', desc: 'D代用' },
-	{ value: 'P', desc: 'Z代用' },
-	{ value: 'Q', desc: 'T代用' },
-	{ value: 'W', desc: 'K代用' },
-	{ value: 'V', desc: '普代用' },
-	{ value: '青', desc: '' },
-	{ value: '藏', desc: '' },
+	{ value: 'G', desc: '高铁', name: '动车组' },
+	{ value: 'D', desc: '动车', name: '动车组' },
+	{ value: 'C', desc: '城际', name: '城际' },
+	{ value: 'S', desc: '市郊', name: '市郊' },
+	{ value: 'Z', desc: '直达', name: '直达' },
+	{ value: 'T', desc: '特快', name: '特快' },
+	{ value: 'K', desc: '快速', name: '快速' },
+	{ value: 'N', desc: '管内快速', name: '快速' },
+	{ value: 'Y', desc: '旅游', name: '旅游' },
+	{ value: 'L', desc: '临时', name: '临时' },
+	{ value: 'A', desc: '临时特快', name: '普快' },
+	{ value: 'I', desc: 'D代用', name: '动车组' },
+	{ value: 'P', desc: 'Z代用', name: '直达' },
+	{ value: 'Q', desc: 'T代用', name: '特快' },
+	{ value: 'W', desc: 'K代用', name: '快速' },
+	{ value: 'V', desc: '普代用', name: '普快' },
+];
+
+export const CR_TONGPIAO_TRAIN_TYPES = [
+	{ value: '普客', title: '普客到底' },
+	{ value: '普快', title: '普快到底' },
+	{ value: '特快', title: '特快到底(K/T/Z)' },
 ];
 
 export const CR_TRAIN_TYPE_ARRAY = CR_TRAIN_TYPES.map((type) => type.value);
@@ -159,6 +163,11 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	purchasePassportCode: '',
 	isRouteIdentifierOldStyle: false,
 	carriageFloor: 0,
+	tongpiaoStyle: TongPiaoStyle.None,
+	tongpiaoStation: '青岛',
+	tongpiaoStationEn: 'Qingdao',
+	tongpiaoTrainClass: '普快',
+	tongpiaoRoute: '',
 };
 export const purchaseMethodList: PurchaseMethod[] = [
 	{ type: PurchaseMethodType.TicketType, title: '孩', desc: 'value.purchaseMethod.list.hai' },

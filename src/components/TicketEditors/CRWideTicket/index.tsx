@@ -14,6 +14,7 @@ import PrettyInputRadioGroup from '../../InfrastructureCompo/PrettyInputRadioGro
 import { pinyin } from 'pinyin-pro';
 import { DescriptionButton } from '@/components/InfrastructureCompo/DescriptionButton';
 import {
+	CR_TONGPIAO_TRAIN_TYPES,
 	CR_TRAIN_TYPE_ARRAY,
 	CR_TRAIN_TYPES,
 	CRPresetStations,
@@ -31,13 +32,14 @@ import {
 	seatType,
 	sleepingCarSeatType,
 } from './value';
-import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType } from './type';
+import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType, TongPiaoStyle } from './type';
 import { drawCRWideTicket } from './draw';
 import { AppContext } from '@/app/app';
 import { useLocale } from '@/utils/hooks/useLocale';
 import { useSearchParams } from 'next/navigation';
 import { getRandomCRTicketNo } from './utils';
 import ElementAddedDate from '@/components/TicketEditorCompo/ElementAddedDate';
+import { CRWideTicketTongpiaoTypeSelector } from './CRWideTicketTongpiaoTypeSelector';
 
 export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
@@ -426,7 +428,7 @@ export default function CRWideTicket() {
 								</div>
 							</div>
 						</TitleContainer>
-						<TitleContainer title={t('editor.common.stationInfo.title')} className="flex flex-wrap gap-2">
+						<TitleContainer title={<span>{t('editor.common.stationInfo.title')}</span>} className="flex flex-wrap gap-2">
 							<div className="flex w-full flex-col gap-2 md:flex-row md:flex-wrap md:items-center justify-center">
 								<div className="flex flex-col p-2 rounded-[4px] gap-[2px] border border-gray-300 dark:border-gray-700 pb-2">
 									<TicketFormLabel label={t('editor.common.stationInfo.departure')}>
@@ -488,13 +490,20 @@ export default function CRWideTicket() {
 									</label>
 								</div>
 								<div className="flex items-center justify-center">
-									<p className="text-[30px] text-[#696969] dark:text-neutral-100 text-center">
-										<span className="md:hidden">↓</span>
-										<span className="hidden md:inline">→</span>
+									<p className="text-[30px] text-[#000000] dark:text-neutral-100 text-center">
+										<span className="md:hidden">
+											↓<span className="text-[12px]">{drawParameters.routeIdentifier}</span>
+										</span>
+										<span className="hidden md:flex md:flex-col">
+											<span className="text-[12px]">{drawParameters.routeIdentifier}</span>
+											<span>→</span>
+										</span>
 									</p>
 								</div>
 								<div className="flex flex-col p-2 rounded-[4px] gap-[2px] border border-gray-300 dark:border-gray-700 pb-2">
-									<TicketFormLabel label={t('editor.common.stationInfo.arrival')}>
+									<TicketFormLabel
+										label={drawParameters.tongpiaoStyle !== TongPiaoStyle.None ? t('editor.cr.jisuanjikepiao2010.stationInfo.tongpiaoMid') : t('editor.common.stationInfo.arrival')}
+									>
 										<input
 											className="w-full font-bold"
 											value={drawParameters.station2}
@@ -519,67 +528,225 @@ export default function CRWideTicket() {
 											}}
 										/>
 									</TicketFormLabel>
-									<TicketFormLabel label={t('editor.common.stationInfo.arrivalForeign')}>
-										<input
-											className="w-full"
-											value={drawParameters.station2en}
-											onChange={(e) =>
-												setDrawParameters((prev) => ({
-													...prev,
-													station2en: e.target.value,
-												}))
-											}
-										/>
-									</TicketFormLabel>
-									<label>
+
+									{(drawParameters.tongpiaoStyle === TongPiaoStyle.New || drawParameters.tongpiaoStyle === TongPiaoStyle.None) && (
+										<>
+											<TicketFormLabel label={t('editor.common.stationInfo.arrivalForeign')}>
+												<input
+													className="w-full"
+													value={drawParameters.station2en}
+													onChange={(e) =>
+														setDrawParameters((prev) => ({
+															...prev,
+															station2en: e.target.value,
+														}))
+													}
+												/>
+											</TicketFormLabel>
+											<label>
+												<Toggle
+													value={drawParameters.doUseHuaWenXinWei2}
+													onChange={(value) => {
+														setDrawParameters((prev) => ({
+															...prev,
+															doUseHuaWenXinWei2: value,
+														}));
+													}}
+												/>
+												<span>
+													{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
+													<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
+													<DescriptionButton modalTitle={t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}>
+														<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
+														<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
+													</DescriptionButton>
+												</span>
+											</label>
+										</>
+									)}
+								</div>
+								{drawParameters.tongpiaoStyle !== TongPiaoStyle.None && (
+									<>
+										<div className="flex items-center justify-center">
+											<p className="text-[30px] text-[#000000] dark:text-neutral-100 text-center">
+												<span className="md:hidden">
+													↓<span className="text-[12px]">{drawParameters.tongpiaoTrainClass}</span>
+												</span>
+												<span className="hidden md:flex md:flex-col">
+													<span className="text-[12px]">{drawParameters.tongpiaoTrainClass}</span>
+													<span>→</span>
+												</span>
+											</p>
+										</div>
+										<div className="flex flex-col p-2 rounded-[4px] gap-[2px] border border-gray-300 dark:border-gray-700 pb-2">
+											<TicketFormLabel label={t('editor.common.stationInfo.arrival')}>
+												<input
+													className="w-full font-bold"
+													value={drawParameters.tongpiaoStation}
+													onChange={(e) => {
+														let stationEnglish = pinyin(e.target.value, {
+															toneType: 'none',
+															type: 'array',
+														}).join('');
+														if (['香港西九龍', '香港西九龙'].includes(e.target.value)) {
+															stationEnglish = 'HKWestKowloon';
+														} else {
+															stationEnglish = stationEnglish.substring(0, 1).toUpperCase() + stationEnglish.substring(1, stationEnglish.length);
+														}
+														setDrawParameters((prev) => ({
+															...prev,
+															tongpiaoStationEn: stationEnglish,
+														}));
+														setDrawParameters((prev) => ({
+															...prev,
+															tongpiaoStation: e.target.value,
+														}));
+													}}
+												/>
+											</TicketFormLabel>
+											{drawParameters.tongpiaoStyle === TongPiaoStyle.Old && (
+												<>
+													<TicketFormLabel label={t('editor.common.stationInfo.arrivalForeign')}>
+														<input
+															className="w-full"
+															value={drawParameters.tongpiaoStationEn}
+															onChange={(e) =>
+																setDrawParameters((prev) => ({
+																	...prev,
+																	tongpiaoStationEn: e.target.value,
+																}))
+															}
+														/>
+													</TicketFormLabel>
+													<label>
+														<Toggle
+															value={drawParameters.doUseHuaWenXinWei2}
+															onChange={(value) => {
+																setDrawParameters((prev) => ({
+																	...prev,
+																	doUseHuaWenXinWei2: value,
+																}));
+															}}
+														/>
+														<span>
+															{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
+															<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
+															<DescriptionButton modalTitle={t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}>
+																<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
+																<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
+															</DescriptionButton>
+														</span>
+													</label>
+												</>
+											)}
+										</div>
+									</>
+								)}
+							</div>
+							<div className="flex flex-col w-full">
+								<div className="flex flex-wrap gap-2">
+									<label className="flex">
 										<Toggle
-											value={drawParameters.doUseHuaWenXinWei2}
+											value={drawParameters.doShowZhan}
 											onChange={(value) => {
 												setDrawParameters((prev) => ({
 													...prev,
-													doUseHuaWenXinWei2: value,
+													doShowZhan: value,
 												}));
 											}}
 										/>
-										<span>
-											{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.useText')}
-											<span className={HuawenXinwei.className}>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}</span>
-											<DescriptionButton modalTitle={t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.weibeitiText')}>
-												<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc1')}</p>
-												<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.useWeibeiti.desc2')}</p>
-											</DescriptionButton>
-										</span>
+										<span>{t('editor.common.stationInfo.showTheTextOfStation')}</span>
+										<ElementAddedDate year={2015} month={8} day={1} />
+									</label>
+									<label className="flex">
+										<Toggle
+											value={drawParameters.doShowEnglish}
+											onChange={(value) => {
+												setDrawParameters((prev) => ({
+													...prev,
+													doShowEnglish: value,
+												}));
+											}}
+										/>
+										<span>{t('editor.common.stationInfo.showForeignLanguageStationName')}</span>
+										<ElementAddedDate year={2006} month={5} />
 									</label>
 								</div>
-							</div>
 
-							<div className="flex flex-wrap gap-2">
-								<label className="flex">
-									<Toggle
-										value={drawParameters.doShowZhan}
-										onChange={(value) => {
-											setDrawParameters((prev) => ({
-												...prev,
-												doShowZhan: value,
-											}));
-										}}
-									/>
-									<span>{t('editor.common.stationInfo.showTheTextOfStation')}</span>
-									<ElementAddedDate year={2015} month={8} day={1} />
-								</label>
-								<label className="flex">
-									<Toggle
-										value={drawParameters.doShowEnglish}
-										onChange={(value) => {
-											setDrawParameters((prev) => ({
-												...prev,
-												doShowEnglish: value,
-											}));
-										}}
-									/>
-									<span>{t('editor.common.stationInfo.showForeignLanguageStationName')}</span>
-									<ElementAddedDate year={2006} month={5} />
-								</label>
+								<TitleContainer
+									title={
+										<div>
+											{t('editor.cr.jisuanjikepiao2010.stationInfo.tongpiao')}
+											<Toggle
+												value={drawParameters.tongpiaoStyle !== TongPiaoStyle.None}
+												onChange={(value) => {
+													setDrawParameters((prev) => ({
+														...prev,
+														tongpiaoStyle: value ? TongPiaoStyle.Old : TongPiaoStyle.None,
+													}));
+												}}
+											/>
+										</div>
+									}
+									className="flex flex-wrap gap-2"
+									disabled={drawParameters.tongpiaoStyle === TongPiaoStyle.None}
+								>
+									<div className="flex flex-col w-full gap-1">
+										<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.stationInfo.tongpiaoStyle')}>
+											<CRWideTicketTongpiaoTypeSelector
+												value={drawParameters.tongpiaoStyle}
+												onChange={(value) => {
+													setDrawParameters((prev) => ({
+														...prev,
+														tongpiaoStyle: value,
+													}));
+												}}
+											/>
+										</TicketFormLabel>
+										<TicketFormLabel
+											label={
+												<div>
+													<p>{t('editor.cr.jisuanjikepiao2010.stationInfo.tongpiaoRoute')}</p>
+													<p className="text-[12px] text-gray-500">※{t('editor.cr.jisuanjikepiao2010.stationInfo.tongpiaoRouteReferenceDesc')}</p>
+												</div>
+											}
+										>
+											<div className="flex gap-2">
+												<input
+													className=""
+													value={drawParameters.tongpiaoRoute}
+													onChange={(e) =>
+														setDrawParameters((prev) => ({
+															...prev,
+															tongpiaoRoute: e.target.value,
+														}))
+													}
+												/>
+												<button className="w-fit flex items-center gap-1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+														<path
+															fill-rule="evenodd"
+															d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.5.5 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103M10 1.91l-4-.8v12.98l4 .8zm1 12.98 4-.8V1.11l-4 .8zm-6-.8V1.11l-4 .8v12.98z"
+														/>
+													</svg>
+													{t('editor.cr.jisuanjikepiao2010.stationInfo.tongpiaoRouteReference')}
+												</button>
+											</div>
+										</TicketFormLabel>
+										<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.stationInfo.tongpiaoTrainClass')}>
+											<PrettyInputRadioGroup
+												list={CR_TONGPIAO_TRAIN_TYPES}
+												value={drawParameters.tongpiaoTrainClass}
+												onChange={(value) => {
+													setDrawParameters((prev) => ({
+														...prev,
+														tongpiaoTrainClass: value,
+													}));
+												}}
+											/>
+										</TicketFormLabel>
+									</div>
+								</TitleContainer>
 							</div>
 						</TitleContainer>
 

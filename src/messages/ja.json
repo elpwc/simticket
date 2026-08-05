@@ -132,9 +132,9 @@
 			},
 			"stationInfo": {
 				"arrival": "到着",
-				"arrivalForeign": "到着外国語",
+				"arrivalForeign": "外語",
 				"departure": "出発",
-				"departureForeign": "出発外国語",
+				"departureForeign": "外語",
 				"showForeignLanguageStationName": "外国語を表示",
 				"showTheTextOfStation": "「駅」を表示",
 				"title": "駅情報"
@@ -180,7 +180,18 @@
 						"desc2": "　しかし、片方がゴシック体、片方が魏碑体となっている乗車券もしばしば見られた故、ここで別々に対処します。",
 						"useText": "表示フォント：",
 						"weibeitiText": "魏碑体"
-					}
+					},
+					"tongpiao": "通票",
+					"tongpiaoStyle": "通票スタイル",
+					"tongpiaoStyleOld": "旧式(1996~2015)",
+					"tongpiaoStyleNew": "新式(2015~2022)",
+					"tongpiaoStyleNone": "通票ではない",
+					"tongpiaoTrainClass": "乗継列車種別",
+					"tongpiaoRoute": "経由",
+					"tongpiaoRouteReferenceDesc": "原則最大長さ最後5文字",
+					"tongpiaoMid": "乗継",
+					"tongpiaoMidForeign": "外語",
+					"tongpiaoRouteReference": "CR全国路線図参考"
 				},
 				"trainInfo": {
 					"pukepukuaiOrCustom": "普客普快 / カスタム",

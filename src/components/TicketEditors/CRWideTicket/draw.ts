@@ -1,5 +1,5 @@
 import { drawQRCode, drawText, DrawTextMethod, fontsLoader, TextAlign } from '@/utils/utils';
-import { CRTicketBackGround, CRWideTicketDrawParameters, RightUpContentType } from './type';
+import { CRTicketBackGround, CRWideTicketDrawParameters, RightUpContentType, TongPiaoStyle } from './type';
 import { CRTicketFlipSideText, CRWideTicketDrawParametersInitialValues, MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from './value';
 import cr_red from '../../../assets/tickets/cr_red.png';
 import cr_blue from '../../../assets/tickets/cr_blue.png';
@@ -203,6 +203,11 @@ export const drawCRWideTicket = (
 	const draw = () => {
 		// 清空
 		ctx.clearRect(0, 0, w, h);
+
+		const lineHeight = 84;
+		const lineLeft = 140;
+		const lineHeights = [0, 1, 2, 3, 4, 5, 6, 7].map((value) => value * lineHeight + 482);
+
 		// 底图
 		switch (drawParameters.background) {
 			case CRTicketBackGround.MagRed:
@@ -323,20 +328,22 @@ export const drawCRWideTicket = (
 			TextAlign.JustifyEvenly,
 		);
 		ctx.font = `${drawParameters.doUseHuaWenXinWei2 ? resizedFont(9, 'HuawenXinwei') : resizedFont(8.5, 'HeiTi')}`;
+		const rightStationText = drawParameters.tongpiaoStyle === TongPiaoStyle.Old ? drawParameters.tongpiaoStation : drawParameters.station2;
 		drawText(
 			ctx,
-			drawParameters.station2.length === 2 ? drawParameters.station2.substring(0, 1) + '　' + drawParameters.station2.substring(1, 2) : drawParameters.station2,
+			rightStationText.length === 2 ? rightStationText.substring(0, 1) + '　' + rightStationText.substring(1, 2) : rightStationText,
 			offsetScaleX(1074),
 			offsetScaleY(drawParameters.doShowEnglish ? 335 : 365),
-			resizedScaleX(drawParameters.doShowZhan ? (drawParameters.station2.length > 4 ? 435 : 365) : 500),
+			resizedScaleX(drawParameters.doShowZhan ? (rightStationText.length > 4 ? 435 : 365) : 500),
 			TextAlign.JustifyEvenly,
 		);
 
 		// 英文站名
 		if (drawParameters.doShowEnglish) {
 			ctx.font = resizedFont(5, 'SongTiEn');
+			const rightEnStationText = drawParameters.tongpiaoStyle === TongPiaoStyle.Old ? drawParameters.tongpiaoStationEn : drawParameters.station2en;
 			drawText(ctx, drawParameters.station1en, offsetScaleX(183), offsetScaleY(397), resizedScaleX(452), TextAlign.Center, DrawTextMethod.fillText, 1.9, 1, 0.75, 1.1, false);
-			drawText(ctx, drawParameters.station2en, offsetScaleX(1072), offsetScaleY(397), resizedScaleX(452), TextAlign.Center, DrawTextMethod.fillText, 1.9, 1, 0.75, 1.1, false);
+			drawText(ctx, rightEnStationText, offsetScaleX(1072), offsetScaleY(397), resizedScaleX(452), TextAlign.Center, DrawTextMethod.fillText, 1.9, 1, 0.75, 1.1, false);
 		}
 
 		// 车次
@@ -430,69 +437,90 @@ export const drawCRWideTicket = (
 			drawText(ctx, drawParameters.routeIdentifier, offsetScaleX(routeIdentifierX), offsetScaleY(routeIdentifierY + 8), resizedScaleX(284), TextAlign.Center, DrawTextMethod.fillText, 1.5);
 		}
 
+		let lineOffset = 0;
+		if (drawParameters.tongpiaoStyle === TongPiaoStyle.Old) {
+			// 旧通票 经由
+			ctx.font = `${resizedFont(5.5, 'Heiti')}`;
+			drawText(ctx, '(经由' + drawParameters.tongpiaoRoute + ')', offsetScaleX(167), offsetScaleY(lineHeights[0]), resizedScaleX(500), TextAlign.Center);
+			// 旧通票 中转车种
+			drawText(
+				ctx,
+				'(' + drawParameters.tongpiaoTrainClass + '至' + drawParameters.tongpiaoStation + ')',
+				offsetScaleX(1074),
+				offsetScaleY(lineHeights[0]),
+				resizedScaleX(500),
+				TextAlign.Center,
+			);
+
+			lineOffset = 1;
+		}
+
 		// 日期时间
+		const ymdk_zh_y = lineHeights[0 + lineOffset] - 28;
+		const ymdk_en_y = lineHeights[0 + lineOffset] + 12;
+		const ymdk_y = lineHeights[0 + lineOffset] - 8;
 		if (drawParameters.isHKWestKowloonStyle) {
 			ctx.font = resizedFont(4, 'SongTi', true);
-			ctx.fillText(`年`, offsetScaleX(310), offsetScaleY(454));
-			ctx.fillText(`月`, offsetScaleX(460), offsetScaleY(454));
-			ctx.fillText(`日`, offsetScaleX(619), offsetScaleY(454));
-			ctx.fillText(`開`, offsetScaleX(877), offsetScaleY(454));
+			ctx.fillText(`年`, offsetScaleX(310), offsetScaleY(ymdk_zh_y));
+			ctx.fillText(`月`, offsetScaleX(460), offsetScaleY(ymdk_zh_y));
+			ctx.fillText(`日`, offsetScaleX(619), offsetScaleY(ymdk_zh_y));
+			ctx.fillText(`開`, offsetScaleX(877), offsetScaleY(ymdk_zh_y));
 			ctx.font = resizedFont(3.5, 'SongTi', true);
-			ctx.fillText(`Ｙ`, offsetScaleX(310), offsetScaleY(494));
-			ctx.fillText(`Ｍ`, offsetScaleX(460), offsetScaleY(494));
-			ctx.fillText(`Ｄ`, offsetScaleX(619), offsetScaleY(494));
-			ctx.fillText(`DEP`, offsetScaleX(877), offsetScaleY(494));
+			ctx.fillText(`Ｙ`, offsetScaleX(310), offsetScaleY(ymdk_en_y));
+			ctx.fillText(`Ｍ`, offsetScaleX(460), offsetScaleY(ymdk_en_y));
+			ctx.fillText(`Ｄ`, offsetScaleX(619), offsetScaleY(ymdk_en_y));
+			ctx.fillText(`DEP`, offsetScaleX(877), offsetScaleY(ymdk_en_y));
 		} else {
 			ctx.font = resizedFont(4, 'SongTi', true);
-			ctx.fillText(`年`, offsetScaleX(310), offsetScaleY(474));
-			ctx.fillText(`月`, offsetScaleX(460), offsetScaleY(474));
-			ctx.fillText(`日`, offsetScaleX(619), offsetScaleY(474));
-			ctx.fillText(`开`, offsetScaleX(877), offsetScaleY(474));
+			ctx.fillText(`年`, offsetScaleX(310), offsetScaleY(ymdk_y));
+			ctx.fillText(`月`, offsetScaleX(460), offsetScaleY(ymdk_y));
+			ctx.fillText(`日`, offsetScaleX(619), offsetScaleY(ymdk_y));
+			ctx.fillText(`开`, offsetScaleX(877), offsetScaleY(ymdk_y));
 		}
 		ctx.font = resizedFont(6.5, 'HeiTi');
-		ctx.fillText(new Date(drawParameters.date).getFullYear().toString(), offsetScaleX(148), offsetScaleY(482));
-		ctx.fillText((new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, '0'), offsetScaleX(378), offsetScaleY(482));
-		ctx.fillText(new Date(drawParameters.date).getDate().toString().padStart(2, '0'), offsetScaleX(529), offsetScaleY(482));
-		ctx.fillText(drawParameters.time, offsetScaleX(680), offsetScaleY(482));
+		ctx.fillText(new Date(drawParameters.date).getFullYear().toString(), offsetScaleX(148), offsetScaleY(lineHeights[0 + lineOffset]));
+		ctx.fillText((new Date(drawParameters.date).getMonth() + 1).toString().padStart(2, '0'), offsetScaleX(378), offsetScaleY(lineHeights[0 + lineOffset]));
+		ctx.fillText(new Date(drawParameters.date).getDate().toString().padStart(2, '0'), offsetScaleX(529), offsetScaleY(lineHeights[0 + lineOffset]));
+		ctx.fillText(drawParameters.time, offsetScaleX(680), offsetScaleY(lineHeights[0 + lineOffset]));
 
 		// 车厢座位
 		if (drawParameters.isHKWestKowloonStyle) {
 			// 香港樣式
 			if (!drawParameters.noCarriage) {
 				ctx.font = resizedFont(4, 'SongTi', true);
-				ctx.fillText(`車廂`, offsetScaleX(1180), offsetScaleY(454));
+				ctx.fillText(`車廂`, offsetScaleX(1180), offsetScaleY(ymdk_zh_y));
 				ctx.font = resizedFont(3.5, 'SongTi', true);
-				ctx.fillText(`Car`, offsetScaleX(1190), offsetScaleY(494));
+				ctx.fillText(`Car`, offsetScaleX(1190), offsetScaleY(ymdk_en_y));
 
 				ctx.font = resizedFont(6.5, 'HeiTi');
-				ctx.fillText(`${drawParameters.carriage}`, offsetScaleX(1096), offsetScaleY(489));
+				ctx.fillText(`${drawParameters.carriage}`, offsetScaleX(1096), offsetScaleY(lineHeights[0 + lineOffset] + 7));
 			}
 
 			if (drawParameters.seatStatus === '') {
 				if (['硬卧代硬座', '软卧代软座'].includes(drawParameters.seatClass)) {
 					ctx.font = resizedFont(4, 'SongTi', true);
-					ctx.fillText(`座`, offsetScaleX(1410), offsetScaleY(454));
+					ctx.fillText(`座`, offsetScaleX(1410), offsetScaleY(ymdk_zh_y));
 					ctx.font = resizedFont(3.5, 'SongTi', true);
-					ctx.fillText(`Seat`, offsetScaleX(1395), offsetScaleY(494));
+					ctx.fillText(`Seat`, offsetScaleX(1395), offsetScaleY(ymdk_en_y));
 					ctx.font = resizedFont(6.5, 'HeiTi');
-					ctx.fillText(`${drawParameters.seat1}`, offsetScaleX(1281), offsetScaleY(489));
+					ctx.fillText(`${drawParameters.seat1}`, offsetScaleX(1281), offsetScaleY(lineHeights[0 + lineOffset] + 7));
 					ctx.font = resizedFont(5, 'SongTi');
-					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1488), offsetScaleY(481));
+					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1488), offsetScaleY(lineHeights[0 + lineOffset] - 1));
 				} else {
 					ctx.font = resizedFont(4, 'SongTi', true);
-					ctx.fillText(`座`, offsetScaleX(1410), offsetScaleY(454));
+					ctx.fillText(`座`, offsetScaleX(1410), offsetScaleY(ymdk_zh_y));
 					ctx.font = resizedFont(3.5, 'SongTi', true);
-					ctx.fillText(`Seat`, offsetScaleX(1395), offsetScaleY(494));
+					ctx.fillText(`Seat`, offsetScaleX(1395), offsetScaleY(ymdk_en_y));
 					ctx.font = resizedFont(6.5, 'HeiTi');
-					ctx.fillText(`${drawParameters.seat1}`, offsetScaleX(1281), offsetScaleY(489));
+					ctx.fillText(`${drawParameters.seat1}`, offsetScaleX(1281), offsetScaleY(lineHeights[0 + lineOffset] + 7));
 					ctx.font = resizedFont(5, 'SongTi');
-					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1358), offsetScaleY(481));
+					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1358), offsetScaleY(lineHeights[0 + lineOffset] - 1));
 				}
 				ctx.font = resizedFont(5.5, 'SongTi');
-				ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(489));
+				ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(lineHeights[0 + lineOffset] + 7));
 			} else {
 				ctx.font = resizedFont(6, 'SongTi');
-				ctx.fillText(drawParameters.seatStatus, offsetScaleX(drawParameters.noCarriage ? 1180 : 1280), offsetScaleY(484));
+				ctx.fillText(drawParameters.seatStatus, offsetScaleX(drawParameters.noCarriage ? 1180 : 1280), offsetScaleY(lineHeights[0 + lineOffset] + 2));
 			}
 		} else {
 			// 非香港样式
@@ -507,51 +535,51 @@ export const drawCRWideTicket = (
 				}
 
 				ctx.font = resizedFont(4, 'SongTi', true);
-				ctx.fillText('车', offsetScaleX(carriageFloorX), offsetScaleY(474));
+				ctx.fillText('车', offsetScaleX(carriageFloorX), offsetScaleY(ymdk_y));
 
-				drawMixedDigitFontText(drawParameters.carriage, offsetScaleX(carriageFloorX - 171), offsetScaleY(482), resizedScaleX(165), 6.5, 6);
+				drawMixedDigitFontText(drawParameters.carriage, offsetScaleX(carriageFloorX - 171), offsetScaleY(lineHeights[0 + lineOffset]), resizedScaleX(165), 6.5, 6);
 			}
 
 			if (drawParameters.seatStatus === '') {
 				if (['硬卧代硬座', '软卧代软座'].includes(drawParameters.seatClass)) {
 					ctx.font = resizedFont(4, 'SongTi', true);
 
-					ctx.fillText(`号`, offsetScaleX(1325), offsetScaleY(474));
+					ctx.fillText(`号`, offsetScaleX(1325), offsetScaleY(ymdk_y));
 					ctx.font = resizedFont(6.5, 'HeiTi');
-					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(482), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 100), TextAlign.Right);
+					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(lineHeights[0 + lineOffset]), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 100), TextAlign.Right);
 					ctx.font = resizedFont(5, 'SongTi');
-					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1368), offsetScaleY(481));
+					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1368), offsetScaleY(lineHeights[0 + lineOffset] - 1));
 				} else {
 					ctx.font = resizedFont(4, 'SongTi', true);
 
-					ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(474));
+					ctx.fillText(`号`, offsetScaleX(1345), offsetScaleY(ymdk_y));
 					ctx.font = resizedFont(6.5, 'HeiTi');
-					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(482), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 79), TextAlign.Right);
+					drawText(ctx, drawParameters.seat1, offsetScaleX(1231), offsetScaleY(lineHeights[0 + lineOffset]), resizedScaleX(drawParameters.seat2.length === 0 ? 100 : 79), TextAlign.Right);
 					ctx.font = resizedFont(5, 'SongTi');
-					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1308), offsetScaleY(481));
+					ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(1308), offsetScaleY(lineHeights[0 + lineOffset] - 1));
 				}
 				ctx.font = resizedFont(5.5, 'SongTi');
-				ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(482));
+				ctx.fillText(`${drawParameters.seat3}`, offsetScaleX(1397), offsetScaleY(lineHeights[0 + lineOffset]));
 			} else {
 				ctx.font = resizedFont(6, 'SongTi');
-				ctx.fillText(drawParameters.seatStatus, offsetScaleX(drawParameters.noCarriage ? 1180 : 1250), offsetScaleY(484));
+				ctx.fillText(drawParameters.seatStatus, offsetScaleX(drawParameters.noCarriage ? 1180 : 1250), offsetScaleY(lineHeights[0 + lineOffset] + 2));
 			}
 		}
 
 		// 价格
 		if (!drawParameters.isHKWestKowloonStyle) {
 			ctx.font = resizedFont(4, 'SongTi', true);
-			ctx.fillText(`元`, offsetScaleX(220 + (`￥${drawParameters.price}`.length > 9 ? 9 : `￥${drawParameters.price}`.length) * 30), offsetScaleY(561));
+			ctx.fillText(`元`, offsetScaleX(220 + (`￥${drawParameters.price}`.length > 9 ? 9 : `￥${drawParameters.price}`.length) * 30), offsetScaleY(lineHeights[1 + lineOffset]));
 
 			ctx.font = resizedFont(5.5, 'SongTi');
-			drawText(ctx, `￥`, offsetScaleX(145), offsetScaleY(566), resizedScaleX(100), TextAlign.Left, DrawTextMethod.fillText, 0, 1, 1, 1);
+			drawText(ctx, `￥`, offsetScaleX(145), offsetScaleY(lineHeights[1 + lineOffset]), resizedScaleX(100), TextAlign.Left, DrawTextMethod.fillText, 0, 1, 1, 1);
 			ctx.font = resizedFont(6.5, 'HeiTi');
-			ctx.fillText(`${drawParameters.price}`, offsetScaleX(203), offsetScaleY(568), resizedScaleX(300));
+			ctx.fillText(`${drawParameters.price}`, offsetScaleX(203), offsetScaleY(lineHeights[1 + lineOffset] + 2), resizedScaleX(300));
 		} else {
 			ctx.font = resizedFont(5.5, 'SongTi', true);
-			ctx.fillText(`HK$`, offsetScaleX(148), offsetScaleY(568), resizedScaleX(100));
+			ctx.fillText(`HK$`, offsetScaleX(148), offsetScaleY(lineHeights[1 + lineOffset] + 2), resizedScaleX(100));
 			ctx.font = resizedFont(6.5, 'HeiTi');
-			ctx.fillText(`${drawParameters.price}`, offsetScaleX(253), offsetScaleY(568), resizedScaleX(300));
+			ctx.fillText(`${drawParameters.price}`, offsetScaleX(253), offsetScaleY(lineHeights[1 + lineOffset] + 2), resizedScaleX(300));
 		}
 
 		// 购票方式
@@ -560,7 +588,7 @@ export const drawCRWideTicket = (
 			if (purchaseMethodItem.length === 1) {
 				if (drawParameters.doPurchaseMethodHaveCircle) {
 					ctx.beginPath();
-					ctx.arc(offsetScaleX(700 + index * wordWidth * 35), offsetScaleY(550), resizedScaleY(36), 0, 2 * Math.PI);
+					ctx.arc(offsetScaleX(700 + index * wordWidth * 35), offsetScaleY(lineHeights[1 + lineOffset] - 16), resizedScaleY(36), 0, 2 * Math.PI);
 					ctx.strokeStyle = 'black';
 					ctx.lineWidth = resizedScaleX(3);
 					ctx.stroke();
@@ -568,16 +596,16 @@ export const drawCRWideTicket = (
 
 					ctx.font = `${resizedFont(5.6, 'SongTi')}`;
 					ctx.fillStyle = 'black';
-					ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(574));
+					ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(lineHeights[1 + lineOffset] + 8));
 				} else {
 					ctx.font = `${resizedFont(6, 'SongTi')}`;
 					ctx.fillStyle = 'black';
-					ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 25), offsetScaleY(581));
+					ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 25), offsetScaleY(lineHeights[1 + lineOffset]));
 				}
 			} else {
 				ctx.font = `${resizedFont(6, 'SongTi')}`;
 				ctx.fillStyle = 'black';
-				ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(581));
+				ctx.fillText(purchaseMethodItem, offsetScaleX(667 + index * wordWidth * 35), offsetScaleY(lineHeights[1 + lineOffset]));
 			}
 		});
 
@@ -587,27 +615,46 @@ export const drawCRWideTicket = (
 			const english = drawParameters.seatClass.split('/')[1];
 
 			ctx.font = resizedFont(5.8, 'Heiti');
-			ctx.fillText(`${chinese}`, offsetScaleX(1070), offsetScaleY(579), resizedScaleX(398));
+			ctx.fillText(`${chinese}`, offsetScaleX(1070), offsetScaleY(lineHeights[1 + lineOffset]), resizedScaleX(398));
 			ctx.font = resizedFont(5.5, 'SongTi');
-			ctx.fillText(`${english}`, offsetScaleX(1200), offsetScaleY(579), resizedScaleX(398));
+			ctx.fillText(`${english}`, offsetScaleX(1200), offsetScaleY(lineHeights[1 + lineOffset]), resizedScaleX(398));
 		} else {
 			ctx.font = resizedFont(5.5, 'SongTi');
-			ctx.fillText(`${drawParameters.seatClass}`, offsetScaleX(1223), offsetScaleY(579), resizedScaleX(398));
+			ctx.fillText(`${drawParameters.seatClass}`, offsetScaleX(1223), offsetScaleY(lineHeights[1 + lineOffset]), resizedScaleX(398));
 		}
 
 		// 信息1 2
-		ctx.font = resizedFont(5.5, 'SongTi');
-		drawText(ctx, `${drawParameters.info1}${drawParameters.info1.length > 0 ? '  ' : ''}${drawParameters.info2}`, offsetScaleX(140), offsetScaleY(650));
+		if (drawParameters.tongpiaoStyle === TongPiaoStyle.New) {
+			ctx.font = resizedFont(5.5, 'SongTi');
+			drawText(ctx, `${drawParameters.tongpiaoTrainClass}`, offsetScaleX(lineLeft), offsetScaleY(lineHeights[2 + lineOffset]), resizedScaleX(125));
+			ctx.font = resizedFont(4, 'SongTi');
+			ctx.fillText(`经由`, offsetScaleX(lineLeft + 132), offsetScaleY(lineHeights[2 + lineOffset] - 3), resizedScaleX(398));
+			ctx.font = resizedFont(5.5, 'SongTi');
+			drawText(ctx, `${drawParameters.tongpiaoRoute}`, offsetScaleX(lineLeft + 230), offsetScaleY(lineHeights[2 + lineOffset]), resizedScaleX(320));
+			ctx.font = resizedFont(4, 'SongTi');
+			const tongpiaoRouteWidth = drawParameters.tongpiaoRoute.substring(0, 5).length * 67;
+			ctx.fillText(`至`, offsetScaleX(lineLeft + 220 + tongpiaoRouteWidth), offsetScaleY(lineHeights[2 + lineOffset] - 3), resizedScaleX(398));
+			ctx.font = resizedFont(6.5, 'Heiti');
+			drawText(ctx, `${drawParameters.tongpiaoStation}`, offsetScaleX(lineLeft + 270 + tongpiaoRouteWidth), offsetScaleY(lineHeights[2 + lineOffset] + 6), resizedScaleX(320));
+			ctx.font = resizedFont(4, 'SongTi', true);
+			const tongpiaoStationWidth = drawParameters.tongpiaoStation.length * 75;
+			ctx.fillText(`站`, offsetScaleX(lineLeft + 270 + tongpiaoRouteWidth + tongpiaoStationWidth), offsetScaleY(lineHeights[2 + lineOffset] - 3), resizedScaleX(398));
+			ctx.font = resizedFont(5.5, 'SongTi');
+			drawText(ctx, `3日内到有效`, offsetScaleX(lineLeft + 380 + tongpiaoRouteWidth + tongpiaoStationWidth), offsetScaleY(lineHeights[2 + lineOffset]), resizedScaleX(600));
+		} else {
+			ctx.font = resizedFont(5.5, 'SongTi');
+			drawText(ctx, `${drawParameters.info1}${drawParameters.info1.length > 0 ? '  ' : ''}${drawParameters.info2}`, offsetScaleX(lineLeft), offsetScaleY(lineHeights[2 + lineOffset]));
+		}
 		// 信息3
 		ctx.font = resizedFont(5.5, 'SongTi');
-		drawText(ctx, `${drawParameters.info3}`, offsetScaleX(140), offsetScaleY(734));
+		drawText(ctx, `${drawParameters.info3}`, offsetScaleX(lineLeft), offsetScaleY(lineHeights[3 + lineOffset]));
 
 		// 身份证+姓名
 		if (drawParameters.doShowPassenger) {
 			ctx.font = resizedFont(6.5, 'HeiTi');
-			ctx.fillText(drawParameters.idNumber, offsetScaleX(133), offsetScaleY(824));
+			ctx.fillText(drawParameters.idNumber, offsetScaleX(133), offsetScaleY(lineHeights[4 + lineOffset]));
 			ctx.font = resizedFont(6, 'SongTi');
-			ctx.fillText(drawParameters.passenger, offsetScaleX(839), offsetScaleY(824));
+			ctx.fillText(drawParameters.passenger, offsetScaleX(839), offsetScaleY(lineHeights[4 + lineOffset]));
 		}
 
 		// 说明
@@ -637,9 +684,9 @@ export const drawCRWideTicket = (
 			}
 		}
 
-		// code 下方购票处
+		// code 下方购票处(固定y坐标，不使用lineHeights)
 		ctx.font = resizedFont(5.5, 'SongTi');
-		drawText(ctx, drawParameters.serialCode, offsetScaleX(133), offsetScaleY(1080), resizedScaleX(770), TextAlign.Left, DrawTextMethod.fillText, 0, 1, 0.8, 1, false);
+		drawText(ctx, drawParameters.serialCode, offsetScaleX(lineLeft - 7), offsetScaleY(1080), resizedScaleX(770), TextAlign.Left, DrawTextMethod.fillText, 0, 1, 0.8, 1, false);
 		if (drawParameters.showSoldPlaceDown) {
 			drawText(ctx, `${drawParameters.soldplace}售`, offsetScaleX(930), offsetScaleY(1080), resizedScaleX(300), TextAlign.Center);
 		} else {

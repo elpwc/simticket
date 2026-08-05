@@ -1,7 +1,7 @@
 import { CRWideTicketDrawParameters } from './type';
 
 // このファイルにあるパラメーターの順序は※絶対※に変更してはいけません
-// 新しいパラメーターを追加する場合は、必ず末尾に追加してください
+// 新しいパラメーターを追加する場合は、必ず後ろに追加してください
 
 export function encodeCRWideTicketParams(p: CRWideTicketDrawParameters): string {
 	const arr: any[] = [
@@ -59,6 +59,11 @@ export function encodeCRWideTicketParams(p: CRWideTicketDrawParameters): string 
 		p.purchasePassportCode,
 		+p.isRouteIdentifierOldStyle,
 		p.carriageFloor,
+		p.tongpiaoStyle,
+		p.tongpiaoStation,
+		p.tongpiaoStationEn,
+		p.tongpiaoTrainClass,
+		p.tongpiaoRoute,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -132,6 +137,11 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		purchasePassportCode,
 		isRouteIdentifierOldStyle,
 		carriageFloor,
+		tongpiaoStyle,
+		tongpiaoStation,
+		tongpiaoStationEn,
+		tongpiaoTrainClass,
+		tongpiaoRoute,
 	] = arr;
 	return {
 		background,
@@ -188,6 +198,11 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		purchasePassportCode,
 		isRouteIdentifierOldStyle: !!isRouteIdentifierOldStyle,
 		carriageFloor,
+		tongpiaoStyle,
+		tongpiaoStation,
+		tongpiaoStationEn,
+		tongpiaoTrainClass,
+		tongpiaoRoute,
 	} as CRWideTicketDrawParameters;
 }
 

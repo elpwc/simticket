@@ -75,10 +75,21 @@ export type CRWideTicketDrawParameters = {
 	purchasePassportCode: string;
 	isRouteIdentifierOldStyle: boolean;
 	carriageFloor: number;
+	tongpiaoStyle: TongPiaoStyle;
+	tongpiaoStation: string;
+	tongpiaoStationEn: string;
+	tongpiaoTrainClass: string;
+	tongpiaoRoute: string;
 };
 
 export interface PurchaseMethod {
 	type: string;
 	title: string;
 	desc: string;
+}
+
+export enum TongPiaoStyle {
+	None = 'none',
+	Old = 'old',
+	New = 'new',
 }

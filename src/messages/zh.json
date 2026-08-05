@@ -123,7 +123,18 @@
 						"desc2": "　但仍存在不少一方是黑体一方是魏碑体的车票，故在此对两车站分别设置字体而不是统一设置",
 						"weibeitiText": "魏碑体",
 						"useText": "使用"
-					}
+					},
+					"tongpiao": "通票",
+					"tongpiaoStyle": "通票样式",
+					"tongpiaoStyleOld": "旧式(1996~2015)",
+					"tongpiaoStyleNew": "新式(2015~2022)",
+					"tongpiaoStyleNone": "非通票",
+					"tongpiaoTrainClass": "中转列车种别",
+					"tongpiaoRoute": "经由",
+					"tongpiaoRouteReferenceDesc": "原则最大长度最後5字符",
+					"tongpiaoMid": "中转",
+					"tongpiaoMidForeign": "外文",
+					"tongpiaoRouteReference": "CR全国线路图参考"
 				},
 				"trainInfo": {
 					"pukepukuaiOrCustom": "普客普快 / 自定义",
@@ -204,9 +215,9 @@
 				"title": "车站信息",
 				"showForeignLanguageStationName": "显示外文",
 				"showTheTextOfStation": "显示「站」",
-				"arrivalForeign": "到达外文",
+				"arrivalForeign": "外文",
 				"arrival": "到达",
-				"departureForeign": "出发外文",
+				"departureForeign": "外文",
 				"departure": "出发"
 			},
 			"trainInfo": {
