@@ -186,7 +186,7 @@
 					"tripDesc": "车站、车次、日期、席别",
 					"purchase": "座位和购票信息",
 					"purchaseDesc": "价格、购票方式、乘车人等",
-					"serial": "票号和宣传文",
+					"serial": "票号和广告文",
 					"serialDesc": "票号、二维码、标识码",
 					"randomPreset": "随机预设站名"
 				}

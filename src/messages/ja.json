@@ -243,7 +243,7 @@
 					"tripDesc": "駅・列車番号・日付・座席種別",
 					"purchase": "座席と購入情報",
 					"purchaseDesc": "料金・購入方法・乗客など",
-					"serial": "券番と宣伝文",
+					"serial": "券番と広告文",
 					"serialDesc": "券番・QR・識別コード",
 					"randomPreset": "ランダム駅名プリセット"
 				}
