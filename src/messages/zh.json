@@ -117,6 +117,9 @@
 					"showBorderForNonBorder": "为软纸票和无背景显示边框",
 					"useHKWestKowloonStyle": "使用香港西九龍站發售樣式"
 				},
+				"version": {
+					"title": "车票版型"
+				},
 				"stationInfo": {
 					"useWeibeiti": {
 						"desc1": "　曾经由TMIS（Transportation Management Information System）发行的车票中，当里程在400km以内时，两方车站名使用魏碑体",

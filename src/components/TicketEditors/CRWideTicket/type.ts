@@ -80,6 +80,7 @@ export type CRWideTicketDrawParameters = {
 	tongpiaoStationEn: string;
 	tongpiaoTrainClass: string;
 	tongpiaoRoute: string;
+	version: CRWideTicketVersion;
 };
 
 export interface PurchaseMethod {
@@ -92,4 +93,14 @@ export enum TongPiaoStyle {
 	None = 'none',
 	Old = 'old',
 	New = 'new',
+}
+
+export enum CRWideTicketVersion {
+	V1996 = '1996',
+	V2000 = '2000',
+	V2006 = '2006',
+	V2009 = '2009',
+	V2011 = '2011',
+	V2015 = '2015',
+	V2022 = '2022',
 }

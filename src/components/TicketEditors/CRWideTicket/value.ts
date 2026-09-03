@@ -1,5 +1,5 @@
 import { TextAlign } from '@/utils/utils';
-import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType, TongPiaoStyle } from './type';
+import { CRTicketBackGround, CRWideTicketDrawParameters, CRWideTicketVersion, PurchaseMethod, RightUpContentType, TongPiaoStyle } from './type';
 import { getRandomCRTicketNo } from './utils';
 
 export const CR_TRAIN_TYPES = [
@@ -168,6 +168,7 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	tongpiaoStationEn: 'Qingdao',
 	tongpiaoTrainClass: '普快',
 	tongpiaoRoute: '',
+	version: CRWideTicketVersion.V2022,
 };
 export const purchaseMethodList: PurchaseMethod[] = [
 	{ type: PurchaseMethodType.TicketType, title: '孩', desc: 'value.purchaseMethod.list.hai' },
