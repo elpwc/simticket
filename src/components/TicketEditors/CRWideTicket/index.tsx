@@ -1355,55 +1355,6 @@ export default function CRWideTicket() {
 									<div className="flex gap-3 flex-wrap">
 										<PrettyInputRadioGroup
 											list={[
-												{
-													value: `${drawParameters.info1TrainType}经由${drawParameters.info1from}至${drawParameters.info1to}`,
-													title: (
-														<div>
-															<span className="bg-black text-white p-[2px] mr-1">通票</span>
-															<input
-																type="text"
-																value={drawParameters.info1TrainType}
-																placeholder={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.inputBox1')}
-																onChange={(e) => {
-																	const val = e.target.value;
-																	setDrawParameters((prev) => ({
-																		...prev,
-																		info1TrainType: val,
-																	}));
-																}}
-																className="border w-16"
-															/>
-															经由
-															<input
-																type="text"
-																value={drawParameters.info1from}
-																placeholder={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.inputBox2')}
-																onChange={(e) => {
-																	const val = e.target.value;
-																	setDrawParameters((prev) => ({
-																		...prev,
-																		info1from: val,
-																	}));
-																}}
-																className="border w-24"
-															/>
-															至
-															<input
-																type="text"
-																value={drawParameters.info1to}
-																placeholder={t('editor.cr.jisuanjikepiao2010.purchaseInfo.info1.inputBox3')}
-																onChange={(e) => {
-																	const val = e.target.value;
-																	setDrawParameters((prev) => ({
-																		...prev,
-																		info1to: val,
-																	}));
-																}}
-																className="border w-16"
-															/>
-														</div>
-													),
-												},
 												...info1List.map((info1Title) => {
 													return {
 														value: info1Title,
