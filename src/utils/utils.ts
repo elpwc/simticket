@@ -74,7 +74,7 @@ export const drawText = (
 	/** 文字垂直压缩（每个字符独立缩放） */
 	charVerticalScale: number = 1,
 	/** 水平压缩是否只作用于全角字符 */
-	doesCharHorizonalScaleOnlyWorkOnFullWidthChar: boolean = true
+	doesCharHorizonalScaleOnlyWorkOnFullWidthChar: boolean = true,
 ) => {
 	if (!text) return;
 
@@ -267,7 +267,7 @@ export const drawTextNew = (
 	/** 行间距 相对于字体大小的倍数*/
 	lineHeight: number = 1.2,
 	scale: number = 1,
-	widthPX: number = 2
+	widthPX: number = 2,
 ) => {
 	if (!text) return;
 
@@ -426,6 +426,41 @@ export const drawTextNew = (
 	ctx.restore();
 };
 
+/** 数字用 HeiTi、其余用 SongTi，同一行连续绘制（右对齐，超宽时整体压缩） */
+export const drawMixedDigitFontText = (
+	ctx: CanvasRenderingContext2D,
+	resizedFont: (size: number, fontName: string, isBold?: boolean) => string,
+	text: string,
+	x: number,
+	y: number,
+	maxWidth: number,
+	numFontSize: number = 6.5,
+	otherFontSize: number = 5.5,
+) => {
+	if (!text) return;
+	const digitFont = resizedFont(numFontSize, 'HeiTi');
+	const otherFont = resizedFont(otherFontSize, 'SongTi');
+	const parts = text.match(/\d+|\D+/g) ?? [];
+	const widths = parts.map((seg) => {
+		ctx.font = /^\d+$/.test(seg) ? digitFont : otherFont;
+		return ctx.measureText(seg).width;
+	});
+	const totalWidth = widths.reduce((sum, w) => sum + w, 0);
+	const scaleX = totalWidth > maxWidth ? maxWidth / totalWidth : 1;
+
+	ctx.save();
+	ctx.translate(x, y);
+	ctx.scale(scaleX, 1);
+	let cursorX = maxWidth / scaleX - totalWidth;
+	for (let i = 0; i < parts.length; i++) {
+		const seg = parts[i];
+		ctx.font = /^\d+$/.test(seg) ? digitFont : otherFont;
+		ctx.fillText(seg, cursorX, 0);
+		cursorX += widths[i];
+	}
+	ctx.restore();
+};
+
 /**
  * 簡単にフォントリストをロード
  * @param fontList
@@ -503,7 +538,7 @@ export const get_CanvasOrImageSize_Of_Ticket_By_TicketType = (
 	} = {
 		crTicketType: CRTicketBackGround.SoftRed,
 		jrTicketIs120mm: false,
-	}
+	},
 ): [number, number] => {
 	switch (companyId) {
 		case 0: //CR

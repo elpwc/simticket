@@ -103,4 +103,5 @@ export enum CRWideTicketVersion {
 	V2011 = '2011',
 	V2015 = '2015',
 	V2022 = '2022',
+	Default = 'default',
 }
