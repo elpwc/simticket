@@ -198,6 +198,8 @@
 				},
 				"trainInfo": {
 					"pukepukuaiOrCustom": "普客普快 / カスタム",
+					"oldTrainTypes": "旧車番",
+					"newTrainTypes2026": "新車番",
 					"routeIdentifier": "車番(车次)",
 					"seat3": "开放式寝台位置",
 					"coolerType": "空調タイプ"

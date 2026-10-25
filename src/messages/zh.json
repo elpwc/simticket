@@ -141,6 +141,8 @@
 				},
 				"trainInfo": {
 					"pukepukuaiOrCustom": "普客普快 / 自定义",
+					"oldTrainTypes": "旧车次",
+					"newTrainTypes2026": "新车次",
 					"routeIdentifier": "车次",
 					"seat3": "卧铺铺位",
 					"coolerType": "空调类型"

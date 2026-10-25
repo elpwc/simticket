@@ -21,13 +21,28 @@ export const CR_TRAIN_TYPES = [
 	{ value: 'V', desc: '普代用', name: '普快' },
 ];
 
+export const CR_TRAIN_TYPES_2026 = [
+	{ value: 'X', desc: '高速350以上', name: '新' },
+	{ value: 'G', desc: '高速350', name: '动车组' },
+	{ value: 'T', desc: '高速300', name: '高铁特快' },
+	{ value: 'K', desc: '高速200', name: '高铁快速' },
+	{ value: 'D', desc: '动集', name: '动车组' },
+	{ value: 'C', desc: '城际', name: '城际' },
+	{ value: 'S', desc: '市郊', name: '市郊' },
+	{ value: 'Z', desc: '快速160', name: '直达' },
+	{ value: 'N', desc: '快速140', name: '快速' },
+	{ value: 'V', desc: '普速120以下', name: '普通' },
+	{ value: 'Y', desc: '旅游', name: '旅游' },
+	{ value: 'L', desc: '临时', name: '临时' },
+];
+
 export const CR_TONGPIAO_TRAIN_TYPES = [
 	{ value: '普客', title: '普客到底' },
 	{ value: '普快', title: '普快到底' },
 	{ value: '特快', title: '特快到底(K/T/Z)' },
 ];
 
-export const CR_TRAIN_TYPE_ARRAY = CR_TRAIN_TYPES.map((type) => type.value);
+export const CR_TRAIN_TYPE_ARRAY = [...new Set([...CR_TRAIN_TYPES, ...CR_TRAIN_TYPES_2026].map((type) => type.value))];
 
 export const PAPER_TICKET_SIZE: [number, number] = [1698, 1162];
 export const MAG_TICKET_SIZE: [number, number] = [1689, 1042];

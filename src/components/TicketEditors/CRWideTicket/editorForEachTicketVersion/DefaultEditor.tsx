@@ -13,12 +13,12 @@ import { DescriptionButton } from '@/components/InfrastructureCompo/DescriptionB
 import ElementAddedDate from '@/components/TicketEditorCompo/ElementAddedDate';
 import { CRWideTicketBgSelector } from '../CRWideTicketBgSelector';
 import { CRWideTicketTongpiaoTypeSelector } from '../CRWideTicketTongpiaoTypeSelector';
+import { CRWideTicketTrainTypeSelector } from '../CRWideTicketTrainTypeSelector';
 import { HuawenXinwei } from '../draw';
 import { getRandomCRTicketNo } from '../utils';
 import {
 	CR_TONGPIAO_TRAIN_TYPES,
 	CR_TRAIN_TYPE_ARRAY,
-	CR_TRAIN_TYPES,
 	CRPresetStations,
 	info1List,
 	info2List,
@@ -609,18 +609,7 @@ export const DefaultEditor = ({ drawParameters, setDrawParameters, offsetContent
 							</label>
 						</div>
 					</TicketFormLabel>
-					<PrettyInputRadioGroup
-						list={CR_TRAIN_TYPES.map((type) => {
-							return {
-								value: type.value,
-								title: (
-									<span>
-										{type.value}
-										<span className="text-[10px]">{type.desc}</span>
-									</span>
-								),
-							};
-						})}
+					<CRWideTicketTrainTypeSelector
 						value={
 							CR_TRAIN_TYPE_ARRAY.includes(
 								drawParameters.routeIdentifier.substring(
@@ -657,7 +646,6 @@ export const DefaultEditor = ({ drawParameters, setDrawParameters, offsetContent
 
 							setDrawParameters((prev) => ({ ...prev, seat3: value }));
 						}}
-						placeholder={t('editor.cr.jisuanjikepiao2010.trainInfo.pukepukuaiOrCustom')}
 					/>
 					<TicketFormLabel label={t('editor.common.trainInfo.departureDate')}>
 						<input

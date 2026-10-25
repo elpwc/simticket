@@ -31,6 +31,7 @@ import {
 	sleepingCarSeatType,
 } from '../value';
 import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType, TongPiaoStyle } from '../type';
+import { CRWideTicketTrainTypeSelector } from '../CRWideTicketTrainTypeSelector';
 
 type EditorProps = {
 	drawParameters: CRWideTicketDrawParameters;
@@ -508,18 +509,7 @@ export const Ver1996Editor = ({ drawParameters, setDrawParameters, offsetContent
 							</label>
 						</div>
 					</TicketFormLabel>
-					<PrettyInputRadioGroup
-						list={CR_TRAIN_TYPES.map((type) => {
-							return {
-								value: type.value,
-								title: (
-									<span>
-										{type.value}
-										<span className="text-[10px]">{type.desc}</span>
-									</span>
-								),
-							};
-						})}
+					<CRWideTicketTrainTypeSelector
 						value={
 							CR_TRAIN_TYPE_ARRAY.includes(
 								drawParameters.routeIdentifier.substring(
@@ -556,7 +546,6 @@ export const Ver1996Editor = ({ drawParameters, setDrawParameters, offsetContent
 
 							setDrawParameters((prev) => ({ ...prev, seat3: value }));
 						}}
-						placeholder={t('editor.cr.jisuanjikepiao2010.trainInfo.pukepukuaiOrCustom')}
 					/>
 					<TicketFormLabel label={t('editor.common.trainInfo.departureDate')}>
 						<input
