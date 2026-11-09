@@ -65,6 +65,8 @@ export function encodeCRWideTicketParams(p: CRWideTicketDrawParameters): string 
 		p.tongpiaoTrainClass,
 		p.tongpiaoRoute,
 		p.version,
+		p.priceType,
+		p.ticketType,
 	];
 
 	// JSON → UTF-8 → Base64 (URL safe)
@@ -144,6 +146,8 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		tongpiaoTrainClass,
 		tongpiaoRoute,
 		version,
+		priceType,
+		ticketType,
 	] = arr;
 	return {
 		background,
@@ -206,6 +210,8 @@ export function decodeCRWideTicketParams(str: string): CRWideTicketDrawParameter
 		tongpiaoTrainClass,
 		tongpiaoRoute,
 		version,
+		priceType,
+		ticketType,
 	} as CRWideTicketDrawParameters;
 }
 

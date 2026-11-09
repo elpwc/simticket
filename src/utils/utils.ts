@@ -13,6 +13,7 @@ import {
 	JRWideTicketDrawParametersInitialValues,
 } from '@/components/TicketEditors/JRWideTicket/value';
 import QRCode from 'qrcode';
+import JsBarcode from 'jsbarcode';
 import { API_PREFIX } from './api';
 
 export const saveCanvasToLocal = (canvas: HTMLCanvasElement | null, filename: string, onSave?: () => void) => {
@@ -34,6 +35,8 @@ export const saveCanvasToLocal = (canvas: HTMLCanvasElement | null, filename: st
 };
 
 export const drawQRCode = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, text: string) => {
+	if (!text) return;
+
 	const tmpCanvas = document.createElement('canvas');
 	QRCode.toCanvas(tmpCanvas, text, {
 		color: {
@@ -42,6 +45,24 @@ export const drawQRCode = (ctx: CanvasRenderingContext2D, x: number, y: number, 
 		},
 	});
 	ctx.drawImage(tmpCanvas, x, y, size, size);
+};
+
+export const drawBarcode = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, text: string) => {
+	if (!text) return;
+
+	const tmpCanvas = document.createElement('canvas');
+	try {
+		JsBarcode(tmpCanvas, text, {
+			format: 'CODE128',
+			displayValue: false,
+			margin: 0,
+			background: '#00000000',
+			lineColor: '#000000',
+			width: 2,
+			height: Math.max(1, Math.round(height)),
+		});
+		ctx.drawImage(tmpCanvas, x, y, width, height);
+	} catch {}
 };
 
 export enum TextAlign {

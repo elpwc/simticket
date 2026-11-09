@@ -1,5 +1,5 @@
 import { TextAlign } from '@/utils/utils';
-import { CRTicketBackGround, CRWideTicketDrawParameters, CRWideTicketVersion, PurchaseMethod, RightUpContentType, TongPiaoStyle } from './type';
+import { CROldPriceType, CRTicketBackGround, CRTicketType, CRWideTicketDrawParameters, CRWideTicketVersion, PurchaseMethod, RightUpContentType, TongPiaoStyle } from './type';
 import { getRandomCRTicketNo } from './utils';
 
 export const CR_TRAIN_TYPES = [
@@ -43,6 +43,62 @@ export const CR_TONGPIAO_TRAIN_TYPES = [
 ];
 
 export const CR_TRAIN_TYPE_ARRAY = [...new Set([...CR_TRAIN_TYPES, ...CR_TRAIN_TYPES_2026].map((type) => type.value))];
+
+/**
+ * 根据车次号判断列车等级（普客 / 普快 / 快速 / 特快 / 直达）。
+ * @param routeIdentifier 车次，如 114、K13、6626、L23、Z1、0G123
+ * @param is2026 是否按 2026 新版车次规则（CR_TRAIN_TYPES_2026）解析字母含义
+ */
+export const getTrainTypeFromRouteIdentifier = (routeIdentifier: string, is2026: boolean = false): string => {
+	const raw = (routeIdentifier || '').trim().toUpperCase();
+	if (!raw) return '普快';
+
+	// 回送车次前缀 0
+	const id = raw.replace(/^0+/, '') || raw;
+
+	// YL、或字母表中不存在的字头 → 普快
+	if (id.startsWith('YL')) return '普快';
+
+	const parsed = id.match(/^([A-Z]*)(\d+)$/);
+	if (!parsed) return '普快';
+
+	const letterPrefix = parsed[1];
+	const num = parseInt(parsed[2], 10);
+
+	// 纯数字：1001–5998 普快，6001–7598 普客（其余含通勤等默认普快）
+	if (!letterPrefix) {
+		if (num >= 6001 && num <= 7598) return '普客';
+		return '普快';
+	}
+
+	const letter = letterPrefix[0];
+	const found = (is2026 ? CR_TRAIN_TYPES_2026 : CR_TRAIN_TYPES).find((type) => type.value === letter);
+	if (!found) return '普快';
+
+	// 2026 版 V：V1–5998 快速，V6001–6998 普快，V7001–7998 普客
+	if (is2026 && letter === 'V') {
+		if (num >= 7001 && num <= 7998) return '普客';
+		if (num >= 6001 && num <= 6998) return '普快';
+		return '快速';
+	}
+
+	switch (found.name) {
+		case '直达':
+			return '直达';
+		case '特快':
+		case '高铁特快':
+			return '特快';
+		case '快速':
+		case '高铁快速':
+			return '快速';
+		case '普快':
+			return '普快';
+		case '普客':
+			return '普客';
+		default:
+			return '普快';
+	}
+};
 
 export const PAPER_TICKET_SIZE: [number, number] = [1698, 1162];
 export const MAG_TICKET_SIZE: [number, number] = [1689, 1042];
@@ -184,6 +240,8 @@ export const CRWideTicketDrawParametersInitialValues: CRWideTicketDrawParameters
 	tongpiaoTrainClass: '普快',
 	tongpiaoRoute: '',
 	version: CRWideTicketVersion.V2022,
+	priceType: CROldPriceType.FullPrice,
+	ticketType: CRTicketType.Normal,
 };
 export const purchaseMethodList: PurchaseMethod[] = [
 	{ type: PurchaseMethodType.TicketType, title: '孩', desc: 'value.purchaseMethod.list.hai' },

@@ -81,12 +81,20 @@ export type CRWideTicketDrawParameters = {
 	tongpiaoTrainClass: string;
 	tongpiaoRoute: string;
 	version: CRWideTicketVersion;
+	priceType: CROldPriceType;
+	ticketType: CRTicketType;
 };
 
 export interface PurchaseMethod {
 	type: string;
 	title: string;
 	desc: string;
+}
+
+export enum CRTicketType {
+	Normal = 'normal',
+	Tongpiao = 'tongpiao',
+	Transition = 'transition',
 }
 
 export enum TongPiaoStyle {
@@ -97,6 +105,7 @@ export enum TongPiaoStyle {
 
 export enum CRWideTicketVersion {
 	V1996 = '1996',
+	V1997 = '1997',
 	V2000 = '2000',
 	V2006 = '2006',
 	V2009 = '2009',
@@ -104,4 +113,11 @@ export enum CRWideTicketVersion {
 	V2015 = '2015',
 	V2022 = '2022',
 	Default = 'default',
+}
+
+export enum CROldPriceType {
+	FullPrice = 'fullprice',
+	HalfPrice = 'halfprice',
+	/* 补费 */
+	SupplementPrice = 'supplementprice',
 }

@@ -643,8 +643,6 @@ export const DefaultEditor = ({ drawParameters, setDrawParameters, offsetContent
 									routeIdentifier: value + prev.routeIdentifier,
 								}));
 							}
-
-							setDrawParameters((prev) => ({ ...prev, seat3: value }));
 						}}
 					/>
 					<TicketFormLabel label={t('editor.common.trainInfo.departureDate')}>

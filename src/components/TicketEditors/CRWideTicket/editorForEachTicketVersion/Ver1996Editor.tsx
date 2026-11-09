@@ -30,7 +30,7 @@ import {
 	seatType,
 	sleepingCarSeatType,
 } from '../value';
-import { CRTicketBackGround, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType, TongPiaoStyle } from '../type';
+import { CROldPriceType, CRTicketBackGround, CRTicketType, CRWideTicketDrawParameters, PurchaseMethod, RightUpContentType, TongPiaoStyle } from '../type';
 import { CRWideTicketTrainTypeSelector } from '../CRWideTicketTrainTypeSelector';
 
 type EditorProps = {
@@ -178,6 +178,7 @@ export const Ver1996Editor = ({ drawParameters, setDrawParameters, offsetContent
 							}
 						/>
 					</TicketFormLabel>
+
 					<div className="ticket-form-label">
 						&nbsp;
 						<div className="flex flex-col">
@@ -197,6 +198,32 @@ export const Ver1996Editor = ({ drawParameters, setDrawParameters, offsetContent
 							</label>
 						</div>
 					</div>
+
+					<TicketFormLabel label={'车票类型'}>
+						<PrettyInputRadioGroup
+							value={drawParameters.ticketType}
+							onChange={(value) => {
+								if (value === CRTicketType.Tongpiao) {
+									setDrawParameters((prev) => ({
+										...prev,
+										tongpiaoStyle: TongPiaoStyle.Old,
+										ticketType: value,
+									}));
+								} else if (value !== CRTicketType.Tongpiao) {
+									setDrawParameters((prev) => ({
+										...prev,
+										tongpiaoStyle: TongPiaoStyle.None,
+										ticketType: value,
+									}));
+								}
+							}}
+							list={[
+								{ value: CRTicketType.Normal, title: '普通车票' },
+								{ value: CRTicketType.Tongpiao, title: '通票' },
+								{ value: CRTicketType.Transition, title: '中转签证' },
+							]}
+						/>
+					</TicketFormLabel>
 				</TitleContainer>
 				<TitleContainer title={<span>{t('editor.common.stationInfo.title')}</span>} className="flex flex-wrap gap-2">
 					<div className="flex w-full flex-col gap-2 md:flex-row md:flex-wrap md:items-center justify-center">
@@ -543,8 +570,6 @@ export const Ver1996Editor = ({ drawParameters, setDrawParameters, offsetContent
 									routeIdentifier: value + prev.routeIdentifier,
 								}));
 							}
-
-							setDrawParameters((prev) => ({ ...prev, seat3: value }));
 						}}
 					/>
 					<TicketFormLabel label={t('editor.common.trainInfo.departureDate')}>
@@ -781,6 +806,21 @@ export const Ver1996Editor = ({ drawParameters, setDrawParameters, offsetContent
 								}))
 							}
 						/>
+						<PrettyInputRadioGroup
+							list={[
+								{ value: CROldPriceType.FullPrice, title: '全价' },
+								{ value: CROldPriceType.HalfPrice, title: '半价' },
+								{ value: CROldPriceType.SupplementPrice, title: '补价' },
+							]}
+							value={drawParameters.priceType}
+							onChange={(value: CROldPriceType) => {
+								setDrawParameters((prev) => ({
+									...prev,
+									priceType: value,
+								}));
+							}}
+							doNotShowInputBox
+						/>
 					</TicketFormLabel>
 					<TicketFormLabel label={t('editor.common.purchaseInfo.soldPlace')}>
 						<input
@@ -793,59 +833,6 @@ export const Ver1996Editor = ({ drawParameters, setDrawParameters, offsetContent
 								}))
 							}
 						/>
-					</TicketFormLabel>
-					<TicketFormLabel label={t('editor.common.purchaseInfo.turnstile')}>
-						<input
-							className=""
-							value={drawParameters.turnstile}
-							onChange={(e) =>
-								setDrawParameters((prev) => ({
-									...prev,
-									turnstile: e.target.value,
-								}))
-							}
-						/>
-					</TicketFormLabel>
-					<TicketFormLabel label={t('editor.cr.jisuanjikepiao2010.purchaseInfo.rightUpContentText')}>
-						<div className="flex items-center flex-wrap">
-							<PrettyInputRadioGroup
-								list={[
-									{
-										value: RightUpContentType.None,
-										title: t('editor.cr.jisuanjikepiao2010.purchaseInfo.rightUpContentTextNotShow'),
-									},
-									{ value: RightUpContentType.SoldPlace, title: '售票站' },
-									{ value: RightUpContentType.Turnstile, title: '检票口' },
-									{
-										value: RightUpContentType.International,
-										title: '国际联运',
-									},
-									{ value: RightUpContentType.Chebu, title: '列车补票' },
-									{ value: RightUpContentType.Zhanbu, title: '到站补票' },
-								]}
-								value={drawParameters.rightUpContentType}
-								onChange={(value: string) => {
-									setDrawParameters((prev) => ({
-										...prev,
-										rightUpContentType: value as RightUpContentType,
-									}));
-								}}
-								placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-							/>
-
-							<label>
-								<Toggle
-									value={drawParameters.showSoldPlaceDown}
-									onChange={(value) => {
-										setDrawParameters((prev) => ({
-											...prev,
-											showSoldPlaceDown: value,
-										}));
-									}}
-								/>
-								<span>{t('editor.cr.jisuanjikepiao2010.purchaseInfo.showSoldPlaceDown')}</span>
-							</label>
-						</div>
 					</TicketFormLabel>
 					<TicketFormLabel
 						label={
@@ -1175,80 +1162,6 @@ export const Ver1996Editor = ({ drawParameters, setDrawParameters, offsetContent
 
 					<TicketFormLabel
 						label={
-							<div>
-								<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.ticketPurchaseInfo')}</span>
-								<p className="text-[12px] text-[#696969] dark:text-neutral-100">※{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertTypeDesc')}</p>
-							</div>
-						}
-					>
-						<div>
-							<div className="flex flex-wrap gap-2">
-								<label className="flex flex-col">
-									{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
-									<input
-										className="w-[120px]"
-										value={drawParameters.purchaseCertType}
-										onChange={(e) =>
-											setDrawParameters((prev) => ({
-												...prev,
-												purchaseCertType: e.target.value,
-											}))
-										}
-									/>
-								</label>
-								<label className="flex flex-col">
-									{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
-									<input
-										className="w-[80px]"
-										value={drawParameters.purchasePassportCode}
-										onChange={(e) =>
-											setDrawParameters((prev) => ({
-												...prev,
-												purchasePassportCode: e.target.value,
-											}))
-										}
-									/>
-								</label>
-							</div>
-
-							<div>
-								<label className="">
-									{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchaseCertType')}
-									<PrettyInputRadioGroup
-										list={purchaseCertTypeList.map((item) => ({
-											value: item.value,
-											title: item.title + item.value,
-										}))}
-										value={drawParameters.purchaseCertType}
-										onChange={(value: string) => {
-											setDrawParameters((prev) => ({
-												...prev,
-												purchaseCertType: value,
-											}));
-										}}
-										placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-									/>
-								</label>
-								<label className="">
-									{t('editor.cr.jisuanjikepiao2010.purchaseInfo.purchasePassportCode')}
-									<PrettyInputRadioGroup
-										list={purchasePassportNationList}
-										value={drawParameters.purchasePassportCode}
-										onChange={(value: string) => {
-											setDrawParameters((prev) => ({
-												...prev,
-												purchasePassportCode: value,
-											}));
-										}}
-										placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-									/>
-								</label>
-							</div>
-						</div>
-					</TicketFormLabel>
-
-					<TicketFormLabel
-						label={
 							<>
 								<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.qrCodeText')}</span>
 								<Toggle
@@ -1273,105 +1186,6 @@ export const Ver1996Editor = ({ drawParameters, setDrawParameters, offsetContent
 								}))
 							}
 						/>
-					</TicketFormLabel>
-					<TicketFormLabel
-						label={
-							<>
-								<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.message')}</span>
-								<Toggle
-									value={drawParameters.doShowMessage}
-									onChange={(value) => {
-										setDrawParameters((prev) => ({
-											...prev,
-											doShowMessage: value,
-										}));
-									}}
-								/>
-							</>
-						}
-					>
-						<div>
-							<textarea
-								className="w-full h-[100px]"
-								value={drawParameters.message}
-								onChange={(e) =>
-									setDrawParameters((prev) => ({
-										...prev,
-										message: e.target.value,
-									}))
-								}
-							/>
-
-							<label>
-								<span>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.showMessageBorder')}</span>
-								<Toggle
-									value={drawParameters.showMessageBorder}
-									onChange={(value) => {
-										setDrawParameters((prev) => ({
-											...prev,
-											showMessageBorder: value,
-										}));
-									}}
-								/>
-							</label>
-							<PrettyInputRadioGroup
-								list={[
-									{
-										value: TextAlign.Left.toString(),
-										title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.left'),
-									},
-									{
-										value: TextAlign.Center.toString(),
-										title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.center'),
-									},
-									{
-										value: TextAlign.Right.toString(),
-										title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.right'),
-									},
-									{
-										value: TextAlign.JustifyBetween.toString(),
-										title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyBetween'),
-									},
-									{
-										value: TextAlign.JustifyEvenly.toString(),
-										title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyEvenly'),
-									},
-									{
-										value: TextAlign.JustifyAround.toString(),
-										title: t('editor.cr.jisuanjikepiao2010.ticketNoInfo.align.justifyAround'),
-									},
-								]}
-								value={drawParameters.messageAlign.toString()}
-								onChange={(value: string) => {
-									setDrawParameters((prev) => ({
-										...prev,
-										messageAlign: Number(value) as TextAlign,
-									}));
-								}}
-								placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-								doNotShowInputBox
-							/>
-							<p>{t('editor.cr.jisuanjikepiao2010.ticketNoInfo.presetText')}</p>
-							<PrettyInputRadioGroup
-								list={messageList.map((messageListItem) => {
-									return {
-										value: messageListItem,
-										title: messageListItem.text,
-									};
-								})}
-								value={messageList.find((item) => item.text === drawParameters.message)}
-								onChange={(value: (typeof messageList)[0]) => {
-									setDrawParameters((prev) => ({
-										...prev,
-										message: value.text,
-										messageAlign: value.align,
-										showMessageBorder: value.showBorder,
-									}));
-								}}
-								placeholder={t('SaveImageModal.customizeSizeTab.buttonTitle')}
-								doNotShowInputBox
-							/>
-						</div>
 					</TicketFormLabel>
 				</TitleContainer>
 			</EditorFormShell.Section>

@@ -1,6 +1,7 @@
-import { drawMixedDigitFontText, drawQRCode, drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
-import { CRTicketBackGround, CRWideTicketDrawParameters } from '../type';
-import { MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE } from '../value';
+import { drawBarcode, drawMixedDigitFontText, drawQRCode, drawText, DrawTextMethod, TextAlign } from '@/utils/utils';
+import { CROldPriceType, CRTicketBackGround, CRWideTicketDrawParameters } from '../type';
+import { MAG_TICKET_CANVAS_SIZE, MAG_TICKET_SIZE, PAPER_TICKET_CANVAS_SIZE, PAPER_TICKET_SIZE, sleepingCarSeatType } from '../value';
+import { getTrainTypeFromRouteIdentifier } from '../value';
 
 export enum BackgroundImageType {
 	Soft,
@@ -181,6 +182,22 @@ export const drawCRStationName = (d: CRDrawerTools, x: number, y: number, statio
 	);
 };
 
+/** 中文站名。左基准 (167, 335/365)，右基准 (1074, 335/365) */
+export const draw1996CRStationName = (d: CRDrawerTools, x: number, y: number, stationText: string, doUseHuaWenXinWei: boolean, isLeft: boolean) => {
+	const { ctx, resizedFont, offsetScaleX, offsetScaleY, resizedScaleX, drawParameters } = d;
+	ctx.fillStyle = 'black';
+	ctx.font = `${resizedFont(8.5, 'HeiTi', true)}`;
+	drawText(
+		ctx,
+		stationText.length === 2 ? stationText.substring(0, 1) + '' + stationText.substring(1, 2) : stationText,
+		offsetScaleX(x),
+		offsetScaleY(y),
+		resizedScaleX(400),
+		isLeft ? TextAlign.Right : TextAlign.Left,
+		DrawTextMethod.fillText,
+	);
+};
+
 /** 英文站名。左基准 (183, 397)，右基准 (1072, 397) */
 export const drawCRStationNameEn = (d: CRDrawerTools, x: number, y: number, text: string) => {
 	const { ctx, resizedFont, offsetScaleX, offsetScaleY, resizedScaleX } = d;
@@ -206,6 +223,28 @@ export const drawCROldArrow = (d: CRDrawerTools, x: number, y: number) => {
 	ctx.lineTo(offsetScaleX(x + (825 - 716)), offsetScaleY(y + (325 - 350)));
 	ctx.lineTo(offsetScaleX(x + (828 - 716)), offsetScaleY(y + (322 - 350)));
 	ctx.lineTo(offsetScaleX(x + (930 - 716)), offsetScaleY(y + (339 - 350)));
+	ctx.fill();
+	ctx.closePath();
+};
+
+/** 旧箭头。基准为箭杆起点 (716, 350) */
+export const drawCROldArrow1996 = (d: CRDrawerTools, x: number, y: number) => {
+	const { ctx, resizedScaleY, offsetScaleX, offsetScaleY } = d;
+	ctx.beginPath();
+	ctx.strokeStyle = 'black';
+	ctx.lineWidth = resizedScaleY(9);
+	ctx.moveTo(offsetScaleX(x), offsetScaleY(y));
+	ctx.lineTo(offsetScaleX(x + 180), offsetScaleY(y));
+	ctx.stroke();
+	ctx.closePath();
+
+	ctx.beginPath();
+	ctx.lineWidth = resizedScaleY(1);
+	ctx.moveTo(offsetScaleX(x + 239), offsetScaleY(y + (355 - 350)));
+	ctx.lineTo(offsetScaleX(x + (880 - 716)), offsetScaleY(y + (355 - 350)));
+	ctx.lineTo(offsetScaleX(x + (825 - 716)), offsetScaleY(y + (325 - 350)));
+	ctx.lineTo(offsetScaleX(x + (828 - 716)), offsetScaleY(y + (322 - 350)));
+	ctx.lineTo(offsetScaleX(x + (900 - 716)), offsetScaleY(y + (339 - 350)));
 	ctx.fill();
 	ctx.closePath();
 };
@@ -240,7 +279,7 @@ export const drawCRCi = (d: CRDrawerTools, x: number, y: number) => {
 };
 
 /** 车次（带字母 / 不带字母）。基准为 routeIdentifierX/Y */
-export const drawCRRouteIdentifier = (d: CRDrawerTools, x: number, y: number) => {
+export const drawCRRouteIdentifier = (d: CRDrawerTools, x: number, y: number, is1996: boolean = false) => {
 	const { ctx, resizedFont, offsetScaleX, offsetScaleY, resizedScaleX, drawParameters } = d;
 	const routeIdentifierFirstChar = drawParameters.routeIdentifier.substring(0, 1);
 	const routeIdentifierNumbersChar = drawParameters.routeIdentifier.substring(1, drawParameters.routeIdentifier.length);
@@ -253,9 +292,17 @@ export const drawCRRouteIdentifier = (d: CRDrawerTools, x: number, y: number) =>
 		if (alignCenterOffset < 0) {
 			alignCenterOffset = 0;
 		}
-		ctx.font = `${resizedFont(7.1, 'TrainCodeFont')}`;
+		if (is1996) {
+			ctx.font = `${resizedFont(7.1, 'HeiTi', true)}`;
+		} else {
+			ctx.font = `${resizedFont(7.1, 'TrainCodeFont')}`;
+		}
 		ctx.fillText(routeIdentifierFirstChar, offsetScaleX(x + alignCenterOffset), offsetScaleY(y), resizedScaleX(64));
-		ctx.font = `${resizedFont(8, 'TrainCodeFont')}`;
+		if (is1996) {
+			ctx.font = `${resizedFont(8, 'HeiTi', true)}`;
+		} else {
+			ctx.font = `${resizedFont(8, 'TrainCodeFont')}`;
+		}
 		drawText(
 			ctx,
 			routeIdentifierNumbersChar,
@@ -268,7 +315,11 @@ export const drawCRRouteIdentifier = (d: CRDrawerTools, x: number, y: number) =>
 		);
 	} else {
 		// 普客普快（不带字母）
-		ctx.font = `${resizedFont(8, 'TrainCodeFont')}`;
+		if (is1996) {
+			ctx.font = `${resizedFont(8, 'HeiTi', true)}`;
+		} else {
+			ctx.font = `${resizedFont(8, 'TrainCodeFont')}`;
+		}
 		drawText(ctx, drawParameters.routeIdentifier, offsetScaleX(x), offsetScaleY(y + 8), resizedScaleX(284), TextAlign.Center, DrawTextMethod.fillText, 1.5);
 	}
 };
@@ -287,8 +338,9 @@ export const drawCROldTongpiaoTransfer = (d: CRDrawerTools, x: number, y: number
 };
 
 /** 日期时间。基准为年份数字 (148, lineHeights[0 + lineOffset]) */
-export const drawCRDateTime = (d: CRDrawerTools, x: number, y: number, ymdk_zh_y: number, ymdk_en_y: number, ymdk_y: number) => {
+export const drawCRDateTime = (d: CRDrawerTools, x: number, y: number, ymdk_zh_y: number, ymdk_en_y: number, ymdk_y: number, isHanziSmallerFont: boolean = true) => {
 	const { ctx, resizedFont, offsetScaleX, offsetScaleY, drawParameters } = d;
+	const hanziFontSize = isHanziSmallerFont ? 4 : 5.5;
 	if (drawParameters.isHKWestKowloonStyle) {
 		ctx.font = resizedFont(4, 'SongTi', true);
 		ctx.fillText(`年`, offsetScaleX(x + (310 - 148)), offsetScaleY(ymdk_zh_y));
@@ -301,7 +353,7 @@ export const drawCRDateTime = (d: CRDrawerTools, x: number, y: number, ymdk_zh_y
 		ctx.fillText(`Ｄ`, offsetScaleX(x + (619 - 148)), offsetScaleY(ymdk_en_y));
 		ctx.fillText(`DEP`, offsetScaleX(x + (877 - 148)), offsetScaleY(ymdk_en_y));
 	} else {
-		ctx.font = resizedFont(4, 'SongTi', true);
+		ctx.font = resizedFont(hanziFontSize, 'SongTi', true);
 		ctx.fillText(`年`, offsetScaleX(x + (310 - 148)), offsetScaleY(ymdk_y));
 		ctx.fillText(`月`, offsetScaleX(x + (460 - 148)), offsetScaleY(ymdk_y));
 		ctx.fillText(`日`, offsetScaleX(x + (619 - 148)), offsetScaleY(ymdk_y));
@@ -315,8 +367,9 @@ export const drawCRDateTime = (d: CRDrawerTools, x: number, y: number, ymdk_zh_y
 };
 
 /** 车厢座位。基准为日期行 y = lineHeights[0 + lineOffset]，x 为整块额外水平偏移（原版为 0） */
-export const drawCRCarriageSeat = (d: CRDrawerTools, x: number, y: number, ymdk_zh_y: number, ymdk_en_y: number, ymdk_y: number) => {
+export const drawCRCarriageSeat = (d: CRDrawerTools, x: number, y: number, ymdk_zh_y: number, ymdk_en_y: number, ymdk_y: number, isHanziSmallerFont: boolean = true) => {
 	const { ctx, resizedFont, offsetScaleX, offsetScaleY, resizedScaleX, drawParameters } = d;
+	const hanziFontSize = isHanziSmallerFont ? 4 : 5.5;
 	if (drawParameters.isHKWestKowloonStyle) {
 		// 香港樣式
 		if (!drawParameters.noCarriage) {
@@ -367,7 +420,7 @@ export const drawCRCarriageSeat = (d: CRDrawerTools, x: number, y: number, ymdk_
 				carriageFloorX = 1171;
 			}
 
-			ctx.font = resizedFont(4, 'SongTi', true);
+			ctx.font = resizedFont(hanziFontSize, 'SongTi', true);
 			ctx.fillText('车', offsetScaleX(x + carriageFloorX), offsetScaleY(ymdk_y));
 
 			drawMixedDigitFontText(ctx, resizedFont, drawParameters.carriage, offsetScaleX(x + carriageFloorX - 171), offsetScaleY(y), resizedScaleX(165), 6.5, 6);
@@ -375,7 +428,7 @@ export const drawCRCarriageSeat = (d: CRDrawerTools, x: number, y: number, ymdk_
 
 		if (drawParameters.seatStatus === '') {
 			if (['硬卧代硬座', '软卧代软座'].includes(drawParameters.seatClass)) {
-				ctx.font = resizedFont(4, 'SongTi', true);
+				ctx.font = resizedFont(hanziFontSize, 'SongTi', true);
 
 				ctx.fillText(`号`, offsetScaleX(x + 1325), offsetScaleY(ymdk_y));
 				ctx.font = resizedFont(6.5, 'HeiTi');
@@ -383,7 +436,7 @@ export const drawCRCarriageSeat = (d: CRDrawerTools, x: number, y: number, ymdk_
 				ctx.font = resizedFont(5, 'SongTi');
 				ctx.fillText(`${drawParameters.seat2}`, offsetScaleX(x + 1368), offsetScaleY(y - 1));
 			} else {
-				ctx.font = resizedFont(4, 'SongTi', true);
+				ctx.font = resizedFont(hanziFontSize, 'SongTi', true);
 
 				ctx.fillText(`号`, offsetScaleX(x + 1345), offsetScaleY(ymdk_y));
 				ctx.font = resizedFont(6.5, 'HeiTi');
@@ -417,6 +470,18 @@ export const drawCRPrice = (d: CRDrawerTools, x: number, y: number) => {
 		ctx.font = resizedFont(6.5, 'HeiTi');
 		ctx.fillText(`${drawParameters.price}`, offsetScaleX(x + (253 - 145)), offsetScaleY(y + 2), resizedScaleX(300));
 	}
+};
+
+export const drawCRPrice1996 = (d: CRDrawerTools, x: number, y: number) => {
+	const { ctx, resizedFont, offsetScaleX, offsetScaleY, resizedScaleX, drawParameters } = d;
+	ctx.font = resizedFont(5.5, 'SongTi');
+	ctx.fillText(`元`, offsetScaleX(x + (300 - 145) + (`全价${drawParameters.price}`.length > 9 ? 9 : `全价${drawParameters.price}`.length) * 30), offsetScaleY(y));
+
+	ctx.font = resizedFont(5.5, 'SongTi');
+	const priceText = drawParameters.priceType === CROldPriceType.FullPrice ? '全价' : drawParameters.priceType === CROldPriceType.HalfPrice ? '半价' : '补价';
+	drawText(ctx, priceText, offsetScaleX(x), offsetScaleY(y), resizedScaleX(200), TextAlign.Left, DrawTextMethod.fillText, 0, 1, 1, 1);
+	ctx.font = resizedFont(6.5, 'HeiTi', true);
+	ctx.fillText(`${drawParameters.price}`, offsetScaleX(x + (300 - 145)), offsetScaleY(y + 2), resizedScaleX(300));
 };
 
 /** 购票方式。基准为第一项文字 (667, lineHeights[1 + lineOffset]) */
@@ -466,6 +531,34 @@ export const drawCRSeatClass = (d: CRDrawerTools, x: number, y: number) => {
 	}
 };
 
+/** 席别。基准为单语席别 (1223, lineHeights[1 + lineOffset]) */
+export const drawCRSeatClass1996 = (d: CRDrawerTools, x: number, y: number, is1996: boolean = false) => {
+	const { ctx, resizedFont, offsetScaleX, offsetScaleY, resizedScaleX, drawParameters } = d;
+	let seatText = '';
+	const trainType = getTrainTypeFromRouteIdentifier(drawParameters.routeIdentifier, false);
+	if (drawParameters.seatClass.includes('卧')) {
+		seatText = drawParameters.seatClass.replace('卧', '座') + trainType + '卧';
+	} else {
+		seatText = drawParameters.seatClass + trainType;
+	}
+
+	if (is1996) {
+		seatText = '(' + seatText + ')';
+	}
+	if (drawParameters.seatClass.includes('/')) {
+		const chinese = drawParameters.seatClass.split('/')[0];
+		const english = drawParameters.seatClass.split('/')[1];
+
+		ctx.font = resizedFont(5.8, 'Heiti');
+		ctx.fillText(`${chinese}`, offsetScaleX(x + (1070 - 1223)), offsetScaleY(y), resizedScaleX(398));
+		ctx.font = resizedFont(5.5, 'SongTi');
+		ctx.fillText(`${english}`, offsetScaleX(x + (1200 - 1223)), offsetScaleY(y), resizedScaleX(398));
+	} else {
+		ctx.font = resizedFont(5, 'SongTi');
+		ctx.fillText(`${seatText}`, offsetScaleX(x), offsetScaleY(y), resizedScaleX(500));
+	}
+};
+
 /** 新通票 信息1 2。基准 (lineLeft, lineHeights[2 + lineOffset]) */
 export const drawCRNewTongpiaoInfo = (d: CRDrawerTools, x: number, y: number) => {
 	const { ctx, resizedFont, offsetScaleX, offsetScaleY, resizedScaleX, drawParameters } = d;
@@ -501,6 +594,18 @@ export const drawCRInfo3 = (d: CRDrawerTools, x: number, y: number) => {
 	drawText(ctx, `${drawParameters.info3}`, offsetScaleX(x), offsetScaleY(y));
 };
 
+export const draw1996RuanpiaofeiInfo = (d: CRDrawerTools, x: number, y: number) => {
+	const { ctx, resizedFont, offsetScaleX, offsetScaleY, drawParameters } = d;
+	ctx.font = resizedFont(5.5, 'SongTi');
+	drawText(ctx, `含软票费 1.00元`, offsetScaleX(x), offsetScaleY(y));
+};
+
+export const draw1996ShenfenzhengInfo = (d: CRDrawerTools, x: number, y: number) => {
+	const { ctx, resizedFont, offsetScaleX, offsetScaleY, drawParameters } = d;
+	ctx.font = resizedFont(5.5, 'SongTi');
+	drawText(ctx, `身份证`, offsetScaleX(x), offsetScaleY(y));
+};
+
 /** 身份证+姓名。基准为身份证号 (133, lineHeights[4 + lineOffset]) */
 export const drawCRPassenger = (d: CRDrawerTools, x: number, y: number) => {
 	const { ctx, resizedFont, offsetScaleX, offsetScaleY, drawParameters } = d;
@@ -530,6 +635,12 @@ export const drawCRMessage = (d: CRDrawerTools, x: number, y: number) => {
 export const drawCRQRCode = (d: CRDrawerTools, x: number, y: number, size: number) => {
 	const { ctx, offsetScaleX, offsetScaleY, resizedScaleX, drawParameters } = d;
 	drawQRCode(ctx, offsetScaleX(x), offsetScaleY(y), resizedScaleX(size), drawParameters.qrCodeText);
+};
+
+/** 条码。基准 (lineLeft - 7, 1080) */
+export const drawCRBarcode = (d: CRDrawerTools, x: number, y: number, width: number, height: number, text: string) => {
+	const { ctx, offsetScaleX, offsetScaleY, resizedScaleX, resizedScaleY } = d;
+	drawBarcode(ctx, offsetScaleX(x), offsetScaleY(y), resizedScaleX(width), resizedScaleY(height), text);
 };
 
 /** 通号。基准 (lineLeft - 7, 1080) */

@@ -9,6 +9,7 @@ import { getInitialMethods } from '@/components/TicketEditorCompo/TicketEditorTe
 import localFonts from 'next/font/local';
 import { BackgroundImageType, createCRScaleFns, CRDrawerContext } from './drawerForEachTicketVersion/drawerUtils';
 import { drawDefaultCRWideTicketFace, drawDefaultCRWideTicketFlip } from './drawerForEachTicketVersion/defaultDrawer';
+import { draw1996CRWideTicketFace } from './drawerForEachTicketVersion/Ver1996Drawer';
 
 export const HuawenXinwei = localFonts({
 	src: '../../../assets/fonts/STXINWEI.woff2',
@@ -141,6 +142,9 @@ export const drawCRWideTicket = (
 
 	const drawByVersion = () => {
 		switch (drawParameters.version) {
+			case CRWideTicketVersion.V1996:
+				draw1996CRWideTicketFace(drawerContext);
+				break;
 			case CRWideTicketVersion.Default:
 			default:
 				drawDefaultCRWideTicketFace(drawerContext);

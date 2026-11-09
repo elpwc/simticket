@@ -21,6 +21,12 @@ const bgInfos = [
 		disabled: false,
 	},
 	{
+		id: '1997',
+		title: '1997版',
+		img: cr_blue_preview.src,
+		value: CRWideTicketVersion.V1997,
+	},
+	{
 		id: '2000',
 		title: '2000版',
 		img: cr_blue_preview.src,
